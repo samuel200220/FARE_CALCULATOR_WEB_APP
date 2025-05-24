@@ -38,16 +38,18 @@ const Section3 = () => {
             placeholder='Entrer un commentaire'
             type='text'
         /> */}
-        <h2 className='text-4xl text-center mb-8 underline decoration-black decoration-2 text-black dark:text-white'>COMMENTAIRES</h2>
+        {/* <h2 className='text-4xl text-center mb-12 underline decoration-black decoration-2 text-black dark:text-white'>COMMENTAIRES</h2> */}
         <div className="grid w-80 gap-2">
             <Textarea className='text-center border border-blue-600 dark:bg-white' placeholder="Entrer votre commentaire ici" />
-            <Button className='cursor-pointer bg-white hover:bg-blue-500 border border-blue-600 mb-10 text-black dark:hover:bg-green-500'>Envoyer</Button>
+            <Button className='w-1/2 ml-20 cursor-pointer bg-blue-500 border border-blue-600 mb-10 text-black dark:hover:bg-green-500 shadow-lg
+                    transform transition-transform duration-300 ease-in-out
+                    hover:scale-105 hover:shadow-2xl'>Envoyer</Button>
         </div>
         <div className="relative w-full">
       {/* Scroll Container */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 p-4 bg-[url('/commentaire.png')] bg-cover bg-center bg-no-repeat h-auto w-full dark:bg-green-600"
+        className="flex overflow-x-auto gap-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 p-4 bg-[url('/comment1.jpg')] bg-cover bg-center bg-no-repeat h-auto w-full dark:bg-[url('/propos_sombre.png')] dark:bg-cover dark:bg-center dark:bg-no-repeat"
       >
         {/* {[1, 2, 3, 4, 5, 6].map((n) => (
           <div
@@ -60,9 +62,11 @@ const Section3 = () => {
         <div className='flex justify-center gap-4'>
             {
                 [...comment, ...comment].map((comme,index)=>(
-                    <div key={index} className='flex-none w-72 h-70 relative overflow-hidden rounded-4xl border border-blue-500 justify-center'>
-                        <h4 className='text-center mt-2 mb-10  text-xl text-white'>{comme.name}</h4>
-                        <p className='text-sm p-4 text-white'>{comme.message}</p>
+                    <div key={index} className='flex-none w-72 h-70 relative overflow-hidden rounded-4xl border border-blue-500 justify-centershadow-lg
+                    transform transition-transform duration-300 ease-in-out
+                    hover:-translate-y-3 hover:shadow-2xl'>
+                        <h4 className='text-center mt-2 mb-10  text-xl text-black dark:text-white'>{comme.name}</h4>
+                        <p className='text-sm p-4 text-black dark:text-white'>{comme.message}</p>
                     </div>
                 ))
             }

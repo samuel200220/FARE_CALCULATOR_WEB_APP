@@ -1,3 +1,4 @@
+import GlobalAudio from '@/components/GlobalAudio'
 import Section1 from '@/components/sections/section1'
 import Section2 from '@/components/sections/section2'
 import Section3 from '@/components/sections/section3'

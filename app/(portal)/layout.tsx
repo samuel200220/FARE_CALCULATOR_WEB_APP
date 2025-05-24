@@ -1,6 +1,7 @@
+import GlobalAudio from '@/components/GlobalAudio'
 import Footer from '@/components/navbar/footer'
 import Header from '@/components/navbar/header'
-import React from 'react'
+import React, { Component } from 'react'
 
 type props={
     children:React.ReactNode
@@ -9,6 +10,7 @@ type props={
 const layout = ({children}:props) => {
   return (
     <div className='w-full min-h-screen'>
+        {/* <GlobalAudio />  */}
         <Header />
         {children}
         <Footer />

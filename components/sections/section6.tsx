@@ -11,7 +11,9 @@ const Section6 = () => {
             placeholder='Message...'
             type='text'
         />
-        <Button className='cursor-pointer bg-white hover:bg-violet-500 border border-violet-600 mt-2 w-110'>Envoyer</Button>
+        <Button className='text-black cursor-pointer bg-violet-500 border border-violet-600 mt-2 w-110 dark:text-black shadow-lg
+                    transform transition-transform duration-300 ease-in-out
+                    hover:scale-105 hover:shadow-2xl'>Envoyer</Button>
     </section>
   )
 }

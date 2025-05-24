@@ -26,7 +26,7 @@ import Link from 'next/link'
 const Header = () => {
     const [isMenuOpen,setIsMenuOpen]=React.useState(false)
     return (
-        <header className='flex items-center justify-between px-4 py-4 bg-gradient-to-r from-blue-500 to-blue-800 h-10 w-full dark:bg-gradient-to-r dark:from-orange-500 dark:to-orange-800'>
+        <header className='sticky top-0 z-[100] flex items-center justify-between px-4 py-4 bg-gradient-to-r from-blue-500 to-blue-800 h-10 w-full dark:bg-gradient-to-r dark:from-orange-500 dark:to-orange-800'>
             <div className='flex items=center lg:hidden'>
             <Sheet
                 open={isMenuOpen}
@@ -81,14 +81,15 @@ const Header = () => {
             {/* <Link href={"/"} className='text-2xl font-bold hoover:text-foreground/65 text-white flex items-center'>
                 Fare Calculator
             </Link> */}
-            <h2 className='font-bold text-white items-center text-2xl'>Fare Calculator</h2>
-            <Link href={"#"} className='text-sm font-medium text-white hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+            {/* <h2 className='font-bold text-white items-center text-2xl'>Fare Calculator</h2> */}
+            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-2xl'>Fare Calculator</Link>
+            <Link href={"#services"} scroll={true} className='text-sm font-medium text-white hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                             Nos services
                         </Link>
-                        <Link href={"#"} className='text-sm font-medium text-white hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                        <Link href={"#mobile"} scroll={true} className='text-sm font-medium text-white hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                             App mobile
                         </Link>
-                        <Link href={"#"} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                        <Link href={"#propos"} scroll={true} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                             A propos
                         </Link>
             </nav>
