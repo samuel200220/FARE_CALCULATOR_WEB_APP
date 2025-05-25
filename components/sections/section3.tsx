@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from "../ui/button"
 import { Textarea } from "../ui/textarea"
+import ContactIcon from '../ContactIcon';
 
 type Comments={
     id:number;
@@ -62,10 +63,10 @@ const Section3 = () => {
         <div className='flex justify-center gap-4'>
             {
                 [...comment, ...comment].map((comme,index)=>(
-                    <div key={index} className='flex-none w-72 h-70 relative overflow-hidden rounded-4xl border border-blue-500 justify-centershadow-lg
+                    <div key={index} className='cursor-pointer flex-none w-72 h-70 relative overflow-hidden rounded-4xl border border-blue-500 justify-centershadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:-translate-y-3 hover:shadow-2xl'>
-                        <h4 className='text-center mt-2 mb-10  text-xl text-black dark:text-white'>{comme.name}</h4>
+                        <h4 className='text-center mt-2 mb-10  text-xl text-black dark:text-white'><span><ContactIcon name={comme.name} /></span>{comme.name}</h4>
                         <p className='text-sm p-4 text-black dark:text-white'>{comme.message}</p>
                     </div>
                 ))

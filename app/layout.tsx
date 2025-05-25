@@ -4,8 +4,10 @@ import "./globals.css";
 import { ThemeProvider } from "@/provider/theme-provider";
 
 const font=Poppins({
-  subsets: ["latin",'latin-ext'],
-  weight:['800', '800']
+  subsets: ["latin", "latin-ext"],
+  weight:["800","800"],
+  variable: "--font-poppins",
+  display: "swap"
 });
 const geistSans = Geist({
   variable: "--font-geist-sans",
