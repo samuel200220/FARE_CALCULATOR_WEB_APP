@@ -9,6 +9,7 @@ import { FaRegCalendarAlt, FaRegClock, FaCalculator } from 'react-icons/fa';
 import Map from '../Map'
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
+import Mapleaf from '../Mapleaf';
 
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
 const Section1 = () => {
@@ -66,7 +67,7 @@ const Section1 = () => {
             <div
                 className="absolute inset-0 bg-cover bg-center w-full h-screen"
                 style={{
-                    backgroundImage: `url(${isDark ? '/theme_sombre.png' : '/theme.png'})`,
+                    backgroundImage: `url(${isDark ? '/calcul.jpg' : '/theme.png'})`,
                   }}
             />
             <div className="absolute inset-0 bg-black/50 h-screen dark:hidden" />
@@ -81,17 +82,17 @@ const Section1 = () => {
             </div> */}
             <div className='flex justify-center items-center z-10 h-screen'>
             <div className='w-full p-4 rounded relative h-screen mt-52'>
-                <div className='w-auto h-96 rounded-3xl justify-center items-center flex flex-col gap-4'>
+                <div className='w-auto h-96 rounded-3xl bg-blue-700 justify-center items-center flex flex-col gap-4'>
                     <h4 className='text-center text-white'>CALCULEZ LES TARIFS POUR N'IMPORTE QUELLE DESTINATION AVEC FARE CALCULATOR</h4>
                     <Input
                         value={start} onChange={(e) => setStart(e.target.value)} 
                         className='bg-white w-110 h-12 px-4 py-2 rounded border border-gray-300 shadow'
-                        placeholder='Lieu de depart'
+                        placeholder='Lieu de départ'
                     />
                     <Input 
                         value={end} onChange={(e) => setEnd(e.target.value)}
                         className='bg-white w-110 h-12 px-4 py-2 rounded border border-gray-300 shadow'
-                        placeholder='Lieu de depot'
+                        placeholder='Lieu de dépot'
                     />
                     <Input 
                         value={hour} onChange={(e) => setHour(e.target.value)}
@@ -99,10 +100,10 @@ const Section1 = () => {
                         placeholder='Heure de prise en charge (HH:MM)'
                     />
                     <div className='justify-center items-center flex gap-6'>
-                        <Button className='text-black bg-white w-54 h-12 cursor-pointer hover:bg-blue-500 shadow-lg
+                        <Button className='text-black bg-white w-54 h-10 cursor-pointer hover:bg-green-500 shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl'><span><FaRegCalendarAlt /></span>Aujourd'hui</Button>
-                    <Button className='text-black bg-white w-54 h-12 cursor-pointer hover:bg-blue-500 shadow-lg
+                    <Button className='text-black bg-white w-54 h-10 cursor-pointer hover:bg-green-500 shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl'><span><FaRegClock /></span>Maintenant</Button>
                     </div>
@@ -120,7 +121,7 @@ const Section1 = () => {
                     </div>
                     <Button
                     onClick={handleCost} 
-                    className='text-black bg-white w-54 h-12 cursor-pointer hover:bg-blue-500 shadow-lg
+                    className='text-black bg-white w-54 h-10 cursor-pointer hover:bg-green-500 shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl'><span><FaCalculator /></span>Calculer tarif</Button>
                 </div>
@@ -135,17 +136,18 @@ const Section1 = () => {
                     </div>
                 )}
             </div>
-            <div className="relative w-full h-[400px] mr-5 mt-0 rounded-2xl">
+            <div className="relative w-full h-screen mr-5 mt-0 rounded-2xl ">
                  {/* <img
                     src="/planifier.jpg"
                     alt="Fond"
                     className="w-full h-full object-cover"
                 /> */}
                 {/* <div className="absolute inset-0 bg-black/50" /> */}
-                 <Map 
+                 {/* <Map 
                     center={yaoundeLocation}
                     zoom={12}
-                />
+                /> */}
+                <Mapleaf />
             </div>
 
             </div>

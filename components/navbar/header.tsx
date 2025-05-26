@@ -86,9 +86,6 @@ const Header = () => {
             <Link href={"#services"} scroll={true} className='text-sm font-medium text-white hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                             Nos services
                         </Link>
-                        <Link href={"#mobile"} scroll={true} className='text-sm font-medium text-white hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
-                            App mobile
-                        </Link>
                         <Link href={"#propos"} scroll={true} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                             A propos
                         </Link>

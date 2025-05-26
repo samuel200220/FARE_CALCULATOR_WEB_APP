@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { BiLogoTwitter, BiLogoFacebook, BiLogoInstagram } from 'react-icons/bi';
+import { FaGooglePlay } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -15,6 +16,9 @@ const Footer = () => {
             </Link>
             <Link href={'#'}>
                 <BiLogoInstagram className='w-10 h-10 dark:bg-white'/>
+            </Link>
+            <Link href={'#'}>
+                <FaGooglePlay className='w-10 h-10 dark:bg-white'/>
             </Link>
         </div>
     </footer>

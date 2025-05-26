@@ -60,7 +60,7 @@ const Section3 = () => {
             Bloc {n}
           </div>
         ))} */}
-        <div className='flex justify-center gap-4'>
+        <div className='flex justify-center gap-32'>
             {
                 [...comment, ...comment].map((comme,index)=>(
                     <div key={index} className='cursor-pointer flex-none w-72 h-70 relative overflow-hidden rounded-4xl border border-blue-500 justify-centershadow-lg
