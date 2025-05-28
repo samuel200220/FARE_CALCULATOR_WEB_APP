@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins,Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/provider/theme-provider";
+import { Toaster } from 'react-hot-toast';
 
 const font=Poppins({
   subsets: ["latin", "latin-ext"],
@@ -32,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={font.className} suppressHydrationWarning>
         <head />
-        <body className=" text-black">
+        <body className=" text-black bg-blue-50 dark:bg-gray-900">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -40,6 +41,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster position="top-left" reverseOrder={false} />
           </ThemeProvider>
         </body>
     </html>

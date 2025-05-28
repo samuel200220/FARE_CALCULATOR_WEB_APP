@@ -1,1 +1,28 @@
-{}
+{
+  "user": [
+    {
+      "id": "5e6d",
+      "nomUtilisateur": "Samuel",
+      "mailUtilisateur": "samuelftagat@gmail.com",
+      "motDePasse": "samuel2",
+      "motDePasseConfirmation": "samuel2"
+    },
+    {
+      "id": "c064",
+      "nomUtilisateur": "Matteo",
+      "mailUtilisateur": "matteo@gmail.com",
+      "motDePasse": "matteo1",
+      "motDePasseConfirmation": "matteo1"
+    },
+    {
+      "id": "21aa",
+      "nomUtilisateur": "Passo",
+      "mailUtilisateur": "passo@gmail.com",
+      "motDePasse": "passo1",
+      "motDePasseConfirmation": "passo1"
+    }
+  ],
+  "commentaires":[
+    
+  ]
+}

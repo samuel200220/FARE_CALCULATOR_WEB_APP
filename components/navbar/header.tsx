@@ -26,7 +26,7 @@ import Link from 'next/link'
 const Header = () => {
     const [isMenuOpen,setIsMenuOpen]=React.useState(false)
     return (
-        <header className='sticky top-0 z-[100] flex items-center justify-between px-4 py-4 bg-gradient-to-r from-blue-500 to-blue-800 h-10 w-full dark:bg-gradient-to-r dark:from-orange-500 dark:to-orange-800'>
+        <header className='sticky top-0 z-[100] flex items-center justify-between px-4 py-4 bg-gradient-to-r from-blue-500 to-blue-800 h-10 w-full dark:bg-gradient-to-r dark:from-blue-900 dark:to-blue-900'>
             <div className='flex items=center lg:hidden'>
             <Sheet
                 open={isMenuOpen}
@@ -83,12 +83,12 @@ const Header = () => {
             </Link> */}
             {/* <h2 className='font-bold text-white items-center text-2xl'>Fare Calculator</h2> */}
             <Link href={'#'} scroll={true} className='font-bold text-white items-center text-2xl'>Fare Calculator</Link>
-            <Link href={"#services"} scroll={true} className='text-sm font-medium text-white hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
-                            Nos services
-                        </Link>
-                        <Link href={"#propos"} scroll={true} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
-                            A propos
-                        </Link>
+                <Link href={"/dashboard"} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                        Tableau de bord
+                </Link>
+                <Link href={"#propos"} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                    Aide
+                </Link>
             </nav>
             {/* <div className='flex items-center space-x-4'>
                 <Button variant={'ghost'} size={'icon'} className='lg:hidden'>
@@ -105,9 +105,13 @@ const Header = () => {
                 </div>
             </div> */}
             <div className='flex items-center gap-4 dark:flex dark:items-center dark:gap-4'>
-                <Button className='mr-6 rounded-full bg-white text-black cursor-pointer hover:bg-green-600'><span className='text-xl text-black dark:text-violet-400'><FaGlobe /></span>English</Button>
-                <Button className='cursor-pointer bg-white hover:bg-green-600 rounded-full border border-blue-600 text-black dark:cursor-pointer'>S'inscrire</Button>
-                <Button className='cursor-pointer bg-white hover:bg-green-600 rounded-full border border-blue-600 text-black'>Se connecter</Button>
+            <Button className='mr-6 bg-transparent border-none shadow-none text-white cursor-pointer hover:bg-blue-300'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>English</Button>
+                <Link href={"/inscription"} >
+                <Button className='cursor-pointer bg-blue-300 hover:bg-blue-300 text-white'>S'inscrire</Button>
+                </Link>
+                <Link href={"/connexion"} className='text-white text-sm mr-10 font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                    Se connecter
+                </Link>
             </div>
         </header>
   )

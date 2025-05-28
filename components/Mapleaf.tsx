@@ -15,7 +15,7 @@ L.Icon.Default.mergeOptions({
 
 const Mapleaf = () => {
   return (
-    <MapContainer center={[48.8566, 2.3522]} zoom={13} style={{ height: '100vh', width: '100%' }}>
+    <MapContainer center={[3.8480, 11.5021]} zoom={13} style={{ height: '100vh', width: '100%' }}>
       <TileLayer
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

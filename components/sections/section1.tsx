@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
@@ -10,9 +10,105 @@ import Map from '../Map'
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import Mapleaf from '../Mapleaf';
+import TextField from '@mui/material/TextField';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import LinearBufferButton from '../LinearBufferButton';
+import LinearProgress from "@mui/material/LinearProgress";
+import Box from "@mui/material/Box";
 
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
 const Section1 = () => {
+  const [progress, setProgress] = useState(0);
+  const [buffer, setBuffer] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const progressRef = useRef<() => void>(() => {});
+  
+  useEffect(() => {
+      progressRef.current = () => {
+        setProgress((prevProgress) => {
+          if (prevProgress >= 100) {
+            setIsLoading(false);
+            setBuffer(10);
+            return 0;
+          }
+  
+          if (prevProgress % 5 === 0) {
+            setBuffer((prevBuffer) => {
+              const newBuffer = prevBuffer + 1 + Math.random() * 10;
+              return newBuffer > 100 ? 100 : newBuffer;
+            });
+          }
+  
+          return prevProgress + 1;
+        });
+      };
+    }, []);
+  useEffect(() => {
+      if (!isLoading) return;
+  
+      const timer = setInterval(() => {
+        progressRef.current();
+      }, 100);
+  
+      return () => {
+        clearInterval(timer);
+      };
+    }, [isLoading]);
+  
+  const [compteur, setCompteur] = useState(0);
+  const [bloque, setBloque] = useState(false);
+  const [afficherMessage, setAfficherMessage] = useState(false);
+  const [estConnecte, setEstConnecte] = useState(false);
+
+useEffect(() => {
+  const connecte = localStorage.getItem("estConnecte") === "true";
+  setEstConnecte(connecte);
+}, []);
+
+  // useEffect(() => {
+  //   const compteurStocke = parseInt(localStorage.getItem("compteurUtilisation") || "0", 10);
+  //   setCompteur(compteurStocke);
+  //   if (compteurStocke >= 3) {
+  //     setBloque(true);
+  //     setAfficherMessage(true);
+  //   }
+  // }, []);
+  useEffect(() => {
+    if (estConnecte) {
+      setBloque(false); // Si connecté, pas de blocage
+      return; // Ignore le reste
+    }
+  
+    const compteurStocke = parseInt(localStorage.getItem("compteurUtilisation") || "0", 10);
+    setCompteur(compteurStocke);
+  
+    if (compteurStocke >= 3) {
+      setBloque(true);
+      setAfficherMessage(true);
+    } else {
+      setBloque(false);
+    }
+  }, [estConnecte]);
+  
+
+  // useEffect(() => {
+  //   if (afficherMessage) {
+  //     toast.error("Vous avez atteint la limite de 3 utilisations. Veuillez vous enregistrer pour continuer.", {
+  //       duration: 5000,
+  //       position: 'top-center',
+  //       style: {
+  //         backgroundColor: '#f87171',
+  //         color: '#fff',
+  //         fontSize: '16px',
+  //         padding: '16px',
+  //         borderRadius: '8px',
+  //       },
+  //     });
+  //   }
+  // }, [afficherMessage]);
+
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const [start, setStart] = useState('');
@@ -29,7 +125,89 @@ const Section1 = () => {
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState('');
 
+  // const handleCost = async () => {
+  //   const nouveauCompteur = compteur + 1;
+  //   setCompteur(nouveauCompteur);
+  //   localStorage.setItem("compteurUtilisation", nouveauCompteur.toString());
+
+  //   if (nouveauCompteur >= 3) {
+  //     setBloque(true);
+  //     setAfficherMessage(true);
+  //   }
+
+  //   console.log("Action du bouton effectuée !");
+  //   setError('');
+  //   try {
+  //     const res = await fetch('https://rideandgo.onrender.com/cost', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ start, end, hour }),
+  //     });
+
+  //     if (!res.ok) {
+  //       const data = await res.json();
+  //       throw new Error(data.detail || 'Erreur de calcul');
+  //     }
+
+  //     const data = await res.json();
+  //     setResult(data);
+  //   } catch (err) {
+  //     setError((err as Error).message);
+  //   }
+  // };
   const handleCost = async () => {
+    setIsLoading(true);
+      setProgress(0);
+      setBuffer(10);
+    
+    // if (!estConnecte) {
+    //   let nouveauCompteur = compteur + 1;
+  
+    //   if (nouveauCompteur >= 3) {
+    //     setBloque(true);
+    //     setAfficherMessage(true);
+    //     localStorage.removeItem("compteurUtilisation");
+    //     nouveauCompteur = 0;
+    //   } else {
+    //     localStorage.setItem("compteurUtilisation", nouveauCompteur.toString());
+    //   }
+  
+    //   setCompteur(nouveauCompteur);
+    // }
+    // if (compteur >= 3) {
+    //   toast.error("Vous avez atteint la limite de 3 utilisations. Veuillez vous enregistrer pour continuer.", {
+    //     duration: 5000,
+    //     position: 'top-center',
+    //     style: {
+    //       backgroundColor: '#f87171',
+    //       color: '#fff',
+    //       fontSize: '16px',
+    //       padding: '16px',
+    //       borderRadius: '8px',
+    //     },
+    //   });
+    //   return;
+    // }
+  
+    // const nouveauCompteur = compteur + 1;
+    // setCompteur(nouveauCompteur);
+    // localStorage.setItem("compteurUtilisation", nouveauCompteur.toString());
+  
+    // if (nouveauCompteur >= 3) {
+    //   setBloque(true);
+    //   toast.error("Vous avez atteint la limite de 3 utilisations. Veuillez vous enregistrer pour continuer.", {
+    //     duration: 5000,
+    //     position: 'top-center',
+    //     style: {
+    //       backgroundColor: '#f87171',
+    //       color: '#fff',
+    //       fontSize: '16px',
+    //       padding: '16px',
+    //       borderRadius: '8px',
+    //     },
+    //   });
+    // }
+  
     setError('');
     try {
       const res = await fetch('https://rideandgo.onrender.com/cost', {
@@ -37,24 +215,19 @@ const Section1 = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ start, end, hour }),
       });
-
+  
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.detail || 'Erreur de calcul');
       }
-
+  
       const data = await res.json();
       setResult(data);
     } catch (err) {
       setError((err as Error).message);
     }
   };
-//   const [backgroundImage, setBackgroundImage] = useState('/theme.png');
-
-//     useEffect(() => {
-//         const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-//         setBackgroundImage(isDark ? '/theme_sombre.png' : '/theme.png');
-//     }, []);
+  
   return (
     <section className='w-full h-[70vh] p-0 justify-center items-center flex flex-col mb-4 mt-0'>
          {/* <div className='w-full h-full relative'>
@@ -64,13 +237,13 @@ const Section1 = () => {
 
         <div className="block relative w-full h-full mt-0">
             {/* Image de fond */}
-            <div
+            {/* <div
                 className="absolute inset-0 bg-cover bg-center w-full h-screen"
                 style={{
-                    backgroundImage: `url(${isDark ? '/calcul.jpg' : '/theme.png'})`,
+                    backgroundImage: `url(${isDark ? '/taxi_nuit.jpg' : '/image_6.jpg'})`,
                   }}
             />
-            <div className="absolute inset-0 bg-black/50 h-screen dark:hidden" />
+            <div className="absolute inset-0 bg-black/85 h-screen dark:hidden" /> */}
 
             {/* Voile noir fondu au-dessus de l'image */}
             {/* <div className="absolute inset-0 bg-black/50 h-screen" /> */}
@@ -82,8 +255,8 @@ const Section1 = () => {
             </div> */}
             <div className='flex justify-center items-center z-10 h-screen'>
             <div className='w-full p-4 rounded relative h-screen mt-52'>
-                <div className='w-auto h-96 rounded-3xl bg-blue-700 justify-center items-center flex flex-col gap-4'>
-                    <h4 className='text-center text-white'>CALCULEZ LES TARIFS POUR N'IMPORTE QUELLE DESTINATION AVEC FARE CALCULATOR</h4>
+                <div className='w-2xl h-4xl rounded-3xl justify-center items-center flex flex-col gap-4 shadow-lg bg-white border-black'>
+                    <h4 className='text-center text-white mt-2'>CALCULEZ LES TARIFS POUR N'IMPORTE QUELLE DESTINATION AVEC FARE CALCULATOR</h4>
                     <Input
                         value={start} onChange={(e) => setStart(e.target.value)} 
                         className='bg-white w-110 h-12 px-4 py-2 rounded border border-gray-300 shadow'
@@ -120,12 +293,14 @@ const Section1 = () => {
                         </RadioGroup>
                     </div>
                     <Button
-                    onClick={handleCost} 
+                    onClick={handleCost} disabled={isLoading}
                     className='text-black bg-white w-54 h-10 cursor-pointer hover:bg-green-500 shadow-lg
                     transform transition-transform duration-300 ease-in-out
-                    hover:scale-105 hover:shadow-2xl'><span><FaCalculator /></span>Calculer tarif</Button>
+                    hover:scale-105 hover:shadow-2xl mb-3' ><span><FaCalculator /></span>{isLoading ? "Chargement..." : "Calculer tarif"}</Button>
+                    {/* <LinearBufferButton /> */}
                 </div>
                 {error && <p className="text-red-500 mt-2">{error}</p>}
+                {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}
                 {result && (
                     <div className="mt-4 p-4 border rounded bg-gray-100">
                     <p><strong>Départ :</strong> {result.start}</p>
@@ -136,7 +311,7 @@ const Section1 = () => {
                     </div>
                 )}
             </div>
-            <div className="relative w-full h-screen mr-5 mt-0 rounded-2xl ">
+            <div className="relative w-full h-screen mr-5 mt-0 rounded-2xl p-4">
                  {/* <img
                     src="/planifier.jpg"
                     alt="Fond"

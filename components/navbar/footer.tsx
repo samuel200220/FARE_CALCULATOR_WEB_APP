@@ -5,7 +5,7 @@ import { FaGooglePlay } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className='w-full bg-blue-900 mt-8'>
+    <footer className='w-full bg-blue-300 dark:bg-blue-900 mt-8'>
         <h2 className='text-center text-black'>Suivez nous</h2>
         <div className='justify-center items-center flex gap-6'>
             <Link href={'#'}>

@@ -3,7 +3,7 @@ import React from 'react'
 
 const Section2 = () => {
   return (
-    <section id='services' className='mt-96 mb-0 m-8 rounded-4xl bg-blue-300 dark:bg-gradient-to-r dark:from-orange-800 dark:to-orange-700 dark:mt-96'>
+    <section id='services' className='mt-96 mb-0 m-8 rounded-4xl dark:from-blue-800 dark:to-blue-700 dark:mt-96'>
         <h2 className='text-4xl text-center mb-8 text-black underline decoration-blue-500 decoration-2 dark:text-white dark:underline dark:decoration-white'>NOS SERVICES</h2>
         <div className='flex justify-center items-center gap-10'>
             <Link href={'#'}>
