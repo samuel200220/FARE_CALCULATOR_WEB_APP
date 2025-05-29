@@ -41,8 +41,9 @@ const Section3 = () => {
         /> */}
         {/* <h2 className='text-4xl text-center mb-12 underline decoration-black decoration-2 text-black dark:text-white'>COMMENTAIRES</h2> */}
         <div className="grid w-80 gap-2">
-            <Textarea className='text-center border border-blue-600 dark:bg-white' placeholder="Entrer votre commentaire ici" />
-            <Button className='w-1/2 ml-20 cursor-pointer bg-blue-500 border border-blue-600 mb-10 text-black dark:hover:bg-green-500 shadow-lg
+          <h2 className='text-blue-800 font-bold ml-3 dark:text-white'>Aidez nous a nous ameliorer</h2>
+            <Textarea className='text-center border border-blue-600 dark:bg-white' placeholder="Votre commentaire" />
+            <Button className='w-1/2 ml-20 cursor-pointer bg-blue-500 border border-blue-600 mb-10 text-white hover:bg-blue-500 dark:hover:bg-blue-700 shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl'>Envoyer</Button>
         </div>
@@ -50,7 +51,7 @@ const Section3 = () => {
       {/* Scroll Container */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-4 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 p-4 bg-[url('/comment1.jpg')] bg-cover bg-center bg-no-repeat h-auto w-full dark:bg-[url('/propos_sombre.png')] dark:bg-cover dark:bg-center dark:bg-no-repeat"
+        className="flex overflow-x-auto gap-2 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 p-4 h-auto w-full"
       >
         {/* {[1, 2, 3, 4, 5, 6].map((n) => (
           <div
@@ -60,14 +61,14 @@ const Section3 = () => {
             Bloc {n}
           </div>
         ))} */}
-        <div className='flex justify-center gap-32'>
+        <div className='flex justify-center gap-12'>
             {
                 [...comment, ...comment].map((comme,index)=>(
-                    <div key={index} className='cursor-pointer flex-none w-72 h-70 relative overflow-hidden rounded-4xl border border-blue-500 justify-centershadow-lg
+                    <div key={index} className='bg-white cursor-pointer flex-none w-72 h-70 relative overflow-hidden rounded-4xl border justify-center shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:-translate-y-3 hover:shadow-2xl'>
-                        <h4 className='text-center mt-2 mb-10  text-xl text-black dark:text-white'><span><ContactIcon name={comme.name} /></span>{comme.name}</h4>
-                        <p className='text-sm p-4 text-black dark:text-white'>{comme.message}</p>
+                        <h4 className='text-center mt-2 mb-10 text-blue-500 text-xl font-bold dark:text-blue'><span><ContactIcon name={comme.name} /></span>{comme.name}</h4>
+                        <p className='text-sm p-4 text-black dark:text-black'>{comme.message}</p>
                     </div>
                 ))
             }

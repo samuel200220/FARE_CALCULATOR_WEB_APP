@@ -5,10 +5,9 @@ import { ThemeProvider } from "@/provider/theme-provider";
 import { Toaster } from 'react-hot-toast';
 
 const font=Poppins({
-  subsets: ["latin", "latin-ext"],
-  weight:["800","800"],
-  variable: "--font-poppins",
-  display: "swap"
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'], // choisis ce que tu veux
+  variable: '--font-poppins',
 });
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={font.className} suppressHydrationWarning>
         <head />
-        <body className=" text-black bg-blue-50 dark:bg-gray-900">
+        <body className=" text-black text-[18px] bg-gray-200 dark:bg-[#0D1B2A]">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

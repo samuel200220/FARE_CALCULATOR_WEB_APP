@@ -20,13 +20,14 @@ import {
 import { Button } from '../ui/button'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
+import { ModeToggle } from '../ui/mode-toggle';
 
 
 
 const Header = () => {
     const [isMenuOpen,setIsMenuOpen]=React.useState(false)
     return (
-        <header className='sticky top-0 z-[100] flex items-center justify-between px-4 py-4 bg-gradient-to-r from-blue-500 to-blue-800 h-10 w-full dark:bg-gradient-to-r dark:from-blue-900 dark:to-blue-900'>
+        <header className='sticky top-0 z-[100] h-20 flex items-center justify-between px-4 py-4 bg-gradient-to-r from-blue-500 to-blue-500 w-full dark:bg-gradient-to-r dark:from-blue-900 dark:to-blue-900'>
             <div className='flex items=center lg:hidden'>
             <Sheet
                 open={isMenuOpen}
@@ -82,13 +83,7 @@ const Header = () => {
                 Fare Calculator
             </Link> */}
             {/* <h2 className='font-bold text-white items-center text-2xl'>Fare Calculator</h2> */}
-            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-2xl'>Fare Calculator</Link>
-                <Link href={"/dashboard"} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
-                        Tableau de bord
-                </Link>
-                <Link href={"#propos"} className='text-white text-sm font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
-                    Aide
-                </Link>
+            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-3xl'>Fare Calculator</Link>
             </nav>
             {/* <div className='flex items-center space-x-4'>
                 <Button variant={'ghost'} size={'icon'} className='lg:hidden'>
@@ -105,12 +100,19 @@ const Header = () => {
                 </div>
             </div> */}
             <div className='flex items-center gap-4 dark:flex dark:items-center dark:gap-4'>
-            <Button className='mr-6 bg-transparent border-none shadow-none text-white cursor-pointer hover:bg-blue-300'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>English</Button>
-                <Link href={"/inscription"} >
-                <Button className='cursor-pointer bg-blue-300 hover:bg-blue-300 text-white'>S'inscrire</Button>
+            <Link href={"/dashboard"} className='text-white  font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                        Tableau de bord
                 </Link>
-                <Link href={"/connexion"} className='text-white text-sm mr-10 font-medium hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
-                    Se connecter
+                <Link href={"#propos"} className='text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                    Aide
+                </Link>
+            <Button className='mr-6 bg-transparent border-none shadow-none text-white text-[18px] cursor-pointer hover:bg-blue-300'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>English</Button>
+            <ModeToggle />
+                <Link href={"/inscription"} >
+                <Button className='cursor-pointer bg-blue-300 hover:bg-blue-300 text-[18px] text-white'>S'inscrire</Button>
+                </Link>
+                <Link href={"/connexion"} >
+                <Button className='cursor-pointer bg-blue-300 hover:bg-blue-300 text-[18px] text-white'>Se connecter</Button>
                 </Link>
             </div>
         </header>
