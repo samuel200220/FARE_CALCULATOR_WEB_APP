@@ -21,9 +21,46 @@ import { MdOutlineDirectionsWalk } from 'react-icons/md';
 import { BsClock } from 'react-icons/bs';
 import 'react-time-picker/dist/TimePicker.css';
 import TimePicker from 'react-time-picker';
+import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaFlagCheckered,FaLocationArrow,FaChevronDown } from 'react-icons/fa';
+
 
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
+const predefinedHours = [
+  "06:00", "07:00", "08:00", "09:00",
+  "10:00", "12:00", "14:00", "16:00",
+  "18:00", "20:00", "22:00"
+];
+const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong'];
 const Section1 = ({}) => {
+  // Removed duplicate declaration of start
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setStart(value);
+
+    if (value.length > 0) {
+      const filtered = suggestions.filter((s) =>
+        s.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+  const handleSelect = (value: string) => {
+    setStart(value);
+    setShowSuggestions(false);
+  };
+  // Removed duplicate declaration of hour
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleSelectHour = (value: string) => {
+    setHour(value);
+    setShowDropdown(false);
+  };
   const [customOffer, setCustomOffer] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
@@ -239,21 +276,89 @@ useEffect(() => {
   return (
     <section className='w-full h-[760px] p-4 justify-center items-center flex mb-4 mt-0'>
       <div className='w-4xl h-full relative mt-6 ml-6 rounded-3xl justify-start items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A]'>
-                    <Input
-                        value={start} onChange={(e) => setStart(e.target.value)} 
-                        className="bg-white dark:bg-gray-800 dark:text-white text-[18px] relative w-120 h-12 px-4 py-2 mt-6 rounded-[7px] border border-gray-300 hover:border-blue-800 "
-                        placeholder='Départ'
-                    />
-                    <Input 
-                        value={end} onChange={(e) => setEnd(e.target.value)}
-                        className='bg-white w-120 h-12 px-4 py-2 dark:bg-gray-800 dark:text-white rounded-[7px] border border-gray-300 hover:border-blue-800'
-                        placeholder='Dépot'
-                    />
-                    <Input 
-                        value={hour} onChange={(e) => setHour(e.target.value)}
-                        className='bg-white w-120 h-12 dark:bg-gray-800 px-4 py-2 dark:text-white rounded-[7px] border border-gray-300 hover:border-blue-800'
-                        placeholder='Heure de prise en charge (HH:MM)'
-                    />
+              <div className="relative mt-6 w-120">
+                {/* Icône positionnée à gauche */}
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaMapMarkerAlt className="text-blue-600 text-lg" />
+                </div>
+
+                <Input
+                  value={start}
+                  onChange={handleChange}
+                  className="bg-white dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+                  placeholder="Départ"
+                />
+
+                {/* Suggestions */}
+                {showSuggestions && (
+                  <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                    {filteredSuggestions.length > 0 ? (
+                      filteredSuggestions.map((s, index) => (
+                        <li
+                          key={index}
+                          onClick={() => handleSelect(s)}
+                          className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                        >
+                          {s}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-4 py-2 text-gray-500">Aucune suggestion</li>
+                    )}
+                  </ul>
+                )}
+              </div>
+              <div className="relative mt-4 w-120">
+                {/* Icône positionnée à gauche */}
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaLocationArrow className="text-blue-600 text-lg" />
+                </div>
+
+                <Input
+                  value={end}
+                  onChange={(e) => setEnd(e.target.value)}
+                  className="bg-white dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+                  placeholder="Destination"
+                />
+              </div>
+              <div className="relative w-120 mt-4">
+      {/* Icône à gauche */}
+      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <FaRegClock className="text-blue-600 text-lg" />
+      </div>
+
+      {/* Icône à droite */}
+      <div
+        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+        onClick={() => setShowDropdown(!showDropdown)}
+      >
+        <FaChevronDown className="text-gray-500" />
+      </div>
+
+      {/* Input */}
+      <Input
+        value={hour}
+        onChange={(e) => setHour(e.target.value)}
+        onClick={() => setShowDropdown(false)} // ferme si on clique dans input
+        className="bg-white dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-10 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+        placeholder="Heure de prise en charge (HH:MM)"
+      />
+
+      {/* Menu déroulant */}
+      {showDropdown && (
+        <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 rounded shadow-md max-h-60 overflow-y-auto">
+          {predefinedHours.map((h) => (
+            <li
+              key={h}
+              onClick={() => handleSelectHour(h)}
+              className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+            >
+              {h}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
                     {/* <input
   type="time"
   value={hour}
@@ -283,7 +388,7 @@ useEffect(() => {
                     </div> */}
                     <Button
                     onClick={handleCost} disabled={isLoading}
-                    className='text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-500 w-54 h-10 cursor-pointer hover:bg-blue-800 shadow-lg
+                    className='text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-700 w-54 h-10 hover:bg-blue-800 shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl mb-3' ><span><FaCalculator /></span>{isLoading ? "Chargement..." : "Calculer tarif"}</Button>
                     {/* <LinearBufferButton /> */}
@@ -298,36 +403,36 @@ useEffect(() => {
                     // <p><strong>Minimum :</strong> {result.mint_cost} FCFA</p>
 
                     // </div>
-                    <div className="w-120 h-56 relative p-4 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 text-sm">
+                    <div className="w-120 h-96 relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 text-sm">
                       {/* Title */}
                       <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
                         <FaMoneyBillAlt />
-                        <span>Notre estimation</span>
+                        <span className='dark:text-white'>Notre estimation</span>
                       </div>
 
                       {/* Distance & Duration */}
                       <div className="flex justify-between gap-2">
-                        <div className="flex-1 bg-blue-50 rounded p-3">
+                        <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
                           <div className="flex items-center gap-1 font-medium text-blue-700">
                             <MdOutlineDirectionsWalk />
-                            <span>Distance</span>
+                            <span className='text-blue-700 dark:text-white'>Distance</span>
                           </div>
-                          <div className="text-xl font-bold">{result.distance.toFixed(2)} km</div>
+                          <div className="text-xl font-bold text-black dark:text-white">{result.distance.toFixed(2)} km</div>
                         </div>
-                        <div className="flex-1 bg-blue-50 rounded p-3">
+                        {/* <div className="flex-1 bg-blue-50 rounded p-3">
                           <div className="flex items-center gap-1 font-medium text-blue-700">
                             <BsClock />
                             <span>Duree</span>
                           </div>
                           <div className="text-xl font-bold">1h 9min 49s</div>
-                        </div>
+                        </div> */}
                       </div>
 
                       {/* Our Estimate */}
-                      <div className="border border-blue-500 rounded p-3 space-y-2">
+                      <div className="border hover:border-blue-500 rounded p-3 space-y-2">
                         <div className="flex justify-between font-medium">
-                          <span>Cout Estime</span>
-                          <span className="font-bold">{result.cost.toFixed(0)} FCFA</span>
+                          <span className='text-blue-700 dark:text-white'>Cout Estime</span>
+                          <span className="font-bold text-blue-700 dark:text-white">{result.cost.toFixed(0)} FCFA</span>
                         </div>
                         <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
                           Commander
@@ -335,10 +440,10 @@ useEffect(() => {
                       </div>
 
                       {/* Official Rate */}
-                      <div className="border border-gray-200 rounded p-3 space-y-2">
+                      <div className="border hover:border-blue-500 w-full relative mt-6 rounded p-3 space-y-2">
                         <div className="flex justify-between font-medium">
-                          <span>Tarif officel</span>
-                          <span className="font-bold">{result.cost.toFixed(0)} FCFA</span>
+                          <span className='text-blue-700 dark:text-white'>Tarif officel</span>
+                          <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
                         </div>
                         <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
                           Commander
@@ -346,7 +451,7 @@ useEffect(() => {
                       </div>
 
                       {/* Custom Offer */}
-                      <div className="border border-blue-200 bg-blue-50 p-3 rounded space-y-2">
+                      {/* <div className="border border-blue-200 bg-blue-50 p-3 rounded space-y-2">
                         <label className="font-medium text-blue-800 flex items-center gap-1">
                           <span>🧭</span> Proposer votre prix
                         </label>
@@ -362,7 +467,7 @@ useEffect(() => {
                             Commader
                           </button>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                 )}
       </div>

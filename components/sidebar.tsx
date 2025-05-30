@@ -51,7 +51,7 @@ export default function Sidebar() {
         }`}
       >
         <ul className="space-y-4 mt-20">
-          <li><a href="/" className="hover:text-blue-300">Accueil</a></li>
+          <li><a href="/" className=" hover:text-blue-300">Accueil</a></li>
           <li><a href="#" className="hover:text-blue-300">Profil</a></li>
           <li><a href="#" className="hover:text-blue-300">Paramètres</a></li>
           <li><a href="/connexion1" className="hover:text-blue-300">Déconnexion</a></li>

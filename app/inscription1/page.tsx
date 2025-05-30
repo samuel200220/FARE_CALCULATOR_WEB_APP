@@ -14,12 +14,12 @@ export default function Page() {
       {/* Left Section */}
       <div className="w-1/2 bg-blue-700 text-white p-16 flex flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">
-          Fare Calculator <br /> Votre Tarif a Portee De Main
+          Fare Calculator <br /> Votre Tarif à Portée De Main
         </h1>
         <p className="text-lg leading-relaxed">
-          Plus besoin de stresser sur le cout du trajet, <br />
+          Plus besoin de stresser sur le coût du trajet, <br />
           Avec Fare Calculator, obtenez une estimation  <br />
-          rapide du cout de vos deplacements.
+          rapide du coût de vos déplacements.
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export default function Page() {
         </div>
 
         <h2 className="text-2xl font-bold mb-6">Inscription</h2>
-        <p className="mb-6 text-gray-600">Creer votre compte gratuitement</p>
+        <p className="mb-6 text-gray-600">Créer votre compte gratuitement</p>
 
         <form className="space-y-4">
           <input
@@ -46,7 +46,7 @@ export default function Page() {
           />
           <input
             type="password"
-            placeholder="Votre mot de passe"
+            placeholder="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full border p-2 rounded-md"
@@ -75,7 +75,7 @@ export default function Page() {
           >
             S'inscrire
           </button>
-          <h5>Deja inscrit?<Link href={'/connexion1'} className="text-blue-900 mr-4 ml-2">Connexion</Link></h5>
+          <h5>Déjà inscrit?<Link href={'/connexion1'} className="text-blue-900 mr-4 ml-2">Cliquez-ici</Link></h5>
         </form>
         {/* <div className='justify-end'>
           <h5>Deja inscrit?</h5>

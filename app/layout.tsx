@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={font.variable} suppressHydrationWarning>
         <head />
-        <body className=" text-black text-[18px] bg-gray-300 dark:bg-gray-800">
+        <body className=" text-black text-[18px] bg-gray-200 dark:bg-gray-800">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
