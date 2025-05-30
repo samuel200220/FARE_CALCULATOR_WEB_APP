@@ -20,9 +20,14 @@
       "mailUtilisateur": "passo@gmail.com",
       "motDePasse": "passo1",
       "motDePasseConfirmation": "passo1"
+    },
+    {
+      "id": "74d8",
+      "nomUtilisateur": "Sean",
+      "mailUtilisateur": "sean@gmail.com",
+      "motDePasse": "sean2",
+      "motDePasseConfirmation": "sean2"
     }
   ],
-  "commentaires":[
-    
-  ]
+  "commentaires": []
 }
