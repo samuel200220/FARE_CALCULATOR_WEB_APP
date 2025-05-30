@@ -7,7 +7,7 @@ const Section2 = () => {
         <h2 className='text-4xl text-center mb-8 text-blue-600 font-bold dark:text-white dark:decoration-white'>Nos Services</h2>
         <div className='flex justify-center items-center gap-10'>
             <Link href={'#'}>
-            <div className='w-72 h-80 flex-none m-6 bg-white p-4 rounded-4xl border overflow-hidden relative shadow-lg
+            <div className='w-72 h-80 flex-none m-6 bg-white p-4 rounded-4xl dark:bg-[#0D1B2A] dark:text-white border overflow-hidden relative shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
                 <h3 className='text-center mb-5 text-2xl'><span className="text-blue-600">Reserver</span> Un Taxi Pour Une Course</h3>
@@ -15,7 +15,7 @@ const Section2 = () => {
             </div>
             </Link>
             <Link href={'#'}>
-            <div className='w-72 h-80 flex-none m-2 bg-white p-4 rounded-4xl border overflow-hidden relative shadow-lg
+            <div className='w-72 h-80 flex-none m-2 bg-white p-4 rounded-4xl dark:bg-[#0D1B2A] dark:text-white border overflow-hidden relative shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
                 <h3 className='text-center mb-5 text-2xl'><span className="text-blue-600">Reserver</span> Une Place Dans Un Taxi</h3>
@@ -23,7 +23,7 @@ const Section2 = () => {
             </div>
             </Link>
             <Link href={'#'}>
-            <div className='w-73 h-80 flex-none m-6 bg-white p-4 rounded-4xl border overflow-hidden relative shadow-lg
+            <div className='w-73 h-80 flex-none m-6 bg-white p-4 rounded-4xl dark:bg-[#0D1B2A] dark:text-white border overflow-hidden relative shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
                 <h3 className='text-center mb-5 text-2xl'><span className="text-blue-600">Reserver</span> Chauffeur Pour Le Depot</h3>

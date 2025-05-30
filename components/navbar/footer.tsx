@@ -6,18 +6,18 @@ import { IoIosArrowUp } from 'react-icons/io';
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-500 dark:bg-blue-900 text-white px-6 md:px-16 pt-12 pb-6 relative">
+    <footer className="bg-blue-700 dark:bg-[#0D1B2A] text-white px-6 md:px-16 pt-12 pb-6 relative">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-10">
         {/* Our Company */}
         <div>
-          <h3 className="font-semibold mb-4">Our Company</h3>
+          <h3 className="font-semibold mb-4">Notre Compagnie</h3>
           <ul className="space-y-2 text-sm text-gray-300">
-            <li>Our Vision</li>
-            <li>Our Mission</li>
-            <li>Our Objectives</li>
-            <li>Our Originality</li>
-            <li>We Are Hiring</li>
-            <li>Contact Information</li>
+            <li>Notre Vision</li>
+            <li>Notre Mission</li>
+            <li>Nos objectifs</li>
+            <li>Notre originalite</li>
+            <li>Nous Recrutons</li>
+            <li>Informations de contact </li>
           </ul>
         </div>
 
@@ -25,29 +25,29 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold mb-4">Support</h3>
           <ul className="space-y-2 text-sm text-gray-300">
-            <li>Marketplace</li>
-            <li>Our system for connecting travel service customers and providers</li>
-            <li>Rental Agency</li>
-            <li>Travel Agency</li>
-            <li>Carpooling Service</li>
-            <li>Pick me up</li>
+            <li>Place de marche</li>
+            {/* <li>Our system for connecting travel service customers and providers</li> */}
+            <li>Agence de location</li>
+            <li>Agence de voyage</li>
+            <li>Service de covoiturage</li>
+            {/* <li>Pick me up</li> */}
           </ul>
         </div>
 
         {/* Legal Information */}
         <div>
-          <h3 className="font-semibold mb-4">Legal Information</h3>
+          <h3 className="font-semibold mb-4">Informations legales</h3>
           <ul className="space-y-2 text-sm text-gray-300">
-            <li>General Terms of Use</li>
-            <li>Privacy Policy</li>
-            <li>Your Personal Information</li>
+            <li>Conditions generales d'utilisation</li>
+            <li>Politique De Confidentialite</li>
+            <li>Vos Informations Personnelles</li>
             <li>Cookies</li>
           </ul>
         </div>
 
         {/* Mobile App */}
         <div>
-          <h3 className="font-semibold mb-4">Mobile App</h3>
+          <h3 className="font-semibold mb-4">Application Mobile</h3>
           <ul className="space-y-3 text-sm text-gray-300">
             <li>
               <span role="img" aria-label="apple">🍎</span> App Store
@@ -60,7 +60,7 @@ const Footer = () => {
 
         {/* Follow Us */}
         <div>
-          <h3 className="font-semibold mb-4">Follow us</h3>
+          <h3 className="font-semibold mb-4">Suivez nous</h3>
           <div className="flex space-x-4 mb-4">
             <FaTwitter className="hover:text-blue-400 cursor-pointer" />
             <FaFacebookF className="hover:text-blue-600 cursor-pointer" />
@@ -80,7 +80,7 @@ const Footer = () => {
 
       {/* Bottom note */}
       <div className="text-center text-sm text-gray-400">
-        © 2024 Ride&Go. <br /> All rights reserved
+        © 2024 Ride&Go. <br /> Tous droits conserves
       </div>
 
       {/* Floating Button */}

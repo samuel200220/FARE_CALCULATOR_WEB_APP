@@ -16,9 +16,15 @@ import toast from 'react-hot-toast';
 import LinearBufferButton from '../LinearBufferButton';
 import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
+import { FaMoneyBillAlt } from 'react-icons/fa';
+import { MdOutlineDirectionsWalk } from 'react-icons/md';
+import { BsClock } from 'react-icons/bs';
+import 'react-time-picker/dist/TimePicker.css';
+import TimePicker from 'react-time-picker';
 
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
-const Section1 = () => {
+const Section1 = ({}) => {
+  const [customOffer, setCustomOffer] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -225,27 +231,36 @@ useEffect(() => {
       setResult(data);
     } catch (err) {
       setError((err as Error).message);
+    }finally{
+      setIsLoading(false);
     }
   };
   
   return (
-    <section className='w-full h-[70vh] p-4 justify-center items-center flex mb-4 mt-0'>
-      <div className='w-4xl h-full relative mt-6 ml-6 rounded-3xl justify-start items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-blue-900'>
+    <section className='w-full h-[760px] p-4 justify-center items-center flex mb-4 mt-0'>
+      <div className='w-4xl h-full relative mt-6 ml-6 rounded-3xl justify-start items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A]'>
                     <Input
                         value={start} onChange={(e) => setStart(e.target.value)} 
-                        className="bg-white text-[18px] relative w-120 h-12 px-4 py-2 mt-6 rounded-[7px] border border-gray-300 hover:border-blue-800 "
+                        className="bg-white dark:bg-gray-800 dark:text-white text-[18px] relative w-120 h-12 px-4 py-2 mt-6 rounded-[7px] border border-gray-300 hover:border-blue-800 "
                         placeholder='Départ'
                     />
                     <Input 
                         value={end} onChange={(e) => setEnd(e.target.value)}
-                        className='bg-white w-120 h-12 px-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800'
+                        className='bg-white w-120 h-12 px-4 py-2 dark:bg-gray-800 dark:text-white rounded-[7px] border border-gray-300 hover:border-blue-800'
                         placeholder='Dépot'
                     />
                     <Input 
                         value={hour} onChange={(e) => setHour(e.target.value)}
-                        className='bg-white w-120 h-12 px-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800'
+                        className='bg-white w-120 h-12 dark:bg-gray-800 px-4 py-2 dark:text-white rounded-[7px] border border-gray-300 hover:border-blue-800'
                         placeholder='Heure de prise en charge (HH:MM)'
                     />
+                    {/* <input
+  type="time"
+  value={hour}
+  onChange={(e) => setHour(e.target.value)}
+  className="bg-white w-60 h-12 dark:bg-gray-800 px-4 py-2 dark:text-white rounded-[7px] border border-gray-300 hover:border-blue-800 cursor-pointer"
+/> */}
+
                     {/* <div className='justify-center items-center flex gap-6'>
                         <Button className='text-black bg-white w-54 h-10 cursor-pointer hover:bg-green-500 shadow-lg
                     transform transition-transform duration-300 ease-in-out
@@ -268,23 +283,90 @@ useEffect(() => {
                     </div> */}
                     <Button
                     onClick={handleCost} disabled={isLoading}
-                    className='text-white bg-blue-500 w-54 h-10 cursor-pointer hover:bg-blue-800 dark:hover:bg-blue-500 shadow-lg
+                    className='text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-500 w-54 h-10 cursor-pointer hover:bg-blue-800 shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl mb-3' ><span><FaCalculator /></span>{isLoading ? "Chargement..." : "Calculer tarif"}</Button>
                     {/* <LinearBufferButton /> */}
                     {error && <p className="text-red-500 mt-2">{error}</p>}
                 {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}
                 {result && (
-                    <div className="mt-4 p-4 border rounded bg-gray-100">
-                    <p><strong>Départ :</strong> {result.start}</p>
-                    <p><strong>Arrivée :</strong> {result.end}</p>
-                    <p><strong>Distance :</strong> {result.distance.toFixed(2)} km</p>
-                    <p><strong>Tarif estimé :</strong> {result.cost.toFixed(0)} FCFA</p>
-                    {/* <p><strong>Minimum :</strong> {result.mint_cost} FCFA</p> */}
+                    // <div className="mt-4 p-4 border rounded bg-gray-100">
+                    // <p><strong>Départ :</strong> {result.start}</p>
+                    // <p><strong>Arrivée :</strong> {result.end}</p>
+                    // <p><strong>Distance :</strong> {result.distance.toFixed(2)} km</p>
+                    // <p><strong>Tarif estimé :</strong> {result.cost.toFixed(0)} FCFA</p>
+                    // <p><strong>Minimum :</strong> {result.mint_cost} FCFA</p>
+
+                    // </div>
+                    <div className="w-120 h-56 relative p-4 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 text-sm">
+                      {/* Title */}
+                      <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
+                        <FaMoneyBillAlt />
+                        <span>Notre estimation</span>
+                      </div>
+
+                      {/* Distance & Duration */}
+                      <div className="flex justify-between gap-2">
+                        <div className="flex-1 bg-blue-50 rounded p-3">
+                          <div className="flex items-center gap-1 font-medium text-blue-700">
+                            <MdOutlineDirectionsWalk />
+                            <span>Distance</span>
+                          </div>
+                          <div className="text-xl font-bold">{result.distance.toFixed(2)} km</div>
+                        </div>
+                        <div className="flex-1 bg-blue-50 rounded p-3">
+                          <div className="flex items-center gap-1 font-medium text-blue-700">
+                            <BsClock />
+                            <span>Duree</span>
+                          </div>
+                          <div className="text-xl font-bold">1h 9min 49s</div>
+                        </div>
+                      </div>
+
+                      {/* Our Estimate */}
+                      <div className="border border-blue-500 rounded p-3 space-y-2">
+                        <div className="flex justify-between font-medium">
+                          <span>Cout Estime</span>
+                          <span className="font-bold">{result.cost.toFixed(0)} FCFA</span>
+                        </div>
+                        <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                          Commander
+                        </button>
+                      </div>
+
+                      {/* Official Rate */}
+                      <div className="border border-gray-200 rounded p-3 space-y-2">
+                        <div className="flex justify-between font-medium">
+                          <span>Tarif officel</span>
+                          <span className="font-bold">{result.cost.toFixed(0)} FCFA</span>
+                        </div>
+                        <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                          Commander
+                        </button>
+                      </div>
+
+                      {/* Custom Offer */}
+                      <div className="border border-blue-200 bg-blue-50 p-3 rounded space-y-2">
+                        <label className="font-medium text-blue-800 flex items-center gap-1">
+                          <span>🧭</span> Proposer votre prix
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="number"
+                            placeholder="Your offer"
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            value={customOffer}
+                            onChange={(e) => setCustomOffer(e.target.value)}
+                          />
+                          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                            Commader
+                          </button>
+                        </div>
+                      </div>
                     </div>
                 )}
       </div>
-      <div className="mr-5 rounded-2xl p-4 relative w-full h-full mt-0">
+      <div className="mr-5 rounded-2xl p-4 relative w-full h-full z-10 mt-0">
             <Mapleaf />
       </div>
 

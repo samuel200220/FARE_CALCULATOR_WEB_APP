@@ -3,11 +3,17 @@ import { Poppins,Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/provider/theme-provider";
 import { Toaster } from 'react-hot-toast';
+import { Montserrat } from 'next/font/google';
+import Sidebar from "@/components/sidebar";
 
 const font=Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'], // choisis ce que tu veux
   variable: '--font-poppins',
+});
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
 });
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,9 +36,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={font.className} suppressHydrationWarning>
+    <html lang="en" className={font.variable} suppressHydrationWarning>
         <head />
-        <body className=" text-black text-[18px] bg-gray-200 dark:bg-[#0D1B2A]">
+        <body className=" text-black text-[18px] bg-gray-300 dark:bg-gray-800">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

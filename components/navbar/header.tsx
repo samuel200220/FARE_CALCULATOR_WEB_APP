@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import { FaGlobe } from 'react-icons/fa';
 
@@ -21,13 +21,19 @@ import { Button } from '../ui/button'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { ModeToggle } from '../ui/mode-toggle';
+import Sidebar from '../sidebar';
 
 
 
 const Header = () => {
-    const [isMenuOpen,setIsMenuOpen]=React.useState(false)
+    const [isMenuOpen,setIsMenuOpen]=React.useState(false);
+    const [lang, setLang] = useState("fr");
+
+  const toggleLang = () => {
+    setLang(lang === "fr" ? "en" : "fr");
+  };
     return (
-        <header className='sticky top-0 z-[100] h-20 flex items-center justify-between px-4 py-4 bg-gradient-to-r from-blue-500 to-blue-500 w-full dark:bg-gradient-to-r dark:from-blue-900 dark:to-blue-900'>
+        <header className='sticky top-0 z-[100] h-20 flex items-center justify-between px-4 py-4 bg-blue-700 w-full dark:bg-[#0D1B2A]'>
             <div className='flex items=center lg:hidden'>
             <Sheet
                 open={isMenuOpen}
@@ -79,11 +85,12 @@ const Header = () => {
             </div>
 
             <nav className='hidden lg:flex items-center gap-6 '>
+            <Sidebar />
             {/* <Link href={"/"} className='text-2xl font-bold hoover:text-foreground/65 text-white flex items-center'>
                 Fare Calculator
             </Link> */}
             {/* <h2 className='font-bold text-white items-center text-2xl'>Fare Calculator</h2> */}
-            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-3xl'>Fare Calculator</Link>
+            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-3xl ml-11'>Fare Calculator</Link>
             </nav>
             {/* <div className='flex items-center space-x-4'>
                 <Button variant={'ghost'} size={'icon'} className='lg:hidden'>
@@ -106,13 +113,13 @@ const Header = () => {
                 <Link href={"#propos"} className='text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                     Aide
                 </Link>
-            <Button className='mr-6 bg-transparent border-none shadow-none text-white text-[18px] cursor-pointer hover:bg-blue-300'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>English</Button>
-            <ModeToggle />
-                <Link href={"/inscription"} >
-                <Button className='cursor-pointer bg-blue-300 hover:bg-blue-300 text-[18px] text-white'>S'inscrire</Button>
+            <Button onClick={toggleLang} className='mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button>
+            {/* <ModeToggle /> */}
+                <Link href={"/inscription1"} >
+                <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:bg-transparent dark:hover:bg-[#0D1B2A] hover:text-violet-800 dark:hover:text-violet-600 text-[18px] text-white'>S'inscrire</Button>
                 </Link>
-                <Link href={"/connexion"} >
-                <Button className='cursor-pointer bg-blue-300 hover:bg-blue-300 text-[18px] text-white'>Se connecter</Button>
+                <Link href={"/connexion1"} >
+                <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 text-[18px] text-white'>Se connecter</Button>
                 </Link>
             </div>
         </header>

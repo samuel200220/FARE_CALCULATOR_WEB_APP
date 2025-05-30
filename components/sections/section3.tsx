@@ -42,16 +42,16 @@ const Section3 = () => {
         {/* <h2 className='text-4xl text-center mb-12 underline decoration-black decoration-2 text-black dark:text-white'>COMMENTAIRES</h2> */}
         <div className="grid w-80 gap-2">
           <h2 className='text-blue-800 font-bold ml-3 dark:text-white'>Aidez nous a nous ameliorer</h2>
-            <Textarea className='text-center border border-blue-600 dark:bg-white' placeholder="Votre commentaire" />
-            <Button className='w-1/2 ml-20 cursor-pointer bg-blue-500 border border-blue-600 mb-10 text-white hover:bg-blue-500 dark:hover:bg-blue-700 shadow-lg
+            <Textarea className='text-center border border-blue-600 dark:text-white dark:bg-[#0D1B2A]' placeholder="Votre commentaire" />
+            <Button className='w-1/2 ml-20 cursor-pointer bg-blue-500 border border-blue-600 mb-10 dark:bg-[#0D1B2A] text-white hover:bg-blue-500 dark:hover:bg-[#0D1B2A] shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl'>Envoyer</Button>
         </div>
-        <div className="relative w-full">
+        <div className="relative w-full items-center justify-center">
       {/* Scroll Container */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-2 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 p-4 h-auto w-full"
+        className="flex overflow-x-auto gap-2 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100 p-4 h-auto w-full justify-center items-center"
       >
         {/* {[1, 2, 3, 4, 5, 6].map((n) => (
           <div
@@ -61,14 +61,14 @@ const Section3 = () => {
             Bloc {n}
           </div>
         ))} */}
-        <div className='flex justify-center gap-12'>
+        <div className='flex justify-center items-center gap-12'>
             {
-                [...comment, ...comment].map((comme,index)=>(
-                    <div key={index} className='bg-white cursor-pointer flex-none w-72 h-70 relative overflow-hidden rounded-4xl border justify-center shadow-lg
+                [...comment].map((comme,index)=>(
+                    <div key={index} className='bg-white dark:bg-[#0D1B2A] flex-none w-72 h-70 relative overflow-hidden rounded-4xl border justify-center shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:-translate-y-3 hover:shadow-2xl'>
-                        <h4 className='text-center mt-2 mb-10 text-blue-500 text-xl font-bold dark:text-blue'><span><ContactIcon name={comme.name} /></span>{comme.name}</h4>
-                        <p className='text-sm p-4 text-black dark:text-black'>{comme.message}</p>
+                        <h4 className='text-center mt-2 mb-10 text-blue-500 text-xl font-bold dark:text-white'><span><ContactIcon name={comme.name} /></span>{comme.name}</h4>
+                        <p className='text-sm p-4 text-black dark:text-white'>{comme.message}</p>
                     </div>
                 ))
             }
@@ -78,7 +78,7 @@ const Section3 = () => {
       {/* Left Button */}
       <button
         onClick={() => scroll('left')}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-green-500 shadow p-2 rounded-full"
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-blue-500 shadow p-2 rounded-full"
       >
         <ChevronLeft/>
       </button>
@@ -86,7 +86,7 @@ const Section3 = () => {
       {/* Right Button */}
       <button
         onClick={() => scroll('right')}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-green-500 shadow p-2 rounded-full "
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-blue-500 shadow p-2 rounded-full "
       >
         <ChevronRight />
       </button>
