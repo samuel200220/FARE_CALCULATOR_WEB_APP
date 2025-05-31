@@ -6,12 +6,9 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Poppins } from 'next/font/google';
+import { useTheme } from '@mui/material/styles';
 
-const font = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-});
+
 
 interface ConnexionFormData {
   motDePasse: string;
@@ -19,6 +16,7 @@ interface ConnexionFormData {
 }
 
 export default function Page() {
+  const theme = useTheme();
   const router = useRouter();
 
   const {
@@ -41,7 +39,7 @@ export default function Page() {
   return (
     <div className="min-h-screen flex p-20 rounded-2xl shadow-lg font-[Poppins]">
       {/* Left Section */}
-      <div className="w-1/2 bg-blue-700 text-white p-16 flex flex-col justify-center">
+      <div className="w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">
           Fare Calculator <br /> Votre Tarif à Portée De Main
         </h1>
@@ -53,7 +51,7 @@ export default function Page() {
       </div>
 
       {/* Right Section */}
-      <div className="w-1/2 p-16 bg-white flex flex-col justify-center">
+      <div className="w-1/2 p-16 bg-white dark:bg-gray-400 flex flex-col rounded-r-3xl justify-center">
         <h2 className="text-2xl font-bold mb-6">Connexion</h2>
 
         <Box
@@ -87,15 +85,20 @@ export default function Page() {
             />
 
             <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              type="submit"
-              sx={{ textTransform: 'none', fontWeight: 'bold' }}
-            >
-              Se Connecter
+                variant="contained"
+                fullWidth
+                type="submit"
+                sx={{
+                  fontFamily: 'Poppins, sans-serif',
+                  bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
+                  color: '#FFFFFF',
+                  '&:hover': {
+                    bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
+                  },
+                }}
+              >
+                Se connecter
             </Button>
-
             <Typography variant="body2" align="center">
               Pas de compte ?{' '}
               <Link href="/inscription1" className="text-blue-900 ml-1">

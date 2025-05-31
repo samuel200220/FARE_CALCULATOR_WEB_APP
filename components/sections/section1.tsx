@@ -6,7 +6,6 @@ import { Button } from '../ui/button'
 import { Label } from '../ui/label'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 import { FaRegCalendarAlt, FaRegClock, FaCalculator } from 'react-icons/fa';
-import Map from '../Map'
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import Mapleaf from '../Mapleaf';
@@ -23,22 +22,54 @@ import 'react-time-picker/dist/TimePicker.css';
 import TimePicker from 'react-time-picker';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FaFlagCheckered,FaLocationArrow,FaChevronDown } from 'react-icons/fa';
+import { IconType } from 'react-icons';
 
 
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
-  "10:00", "12:00", "14:00", "16:00",
-  "18:00", "20:00", "22:00"
+  "10:00", "11:00", "12:00", "13:00",
+  "14:00", "15:00", "16:00", "17:00",
+  "18:00", "19:00", "20:00", "21:00",
+  "22:00"
 ];
-const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong'];
+
+const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
+const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 const Section1 = ({}) => {
+  const [showSuggestionsStart, setShowSuggestionsStart] = useState(false);
+  const [showSuggestionsEnd, setShowSuggestionsEnd] = useState(false);
+  const handleSelectd = (value: string) => {
+    setEnd(value);
+    //setShowSuggestions(false);
+    setShowSuggestionsEnd(false);
+  };
+  const [filteredSuggestionsd, setFilteredSuggestionsd] = useState<string[]>([]);
+  // Removed duplicate declaration of end
+  const handleChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEnd(value);
+    setShowSuggestionsEnd(true);
+    setShowSuggestionsStart(false);
+
+    if (value.length > 0) {
+      const filtered = destinationSuggestions.filter((s) =>
+        s.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredSuggestionsd(filtered);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
   // Removed duplicate declaration of start
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setStart(value);
+    setShowSuggestionsEnd(false);
+    setShowSuggestionsStart(true);
 
     if (value.length > 0) {
       const filtered = suggestions.filter((s) =>
@@ -52,7 +83,8 @@ const Section1 = ({}) => {
   };
   const handleSelect = (value: string) => {
     setStart(value);
-    setShowSuggestions(false);
+    //setShowSuggestions(false);
+    setShowSuggestionsStart(false);
   };
   // Removed duplicate declaration of hour
   const [showDropdown, setShowDropdown] = useState(false);
@@ -88,6 +120,8 @@ const Section1 = ({}) => {
         });
       };
     }, []);
+
+
   useEffect(() => {
       if (!isLoading) return;
   
@@ -285,26 +319,29 @@ useEffect(() => {
                 <Input
                   value={start}
                   onChange={handleChange}
-                  className="bg-white dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+                  className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
                   placeholder="Départ"
                 />
 
                 {/* Suggestions */}
-                {showSuggestions && (
+                {showSuggestionsStart && (
                   <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
                     {filteredSuggestions.length > 0 ? (
                       filteredSuggestions.map((s, index) => (
                         <li
                           key={index}
                           onClick={() => handleSelect(s)}
-                          className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                          className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
                         >
                           {s}
                         </li>
                       ))
-                    ) : (
-                      <li className="px-4 py-2 text-gray-500">Aucune suggestion</li>
-                    )}
+                    ) 
+                    : 
+                    (
+                      <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                    )
+                    }
                   </ul>
                 )}
               </div>
@@ -316,10 +353,29 @@ useEffect(() => {
 
                 <Input
                   value={end}
-                  onChange={(e) => setEnd(e.target.value)}
-                  className="bg-white dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+                  onChange={handleChanged}
+                  className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
                   placeholder="Destination"
                 />
+
+                {/* Suggestions */}
+                {showSuggestionsEnd && (
+                  <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                    {filteredSuggestionsd.length > 0 ? (
+                      filteredSuggestionsd.map((s, index) => (
+                        <li
+                          key={index}
+                          onClick={() => handleSelectd(s)}
+                          className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                        >
+                          {s}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                    )}
+                  </ul>
+                )}
               </div>
               <div className="relative w-120 mt-4">
       {/* Icône à gauche */}
@@ -340,7 +396,7 @@ useEffect(() => {
         value={hour}
         onChange={(e) => setHour(e.target.value)}
         onClick={() => setShowDropdown(false)} // ferme si on clique dans input
-        className="bg-white dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-10 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+        className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-10 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
         placeholder="Heure de prise en charge (HH:MM)"
       />
 
@@ -351,7 +407,7 @@ useEffect(() => {
             <li
               key={h}
               onClick={() => handleSelectHour(h)}
-              className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+              className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
             >
               {h}
             </li>

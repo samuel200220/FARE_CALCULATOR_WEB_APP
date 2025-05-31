@@ -14,6 +14,7 @@ import {
   Typography
 } from '@mui/material';
 import { Poppins } from 'next/font/google';
+import { useTheme } from '@mui/material/styles';
 
 const font = Poppins({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ interface FormData {
 }
 
 export default function Page() {
+  const theme = useTheme();
   const router = useRouter();
 
   const {
@@ -64,9 +66,9 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen flex p-20 rounded-2xl shadow-lg">
+    <div className="min-h-screen flex p-20 rounded-3xl shadow-lg">
       {/* Left Section */}
-      <div className="w-1/2 bg-blue-700 text-white p-16 flex flex-col justify-center">
+      <div className="w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">
           Fare Calculator <br /> Votre Tarif à Portée De Main
         </h1>
@@ -78,10 +80,10 @@ export default function Page() {
       </div>
 
       {/* Right Section */}
-      <div className="w-1/2 p-16 bg-white flex flex-col justify-center">
+      <div className="w-1/2 p-16 bg-white dark:bg-gray-400 flex flex-col rounded-r-3xl justify-center">
         <div className="flex justify-end mb-6">
           <Link href="/">
-            <button className="border border-blue-900 text-blue-900 px-4 py-1 rounded-full hover:bg-blue-900 hover:text-white transition">
+            <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
               Commencez Gratuitement
             </button>
           </Link>
@@ -147,12 +149,19 @@ export default function Page() {
             />
 
             <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              type="submit" sx={{fontFamily: 'Poppins, sans-serif'}}
-            >
-              S'inscrire
+                variant="contained"
+                fullWidth
+                type="submit"
+                sx={{
+                  fontFamily: 'Poppins, sans-serif',
+                  bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
+                  color: '#FFFFFF',
+                  '&:hover': {
+                    bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
+                  },
+                }}
+              >
+                S'inscrire
             </Button>
 
             <Typography variant="body2" align="center" sx={{fontFamily: 'Poppins, sans-serif'}}>

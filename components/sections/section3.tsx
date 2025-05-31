@@ -33,7 +33,7 @@ const Section3 = () => {
       };
     
   return (
-    <section className='mt-40 mb-0 justify-center items-center flex flex-col'>
+    <section className='mt-40 mb-0 bg-white dark:bg-[#0D1B2A] pt-20 pb-20 justify-center items-center flex flex-col'>
         {/* <Input 
             className='bg-white w-100 h-10 px-4 py-2 rounded border border-gray-300 shadow text-center'
             placeholder='Entrer un commentaire'
@@ -42,8 +42,8 @@ const Section3 = () => {
         {/* <h2 className='text-4xl text-center mb-12 underline decoration-black decoration-2 text-black dark:text-white'>COMMENTAIRES</h2> */}
         <div className="grid w-80 gap-2">
           <h2 className='text-blue-800 font-bold ml-3 dark:text-white'>Aidez nous a nous ameliorer</h2>
-            <Textarea className='text-center border border-blue-600 dark:text-white dark:bg-[#0D1B2A]' placeholder="Votre commentaire" />
-            <Button className='w-1/2 ml-20 cursor-pointer bg-blue-500 border border-blue-600 mb-10 dark:bg-[#0D1B2A] text-white hover:bg-blue-500 dark:hover:bg-[#0D1B2A] shadow-lg
+            <Textarea className='text-center border border-blue-600 dark:text-white dark:bg-gray-800' placeholder="Votre commentaire" />
+            <Button className='w-1/2 ml-20 cursor-pointer bg-blue-500 border border-blue-600 mb-10 dark:bg-800 text-white hover:bg-blue-500 dark:hover:bg-[#0D1B2A] shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl'>Envoyer</Button>
         </div>
@@ -64,7 +64,7 @@ const Section3 = () => {
         <div className='flex justify-center items-center gap-12'>
             {
                 [...comment].map((comme,index)=>(
-                    <div key={index} className='bg-white dark:bg-[#0D1B2A] flex-none w-72 h-70 relative overflow-hidden rounded-4xl border justify-center shadow-lg
+                    <div key={index} className='bg-white dark:bg-gray-800 flex-none w-72 h-70 relative overflow-hidden rounded-4xl border justify-center shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:-translate-y-3 hover:shadow-2xl'>
                         <h4 className='text-center mt-2 mb-10 text-blue-500 text-xl font-bold dark:text-white'><span><ContactIcon name={comme.name} /></span>{comme.name}</h4>
