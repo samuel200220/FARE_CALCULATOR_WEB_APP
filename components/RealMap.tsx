@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
 
 export default function RealMap() {
   return (
-    <MapContainer center={[3.848, 11.5021]} zoom={13} style={{ height: '400px', width: '100%' }}>
+    <MapContainer center={[3.848, 11.5021]} zoom={13} style={{ borderRadius:'20px', height: '100%', width: '100%' }}>
       <TileLayer
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

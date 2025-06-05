@@ -308,8 +308,9 @@ useEffect(() => {
   };
   
   return (
-    <section className='w-full h-[760px] p-4 justify-center items-center flex mb-4 mt-0'>
-      <div className='w-4xl h-full relative mt-6 ml-6 rounded-3xl justify-start items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A]'>
+    <section className='w-full h-[850px] p-4 justify-center items-center flex mb-4 mt-0'>
+      <div className='w-4xl h-full relative mt-6 ml-6 rounded-3xl justify-start pt-10 items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A]'>
+      <h3 className='dark:text-white text-2xl font-bold text-black'>Calculateur de Tarif</h3>
               <div className="relative mt-6 w-120">
                 {/* Icône positionnée à gauche */}
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -498,7 +499,7 @@ useEffect(() => {
                       {/* Official Rate */}
                       <div className="border hover:border-blue-500 w-full relative mt-6 rounded p-3 space-y-2">
                         <div className="flex justify-between font-medium">
-                          <span className='text-blue-700 dark:text-white'>Tarif officel</span>
+                          <span className='text-blue-700 dark:text-white'>Tarif officiel</span>
                           <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
                         </div>
                         <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">

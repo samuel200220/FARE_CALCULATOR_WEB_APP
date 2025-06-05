@@ -34,7 +34,7 @@ const Header = () => {
   };
     return (
         <header className='sticky top-0 z-[100] h-20 flex items-center justify-between px-4 py-4 bg-blue-700 w-full dark:bg-[#0D1B2A]'>
-            <div className='flex items=center lg:hidden'>
+            {/* <div className='flex items=center lg:hidden'>
             <Sheet
                 open={isMenuOpen}
                 onOpenChange={setIsMenuOpen}
@@ -82,7 +82,7 @@ const Header = () => {
                 </SheetContent>
             </Sheet>
 
-            </div>
+            </div> */}
 
             <nav className='hidden lg:flex items-center gap-6 '>
             <Sidebar />
