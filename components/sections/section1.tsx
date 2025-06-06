@@ -37,6 +37,8 @@ const predefinedHours = [
 const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 const Section1 = ({}) => {
+  const [show, setShow] = useState(false);
+  // Removed duplicate declaration of result
   const [showSuggestionsStart, setShowSuggestionsStart] = useState(false);
   const [showSuggestionsEnd, setShowSuggestionsEnd] = useState(false);
   const handleSelectd = (value: string) => {
@@ -300,6 +302,7 @@ useEffect(() => {
   
       const data = await res.json();
       setResult(data);
+      setShow(true);
     } catch (err) {
       setError((err as Error).message);
     }finally{
@@ -309,9 +312,9 @@ useEffect(() => {
   
   return (
     <section className='w-full h-[850px] p-4 justify-center items-center flex mb-4 mt-0'>
-      <div className='w-4xl h-full relative mt-6 ml-6 rounded-3xl justify-start pt-10 items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A]'>
-      <h3 className='dark:text-white text-4xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>Calculateur de Tarif</h3>
-              <div className="relative mt-6 w-120">
+      <div className='lg:w-4xl sm:w-4xl md:w-4xl w-[320px] h-full relative mt-6 lg:ml-6 sm:ml-6 md:ml-6 ml-1 rounded-3xl justify-start pt-10 items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A] overflow-hidden transition-all duration-700 ease-in-out '>
+      <h3 className='dark:text-white text-2xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>Calculateur de Tarif</h3>
+              <div className="relative mt-6 lg:w-120 sm:w-120 md:w-120 w-[260px]">
                 {/* Icône positionnée à gauche */}
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <FaMapMarkerAlt className="text-blue-600 text-lg" />
@@ -346,7 +349,7 @@ useEffect(() => {
                   </ul>
                 )}
               </div>
-              <div className="relative mt-4 w-120">
+              <div className="relative mt-4 lg:w-120 sm:w-120 md:w-120 w-[260px]">
                 {/* Icône positionnée à gauche */}
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <FaLocationArrow className="text-blue-600 text-lg" />
@@ -378,7 +381,7 @@ useEffect(() => {
                   </ul>
                 )}
               </div>
-              <div className="relative w-120 mt-4">
+              <div className="relative lg:w-120 sm:w-120 md:w-120 w-[260px] mt-4">
       {/* Icône à gauche */}
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <FaRegClock className="text-blue-600 text-lg" />
@@ -460,7 +463,8 @@ useEffect(() => {
                     // <p><strong>Minimum :</strong> {result.mint_cost} FCFA</p>
 
                     // </div>
-                    <div className="w-120 h-96 relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 text-sm">
+                    <div className={`lg:w-120 sm:w-120 md:w-120 w-[260px] h-96 relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-hidden transition-all duration-700 ease-in-out 
+        ${show ? 'max-h-96 opacity-100 mt-0' : 'max-h-0 opacity-0'}`}>
                       {/* Title */}
                       <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
                         <FaMoneyBillAlt />

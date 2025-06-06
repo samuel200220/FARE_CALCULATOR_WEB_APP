@@ -33,7 +33,7 @@ const Header = () => {
     setLang(lang === "fr" ? "en" : "fr");
   };
     return (
-        <header className='sticky top-0 z-[100] h-20 flex items-center justify-between px-4 py-4 bg-blue-700 w-full dark:bg-[#0D1B2A]'>
+        <header className='sticky top-0 z-[100] h-20 flex items-center justify-between px-0 lg:px-4 md:px-4 sm:px-4 py-4 bg-blue-700 w-full dark:bg-[#0D1B2A]'>
             {/* <div className='flex items=center lg:hidden'>
             <Sheet
                 open={isMenuOpen}
@@ -90,7 +90,7 @@ const Header = () => {
                 Fare Calculator
             </Link> */}
             {/* <h2 className='font-bold text-white items-center text-2xl'>Fare Calculator</h2> */}
-            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-3xl ml-11'>Fare Calculator</Link>
+            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-xl lg:text-3xl sm:text-3xl md:text-3xl ml-11'>Fare Calculator</Link>
             </nav>
             {/* <div className='flex items-center space-x-4'>
                 <Button variant={'ghost'} size={'icon'} className='lg:hidden'>
@@ -113,15 +113,17 @@ const Header = () => {
                 <Link href={"#propos"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                     Aide
                 </Link>
-            <Button onClick={toggleLang} className='mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button>
+            <Button onClick={toggleLang} className='hidden sm:flex mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button>
             {/* <ModeToggle /> */}
                 <Link href={"/inscription1"} className='hidden lg:flex'>
                 <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:bg-transparent dark:hover:bg-[#0D1B2A] hover:text-violet-800 dark:hover:text-violet-600 text-[18px] text-white'>S'inscrire</Button>
                 </Link>
                 <Link href={"/connexion1"} >
-                <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 text-[18px] text-white'>Se connecter</Button>
+                <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
                 </Link>
+                <div className='hidden sm:flex'>
                 <ModeToggle />
+                </div>
             </div>
         </header>
   )

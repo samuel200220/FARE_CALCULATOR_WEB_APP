@@ -38,7 +38,7 @@ export default function Sidebar() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 mt-4 text-xl rounded bg-transparent shadow"
+        className="fixed top-4 left-4 z-50 mt-4 text-[15px] sm:text-xl lg:text-xl md:text-xl rounded bg-transparent shadow"
       >
         {isOpen ? <FaTimes className='text-white' /> : <FaBars className='text-white' />}
       </button>
@@ -46,11 +46,11 @@ export default function Sidebar() {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full w-64 z-10 dark:bg-gray-800 bg-blue-600 text-white p-6 transform transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full lg:w-64 md:w-64 sm:w-64 w-30 z-10 dark:bg-gray-800 bg-blue-600 text-white p-6 transform transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <ul className="space-y-4 mt-20">
+        <ul className="lg:space-y-4 sm:space-y-4 md:space-y-4 space-y-4 lg:mt-20 sm:mt-20 md:mt-20 mt-10">
           <li><a href="/" className=" hover:text-blue-300">Accueil</a></li>
           <li><a href="#" className="hover:text-blue-300">Profil</a></li>
           <li><a href="#" className="hover:text-blue-300">Paramètres</a></li>

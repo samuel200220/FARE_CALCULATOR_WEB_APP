@@ -28,7 +28,7 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <div className="dark:bg-[#0D1B2A] bg-white mt-20 p-6">
-        <h2 className="text-5xl sm:text-4xl md:text-2xl lg:text-5xl font-bold text-center mb-8 text-blue-600 dark:text-white">
+        <h2 className="text-xl sm:text-4xl md:text-2xl lg:text-5xl font-bold text-center mb-8 text-blue-600 dark:text-white">
             Ce que disent nos clients
         </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
