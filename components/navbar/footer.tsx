@@ -6,7 +6,7 @@ import { IoIosArrowUp } from 'react-icons/io';
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-700 dark:bg-[#0D1B2A] text-white px-6 md:px-16 pt-12 pb-6 relative">
+    <footer className="bg-gray-800 dark:bg-[#0D1B2A] text-white px-6 md:px-16 pt-12 pb-6 relative">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-10">
         {/* Our Company */}
         <div>

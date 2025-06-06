@@ -4,7 +4,7 @@ import { Button } from '../ui/button'
 
 const Section6 = () => {
   return (
-    <section className='mt-40 justify-center items-center flex flex-col mb-10'>
+    <section className='hidden lg:flex mt-40 justify-center items-center flex-col mb-10'>
         <h2 className='text-4xl text-center mb-8 text-blue-600 font-bold dark:text-white'>Contactez-Nous</h2>
         <Input 
             className='bg-white w-110 h-12 px-4 py-2 rounded dark:text-white dark:bg-[#0D1B2A] border border-blue-600 shadow'

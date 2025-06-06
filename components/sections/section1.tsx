@@ -310,7 +310,7 @@ useEffect(() => {
   return (
     <section className='w-full h-[850px] p-4 justify-center items-center flex mb-4 mt-0'>
       <div className='w-4xl h-full relative mt-6 ml-6 rounded-3xl justify-start pt-10 items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A]'>
-      <h3 className='dark:text-white text-2xl font-bold text-black'>Calculateur de Tarif</h3>
+      <h3 className='dark:text-white text-4xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>Calculateur de Tarif</h3>
               <div className="relative mt-6 w-120">
                 {/* Icône positionnée à gauche */}
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -528,7 +528,7 @@ useEffect(() => {
                     </div>
                 )}
       </div>
-      <div className="mr-5 rounded-2xl p-4 relative w-full h-full z-10 mt-0">
+      <div className="hidden lg:block mr-5 rounded-2xl p-4 relative w-full h-full z-10 mt-0">
             <Mapleaf />
       </div>
 
