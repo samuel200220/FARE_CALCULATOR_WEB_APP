@@ -23,10 +23,10 @@ const font = Poppins({
 });
 
 interface FormData {
-  nomUtilisateur: string;
-  mailUtilisateur: string;
-  motDePasse: string;
-  motDePasseConfirmation: string;
+  nomUtilisateurPro: string;
+  mailUtilisateurPro: string;
+  motDePassePro: string;
+  motDePasseConfirmationPro: string;
 }
 
 export default function Page() {
@@ -40,14 +40,14 @@ export default function Page() {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    if (data.motDePasse !== data.motDePasseConfirmation) {
+    if (data.motDePassePro !== data.motDePasseConfirmationPro) {
       toast.error('Les mots de passe ne correspondent pas');
       return;
     }
 
     try {
       const res = await axios.get(
-        `http://localhost:4000/user?mailUtilisateur=${data.mailUtilisateur}`
+        `http://localhost:4000/userpro?mailUtilisateurPro=${data.mailUtilisateurPro}`
       );
 
       if (res.data.length > 0) {
@@ -55,10 +55,10 @@ export default function Page() {
         return;
       }
 
-      await axios.post('http://localhost:4000/user', data);
+      await axios.post('http://localhost:4000/userpro', data);
       toast.success('Inscription réussie');
       localStorage.removeItem('compteurUtilisation');
-      router.push('/connexion1');
+      router.push('/connexionpro');
     } catch (error) {
       console.error(error);
       toast.error('Une erreur est survenue');
@@ -70,7 +70,7 @@ export default function Page() {
       {/* Left Section */}
       <div className="hidden lg:flex w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">
-          Fare Calculator <br /> Votre Tarif à Portée De Main
+          Fare Calculator Pro <br /> Votre Tarif à Portée De Main
         </h1>
         <p className="text-lg leading-relaxed">
           Plus besoin de stresser sur le coût du trajet, <br />
@@ -81,21 +81,16 @@ export default function Page() {
 
       {/* Right Section */}
       <div className="lg:w-1/2 w-full lg:p-16 p-0 bg-white dark:bg-gray-400 flex flex-col rounded-3xl lg:rounded-l-none lg:rounded-r-3xl justify-center">
-        <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
-          <Link href="/">
+        <div className="flex justify-center lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
+          <Link href="/inscription1">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Commencez Gratuitement
-            </button>
-          </Link>
-          <Link href="/inscriptionpro">
-            <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Version Pro
+              Version simple
             </button>
           </Link>
         </div>
 
         <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Inscription</h2>
-        <p className="mb-6 text-center lg-text-start text-gray-600">Créer votre compte gratuitement</p>
+        <p className="mb-6 text-center lg-text-start text-gray-600">Créer votre compte pro gratuitement</p>
 
         <Box
           component="form"
@@ -124,9 +119,9 @@ export default function Page() {
               placeholder="you@example.com"
               variant="outlined"
               fullWidth
-              {...register('mailUtilisateur', { required: 'Email requis' })}
-              error={!!errors.mailUtilisateur}
-              helperText={errors.mailUtilisateur?.message}
+              {...register('mailUtilisateurPro', { required: 'Email requis' })}
+              error={!!errors.mailUtilisateurPro}
+              helperText={errors.mailUtilisateurPro?.message}
               sx={{fontFamily: 'Poppins, sans-serif'}}
             />
 
@@ -134,9 +129,9 @@ export default function Page() {
               type="password"
               label="Mot de passe"
               fullWidth
-              {...register('motDePasse', { required: 'Mot de passe requis' })}
-              error={!!errors.motDePasse}
-              helperText={errors.motDePasse?.message}
+              {...register('motDePassePro', { required: 'Mot de passe requis' })}
+              error={!!errors.motDePassePro}
+              helperText={errors.motDePassePro?.message}
               sx={{fontFamily: 'Poppins, sans-serif'}}
             />
 
@@ -144,11 +139,11 @@ export default function Page() {
               type="password"
               label="Confirmer le mot de passe"
               fullWidth
-              {...register('motDePasseConfirmation', {
+              {...register('motDePasseConfirmationPro', {
                 required: 'Confirmation requise'
               })}
-              error={!!errors.motDePasseConfirmation}
-              helperText={errors.motDePasseConfirmation?.message}
+              error={!!errors.motDePasseConfirmationPro}
+              helperText={errors.motDePasseConfirmationPro?.message}
               sx={{fontFamily: 'Poppins, sans-serif'}}
             />
 
@@ -169,8 +164,8 @@ export default function Page() {
             </Button>
 
             <Typography variant="body2" align="center" sx={{fontFamily: 'Poppins, sans-serif', marginBottom: '5px',}}>
-              Déjà inscrit ?{' '}
-              <Link href="/connexion1" style={{ fontFamily: 'Poppins, sans-serif',color: '#1e3a8a' }}>
+              Déjà inscrit à la version pro ?{' '}
+              <Link href="/connexionpro" style={{ fontFamily: 'Poppins, sans-serif',color: '#1e3a8a' }}>
                 Cliquez-ici
               </Link>
             </Typography>

@@ -33,7 +33,7 @@ const Section3 = () => {
       };
     
   return (
-    <section className='mt-40 mb-0 bg-white dark:bg-[#0D1B2A] pt-20 pb-20 justify-center items-center flex flex-col'>
+    <section className='mt-40 mb-0 bg-300 dark:bg-[#0D1B2A] pt-20 pb-20 justify-center items-center flex flex-col'>
         {/* <Input 
             className='bg-white w-100 h-10 px-4 py-2 rounded border border-gray-300 shadow text-center'
             placeholder='Entrer un commentaire'

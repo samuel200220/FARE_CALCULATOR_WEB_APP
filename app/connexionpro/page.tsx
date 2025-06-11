@@ -32,7 +32,7 @@ export default function Page() {
     } else {
       // Ici vous pouvez ajouter la logique de connexion (vérification d'email, etc.)
       toast.success('Connexion réussie');
-      router.push('/'); // rediriger vers une autre page
+      router.push('/versionpro'); // rediriger vers une autre page
     }
   };
 
@@ -52,13 +52,6 @@ export default function Page() {
 
       {/* Right Section */}
       <div className="lg:w-1/2 w-full lg:p-16 p-0 bg-white dark:bg-gray-400 flex flex-col rounded-3xl lg:rounded-l-none lg:rounded-r-3xl justify-center">
-      <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
-          <Link href="/inscriptionpro">
-            <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Version Pro
-            </button>
-          </Link>
-        </div>
         <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Connexion</h2>
 
         <Box
@@ -107,9 +100,9 @@ export default function Page() {
                 Se connecter
             </Button>
             <Typography variant="body2" align="center">
-              Pas de compte ?{' '}
-              <Link href="/inscription1" className="text-blue-900 ml-1">
-                Cliquez ici
+              Pas de compte pro ?{' '}
+              <Link href="/inscriptionpro" className="text-blue-900 ml-1">
+                Cliquez-ici
               </Link>
             </Typography>
           </Stack>

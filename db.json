@@ -27,7 +27,21 @@
       "mailUtilisateur": "sean@gmail.com",
       "motDePasse": "sean2",
       "motDePasseConfirmation": "sean2"
+    },
+    {
+      "id": "d8a3",
+      "mailUtilisateur": "lagrange@gmail.com",
+      "motDePasse": "lagrange1",
+      "motDePasseConfirmation": "lagrange1"
     }
   ],
-  "commentaires": []
+  "commentaires": [],
+  "userpro": [
+    {
+      "id": "9de6",
+      "mailUtilisateurPro": "stella@gmail.com",
+      "motDePassePro": "12345",
+      "motDePasseConfirmationPro": "12345"
+    }
+  ]
 }
