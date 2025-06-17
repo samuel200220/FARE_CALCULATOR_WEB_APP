@@ -4,7 +4,19 @@ import { useState, useEffect, useRef } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { ModeToggle } from './ui/mode-toggle';
 import { useTheme } from 'next-themes';
+import {
+  Home, User, Settings, LogOut, HelpCircle, LayoutDashboard, History
+} from 'lucide-react';
 
+const menuItems = [
+  { label: 'Accueil', icon: <Home />, href: '#' },
+  { label: 'Profil', icon: <User />, href: '#' },
+  { label: 'Paramètres', icon: <Settings />, href: '#' },
+  { label: 'Déconnexion', icon: <LogOut />, href: '#' },
+  { label: 'Aide', icon: <HelpCircle />, href: '#' },
+  { label: 'Tableau de Bord', icon: <LayoutDashboard />, href: '#' },
+  { label: 'Historique', icon: <History />, href: '#' },
+];
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const { resolvedTheme } = useTheme();

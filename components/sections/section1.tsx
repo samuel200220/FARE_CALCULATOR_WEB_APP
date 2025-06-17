@@ -248,142 +248,103 @@ useEffect(() => {
     <section className='w-full h-[850px] p-4 justify-center items-center flex mb-4 mt-0'>
       <div className='lg:w-4xl sm:w-4xl md:w-4xl w-[320px] h-full relative mt-6 lg:ml-6 sm:ml-6 md:ml-6 ml-1 rounded-3xl justify-start pt-10 items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A] overflow-hidden transition-all duration-700 ease-in-out '>
       <h3 className='dark:text-white text-2xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>Calculateur de Tarif</h3>
-              <div className="relative mt-6 lg:w-120 sm:w-120 md:w-120 w-[260px]">
-                {/* Icône positionnée à gauche */}
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaMapMarkerAlt className="text-blue-600 text-lg" />
-                </div>
-                <Input
-                  value={start}
-                  onChange={handleChange}    
-                  className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
-                  placeholder="Départ"
-                />
-
-                {/* Suggestions */}
-                {showSuggestionsStart && (
-                  <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-                    {filteredSuggestions.length > 0 ? (
-                      filteredSuggestions.map((s, index) => (
-                        <li
-                          key={index}
-                          onClick={() => handleSelect(s)}
-                          className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                        >
-                          {s}
-                        </li>
-                      ))
-                    ) 
-                    : 
-                    (
-                      <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-                    )
-                    }
-                  </ul>
-                )}
-              </div>
-              <div className="relative mt-4 lg:w-120 sm:w-120 md:w-120 w-[260px]">
-                {/* Icône positionnée à gauche */}
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaLocationArrow className="text-blue-600 text-lg" />
-                </div>
-
-                <Input
-                  value={end}
-                  onChange={handleChanged}
-                  className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
-                  placeholder="Destination"
-                />
-
-                {/* Suggestions */}
-                {showSuggestionsEnd && (
-                  <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-                    {filteredSuggestionsd.length > 0 ? (
-                      filteredSuggestionsd.map((s, index) => (
-                        <li
-                          key={index}
-                          onClick={() => handleSelectd(s)}
-                          className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                        >
-                          {s}
-                        </li>
-                      ))
-                    ) : (
-                      <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-                    )}
-                  </ul>
-                )}
-              </div>
-              <div className="relative lg:w-120 sm:w-120 md:w-120 w-[260px] mt-4">
-      {/* Icône à gauche */}
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <FaRegClock className="text-blue-600 text-lg" />
+      <form
+      onSubmit={handleCost}
+      className="space-y-5 max-w-md w-full mx-auto p-4 bg-white dark:bg-gray-900 rounded-lg shadow"
+    >
+      {/* Champ Départ */}
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <FaMapMarkerAlt className="text-blue-600 text-lg" />
+        </div>
+        <Input
+          required
+          value={start}
+          onChange={handleChange}
+          className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+          placeholder="Départ"
+        />
+        {showSuggestionsStart && (
+          <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+            {filteredSuggestions.length > 0 ? (
+              filteredSuggestions.map((s, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSelect(s)}
+                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                >
+                  {s}
+                </li>
+              ))
+            ) : (
+              <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+            )}
+          </ul>
+        )}
       </div>
 
-      {/* Icône à droite */}
-      <div
-        className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-        onClick={() => setShowDropdown(!showDropdown)}
-      >
-        <FaChevronDown className="text-gray-500" />
+      {/* Champ Destination */}
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <FaLocationArrow className="text-blue-600 text-lg" />
+        </div>
+        <Input
+          required
+          value={end}
+          onChange={handleChanged}
+          className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
+          placeholder="Destination"
+        />
+        {showSuggestionsEnd && (
+          <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+            {filteredSuggestionsd.length > 0 ? (
+              filteredSuggestionsd.map((s, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSelectd(s)}
+                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                >
+                  {s}
+                </li>
+              ))
+            ) : (
+              <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+            )}
+          </ul>
+        )}
       </div>
 
-      {/* Input */}
-      <Input
-        value={hour}
-        onChange={(e) => setHour(e.target.value)}
-        onClick={() => setShowDropdown(false)} // ferme si on clique dans input
-        className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-10 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800"
-        placeholder="Heure de prise en charge (HH:MM)"
-      />
-
-      {/* Menu déroulant */}
-      {showDropdown && (
-        <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 rounded shadow-md max-h-60 overflow-y-auto">
+      {/* Select Heure */}
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <FaRegClock className="text-blue-600 text-lg" />
+        </div>
+        <select
+          required
+          value={hour}
+          onChange={(e) => setHour(e.target.value)}
+          className="bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border border-gray-300 hover:border-blue-800 appearance-none"
+        >
+          <option value="">Sélectionnez l'heure</option>
           {predefinedHours.map((h) => (
-            <li
-              key={h}
-              onClick={() => handleSelectHour(h)}
-              className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-            >
+            <option key={h} value={h}>
               {h}
-            </li>
+            </option>
           ))}
-        </ul>
-      )}
-    </div>
-                    {/* <input
-  type="time"
-  value={hour}
-  onChange={(e) => setHour(e.target.value)}
-  className="bg-white w-60 h-12 dark:bg-gray-800 px-4 py-2 dark:text-white rounded-[7px] border border-gray-300 hover:border-blue-800 cursor-pointer"
-/> */}
+        </select>
+      </div>
 
-                    {/* <div className='justify-center items-center flex gap-6'>
-                        <Button className='text-black bg-white w-54 h-10 cursor-pointer hover:bg-green-500 shadow-lg
-                    transform transition-transform duration-300 ease-in-out
-                    hover:scale-105 hover:shadow-2xl'><span><FaRegCalendarAlt /></span>Aujourd'hui</Button>
-                    <Button className='text-black bg-white w-54 h-10 cursor-pointer hover:bg-green-500 shadow-lg
-                    transform transition-transform duration-300 ease-in-out
-                    hover:scale-105 hover:shadow-2xl'><span><FaRegClock /></span>Maintenant</Button>
-                    </div> */}
-                    {/* <div className='justify-center items-center flex gap-6'>
-                        <RadioGroup defaultValue="Ramassage" className='justify-center items-center flex gap-20'>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="default" id="r1" className="border-2 border-gray-400 rounded-full w-4 h-4 data-[state=checked]:bg-black data-[state=checked]:border-black"/>
-                                <Label htmlFor="r1" className='text-white dark:text-white font-bold'>Ramassage</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="Depot" id="r2" className="border-2 border-gray-400 rounded-full w-4 h-4 data-[state=checked]:bg-black data-[state=checked]:border-black"/>
-                                <Label htmlFor="r2" className='text-white dark:text-white dark:font-bold'>Depot</Label>
-                            </div>
-                        </RadioGroup>
-                    </div> */}
-                    <Button
-                    onClick={handleCost} disabled={isLoading}
-                    className='text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-700 w-54 h-10 hover:bg-blue-800 shadow-lg
-                    transform transition-transform duration-300 ease-in-out
-                    hover:scale-105 hover:shadow-2xl mb-3' ><span><FaCalculator /></span>{isLoading ? "Calcul en cours..." : "Calculer tarif"}</Button>
+      {/* Bouton Calculer */}
+      <Button
+        type="submit"
+        onClick={handleCost}
+        disabled={isLoading}
+        className="text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-700 w-full h-12 hover:bg-blue-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+      >
+        <FaCalculator className="mr-2" />
+        {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
+      </Button>
+    </form>
                     {/* <LinearBufferButton /> */}
                     {error && <p className="text-red-500 mt-2">{error}</p>}
                 {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}

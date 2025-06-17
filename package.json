@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/poppins": "^5.2.6",
     "@googlemaps/js-api-loader": "^1.16.8",
+    "@headlessui/react": "^2.2.4",
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
     "@radix-ui/react-avatar": "^1.1.9",

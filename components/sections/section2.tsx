@@ -32,22 +32,22 @@ const Section2 = () => {
 
   <div className='flex flex-col lg:flex-row justify-center items-center gap-10 w-full max-w-6xl mx-auto'>
     <Link href={'#'} className='px-3'>
-      <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-100 p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
+      <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-200  p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer '>
         <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Réserver</span> Un Taxi Pour Une Course</h3>
-        <p className='text-sm'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis facilis veniam nesciunt dicta iure? Repudiandae, at praesentium quos delectus ullam velit sapiente sunt labore magni? Ea nisi molestiae dolorem voluptatem!</p>
+        <p className='text-sm'>Réservez votre taxi rapidement et facilement pour tous vos déplacements. Que ce soit pour un trajet en ville ou une sortie à l’aéroport, notre service fiable vous garantit un confort optimal et une ponctualité exemplaire. Contactez-nous dès aujourd’hui !</p>
       </div>
     </Link>
 
     <Link href={'#'} className='px-3'>
-         <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-100 p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
+         <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-200 p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
              <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Reserver</span> Une Place Dans Un Taxi</h3>
-             <p className='text-sm'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odit laudantium quibusdam, ipsam necessitatibus earum repellat officiis delectus totam adipisci voluptatem cumque sit rem asperiores dolores ut culpa? Laudantium, laboriosam numquam.</p>
+             <p className='text-sm'>Partagez votre trajet avec d'autres passagers grâce à notre option de réservation de place. Économisez tout en voyageant en toute sécurité avec des conducteurs expérimentés. Réservez en ligne ou par téléphone pour un départ immédiat !</p>
          </div>
      </Link>
     <Link href={'#'} className='px-3'>
-        <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-100 p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
+        <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-200 p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
              <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Reserver</span> Chauffeur Pour Le Depot</h3>
-             <p className='text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque!</p>
+             <p className='text-sm'>Profitez d’un service personnalisé avec un chauffeur dédié pour vos livraisons ou dépôts. Que ce soit pour des colis urgents ou des marchandises fragiles, nous assurons un transport sécurisé et efficace. Faites votre demande maintenant !</p>
              </div>
      </Link>
   </div>

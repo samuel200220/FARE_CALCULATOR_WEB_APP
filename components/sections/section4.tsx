@@ -10,21 +10,21 @@ const Section4 = () => {
                     hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
                 <h3 className='text-violet-500 text-center mb-5 text-2xl'>Pourquoi</h3>
                 <hr className='bg-black'/>
-                <p className='text-sm dark:text-white'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis facilis veniam nesciunt dicta iure? Repudiandae, at praesentium quos delectus ullam velit sapiente sunt labore magni? Ea nisi molestiae dolorem voluptatem!</p>
+                <p className='text-sm dark:text-white'>Découvrez pourquoi notre entreprise est le choix idéal pour vos besoins de transport. Avec une équipe dédiée et un service client exceptionnel, nous mettons tout en œuvre pour vous offrir une expérience de voyage agréable et sans stress. Rejoignez-nous dès maintenant !</p>
             </div>
             <div className='w-72 h-80 flex-none m-2 bg-gray-100 dark:bg-gray-800 p-4 rounded-4xl border overflow-hidden relative shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
             <h3 className='text-violet-500 text-center mb-5 text-2xl'>Vision</h3>
                 <hr className='bg-black'/>
-                <p className='text-sm dark:text-white'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odit laudantium quibusdam, ipsam necessitatibus earum repellat officiis delectus totam adipisci voluptatem cumque sit rem asperiores dolores ut culpa? Laudantium, laboriosam numquam.</p>
+                <p className='text-sm dark:text-white'>Notre vision est de révolutionner le secteur du transport en proposant des solutions innovantes et durables. Nous aspirons à devenir un leader mondial en offrant un service fiable, écologique et accessible à tous, aujourd’hui et demain.</p>
             </div>
             <div className='w-73 h-80 flex-none m-6 bg-gray-100 dark:bg-gray-800 p-4 rounded-4xl border overflow-hidden relative shadow-lg
                     transform transition-transform duration-300 ease-in-out
                     hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
             <h3 className='text-violet-500 text-center mb-5 text-2xl'>Objectif</h3>
                 <hr className='bg-black'/>
-                <p className='text-sm dark:text-white'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque!</p>
+                <p className='text-sm dark:text-white'>Notre objectif est de garantir la satisfaction de chaque client grâce à une ponctualité irréprochable et un professionnalisme constant. Nous visons à élargir notre réseau pour desservir encore plus de destinations, tout en maintenant des standards élevés.</p>
             </div>
         </div>
     </section>
