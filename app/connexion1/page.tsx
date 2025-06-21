@@ -32,7 +32,7 @@ export default function Page() {
     } else {
       // Ici vous pouvez ajouter la logique de connexion (vérification d'email, etc.)
       toast.success('Connexion réussie');
-      router.push('/'); // rediriger vers une autre page
+      router.push('/accueil'); // rediriger vers une autre page
     }
   };
 

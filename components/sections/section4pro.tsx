@@ -1,34 +1,58 @@
-import React from 'react'
+'use client';
 
-const Section4pro = () => {
+import { Lightbulb, Eye, Target } from 'lucide-react';
+import React from 'react';
+
+const Section4 = () => {
+  const infos = [
+    {
+      title: 'Pourquoi',
+      description:
+        'Découvrez pourquoi notre entreprise est le choix idéal pour vos besoins de transport. Une équipe dédiée, un service client exceptionnel, et une expérience de voyage sans stress.',
+      icon: <Lightbulb className="text-violet-500 w-10 h-10 mb-3" />,
+    },
+    {
+      title: 'Vision',
+      description:
+        'Notre vision est de révolutionner le transport avec des solutions innovantes et durables. Un service fiable, écologique et accessible à tous.',
+      icon: <Eye className="text-violet-500 w-10 h-10 mb-3" />,
+    },
+    {
+      title: 'Objectif',
+      description:
+        'Garantir la satisfaction de chaque client grâce à une ponctualité irréprochable et un professionnalisme constant. Étendre notre réseau tout en maintenant l’excellence.',
+      icon: <Target className="text-violet-500 w-10 h-10 mb-3" />,
+    },
+  ];
+
   return (
-    <section id='propos' className='hidden lg:flex mt-40 mb-0 justify-center h-[630px] bg-white dark:bg-[#0D1B2A] pt-14 items-center flex-col'>
-        <h2 className='text-5xl sm:text-4xl md:text-2xl lg:text-5xl text-center mb-8 text-blue-700 font-bold dark:text-white'>A Propos De Nous</h2>
-        <div className='flex justify-center items-center gap-6'>
-            <div className='w-72 h-80 flex-none m-6 bg-gray-100 dark:bg-gray-800 p-4 rounded-4xl border overflow-hidden relative shadow-lg
-                    transform transition-transform duration-300 ease-in-out
-                    hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
-                <h3 className='text-violet-500 text-center mb-5 text-2xl'>Pourquoi</h3>
-                <hr className='bg-black'/>
-                <p className='text-sm dark:text-white'>Découvrez pourquoi notre entreprise est le choix idéal pour vos besoins de transport. Avec une équipe dédiée et un service client exceptionnel, nous mettons tout en œuvre pour vous offrir une expérience de voyage agréable et sans stress. Rejoignez-nous dès maintenant !</p>
-            </div>
-            <div className='w-72 h-80 flex-none m-2 bg-gray-100 dark:bg-gray-800 p-4 rounded-4xl border overflow-hidden relative shadow-lg
-                    transform transition-transform duration-300 ease-in-out
-                    hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
-            <h3 className='text-violet-500 text-center mb-5 text-2xl'>Vision</h3>
-                <hr className='bg-black'/>
-                <p className='text-sm dark:text-white'>Notre vision est de révolutionner le secteur du transport en proposant des solutions innovantes et durables. Nous aspirons à devenir un leader mondial en offrant un service fiable, écologique et accessible à tous, aujourd’hui et demain.</p>
-            </div>
-            <div className='w-73 h-80 flex-none m-6 bg-gray-100 dark:bg-gray-800 p-4 rounded-4xl border overflow-hidden relative shadow-lg
-                    transform transition-transform duration-300 ease-in-out
-                    hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
-            <h3 className='text-violet-500 text-center mb-5 text-2xl'>Objectif</h3>
-                <hr className='bg-black'/>
-                <p className='text-sm dark:text-white'>Notre objectif est de garantir la satisfaction de chaque client grâce à une ponctualité irréprochable et un professionnalisme constant. Nous visons à élargir notre réseau pour desservir encore plus de destinations, tout en maintenant des standards élevés.</p>
-            </div>
-        </div>
-    </section>
-  )
-}
+    <section
+      id="propos"
+      className="bg-white dark:bg-[#0D1B2A] pt-20 pb-32 mt-20 px-4 sm:px-6 lg:px-8"
+    >
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-blue-700 dark:text-white mb-16">
+        À Propos de Nous
+      </h2>
 
-export default Section4pro
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+        {infos.map((info, index) => (
+          <div
+            key={index}
+            className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl border shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 cursor-pointer text-center"
+          >
+            <div className="flex flex-col items-center">
+              {info.icon}
+              <h3 className="text-xl font-semibold text-violet-500 mb-3">
+                {info.title}
+              </h3>
+              <hr className="border-gray-300 dark:border-gray-600 w-16 mb-4" />
+              <p className="text-sm text-gray-700 dark:text-gray-200">{info.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default Section4;

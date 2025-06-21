@@ -3,21 +3,21 @@ import { FaStar } from 'react-icons/fa';
 
 const testimonials = [
   {
-    name: 'Marie Dubois',
+    name: 'Thomas Sankara',
     title: 'Directrice Logistique',
     quote:
       'Service exceptionnelle ! Le calculateur de tarifs nous fait gagner un temps précieux dans nos devis quotidiens.',
     color: 'bg-red-500',
   },
   {
-    name: 'Jean Martin',
+    name: 'Djouhou Pascaline',
     title: "Chef d'Entreprise",
     quote:
       'Interface intuitive et tarifs transparents. Nous recommandons vivement cette solution à nos partenaires.',
     color: 'bg-blue-600',
   },
   {
-    name: 'Sophie Laurent',
+    name: 'TAGATSING Samuel',
     title: 'Responsable Achats',
     quote:
       'La précision des calculs et la rapidité du service ont transformé notre processus de commande.',

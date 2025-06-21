@@ -22,6 +22,7 @@ import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { ModeToggle } from '../ui/mode-toggle';
 import Sidebar from '../sidebar';
+import SidebarToggle from '../sidebar1';
 
 
 
@@ -85,7 +86,7 @@ const Headerpro = () => {
             </div> */}
 
             <nav className='flex items-center gap-6 '>
-            <Sidebar />
+            <SidebarToggle />
             {/* <Link href={"/"} className='text-2xl font-bold hoover:text-foreground/65 text-white flex items-center'>
                 Fare Calculator
             </Link> */}
@@ -107,10 +108,10 @@ const Headerpro = () => {
                 </div>
             </div> */}
             <div className='flex items-center gap-4 dark:flex dark:items-center dark:gap-4'>
-            <Link href={"#"} className='hidden lg:flex text-white  font-medium mr-4 text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+            <Link href={"/statistiques"} className='hidden lg:flex text-white  font-medium mr-4 text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                         Tableau de bord
                 </Link>
-                <Link href={"#propos"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                <Link href={"/aide"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                     Aide
                 </Link>
             <Button onClick={toggleLang} className='hidden sm:flex mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button>

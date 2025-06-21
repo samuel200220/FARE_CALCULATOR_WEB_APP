@@ -37,12 +37,12 @@ export default function SidebarToggle() {
           Fare Calculator
         </div>
         <nav className="p-4 space-y-4 text-gray-700 dark:text-gray-200">
-          <NavItem href="/" icon={<Home />} label="Accueil" />
-          <NavItem href="/profil" icon={<User />} label="Profil" />
+          <NavItem href="/accueil" icon={<Home />} label="Accueil" />
+          <NavItem href="/profil1" icon={<User />} label="Profil" />
           <NavItem href="/parametres" icon={<Settings />} label="Paramètres" />
           <NavItem href="/statistiques" icon={<LayoutDashboard />} label="Tableau de Bord" />
           <NavItem href="/historique" icon={<History />} label="Historique" />
-          <NavItem href="/aide" icon={<HelpCircle />} label="Aide" />
+          <NavItem href="/aide1" icon={<HelpCircle />} label="Aide" />
           <NavItem href="/connexion1" icon={<LogOut />} label="Déconnexion" />
         </nav>
       </aside>

@@ -33,6 +33,12 @@
       "mailUtilisateur": "lagrange@gmail.com",
       "motDePasse": "lagrange1",
       "motDePasseConfirmation": "lagrange1"
+    },
+    {
+      "id": "5379",
+      "mailUtilisateur": "liojel",
+      "motDePasse": "1234",
+      "motDePasseConfirmation": "1234"
     }
   ],
   "commentaires": [],

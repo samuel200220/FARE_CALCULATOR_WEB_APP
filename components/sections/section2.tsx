@@ -1,59 +1,61 @@
-import Link from 'next/link'
-import React from 'react'
+'use client';
+
+import Link from 'next/link';
+import { Car, Users, PackageSearch } from 'lucide-react';
+
+const services = [
+  {
+    icon: <Car className="w-10 h-10 text-blue-600 mb-3" />,
+    title: 'Réserver un Taxi',
+    description:
+      'Réservez votre taxi rapidement pour vos trajets quotidiens ou vers l’aéroport. Confort, ponctualité et fiabilité garantis.',
+    link: '#',
+  },
+  {
+    icon: <Users className="w-10 h-10 text-green-600 mb-3" />,
+    title: 'Réserver une Place',
+    description:
+      'Partagez un trajet avec d’autres passagers. Voyagez en toute sécurité tout en réalisant des économies.',
+    link: '#',
+  },
+  {
+    icon: <PackageSearch className="w-10 h-10 text-pink-600 mb-3" />,
+    title: 'Chauffeur pour Dépôt',
+    description:
+      'Bénéficiez d’un chauffeur pour déposer colis ou marchandises. Transport sécurisé, rapide et fiable.',
+    link: '#',
+  },
+];
 
 const Section2 = () => {
   return (
-    // <section id='services' className='bg-white dark:bg-[#0D1B2A] h-[700px] pt-32 justify-center mt-40 mb-0 dark:from-blue-800 dark:to-blue-700'>
-    //     <h2 className='text-5xl sm:text-3xl md:text-2xl lg:text-5xl text-center mb-8 text-blue-700 font-bold dark:text-white dark:decoration-white'>Nos Services</h2>
-    //     <div className='flex flex-col lg:flex-row justify-center items-center gap-10'>
-    //         <Link href={'#'}>
-    //         <div className='w-72 md:w-80 h-80 flex-none m-4 bg-gray-100 p-4 rounded-4xl dark:bg-gray-800 dark:text-white border overflow-hidden relative shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
-    //             <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Reserver</span> Un Taxi Pour Une Course</h3>
-    //             <p className='text-sm'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis facilis veniam nesciunt dicta iure? Repudiandae, at praesentium quos delectus ullam velit sapiente sunt labore magni? Ea nisi molestiae dolorem voluptatem!</p>
-    //         </div>
-    //         </Link>
-    //         <Link href={'#'}>
-    //         <div className='w-72 md:w-80 h-80 flex-none m-4 bg-gray-100 p-4 rounded-4xl dark:bg-gray-800 dark:text-white border overflow-hidden relative shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
-    //             <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Reserver</span> Une Place Dans Un Taxi</h3>
-    //             <p className='text-sm'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odit laudantium quibusdam, ipsam necessitatibus earum repellat officiis delectus totam adipisci voluptatem cumque sit rem asperiores dolores ut culpa? Laudantium, laboriosam numquam.</p>
-    //         </div>
-    //         </Link>
-    //         <Link href={'#'}>
-    //         <div className='w-72 md:w-80 h-80 flex-none m-4 bg-gray-100 p-4 rounded-4xl dark:bg-gray-800 dark:text-white border overflow-hidden relative shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
+    <section
+      id="services"
+      className="bg-white dark:bg-[#0D1B2A] pt-10 pb-20 mt-20 px-4 sm:px-6 lg:px-8"
+    >
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-blue-700 dark:text-white mb-12">
+        Nos Services
+      </h2>
 
-    //             <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Reserver</span> Chauffeur Pour Le Depot</h3>
-    //             <p className='text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque! Quisquam, voluptatibus. Quod, cumque!</p>
-    //         </div>
-    //         </Link>
-    //     </div>
-    // </section>
-    <section id='services' className='bg-white dark:bg-[#0D1B2A] pt-10 pb-10 lg:pt-32 lg:rounded-none lg:ml-0 lg:mr-0 lg:pb-32 sm:pt-10 sm:pb-8 sm:rounded-3xl sm:ml-4 sm:mr-4 lg:mt-40 sm:mt-40 md:mt-40 mt-20 mb-0 px-4'>
-  <h2 className='text-xl sm:text-4xl lg:text-5xl text-center mb-6 lg:mb-8 sm:mb-10 md:mb-10 text-blue-700 font-bold dark:text-white'>Nos Services</h2>
-
-  <div className='flex flex-col lg:flex-row justify-center items-center gap-10 w-full max-w-6xl mx-auto'>
-    <Link href={'#'} className='px-3'>
-      <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-200  p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer '>
-        <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Réserver</span> Un Taxi Pour Une Course</h3>
-        <p className='text-sm'>Réservez votre taxi rapidement et facilement pour tous vos déplacements. Que ce soit pour un trajet en ville ou une sortie à l’aéroport, notre service fiable vous garantit un confort optimal et une ponctualité exemplaire. Contactez-nous dès aujourd’hui !</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+        {services.map((service, index) => (
+          <Link href={service.link} key={index}>
+            <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl border shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 cursor-pointer">
+              <div className="flex flex-col items-center text-center">
+                {service.icon}
+                <h3 className="text-xl font-semibold text-blue-700 dark:text-white mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 text-sm">
+                  {service.description}
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
-    </Link>
+    </section>
+  );
+};
 
-    <Link href={'#'} className='px-3'>
-         <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-200 p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
-             <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Reserver</span> Une Place Dans Un Taxi</h3>
-             <p className='text-sm'>Partagez votre trajet avec d'autres passagers grâce à notre option de réservation de place. Économisez tout en voyageant en toute sécurité avec des conducteurs expérimentés. Réservez en ligne ou par téléphone pour un départ immédiat !</p>
-         </div>
-     </Link>
-    <Link href={'#'} className='px-3'>
-        <div className='w-full lg:max-w-xs lg:h-80 sm:flex sm:flex-col md:flex md:flex-col bg-gray-200 p-4 sm:rounded-xl md:rounded-xl lg:rounded-4xl rounded-xl dark:bg-gray-800 dark:text-white border shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:cursor-pointer'>
-             <h3 className='text-center mb-5 text-2xl'><span className="text-blue-700 font-bold">Reserver</span> Chauffeur Pour Le Depot</h3>
-             <p className='text-sm'>Profitez d’un service personnalisé avec un chauffeur dédié pour vos livraisons ou dépôts. Que ce soit pour des colis urgents ou des marchandises fragiles, nous assurons un transport sécurisé et efficace. Faites votre demande maintenant !</p>
-             </div>
-     </Link>
-  </div>
-</section>
-
-  )
-}
-
-export default Section2
+export default Section2;

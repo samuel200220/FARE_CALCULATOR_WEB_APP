@@ -27,7 +27,8 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-fixed bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+      <SidebarToggle />
 
       {/* Hero Section */}
       <section className="bg-blue-700 text-white py-20 text-center px-4">
@@ -35,37 +36,12 @@ export default function HomePage() {
         <p className="text-lg max-w-2xl mx-auto mb-6">
           Votre solution rapide et fiable pour estimer le tarif de vos trajets en toute simplicité.
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
-      {/* Toujours visibles, en ligne même sur petits écrans */}
-      <Link
-        href="/accueil"
-        className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
-      >
-        Commencer gratuitement
-      </Link>
-
-      <Link
-        href="/inscriptionpro"
-        className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
-      >
-        Version Pro
-      </Link>
-
-      {/* Masqués sur petits écrans, visibles en md et + */}
-      <Link
-        href="/inscription1"
-        className="hidden md:inline-block bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
-      >
-        S'inscrire
-      </Link>
-
-      <Link
-        href="/connexion1"
-        className="hidden md:inline-block bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
-      >
-        Se Connecter
-      </Link>
-    </div>
+        <Link
+          href="/calculateur"
+          className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
+        >
+          Commencer maintenant
+        </Link>
       </section>
 
       {/* Fonctionnalités */}
@@ -73,28 +49,32 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold text-center mb-8 text-blue-700">Fonctionnalités principales</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-xl transition transform hover:scale-[1.02]">
+            <Link
+              href={feature.link}
+              key={index}
+              className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-xl transition transform hover:scale-[1.02]"
+            >
               <div className="mb-4 flex justify-center">{feature.icon}</div>
               <h3 className="text-lg font-semibold text-center">{feature.title}</h3>
               <p className="text-sm text-center text-gray-600 dark:text-gray-300 mt-2">{feature.description}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
 
       {/* Call to Action */}
-      {/* <section className="text-center py-12 px-4">
+      <section className="text-center py-12 px-4">
         <h2 className="text-xl font-bold mb-4">Besoin d’aide ?</h2>
         <p className="text-gray-600 dark:text-gray-300 mb-6">
           Consultez notre centre d’assistance pour trouver des réponses à vos questions.
         </p>
         <Link
-          href="/aide1"
+          href="/support"
           className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition"
         >
           Accéder à l’aide
         </Link>
-      </section> */}
+      </section>
     </div>
   );
 }
