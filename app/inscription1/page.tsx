@@ -82,11 +82,6 @@ export default function Page() {
       {/* Right Section */}
       <div className="lg:w-1/2 w-full lg:p-16 p-0 bg-white dark:bg-gray-400 flex flex-col rounded-3xl lg:rounded-l-none lg:rounded-r-3xl justify-center">
         <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
-          <Link href="/accueil">
-            <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Commencez Gratuitement
-            </button>
-          </Link>
           <Link href="/inscriptionpro">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
               Version Pro
@@ -110,13 +105,13 @@ export default function Page() {
           }}
         >
           <Stack spacing={3} sx={{fontFamily: 'Poppins, sans-serif'}}>
-            {/* <TextField
+            <TextField
               label="Nom d'utilisateur"
               fullWidth
               {...register('nomUtilisateur', { required: 'Ce champ est requis' })}
               error={!!errors.nomUtilisateur}
               helperText={errors.nomUtilisateur?.message}
-            /> */}
+            />
 
             <TextField
               type="email"
@@ -130,7 +125,7 @@ export default function Page() {
               sx={{fontFamily: 'Poppins, sans-serif'}}
             />
 
-            <TextField
+            {/* <TextField
               type="password"
               label="Mot de passe"
               fullWidth
@@ -150,7 +145,7 @@ export default function Page() {
               error={!!errors.motDePasseConfirmation}
               helperText={errors.motDePasseConfirmation?.message}
               sx={{fontFamily: 'Poppins, sans-serif'}}
-            />
+            /> */}
 
             <Button
                 variant="contained"

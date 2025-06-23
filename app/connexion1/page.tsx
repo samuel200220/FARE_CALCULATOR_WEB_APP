@@ -7,10 +7,12 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
+import axios from 'axios';
 
 
 
 interface ConnexionFormData {
+  mailUtilisateur: string;
   motDePasse: string;
   motDePasseConfirmation: string;
 }
@@ -26,13 +28,31 @@ export default function Page() {
     watch,
   } = useForm<ConnexionFormData>();
 
-  const onSubmit = (data: ConnexionFormData) => {
+  const onSubmit = async (data: ConnexionFormData) => {
     if (data.motDePasse !== data.motDePasseConfirmation) {
       toast.error('Les mots de passe ne correspondent pas');
     } else {
       // Ici vous pouvez ajouter la logique de connexion (vérification d'email, etc.)
       toast.success('Connexion réussie');
       router.push('/accueil'); // rediriger vers une autre page
+    }
+    try {
+      const res = await axios.get(
+        `http://localhost:4000/user?mailUtilisateur=${data.mailUtilisateur}`
+      );
+
+      if (res.data.length > 0) {
+        toast.error('Un compte existe déjà avec cette adresse mail');
+        return;
+      }
+
+      await axios.post('http://localhost:4000/user', data);
+      toast.success('Connexion réussie');
+      localStorage.removeItem('compteurUtilisation');
+      router.push('/accueil');
+    } catch (error) {
+      console.error(error);
+      toast.error('Une erreur est survenue');
     }
   };
 
@@ -70,6 +90,17 @@ export default function Page() {
         >
           <Stack spacing={3}>
             <TextField
+              type="email"
+              label="Adresse email"
+              placeholder="you@example.com"
+              variant="outlined"
+              fullWidth
+              {...register('mailUtilisateur', { required: 'Email requis' })}
+              error={!!errors.mailUtilisateur}
+              helperText={errors.mailUtilisateur?.message}
+              sx={{fontFamily: 'Poppins, sans-serif'}}
+            />
+            {/* <TextField
               type="password"
               label="Votre mot de passe"
               variant="outlined"
@@ -89,7 +120,7 @@ export default function Page() {
               })}
               error={!!errors.motDePasseConfirmation}
               helperText={errors.motDePasseConfirmation?.message}
-            />
+            /> */}
 
             <Button
                 variant="contained"

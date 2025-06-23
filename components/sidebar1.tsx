@@ -43,7 +43,7 @@ export default function SidebarToggle() {
           <NavItem href="/statistiques" icon={<LayoutDashboard />} label="Tableau de Bord" />
           <NavItem href="/historique" icon={<History />} label="Historique" />
           <NavItem href="/aide1" icon={<HelpCircle />} label="Aide" />
-          <NavItem href="/connexion1" icon={<LogOut />} label="Déconnexion" />
+          <NavItem href="/connexionpro" icon={<LogOut />} label="Déconnexion" />
         </nav>
       </aside>
 

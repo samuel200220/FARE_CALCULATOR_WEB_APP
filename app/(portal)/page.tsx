@@ -38,10 +38,17 @@ export default function HomePage() {
         <div className="flex flex-wrap justify-center gap-4">
       {/* Toujours visibles, en ligne même sur petits écrans */}
       <Link
-        href="/accueil"
+        href="/accueilano"
         className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
       >
         Commencer gratuitement
+      </Link>
+
+      <Link
+        href="/inscription1"
+        className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
+      >
+        Version Simple
       </Link>
 
       <Link
@@ -49,21 +56,6 @@ export default function HomePage() {
         className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
       >
         Version Pro
-      </Link>
-
-      {/* Masqués sur petits écrans, visibles en md et + */}
-      <Link
-        href="/inscription1"
-        className="hidden md:inline-block bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
-      >
-        S'inscrire
-      </Link>
-
-      <Link
-        href="/connexion1"
-        className="hidden md:inline-block bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
-      >
-        Se Connecter
       </Link>
     </div>
       </section>
