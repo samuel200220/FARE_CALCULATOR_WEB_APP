@@ -90,7 +90,7 @@ export default function ParametresPage() {
                 </Switch>
               </div>
 
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Mode sombre</span>
                 <Switch
                   checked={darkModeEnabled}
@@ -105,7 +105,7 @@ export default function ParametresPage() {
                     } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                   />
                 </Switch>
-              </div>
+              </div> */}
             </div>
           </section>
         </div>

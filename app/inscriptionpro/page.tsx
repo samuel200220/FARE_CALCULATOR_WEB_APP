@@ -23,6 +23,7 @@ const font = Poppins({
 });
 
 interface FormData {
+  responsableEntreprise: string;
   nomUtilisateurPro: string;
   mailUtilisateurPro: string;
   motDePassePro: string;
@@ -105,13 +106,21 @@ export default function Page() {
           }}
         >
           <Stack spacing={3} sx={{fontFamily: 'Poppins, sans-serif'}}>
-            {/* <TextField
-              label="Nom d'utilisateur"
+            <TextField
+              label="Nom de l'entreprise"
               fullWidth
-              {...register('nomUtilisateur', { required: 'Ce champ est requis' })}
-              error={!!errors.nomUtilisateur}
-              helperText={errors.nomUtilisateur?.message}
-            /> */}
+              {...register('nomUtilisateurPro', { required: 'Ce champ est requis' })}
+              error={!!errors.nomUtilisateurPro}
+              helperText={errors.nomUtilisateurPro?.message}
+            />
+
+            <TextField
+              label="Responsable de l'entreprise"
+              fullWidth
+              {...register('responsableEntreprise', { required: 'Ce champ est requis' })}
+              error={!!errors.responsableEntreprise}
+              helperText={errors.responsableEntreprise?.message}
+            />
 
             <TextField
               type="email"

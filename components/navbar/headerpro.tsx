@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Crown } from 'lucide-react';
 
 import { FaGlobe } from 'react-icons/fa';
 
@@ -91,7 +92,14 @@ const Headerpro = () => {
                 Fare Calculator
             </Link> */}
             {/* <h2 className='font-bold text-white items-center text-2xl'>Fare Calculator</h2> */}
-            <Link href={'#'} scroll={true} className='font-bold text-white items-center text-xl lg:text-3xl sm:text-3xl md:text-3xl ml-11'>Fare Calculator</Link>
+            <Link
+            href="#"
+            scroll={true}
+            className="font-bold text-white items-center text-xl lg:text-3xl sm:text-3xl md:text-3xl ml-11 flex gap-2"
+            >
+            Fare Calculator Pro
+            <Crown className="w-6 h-6 text-yellow-400" /> {/* icône couronne dorée */}
+            </Link>
             </nav>
             {/* <div className='flex items-center space-x-4'>
                 <Button variant={'ghost'} size={'icon'} className='lg:hidden'>
@@ -111,8 +119,11 @@ const Headerpro = () => {
             <Link href={"/statistiques"} className='hidden lg:flex text-white  font-medium mr-4 text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                         Tableau de bord
                 </Link>
-                <Link href={"/aide"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                <Link href={"/aide1"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                     Aide
+                </Link>
+                <Link href={"/connexionpro"} >
+                    <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Deconnexion</Button>
                 </Link>
             {/* <Button onClick={toggleLang} className='hidden sm:flex mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button> */}
             {/* <ModeToggle /> */}

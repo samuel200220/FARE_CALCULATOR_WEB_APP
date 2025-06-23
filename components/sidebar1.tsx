@@ -4,7 +4,7 @@ import { JSX, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Menu, Home, User, Settings, LogOut,
-  HelpCircle, LayoutDashboard, History
+  HelpCircle, LayoutDashboard, History, Crown,PartyPopper
 } from 'lucide-react';
 
 export default function SidebarToggle() {
@@ -33,11 +33,13 @@ export default function SidebarToggle() {
         }`}
         aria-label="Sidebar"
       >
-        <div className="p-5 text-2xl font-bold text-blue-700 border-b border-gray-300 dark:border-gray-700">
+        <div className="p-5 text-2xl font-bold text-blue-700 text-center border-b border-gray-300 dark:border-gray-700 flex items-center gap-2">
           Fare Calculator
+          <Crown className="w-6 h-6 text-yellow-500" />
         </div>
         <nav className="p-4 space-y-4 text-gray-700 dark:text-gray-200">
-          <NavItem href="/accueil" icon={<Home />} label="Accueil" />
+          <NavItem href="/" icon={<PartyPopper />} label="Bienvenue" />
+          <NavItem href="/versionpro" icon={<Home />} label="Accueil" />
           <NavItem href="/profil1" icon={<User />} label="Profil" />
           <NavItem href="/parametres" icon={<Settings />} label="Paramètres" />
           <NavItem href="/statistiques" icon={<LayoutDashboard />} label="Tableau de Bord" />

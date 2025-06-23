@@ -109,7 +109,7 @@ const Headerano = () => {
                 </div>
             </div> */}
             <div className='flex items-center gap-4 dark:flex dark:items-center dark:gap-4'>
-                <Link href={"/aide"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                <Link href={"/aide1"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                     Aide
                 </Link>
             {/* <Button onClick={toggleLang} className='hidden sm:flex mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button> */}

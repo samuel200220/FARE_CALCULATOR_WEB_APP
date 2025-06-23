@@ -1,51 +1,23 @@
 {
   "user": [
     {
-      "id": "5e6d",
+      "id": "4a64",
+      "nomUtilisateur": "Grace",
+      "mailUtilisateur": "grace@gmail.com"
+    },
+    {
+      "id": "e364",
       "nomUtilisateur": "Samuel",
-      "mailUtilisateur": "samuelftagat@gmail.com",
-      "motDePasse": "samuel2",
-      "motDePasseConfirmation": "samuel2"
-    },
-    {
-      "id": "c064",
-      "nomUtilisateur": "Matteo",
-      "mailUtilisateur": "matteo@gmail.com",
-      "motDePasse": "matteo1",
-      "motDePasseConfirmation": "matteo1"
-    },
-    {
-      "id": "21aa",
-      "nomUtilisateur": "Passo",
-      "mailUtilisateur": "passo@gmail.com",
-      "motDePasse": "passo1",
-      "motDePasseConfirmation": "passo1"
-    },
-    {
-      "id": "74d8",
-      "nomUtilisateur": "Sean",
-      "mailUtilisateur": "sean@gmail.com",
-      "motDePasse": "sean2",
-      "motDePasseConfirmation": "sean2"
-    },
-    {
-      "id": "d8a3",
-      "mailUtilisateur": "lagrange@gmail.com",
-      "motDePasse": "lagrange1",
-      "motDePasseConfirmation": "lagrange1"
-    },
-    {
-      "id": "5379",
-      "mailUtilisateur": "liojel",
-      "motDePasse": "1234",
-      "motDePasseConfirmation": "1234"
+      "mailUtilisateur": "samuelftagat@gmail.com"
     }
   ],
   "commentaires": [],
   "userpro": [
     {
-      "id": "9de6",
-      "mailUtilisateurPro": "stella@gmail.com",
+      "id": "2569",
+      "nomUtilisateurPro": "Fare Calculator",
+      "responsableEntreprise": "DJIOTO",
+      "mailUtilisateurPro": "djioto@gmail.com",
       "motDePassePro": "12345",
       "motDePasseConfirmationPro": "12345"
     }

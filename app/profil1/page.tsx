@@ -59,14 +59,14 @@ export default function Profile() {
             <h1 className="text-2xl font-bold">Bienvenue, {user.nickName}</h1>
             <p className="text-gray-500 dark:text-gray-400">Mardi 07 Juin 2022</p>
           </div>
-          <div className="flex items-center space-x-4">
+          {/* <div className="flex items-center space-x-4">
             <input
               type="text"
               placeholder="Recherche"
               className="p-2 rounded-md border dark:border-gray-700 bg-gray-200 dark:bg-gray-700 text-black dark:text-white"
             />
             <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full" />
-          </div>
+          </div> */}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-6">

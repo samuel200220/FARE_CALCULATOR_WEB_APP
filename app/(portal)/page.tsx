@@ -75,7 +75,7 @@ export default function HomePage() {
       </section>
 
       {/* Call to Action */}
-      {/* <section className="text-center py-12 px-4">
+      <section className="text-center py-12 px-4">
         <h2 className="text-xl font-bold mb-4">Besoin d’aide ?</h2>
         <p className="text-gray-600 dark:text-gray-300 mb-6">
           Consultez notre centre d’assistance pour trouver des réponses à vos questions.
@@ -86,7 +86,7 @@ export default function HomePage() {
         >
           Accéder à l’aide
         </Link>
-      </section> */}
+      </section>
     </div>
   );
 }

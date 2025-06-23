@@ -13,8 +13,8 @@ import axios from 'axios';
 
 interface ConnexionFormData {
   mailUtilisateur: string;
-  motDePasse: string;
-  motDePasseConfirmation: string;
+  // motDePasse: string;
+  // motDePasseConfirmation: string;
 }
 
 export default function Page() {
@@ -29,24 +29,23 @@ export default function Page() {
   } = useForm<ConnexionFormData>();
 
   const onSubmit = async (data: ConnexionFormData) => {
-    if (data.motDePasse !== data.motDePasseConfirmation) {
-      toast.error('Les mots de passe ne correspondent pas');
-    } else {
-      // Ici vous pouvez ajouter la logique de connexion (vérification d'email, etc.)
-      toast.success('Connexion réussie');
-      router.push('/accueil'); // rediriger vers une autre page
-    }
+    // if (data.motDePasse !== data.motDePasseConfirmation) {
+    //   toast.error('Les mots de passe ne correspondent pas');
+    // } else {
+    //   toast.success('Connexion réussie');
+    //   router.push('/accueil');
+    // }
     try {
       const res = await axios.get(
         `http://localhost:4000/user?mailUtilisateur=${data.mailUtilisateur}`
       );
 
-      if (res.data.length > 0) {
-        toast.error('Un compte existe déjà avec cette adresse mail');
-        return;
-      }
+      // if (res.data.length > 0) {
+      //   toast.error('Un compte existe déjà avec cette adresse mail');
+      //   return;
+      // }
 
-      await axios.post('http://localhost:4000/user', data);
+      // await axios.post('http://localhost:4000/user', data);
       toast.success('Connexion réussie');
       localStorage.removeItem('compteurUtilisation');
       router.push('/accueil');
@@ -88,7 +87,7 @@ export default function Page() {
           autoComplete="off"
           sx={{ fontFamily: 'Poppins, sans-serif', maxWidth:{xs:300,sm:300, md:400, lg:400,}, mx:{xs:'auto', sm:0} }}
         >
-          <Stack spacing={3}>
+           <Stack spacing={3}>
             <TextField
               type="email"
               label="Adresse email"
@@ -120,7 +119,7 @@ export default function Page() {
               })}
               error={!!errors.motDePasseConfirmation}
               helperText={errors.motDePasseConfirmation?.message}
-            /> */}
+            />  */}
 
             <Button
                 variant="contained"

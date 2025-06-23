@@ -86,7 +86,7 @@ const Header = () => {
             </div> */}
 
             <nav className='flex items-center gap-6 '>
-            <SidebarToggle />
+            <Sidebar />
             {/* <Link href={"/"} className='text-2xl font-bold hoover:text-foreground/65 text-white flex items-center'>
                 Fare Calculator
             </Link> */}
@@ -108,19 +108,19 @@ const Header = () => {
                 </div>
             </div> */}
             <div className='flex items-center gap-4 dark:flex dark:items-center dark:gap-4'>
-            <Link href={"/statistiques"} className='hidden lg:flex text-white  font-medium mr-4 text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+            {/* <Link href={"/statistiques"} className='hidden lg:flex text-white  font-medium mr-4 text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                         Tableau de bord
-                </Link>
-                <Link href={"/aide"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
+                </Link> */}
+                <Link href={"/aide1"} className='hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800 dark:text-white dark:hover:text-violet-600'>
                     Aide
                 </Link>
             {/* <Button onClick={toggleLang} className='hidden sm:flex mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button> */}
             {/* <ModeToggle /> */}
-                <Link href={"/inscription1"} className='hidden lg:flex'>
+                {/* <Link href={"/inscription1"} className='hidden lg:flex'>
                 <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:bg-transparent dark:hover:bg-[#0D1B2A] hover:text-violet-800 dark:hover:text-violet-600 text-[18px] text-white'>S'inscrire</Button>
-                </Link>
+                </Link> */}
                 <Link href={"/connexion1"} >
-                <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
+                <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Deconnexion</Button>
                 </Link>
                 <div className='hidden sm:flex'>
                 <ModeToggle />

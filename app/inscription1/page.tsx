@@ -25,8 +25,8 @@ const font = Poppins({
 interface FormData {
   nomUtilisateur: string;
   mailUtilisateur: string;
-  motDePasse: string;
-  motDePasseConfirmation: string;
+  // motDePasse: string;
+  // motDePasseConfirmation: string;
 }
 
 export default function Page() {
@@ -40,10 +40,10 @@ export default function Page() {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    if (data.motDePasse !== data.motDePasseConfirmation) {
-      toast.error('Les mots de passe ne correspondent pas');
-      return;
-    }
+    // if (data.motDePasse !== data.motDePasseConfirmation) {
+    //   toast.error('Les mots de passe ne correspondent pas');
+    //   return;
+    // }
 
     try {
       const res = await axios.get(

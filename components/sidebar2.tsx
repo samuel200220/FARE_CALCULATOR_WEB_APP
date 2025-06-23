@@ -4,7 +4,7 @@ import { JSX, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Menu, Home, User, Settings, LogOut,
-  HelpCircle, LayoutDashboard, History
+  HelpCircle, LayoutDashboard, History,PartyPopper
 } from 'lucide-react';
 
 export default function Sidebar2() {
@@ -37,7 +37,7 @@ export default function Sidebar2() {
           Fare Calculator
         </div>
         <nav className="p-4 space-y-4 text-gray-700 dark:text-gray-200">
-          <NavItem href="/" icon={<Home />} label="Accueil" />
+          <NavItem href="/" icon={<PartyPopper />} label="Bienvenue" />
           <NavItem href="/aide1" icon={<HelpCircle />} label="Aide" />
         </nav>
       </aside>
