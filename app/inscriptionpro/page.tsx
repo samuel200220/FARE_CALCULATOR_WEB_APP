@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -25,9 +24,9 @@ const font = Poppins({
 interface FormData {
   responsableEntreprise: string;
   nomUtilisateurPro: string;
-  mailUtilisateurPro: string;
-  motDePassePro: string;
-  motDePasseConfirmationPro: string;
+  email: string;
+  motDePasse: string;
+  motDePasseConfirmation: string;
 }
 
 export default function Page() {
@@ -41,28 +40,41 @@ export default function Page() {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    if (data.motDePassePro !== data.motDePasseConfirmationPro) {
+    if (data.motDePasse !== data.motDePasseConfirmation) {
       toast.error('Les mots de passe ne correspondent pas');
       return;
     }
 
     try {
       const res = await axios.get(
-        `http://localhost:4000/userpro?mailUtilisateurPro=${data.mailUtilisateurPro}`
+        `http://localhost:8080/api/entreprises/email/${data.email}`
       );
 
-      if (res.data.length > 0) {
-        toast.error('Un compte existe déjà avec cette adresse mail');
+      if (res.data) {
+        toast.error('Un compte existe déjà avec cette adresse email');
         return;
       }
+    } catch (err: any) {
+      if (err.response?.status !== 404) {
+        toast.error("Erreur lors de la vérification de l'email");
+        return;
+      }
+    }
 
-      await axios.post('http://localhost:4000/userpro', data);
+    try {
+      await axios.post('http://localhost:8080/api/entreprises', {
+        responsableEntreprise: data.responsableEntreprise,
+        nomUtilisateurPro: data.nomUtilisateurPro,
+        email: data.email,
+        motDePasse: data.motDePasse,
+      });
+
       toast.success('Inscription réussie');
       localStorage.removeItem('compteurUtilisation');
       router.push('/connexionpro');
     } catch (error) {
       console.error(error);
-      toast.error('Une erreur est survenue');
+      toast.error("Une erreur est survenue lors de l'inscription");
     }
   };
 
@@ -82,7 +94,7 @@ export default function Page() {
 
       {/* Right Section */}
       <div className="lg:w-1/2 w-full lg:p-16 p-0 bg-white dark:bg-gray-400 flex flex-col rounded-3xl lg:rounded-l-none lg:rounded-r-3xl justify-center">
-        <div className="flex justify-center lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
+        <div className="flex justify-center lg:justify-end mb-6 mt-2 lg:mt-0">
           <Link href="/inscription1">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
               Version simple
@@ -91,7 +103,7 @@ export default function Page() {
         </div>
 
         <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Inscription</h2>
-        <p className="mb-6 text-center lg-text-start text-gray-600">Créer votre compte pro gratuitement</p>
+        <p className="mb-6 text-center text-gray-600">Créer votre compte pro gratuitement</p>
 
         <Box
           component="form"
@@ -100,12 +112,12 @@ export default function Page() {
           onSubmit={handleSubmit(onSubmit)}
           sx={{
             fontFamily: 'Poppins, sans-serif',
-            width: {lg:'100%'},
-            ml:0,
-            maxWidth:{xs:300,sm:300, md:400, lg:400,}, mx:{xs:'auto', sm:0},
+            width: '100%',
+            maxWidth: { xs: 300, sm: 300, md: 400, lg: 400 },
+            mx: { xs: 'auto', sm: 0 },
           }}
         >
-          <Stack spacing={3} sx={{fontFamily: 'Poppins, sans-serif'}}>
+          <Stack spacing={3}>
             <TextField
               label="Nom de l'entreprise"
               fullWidth
@@ -126,55 +138,51 @@ export default function Page() {
               type="email"
               label="Adresse email"
               placeholder="you@example.com"
-              variant="outlined"
               fullWidth
-              {...register('mailUtilisateurPro', { required: 'Email requis' })}
-              error={!!errors.mailUtilisateurPro}
-              helperText={errors.mailUtilisateurPro?.message}
-              sx={{fontFamily: 'Poppins, sans-serif'}}
+              {...register('email', { required: 'Email requis' })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
 
             <TextField
               type="password"
               label="Mot de passe"
               fullWidth
-              {...register('motDePassePro', { required: 'Mot de passe requis' })}
-              error={!!errors.motDePassePro}
-              helperText={errors.motDePassePro?.message}
-              sx={{fontFamily: 'Poppins, sans-serif'}}
+              {...register('motDePasse', { required: 'Mot de passe requis' })}
+              error={!!errors.motDePasse}
+              helperText={errors.motDePasse?.message}
             />
 
             <TextField
               type="password"
               label="Confirmer le mot de passe"
               fullWidth
-              {...register('motDePasseConfirmationPro', {
-                required: 'Confirmation requise'
+              {...register('motDePasseConfirmation', {
+                required: 'Confirmation requise',
               })}
-              error={!!errors.motDePasseConfirmationPro}
-              helperText={errors.motDePasseConfirmationPro?.message}
-              sx={{fontFamily: 'Poppins, sans-serif'}}
+              error={!!errors.motDePasseConfirmation}
+              helperText={errors.motDePasseConfirmation?.message}
             />
 
             <Button
-                variant="contained"
-                fullWidth
-                type="submit"
-                sx={{
-                  fontFamily: 'Poppins, sans-serif',
-                  bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
-                  color: '#FFFFFF',
-                  '&:hover': {
-                    bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
-                  },
-                }}
-              >
-                S'inscrire
+              variant="contained"
+              fullWidth
+              type="submit"
+              sx={{
+                fontFamily: 'Poppins, sans-serif',
+                bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
+                color: '#FFFFFF',
+                '&:hover': {
+                  bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
+                },
+              }}
+            >
+              S'inscrire
             </Button>
 
-            <Typography variant="body2" align="center" sx={{fontFamily: 'Poppins, sans-serif', marginBottom: '5px',}}>
+            <Typography variant="body2" align="center" sx={{ marginBottom: '5px' }}>
               Déjà inscrit à la version pro ?{' '}
-              <Link href="/connexionpro" style={{ fontFamily: 'Poppins, sans-serif',color: '#1e3a8a' }}>
+              <Link href="/connexionpro" style={{ color: '#1e3a8a' }}>
                 Cliquez-ici
               </Link>
             </Typography>

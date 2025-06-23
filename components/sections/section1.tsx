@@ -27,7 +27,6 @@ import { LoadScript, Autocomplete } from "@react-google-maps/api";
 
 
 import { Libraries } from "@react-google-maps/api";
-import { enregistrerCalcul } from '@/app/services/calculService';
 
 const libraries: Libraries = ["places"];
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
@@ -41,67 +40,6 @@ const predefinedHours = [
 
 const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
-// Types pour le backend
-interface CreateCalculRequest {
-  utilisateurId: string;
-  lieuDepart: string;
-  lieuArrivee: string;
-  heurePriseEnCharge: string;
-  distanceKm: number;
-  coutEstime: number;
-  tarifOfficiel: number;
-}
-
-interface CalculResponse {
-  idCalcul: string;
-  utilisateurId: string;
-  dateCalcul: string;
-  lieuDepart: string;
-  lieuArrivee: string;
-  heurePriseEnCharge: string;
-  distanceKm: number;
-  coutEstime: number;
-  tarifOfficiel: number;
-}
-
-// Service API
-const API_BASE_URL = 'http://localhost:8080/api';
-
-class CalculService {
-  private static async handleResponse(response: Response) {
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: 'Erreur réseau' }));
-      throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
-    }
-    return response.json();
-  }
-
-  static async enregistrerCalcul(request: CreateCalculRequest): Promise<CalculResponse> {
-    const response = await fetch(`${API_BASE_URL}/calculs`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(request),
-    });
-    return this.handleResponse(response);
-  }
-
-  static async getHistoriqueUtilisateur(utilisateurId: string): Promise<CalculResponse[]> {
-    const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}`);
-    return this.handleResponse(response);
-  }
-
-  static async getDerniersCalculs(utilisateurId: string): Promise<CalculResponse[]> {
-    const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/recent`);
-    return this.handleResponse(response);
-  }
-
-  static async compterCalculs(utilisateurId: string): Promise<number> {
-    const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/count`);
-    return this.handleResponse(response);
-  }
-}
 const Section1 = ({}) => {
 
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
@@ -298,20 +236,6 @@ useEffect(() => {
   
       const data = await res.json();
       setResult(data);
-      if (estConnecte) {
-        const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
-
-        await enregistrerCalcul({
-          utilisateurId,
-          lieuDepart: start,
-          lieuArrivee: end,
-          heurePriseEnCharge: hour,
-          distanceKm: data.distance,
-          coutEstime: data.cost,
-          tarifOfficiel: data.mint_cost,
-        });
-      }
-
       setShow(true);
     } catch (err) {
       setError((err as Error).message);
@@ -319,143 +243,130 @@ useEffect(() => {
       setIsLoading(false);
     }
   };
-  const [errors, setErrors] = useState<{ start?: string; end?: string; hour?: string }>({});
-  const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  const newErrors: typeof errors = {};
-
-  if (!start.trim()) {
-    newErrors.start = 'Le champ Départ est requis.';
-  } else if (/^\d+$/.test(start.trim())) {
-    newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
-  }
-
-  if (!end.trim()) {
-    newErrors.end = 'Le champ Destination est requis.';
-  } else if (/^\d+$/.test(end.trim())) {
-    newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
-  }
-
-  if (!hour) {
-    newErrors.hour = "L'heure doit être sélectionnée.";
-  }
-
-  setErrors(newErrors);
-
-  if (Object.keys(newErrors).length === 0) {
-    setIsLoading(true);
-    handleCost();
-  }
-};
-
   
+  const [errors, setErrors] = useState<{ start?: string; end?: string; hour?: string }>({});
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      const newErrors: typeof errors = {};
+  
+      if (!start.trim()) newErrors.start = 'Le champ Départ est requis.';
+      if (!end.trim()) newErrors.end = 'Le champ Destination est requis.';
+      if (!hour) newErrors.hour = "L'heure doit être sélectionnée.";
+  
+      setErrors(newErrors);
+  
+      if (Object.keys(newErrors).length === 0) {
+        setIsLoading(true);
+        handleCost();
+      }
+    };
   return (
     <section className='w-full h-[850px] p-4 justify-center items-center flex mb-4 mt-0'>
       <div className='lg:w-4xl sm:w-4xl md:w-4xl w-[320px] h-full relative mt-6 lg:ml-6 sm:ml-6 md:ml-6 ml-1 rounded-3xl justify-start pt-10 items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A] overflow-hidden transition-all duration-700 ease-in-out '>
       <h3 className='dark:text-white text-2xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>Calculateur de Tarif</h3>
-      <form
-      onSubmit={handleSubmit}
-      className="space-y-5 max-w-md w-full mx-auto p-4 bg-white dark:bg-gray-900 rounded-lg shadow"
-    >
-      {/* Champ Départ */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <FaMapMarkerAlt className="text-blue-600 text-lg" />
-        </div>
-        <Input
-          value={start}
-          onChange={handleChange}
-          className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-    errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
-  }`}
-          placeholder="Départ"
-        />
-        {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
-        {showSuggestionsStart && (
-          <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-            {filteredSuggestions.length > 0 ? (
-              filteredSuggestions.map((s, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleSelect(s)}
-                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                >
-                  {s}
-                </li>
-              ))
-            ) : (
-              <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-            )}
-          </ul>
-        )}
-      </div>
-
-      {/* Champ Destination */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <FaLocationArrow className="text-blue-600 text-lg" />
-        </div>
-        <Input
-          value={end}
-          onChange={handleChanged}
-          className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-    errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
-  }`}
-          placeholder="Destination"
-        />
-        {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
-        {showSuggestionsEnd && (
-          <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-            {filteredSuggestionsd.length > 0 ? (
-              filteredSuggestionsd.map((s, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleSelectd(s)}
-                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                >
-                  {s}
-                </li>
-              ))
-            ) : (
-              <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-            )}
-          </ul>
-        )}
-      </div>
-
-      {/* Select Heure */}
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <FaRegClock className="text-blue-600" />
-        </div>
-        <select
-          value={hour}
-          onChange={(e) => setHour(e.target.value)}
-          className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
-    errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
-  }`}
-        >
-          <option value="">Sélectionnez l'heure</option>
-          {predefinedHours.map((h) => (
-            <option key={h} value={h}>
-              {h}
-            </option>
-          ))}
-        </select>
-        {errors.hour && <p className="text-red-600 text-sm mt-1">{errors.hour}</p>}
-      </div>
-
-      {/* Bouton Calculer */}
-      <Button
-        type="submit"
-        // onClick={handleCost}
-        disabled={isLoading}
-        className="text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-700 w-full h-12 hover:bg-blue-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
-      >
-        <FaCalculator className="mr-2" />
-        {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
-      </Button>
-    </form>
+              <form
+                    onSubmit={handleSubmit}
+                    className="space-y-5 max-w-md w-full mx-auto p-4 bg-white dark:bg-gray-900 rounded-lg shadow"
+                  >
+                    {/* Champ Départ */}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaMapMarkerAlt className="text-blue-600 text-lg" />
+                      </div>
+                      <Input
+                        value={start}
+                        onChange={handleChange}
+                        className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
+                  errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                }`}
+                        placeholder="Départ"
+                      />
+                      {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
+                      {showSuggestionsStart && (
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                          {filteredSuggestions.length > 0 ? (
+                            filteredSuggestions.map((s, index) => (
+                              <li
+                                key={index}
+                                onClick={() => handleSelect(s)}
+                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                              >
+                                {s}
+                              </li>
+                            ))
+                          ) : (
+                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
+              
+                    {/* Champ Destination */}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaLocationArrow className="text-blue-600 text-lg" />
+                      </div>
+                      <Input
+                        value={end}
+                        onChange={handleChanged}
+                        className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
+                  errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                }`}
+                        placeholder="Destination"
+                      />
+                      {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
+                      {showSuggestionsEnd && (
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                          {filteredSuggestionsd.length > 0 ? (
+                            filteredSuggestionsd.map((s, index) => (
+                              <li
+                                key={index}
+                                onClick={() => handleSelectd(s)}
+                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                              >
+                                {s}
+                              </li>
+                            ))
+                          ) : (
+                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
+              
+                    {/* Select Heure */}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaRegClock className="text-blue-600" />
+                      </div>
+                      <select
+                        value={hour}
+                        onChange={(e) => setHour(e.target.value)}
+                        className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
+                  errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                }`}
+                      >
+                        <option value="">Sélectionnez l'heure</option>
+                        {predefinedHours.map((h) => (
+                          <option key={h} value={h}>
+                            {h}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.hour && <p className="text-red-600 text-sm mt-1">{errors.hour}</p>}
+                    </div>
+              
+                    {/* Bouton Calculer */}
+                    <Button
+                      type="submit"
+                      // onClick={handleCost}
+                      disabled={isLoading}
+                      className="text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-700 w-full h-12 hover:bg-blue-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                    >
+                      <FaCalculator className="mr-2" />
+                      {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
+                    </Button>
+                  </form>
                     {/* <LinearBufferButton /> */}
                     {error && <p className="text-red-500 mt-2">Probleme de connexion</p>}
                 {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}

@@ -9,12 +9,14 @@ import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 
-
+const font = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-poppins',
+});
 
 interface ConnexionFormData {
-  mailUtilisateur: string;
-  // motDePasse: string;
-  // motDePasseConfirmation: string;
+  email: string;
 }
 
 export default function Page() {
@@ -25,33 +27,29 @@ export default function Page() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<ConnexionFormData>();
 
   const onSubmit = async (data: ConnexionFormData) => {
-    // if (data.motDePasse !== data.motDePasseConfirmation) {
-    //   toast.error('Les mots de passe ne correspondent pas');
-    // } else {
-    //   toast.success('Connexion réussie');
-    //   router.push('/accueil');
-    // }
     try {
       const res = await axios.get(
-        `http://localhost:4000/user?mailUtilisateur=${data.mailUtilisateur}`
+        `http://localhost:8080/api/utilisateurs/email/${data.email}`
       );
 
-      // if (res.data.length > 0) {
-      //   toast.error('Un compte existe déjà avec cette adresse mail');
-      //   return;
-      // }
-
-      // await axios.post('http://localhost:4000/user', data);
-      toast.success('Connexion réussie');
-      localStorage.removeItem('compteurUtilisation');
-      router.push('/accueil');
-    } catch (error) {
-      console.error(error);
-      toast.error('Une erreur est survenue');
+      if (res.data) {
+        toast.success('Connexion réussie');
+        // Tu peux aussi stocker l'utilisateur ou son ID dans localStorage si besoin :
+        localStorage.setItem('utilisateur', JSON.stringify(res.data));
+        router.push('/accueil');
+      } else {
+        toast.error('Aucun compte trouvé avec cette adresse email');
+      }
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        toast.error('Aucun compte trouvé avec cette adresse email');
+      } else {
+        console.error(error);
+        toast.error('Erreur lors de la connexion');
+      }
     }
   };
 
@@ -71,13 +69,14 @@ export default function Page() {
 
       {/* Right Section */}
       <div className="lg:w-1/2 w-full lg:p-16 p-0 bg-white dark:bg-gray-400 flex flex-col rounded-3xl lg:rounded-l-none lg:rounded-r-3xl justify-center">
-      <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
+        <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
           <Link href="/inscriptionpro">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
               Version Pro
             </button>
           </Link>
         </div>
+
         <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Connexion</h2>
 
         <Box
@@ -85,57 +84,41 @@ export default function Page() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
           autoComplete="off"
-          sx={{ fontFamily: 'Poppins, sans-serif', maxWidth:{xs:300,sm:300, md:400, lg:400,}, mx:{xs:'auto', sm:0} }}
+          sx={{
+            fontFamily: 'Poppins, sans-serif',
+            maxWidth: { xs: 300, sm: 300, md: 400, lg: 400 },
+            mx: { xs: 'auto', sm: 0 },
+          }}
         >
-           <Stack spacing={3}>
+          <Stack spacing={3}>
             <TextField
               type="email"
               label="Adresse email"
               placeholder="you@example.com"
               variant="outlined"
               fullWidth
-              {...register('mailUtilisateur', { required: 'Email requis' })}
-              error={!!errors.mailUtilisateur}
-              helperText={errors.mailUtilisateur?.message}
-              sx={{fontFamily: 'Poppins, sans-serif'}}
+              {...register('email', { required: 'Email requis' })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              sx={{ fontFamily: 'Poppins, sans-serif' }}
             />
-            {/* <TextField
-              type="password"
-              label="Votre mot de passe"
-              variant="outlined"
-              fullWidth
-              {...register('motDePasse', { required: 'Mot de passe requis' })}
-              error={!!errors.motDePasse}
-              helperText={errors.motDePasse?.message}
-            />
-
-            <TextField
-              type="password"
-              label="Confirmer le mot de passe"
-              variant="outlined"
-              fullWidth
-              {...register('motDePasseConfirmation', {
-                required: 'Confirmation requise',
-              })}
-              error={!!errors.motDePasseConfirmation}
-              helperText={errors.motDePasseConfirmation?.message}
-            />  */}
 
             <Button
-                variant="contained"
-                fullWidth
-                type="submit"
-                sx={{
-                  fontFamily: 'Poppins, sans-serif',
-                  bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
-                  color: '#FFFFFF',
-                  '&:hover': {
-                    bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
-                  },
-                }}
-              >
-                Se connecter
+              variant="contained"
+              fullWidth
+              type="submit"
+              sx={{
+                fontFamily: 'Poppins, sans-serif',
+                bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
+                color: '#FFFFFF',
+                '&:hover': {
+                  bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
+                },
+              }}
+            >
+              Se connecter
             </Button>
+
             <Typography variant="body2" align="center">
               Pas de compte ?{' '}
               <Link href="/inscription1" className="text-blue-900 ml-1">

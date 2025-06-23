@@ -23,10 +23,8 @@ const font = Poppins({
 });
 
 interface FormData {
-  nomUtilisateur: string;
-  mailUtilisateur: string;
-  // motDePasse: string;
-  // motDePasseConfirmation: string;
+  nom: string;
+  email: string;
 }
 
 export default function Page() {
@@ -40,22 +38,29 @@ export default function Page() {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    // if (data.motDePasse !== data.motDePasseConfirmation) {
-    //   toast.error('Les mots de passe ne correspondent pas');
-    //   return;
-    // }
+    try {
+    const existingUser = await axios.get(
+      `http://localhost:8080/api/utilisateurs/email/${data.email}`
+    );
+
+    if (existingUser.data) {
+      toast.error('Un compte existe déjà avec cette adresse mail');
+      return;
+    }
+  } catch (err: any) {
+    if (err.response?.status !== 404) {
+      toast.error("Erreur lors de la vérification de l'email");
+      return;
+    }
+    // 404 attendu = email non trouvé, donc on continue
+  }
 
     try {
-      const res = await axios.get(
-        `http://localhost:4000/user?mailUtilisateur=${data.mailUtilisateur}`
-      );
+      await axios.post('http://localhost:8080/api/utilisateurs', {
+        nom: data.nom,
+        email: data.email,
+      });
 
-      if (res.data.length > 0) {
-        toast.error('Un compte existe déjà avec cette adresse mail');
-        return;
-      }
-
-      await axios.post('http://localhost:4000/user', data);
       toast.success('Inscription réussie');
       localStorage.removeItem('compteurUtilisation');
       router.push('/connexion1');
@@ -90,7 +95,7 @@ export default function Page() {
         </div>
 
         <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Inscription</h2>
-        <p className="mb-6 text-center lg-text-start text-gray-600">Créer votre compte gratuitement</p>
+        <p className="mb-6 text-center text-gray-600">Créer votre compte gratuitement</p>
 
         <Box
           component="form"
@@ -99,18 +104,19 @@ export default function Page() {
           onSubmit={handleSubmit(onSubmit)}
           sx={{
             fontFamily: 'Poppins, sans-serif',
-            width: {lg:'100%'},
-            ml:0,
-            maxWidth:{xs:300,sm:300, md:400, lg:400,}, mx:{xs:'auto', sm:0},
+            width: { lg: '100%' },
+            ml: 0,
+            maxWidth: { xs: 300, sm: 300, md: 400, lg: 400 },
+            mx: { xs: 'auto', sm: 0 },
           }}
         >
-          <Stack spacing={3} sx={{fontFamily: 'Poppins, sans-serif'}}>
+          <Stack spacing={3} sx={{ fontFamily: 'Poppins, sans-serif' }}>
             <TextField
               label="Nom d'utilisateur"
               fullWidth
-              {...register('nomUtilisateur', { required: 'Ce champ est requis' })}
-              error={!!errors.nomUtilisateur}
-              helperText={errors.nomUtilisateur?.message}
+              {...register('nom', { required: 'Ce champ est requis' })}
+              error={!!errors.nom}
+              helperText={errors.nom?.message}
             />
 
             <TextField
@@ -119,53 +125,37 @@ export default function Page() {
               placeholder="you@example.com"
               variant="outlined"
               fullWidth
-              {...register('mailUtilisateur', { required: 'Email requis' })}
-              error={!!errors.mailUtilisateur}
-              helperText={errors.mailUtilisateur?.message}
-              sx={{fontFamily: 'Poppins, sans-serif'}}
+              {...register('email', { required: 'Email requis' })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
-
-            {/* <TextField
-              type="password"
-              label="Mot de passe"
-              fullWidth
-              {...register('motDePasse', { required: 'Mot de passe requis' })}
-              error={!!errors.motDePasse}
-              helperText={errors.motDePasse?.message}
-              sx={{fontFamily: 'Poppins, sans-serif'}}
-            />
-
-            <TextField
-              type="password"
-              label="Confirmer le mot de passe"
-              fullWidth
-              {...register('motDePasseConfirmation', {
-                required: 'Confirmation requise'
-              })}
-              error={!!errors.motDePasseConfirmation}
-              helperText={errors.motDePasseConfirmation?.message}
-              sx={{fontFamily: 'Poppins, sans-serif'}}
-            /> */}
 
             <Button
-                variant="contained"
-                fullWidth
-                type="submit"
-                sx={{
-                  fontFamily: 'Poppins, sans-serif',
-                  bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
-                  color: '#FFFFFF',
-                  '&:hover': {
-                    bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
-                  },
-                }}
-              >
-                S'inscrire
+              variant="contained"
+              fullWidth
+              type="submit"
+              sx={{
+                fontFamily: 'Poppins, sans-serif',
+                bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
+                color: '#FFFFFF',
+                '&:hover': {
+                  bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
+                },
+              }}
+            >
+              S'inscrire
             </Button>
 
-            <Typography variant="body2" align="center" sx={{fontFamily: 'Poppins, sans-serif', marginBottom: '5px',}}>
+            <Typography
+              variant="body2"
+              align="center"
+              sx={{
+                fontFamily: 'Poppins, sans-serif',
+                marginBottom: '5px',
+              }}
+            >
               Déjà inscrit ?{' '}
-              <Link href="/connexion1" style={{ fontFamily: 'Poppins, sans-serif',color: '#1e3a8a' }}>
+              <Link href="/connexion1" style={{ color: '#1e3a8a' }}>
                 Cliquez-ici
               </Link>
             </Typography>

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Calculator, History, MapPin } from 'lucide-react';
 import SidebarToggle from '@/components/sidebar1';
+import { ModeToggle } from '@/components/ui/mode-toggle';
 
 export default function HomePage() {
   const features = [
@@ -28,9 +29,12 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-fixed bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
-
+      
       {/* Hero Section */}
-      <section className="bg-blue-700 text-white py-20 text-center px-4">
+      <section className="bg-blue-700 dark:bg-gray-800 text-white py-20 text-center px-4">
+        <div className='flex justify-end items-center mb-6'>
+          <ModeToggle />
+        </div>
         <h1 className="text-4xl font-bold mb-4">Bienvenue sur Fare Calculator</h1>
         <p className="text-lg max-w-2xl mx-auto mb-6">
           Votre solution rapide et fiable pour estimer le tarif de vos trajets en toute simplicité.

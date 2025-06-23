@@ -31,9 +31,13 @@ export default function FaqPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 py-10 px-4 sm:px-10">
-      <h1 className="text-3xl sm:text-4xl font-bold text-center text-blue-700 mb-2">Aide & Assistance</h1>
-      <p className="text-center text-orange-600 font-semibold text-lg mb-6">Questions Fréquemment Posées</p>
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 dark:from-gray-900 dark:via-[#0D1B2A] dark:to-[#0D1B2A] py-10 px-4 sm:px-10">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center text-blue-700 dark:text-white mb-2">
+        Aide & Assistance
+      </h1>
+      <p className="text-center text-orange-600 font-semibold text-lg mb-6 dark:text-orange-400">
+        Questions Fréquemment Posées
+      </p>
 
       <div className="max-w-2xl mx-auto mb-6">
         <div className="relative">
@@ -42,31 +46,34 @@ export default function FaqPage() {
             placeholder="Recherchez une question ou un mot-clé..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10"
+            className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10"
           />
-          <Search className="absolute right-3 top-3.5 h-5 w-5 text-gray-500" />
+          <Search className="absolute right-3 top-3.5 h-5 w-5 text-gray-500 dark:text-gray-400" />
         </div>
       </div>
 
       <div className="max-w-2xl mx-auto space-y-4">
         {filteredFaq.map((item, index) => (
-          <div key={index} className="bg-blue-100 rounded-lg shadow-md">
+          <div
+            key={index}
+            className="bg-blue-100 dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-700"
+          >
             <button
               onClick={() => setOpenIndex(index === openIndex ? null : index)}
-              className="flex items-center justify-between w-full p-4 font-semibold text-blue-800 text-left"
+              className="flex items-center justify-between w-full p-4 font-semibold text-blue-800 dark:text-white text-left"
             >
               <div className="flex items-center gap-2">
-                <HelpCircle className="h-5 w-5 text-blue-500" />
+                <HelpCircle className="h-5 w-5 text-blue-500 dark:text-blue-400" />
                 {item.question}
               </div>
               {index === openIndex ? (
-                <ChevronUp className="text-blue-600" />
+                <ChevronUp className="text-blue-600 dark:text-blue-300" />
               ) : (
-                <ChevronDown className="text-blue-600" />
+                <ChevronDown className="text-blue-600 dark:text-blue-300" />
               )}
             </button>
             {index === openIndex && (
-              <div className="bg-blue-200 text-blue-900 px-5 py-3 rounded-b-lg border-t border-blue-300">
+              <div className="bg-blue-200 dark:bg-gray-700 dark:text-gray-100 px-5 py-3 rounded-b-lg border-t border-blue-300 dark:border-gray-600">
                 {item.answer}
               </div>
             )}
@@ -74,7 +81,9 @@ export default function FaqPage() {
         ))}
 
         {filteredFaq.length === 0 && (
-          <div className="text-center text-gray-600 font-medium">Aucune question ne correspond à votre recherche.</div>
+          <div className="text-center text-gray-600 dark:text-gray-300 font-medium">
+            Aucune question ne correspond à votre recherche.
+          </div>
         )}
       </div>
     </div>

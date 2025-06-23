@@ -5,14 +5,12 @@ import { Box, TextField, Button, Stack, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { Poppins } from 'next/font/google';
+import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 
-
-
 interface ConnexionFormData {
+  email: string;
   motDePasse: string;
-  motDePasseConfirmation: string;
 }
 
 export default function Page() {
@@ -23,16 +21,29 @@ export default function Page() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<ConnexionFormData>();
 
-  const onSubmit = (data: ConnexionFormData) => {
-    if (data.motDePasse !== data.motDePasseConfirmation) {
-      toast.error('Les mots de passe ne correspondent pas');
-    } else {
-      // Ici vous pouvez ajouter la logique de connexion (vérification d'email, etc.)
+  const onSubmit = async (data: ConnexionFormData) => {
+    try {
+      const res = await axios.get(`http://localhost:8080/api/entreprises/email/${data.email}`);
+      const entreprise = res.data;
+
+      if (!entreprise || entreprise.motDePasse !== data.motDePasse) {
+        toast.error('Email ou mot de passe incorrect');
+        return;
+      }
+
+      // Enregistrer temporairement les infos en localStorage
+      localStorage.setItem('entrepriseConnectee', JSON.stringify(entreprise));
+
       toast.success('Connexion réussie');
-      router.push('/versionpro'); // rediriger vers une autre page
+      router.push('/versionpro');
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        toast.error("Aucun compte associé à cet email");
+      } else {
+        toast.error("Erreur lors de la connexion");
+      }
     }
   };
 
@@ -59,46 +70,47 @@ export default function Page() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
           autoComplete="off"
-          sx={{ fontFamily: 'Poppins, sans-serif', maxWidth:{xs:300,sm:300, md:400, lg:400,}, mx:{xs:'auto', sm:0} }}
+          sx={{
+            fontFamily: 'Poppins, sans-serif',
+            maxWidth: { xs: 300, sm: 300, md: 400, lg: 400 },
+            mx: { xs: 'auto', sm: 0 },
+          }}
         >
           <Stack spacing={3}>
             <TextField
+              label="Adresse email"
+              type="email"
+              fullWidth
+              {...register('email', { required: 'Email requis' })}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+
+            <TextField
               type="password"
-              label="Votre mot de passe"
-              variant="outlined"
+              label="Mot de passe"
               fullWidth
               {...register('motDePasse', { required: 'Mot de passe requis' })}
               error={!!errors.motDePasse}
               helperText={errors.motDePasse?.message}
             />
 
-            <TextField
-              type="password"
-              label="Confirmer le mot de passe"
-              variant="outlined"
-              fullWidth
-              {...register('motDePasseConfirmation', {
-                required: 'Confirmation requise',
-              })}
-              error={!!errors.motDePasseConfirmation}
-              helperText={errors.motDePasseConfirmation?.message}
-            />
-
             <Button
-                variant="contained"
-                fullWidth
-                type="submit"
-                sx={{
-                  fontFamily: 'Poppins, sans-serif',
-                  bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
-                  color: '#FFFFFF',
-                  '&:hover': {
-                    bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
-                  },
-                }}
-              >
-                Se connecter
+              variant="contained"
+              fullWidth
+              type="submit"
+              sx={{
+                fontFamily: 'Poppins, sans-serif',
+                bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
+                color: '#FFFFFF',
+                '&:hover': {
+                  bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
+                },
+              }}
+            >
+              Se connecter
             </Button>
+
             <Typography variant="body2" align="center">
               Pas de compte pro ?{' '}
               <Link href="/inscriptionpro" className="text-blue-900 ml-1">
