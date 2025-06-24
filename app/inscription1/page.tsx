@@ -56,12 +56,14 @@ export default function Page() {
   }
 
     try {
-      await axios.post('http://localhost:8080/api/utilisateurs', {
+      const response=await axios.post('http://localhost:8080/api/utilisateurs', {
         nom: data.nom,
         email: data.email,
       });
 
       toast.success('Inscription réussie');
+      const idUtilisateur = response.data.id;
+      localStorage.setItem("idUtilisateur", idUtilisateur);
       localStorage.removeItem('compteurUtilisation');
       router.push('/connexion1');
     } catch (error) {

@@ -97,7 +97,7 @@ export default function Page() {
         <div className="flex justify-center lg:justify-end mb-6 mt-2 lg:mt-0">
           <Link href="/inscription1">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Version simple
+              Version Standard
             </button>
           </Link>
         </div>

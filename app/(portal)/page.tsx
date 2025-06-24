@@ -52,7 +52,7 @@ export default function HomePage() {
         href="/inscription1"
         className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition"
       >
-        Version Simple
+        Version Standard
       </Link>
 
       <Link

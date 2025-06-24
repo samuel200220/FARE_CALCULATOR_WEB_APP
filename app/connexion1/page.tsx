@@ -37,8 +37,11 @@ export default function Page() {
 
       if (res.data) {
         toast.success('Connexion réussie');
-        // Tu peux aussi stocker l'utilisateur ou son ID dans localStorage si besoin :
+
+        // ✅ Stockage de l'utilisateur et de son ID dans localStorage
         localStorage.setItem('utilisateur', JSON.stringify(res.data));
+        localStorage.setItem('idUtilisateur', res.data.id); // ✅ ID explicite
+
         router.push('/accueil');
       } else {
         toast.error('Aucun compte trouvé avec cette adresse email');
