@@ -15,6 +15,7 @@ import Section6 from '@/components/sections/section6'
 import Section7 from '@/components/sections/section7'
 import Section7pro from '@/components/sections/section7pro'
 import Titre from '@/components/sections/titre'
+import StatsSection from '@/components/statsection'
 import { Button } from '@/components/ui/button'
 import { ModeToggle } from '@/components/ui/mode-toggle'
 import Script from 'next/script'
@@ -32,6 +33,7 @@ const page = () => {
       <Section7pro />
       <Section4pro />
       <Section5pro/>
+      <StatsSection/>
       {/* <Section6/> */}
       <Footer />
     </>

@@ -62,7 +62,7 @@ export default function Page() {
     }
 
     try {
-      await axios.post('http://localhost:8080/api/entreprises', {
+      const response= await axios.post('http://localhost:8080/api/entreprises', {
         responsableEntreprise: data.responsableEntreprise,
         nomUtilisateurPro: data.nomUtilisateurPro,
         email: data.email,
@@ -70,6 +70,8 @@ export default function Page() {
       });
 
       toast.success('Inscription réussie');
+      const idUtilisateur = response.data.id;
+      localStorage.setItem("idUtilisateur", idUtilisateur);
       localStorage.removeItem('compteurUtilisation');
       router.push('/connexionpro');
     } catch (error) {

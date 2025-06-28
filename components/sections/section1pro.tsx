@@ -215,6 +215,48 @@ useEffect(() => {
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState('');
 
+  const enregistrerCalcul = async () => {
+    if (!estConnecte || !result) return;
+  
+    const idUtilisateur = localStorage.getItem("idUtilisateur");
+    if (!idUtilisateur || !/^[0-9a-fA-F\-]{36}$/.test(idUtilisateur)) {
+      toast.error("ID utilisateur invalide");
+      return;
+    }
+  
+    const body = {
+    key: {
+      id_utilisateur: idUtilisateur,
+      timestamp: new Date().toISOString()
+    },
+    lieu_depart: start,
+    lieu_arrivee: end,
+    heure_prise_en_charge: hour.length === 5 ? hour + ":00" : hour,
+    distance_km: result?.distance,
+    cout_estime: result?.cost,
+    tarif_officiel: result?.mint_cost
+  };
+  
+    try {
+      const res = await fetch("http://localhost:8080/api/calculs-utilisateur", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+  
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Erreur HTTP", res.status, errText);
+        toast.error("Erreur lors de l'enregistrement du calcul : " + res.status);
+      } else {
+        toast.success("Calcul enregistré avec succès !");
+      }
+    } catch (err) {
+      console.error("Erreur réseau", err);
+      toast.error("Erreur de connexion au backend local");
+    }
+  };
+
   const handleCost = async () => {
     setIsLoading(true);
       setProgress(0);
@@ -237,6 +279,7 @@ useEffect(() => {
       const data = await res.json();
       setResult(data);
       setShow(true);
+      await enregistrerCalcul();
     } catch (err) {
       setError((err as Error).message);
     }finally{
