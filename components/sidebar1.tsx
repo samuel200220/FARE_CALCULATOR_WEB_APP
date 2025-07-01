@@ -51,7 +51,7 @@ export default function SidebarToggle() {
 
       {/* Bouton d'ouverture */}
       <button
-        className="flex items-center space-x-2 px-4 py-2 bg-blue-700 dark:bg-gray-500 text-white rounded-md shadow hover:bg-blue-800"
+        className="flex items-center space-x-2 px-4 py-2 bg-violet-800 dark:bg-violet-800 text-white rounded-md shadow"
         onClick={() => setIsOpen(true)}
       >
         <Menu />

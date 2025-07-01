@@ -489,7 +489,7 @@ const Section1ano = ({}) => {
         type="submit"
         // onClick={handleCost}
         disabled={isLoading}
-        className="text-white dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800 bg-blue-700 w-full h-12 hover:bg-blue-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+        className="text-white dark:bg-blue-700 dark:text-white dark:hover:bg-violet-900 bg-blue-700 w-full h-12 hover:bg-violet-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
       >
         <FaCalculator className="mr-2" />
         {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}

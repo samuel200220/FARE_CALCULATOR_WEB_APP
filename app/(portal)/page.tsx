@@ -86,7 +86,7 @@ export default function HomePage() {
         </p>
         <Link
           href="/aide1"
-          className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition"
+          className="inline-block bg-blue-700 dark:font-bold hover:bg-blue-700 text-white px-6 py-2 rounded-md transition"
         >
           Accéder à l’aide
         </Link>

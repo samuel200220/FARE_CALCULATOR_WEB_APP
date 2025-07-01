@@ -47,7 +47,7 @@ export default function StatsSection() {
   return (
     <section
       ref={ref}
-      className="bg-yellow-50 dark:bg-[#0D1B2A] py-16 px-4 sm:px-8 text-center"
+      className="bg-yellow-50 dark:bg-[#0D1B2A] py-16 px-4 sm:px-8 text-center mb-20"
     >
       <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-10">
         Statistiques Clés

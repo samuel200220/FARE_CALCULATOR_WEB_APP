@@ -1,3 +1,4 @@
+import InscriptionSection from '@/components/direction'
 import GlobalAudio from '@/components/GlobalAudio'
 import Footer from '@/components/navbar/footer'
 import Header from '@/components/navbar/header'
@@ -11,6 +12,7 @@ import Section5 from '@/components/sections/section5'
 import Section6 from '@/components/sections/section6'
 import Section7 from '@/components/sections/section7'
 import Titre from '@/components/sections/titre'
+import Titreano from '@/components/sections/titreano'
 import StatsSection from '@/components/statsection'
 import { Button } from '@/components/ui/button'
 import { ModeToggle } from '@/components/ui/mode-toggle'
@@ -22,7 +24,8 @@ const page = () => {
     <>
       {/* <Button variant={'ghost'} className='border border-black'>Mode sombre</Button> */}
       <Headerano />
-      <Titre />
+      <Titreano />
+      {/* <InscriptionSection/> */}
       <Section1ano />
       <Section2/>
       {/* <Section3/> */}
@@ -30,6 +33,7 @@ const page = () => {
       <Section4/>
       <Section5/>
       <StatsSection/>
+      <InscriptionSection/>
       {/* <Section6/> */}
       <Footer />
     </>
