@@ -27,6 +27,9 @@ import { LoadScript, Autocomplete } from "@react-google-maps/api";
 
 
 import { Libraries } from "@react-google-maps/api";
+// import MapNavigoo from '../MapNavigoo';
+// import MapNavigooWrapper from '../MapNavigooWrapper';
+import dynamic from 'next/dynamic';
 
 const libraries: Libraries = ["places"];
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
@@ -37,6 +40,8 @@ const predefinedHours = [
   "18:00", "19:00", "20:00", "21:00",
   "22:00"
 ];
+
+const MapNavigooWrapper = dynamic(() => import('../MapNavigooWrapper.client'), { ssr: false });
 
 const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
@@ -485,7 +490,9 @@ useEffect(() => {
                 )}
       </div>
       <div className="hidden lg:block mr-5 rounded-2xl p-4 relative w-full h-full z-10 mt-0">
-            <Mapleaf />
+            {/* <Mapleaf /> */}
+            {/* <MapNavigoo/> */}
+            <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />
       </div>                
     </section>
   )
