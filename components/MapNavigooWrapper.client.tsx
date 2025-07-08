@@ -58,7 +58,8 @@ const MapNavigooWrapper = ({ startPlaceName, endPlaceName }: { startPlaceName: s
   if (!apiClient) return null;
 
   return (
-    <MapView
+    <div className="relative w-full h-full bg-white dark:bg-[#0D1B2A] rounded-2xl shadow-lg flex flex-col items-center justify-center">
+      <MapView
       apiClient={apiClient}
       userLocation={userLocation}
       searchedPlace={searchedPlace}
@@ -66,6 +67,7 @@ const MapNavigooWrapper = ({ startPlaceName, endPlaceName }: { startPlaceName: s
       selectedRouteIndex={selectedRouteIndex}
       setSelectedRouteIndex={setSelectedRouteIndex}
     />
+    </div>
   );
 };
 

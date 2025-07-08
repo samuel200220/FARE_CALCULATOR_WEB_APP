@@ -41,7 +41,7 @@ export default function Sidebar() {
           <NavItem href="/accueil" icon={<Home />} label="Accueil" />
           {/* <NavItem href="/profil1" icon={<User />} label="Profil" /> */}
           <NavItem href="/parametres" icon={<Settings />} label="Paramètres" />
-          <NavItem href="/historique" icon={<History />} label="Historique" />
+          {/* <NavItem href="/historique" icon={<History />} label="Historique" /> */}
           <NavItem href="/aide1" icon={<HelpCircle />} label="Aide" />
           <NavItem href="/connexion1" icon={<LogOut />} label="Déconnexion" />
         </nav>

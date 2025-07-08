@@ -258,7 +258,7 @@ useEffect(() => {
     }
   } catch (err) {
     console.error("Erreur réseau", err);
-    toast.error("Erreur de connexion au backend local");
+    console.error("Erreur de connexion au backend local");
   }
 };
 
@@ -489,7 +489,7 @@ useEffect(() => {
                     </div>
                 )}
       </div>
-      <div className="hidden lg:block mr-5 rounded-2xl p-4 relative w-full h-full z-10 mt-0">
+      <div className="hidden lg:block mr-5 rounded-2xl p-4 w-full h-full relative z-10 mt-0">
             {/* <Mapleaf /> */}
             {/* <MapNavigoo/> */}
             <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />

@@ -255,7 +255,7 @@ useEffect(() => {
       }
     } catch (err) {
       console.error("Erreur réseau", err);
-      toast.error("Erreur de connexion au backend local");
+      console.error("Erreur de connexion au backend local");
     }
   };
 

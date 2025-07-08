@@ -62,7 +62,7 @@ const MapNavigooWrapper: React.FC<MapNavigooWrapperProps> = ({ startPlaceName, e
   }, [startPlaceName, endPlaceName]);
 
   return (
-    <div className="w-full h-full">
+    <div className="relative w-full h-full">
       <MapNavigooView
         apiClient={apiClient}
         userLocation={userLocation}
