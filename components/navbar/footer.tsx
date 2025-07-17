@@ -15,7 +15,7 @@ const Footer = () => {
             <li>Notre Vision</li>
             <li>Notre Mission</li>
             <li>Nos objectifs</li>
-            <li>Notre originalite</li>
+            <li>Notre originalité</li>
             <li>Nous Recrutons</li>
             <li>Informations de contact </li>
           </ul>
@@ -25,7 +25,7 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold mb-4">Support</h3>
           <ul className="space-y-2 text-sm text-gray-300">
-            <li>Place de marche</li>
+            <li>Place de marché</li>
             {/* <li>Our system for connecting travel service customers and providers</li> */}
             <li>Agence de location</li>
             <li>Agence de voyage</li>
@@ -36,10 +36,10 @@ const Footer = () => {
 
         {/* Legal Information */}
         <div>
-          <h3 className="font-semibold mb-4">Informations legales</h3>
+          <h3 className="font-semibold mb-4">Informations légales</h3>
           <ul className="space-y-2 text-sm text-gray-300">
-            <li>Conditions generales d'utilisation</li>
-            <li>Politique De Confidentialite</li>
+            <li>Conditions générales d'utilisation</li>
+            <li>Politique De Confidentialité</li>
             <li>Vos Informations Personnelles</li>
             <li>Cookies</li>
           </ul>
@@ -80,7 +80,7 @@ const Footer = () => {
 
       {/* Bottom note */}
       <div className="text-center text-sm text-gray-400">
-        © 2024 Ride&Go. <br /> Tous droits conserves
+        © 2025 Fare Calculator. <br /> Tous droits conservés
       </div>
 
       {/* Floating Button */}

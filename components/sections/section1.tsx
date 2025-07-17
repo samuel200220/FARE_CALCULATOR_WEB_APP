@@ -417,7 +417,7 @@ useEffect(() => {
                     </Button>
                   </form>
                     {/* <LinearBufferButton /> */}
-                    {error && <p className="text-red-500 mt-2">Probleme de connexion</p>}
+                    {error && <p className="text-red-500 mt-2">Problème de connexion au serveur</p>}
                 {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}
                 {result && (
                     <div className={`lg:w-120 sm:w-120 md:w-120 w-[260px] h-96 relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-hidden transition-all duration-700 ease-in-out 

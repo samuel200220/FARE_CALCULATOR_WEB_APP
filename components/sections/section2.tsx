@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Car, Users, PackageSearch } from 'lucide-react';
+import { FaPlaneDeparture } from 'react-icons/fa';
 
 const services = [
   {
@@ -12,11 +13,11 @@ const services = [
     link: '#',
   },
   {
-    icon: <Users className="w-10 h-10 text-green-600 mb-3" />,
-    title: 'Réserver une Place',
+    icon: <FaPlaneDeparture className="w-10 h-10 text-green-600 mb-3" />,
+    title: 'Réserver un Voyage',
     description:
-      'Partagez un trajet avec d’autres passagers. Voyagez en toute sécurité tout en réalisant des économies.',
-    link: '#',
+      'Planifiez et réservez vos voyages nationaux ou régionaux facilement avec notre agence.',
+    link: 'https://lets-go-liart-phi.vercel.app/',
   },
   {
     icon: <PackageSearch className="w-10 h-10 text-pink-600 mb-3" />,
@@ -34,7 +35,7 @@ const Section2 = () => {
       className="bg-white dark:bg-[#0D1B2A] pt-10 pb-20 mt-20 px-4 sm:px-6 lg:px-8"
     >
       <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-blue-700 dark:text-white mb-12">
-        Nos Services
+        Services Associés
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
