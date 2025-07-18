@@ -123,7 +123,7 @@ const Headerpro = () => {
                     Aide
                 </Link>
                 <Link href={"/connexionpro"} >
-                    <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Deconnexion</Button>
+                    <Button className='cursor-pointer mr-2 bg-transparent dark:bg-[#0D1B2A] hover:text-violet-800 hover:bg-transparent dark:hover:bg-[#0D1B2A] dark:hover:text-violet-600 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Deconnexion</Button>
                 </Link>
             {/* <Button onClick={toggleLang} className='hidden sm:flex mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button> */}
             {/* <ModeToggle /> */}

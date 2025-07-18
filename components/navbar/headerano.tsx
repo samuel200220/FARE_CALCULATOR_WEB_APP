@@ -118,7 +118,7 @@ const Headerano = () => {
                 <Button className='cursor-pointer bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 text-[18px] text-white transform transition-transform duration-300 ease-in-out hover:scale-105'>S'inscrire</Button>
                 </Link>
                 <Link href={"/connexion1"} >
-                <Button className='cursor-pointer bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
+                <Button className='cursor-pointer mr-2 bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
                 </Link>
                 <div className='hidden sm:flex'>
                 <ModeToggle />

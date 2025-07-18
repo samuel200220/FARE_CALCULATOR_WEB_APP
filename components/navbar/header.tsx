@@ -120,7 +120,7 @@ const Header = () => {
                 <Button className='cursor-pointer bg-transparent dark:bg-[#0D1B2A] hover:bg-transparent dark:hover:bg-[#0D1B2A] hover:text-violet-800 dark:hover:text-violet-600 text-[18px] text-white'>S'inscrire</Button>
                 </Link> */}
                 <Link href={"/connexion1"} >
-                <Button className='cursor-pointer bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
+                <Button className='cursor-pointer mr-2 bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
                 </Link>
                 <div className='hidden sm:flex'>
                 <ModeToggle />

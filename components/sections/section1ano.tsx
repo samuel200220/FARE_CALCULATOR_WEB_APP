@@ -174,6 +174,8 @@ const Section1ano = ({}) => {
   // Removed duplicate declaration of hour
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const [showCustomDiv, setShowCustomDiv] = useState(false);
+
   const handleSelectHour = (value: string) => {
     setHour(value);
     setShowDropdown(false);
@@ -287,7 +289,7 @@ const Section1ano = ({}) => {
   
     setError('');
     try {
-      const res = await fetch('https://rideandgo.onrender.com/cost', {
+      const res = await fetch('https://fare-calculator.onrender.com/cost', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ start, end, hour }),
@@ -500,75 +502,78 @@ const Section1ano = ({}) => {
                     {/* <LinearBufferButton /> */}
                     {error && <p className="text-red-500 mt-2">Problème de connexion au serveur</p>}
                 {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}
-                {result && (
-                    <div className={`lg:w-120 sm:w-120 md:w-120 w-[260px] h-96 relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-hidden transition-all duration-700 ease-in-out 
-        ${show ? 'max-h-96 opacity-100 mt-0' : 'max-h-0 opacity-0'}`}>
-                      {/* Title */}
-                      <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
-                        <FaMoneyBillAlt />
-                        <span className='dark:text-white'>Notre estimation</span>
-                      </div>
-
-                      {/* Distance & Duration */}
-                      <div className="flex justify-between gap-2">
-                        <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
-                          <div className="flex items-center gap-1 font-medium text-blue-700">
-                            <MdOutlineDirectionsWalk />
-                            <span className='text-blue-700 dark:text-white'>Distance</span>
-                          </div>
-                          <div className="text-xl font-bold text-black dark:text-white">{result.distance.toFixed(2)} km</div>
-                        </div>
-                        {/* <div className="flex-1 bg-blue-50 rounded p-3">
-                          <div className="flex items-center gap-1 font-medium text-blue-700">
-                            <BsClock />
-                            <span>Duree</span>
-                          </div>
-                          <div className="text-xl font-bold">1h 9min 49s</div>
-                        </div> */}
-                      </div>
-
-                      {/* Our Estimate */}
-                      <div className="border hover:border-blue-500 rounded p-3 space-y-2">
-                        <div className="flex justify-between font-medium">
-                          <span className='text-blue-700 dark:text-white'>Cout Estime</span>
-                          <span className="font-bold text-blue-700 dark:text-white">{result.cost.toFixed(0)} FCFA</span>
-                        </div>
-                        {/* <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-                          Commander
-                        </button> */}
-                      </div>
-
-                      {/* Official Rate */}
-                      <div className="border hover:border-blue-500 w-full relative mt-6 rounded p-3 space-y-2">
-                        <div className="flex justify-between font-medium">
-                          <span className='text-blue-700 dark:text-white'>Tarif officiel</span>
-                          <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
-                        </div>
-                        {/* <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-                          Commander
-                        </button> */}
-                      </div>
-
-                      {/* Custom Offer */}
-                      {/* <div className="border border-blue-200 bg-blue-50 p-3 rounded space-y-2">
-                        <label className="font-medium text-blue-800 flex items-center gap-1">
-                          <span>🧭</span> Proposer votre prix
-                        </label>
-                        <div className="flex gap-2">
-                          <input
-                            type="number"
-                            placeholder="Your offer"
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                            value={customOffer}
-                            onChange={(e) => setCustomOffer(e.target.value)}
-                          />
-                          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                            Commader
-                          </button>
-                        </div>
-                      </div> */}
+                {result && !showCustomDiv && (
+                  <div className={`lg:w-120 sm:w-120 md:w-120 w-[260px] h-auto relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-hidden transition-all duration-700 ease-in-out ${show ? 'max-h-96 opacity-100 mt-0' : 'max-h-0 opacity-0'}`}>
+                    <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
+                      <FaMoneyBillAlt />
+                      <span className='dark:text-white'>Notre estimation</span>
                     </div>
+
+                    <div className="flex justify-between gap-2">
+                      <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
+                        <div className="flex items-center gap-1 font-medium text-blue-700">
+                          <MdOutlineDirectionsWalk />
+                          <span className='text-blue-700 dark:text-white'>Distance</span>
+                        </div>
+                        <div className="text-xl font-bold text-black dark:text-white">{result.distance.toFixed(2)} km</div>
+                      </div>
+                    </div>
+
+                    <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
+                      <span className='text-blue-700 dark:text-white'>Coût Estimé</span>
+                      <span className="font-bold text-blue-700 dark:text-white">{result.cost.toFixed(0)} FCFA</span>
+                    </div>
+
+                    <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
+                      <span className='text-blue-700 dark:text-white'>Tarif Officiel</span>
+                      <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
+                    </div>
+
+                    <div className="flex flex-col gap-3 mt-4">
+                      <Button
+                        onClick={() => setShowCustomDiv(true)}
+                        className="bg-green-600 text-white w-full h-12 lg:hidden sm:hidden md:hidden hover:bg-green-800"
+                      >
+                        Visualiser la carte
+                      </Button>
+
+                      <Button
+                        onClick={() => {
+                          setResult(null);
+                          setShow(false);
+                        }}
+                        className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800"
+                      >
+                        Refaire un calcul
+                      </Button>
+                    </div>
+                  </div>
                 )}
+
+                {result && showCustomDiv && (
+                  <div className="lg:w-120 sm:w-120 md:w-120 w-[260px] h-auto relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-hidden transition-all duration-700 ease-in-out">
+                    {/* <h2 className="text-2xl font-bold mb-4 text-blue-700 dark:text-white">Détails Supplémentaires</h2>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4">
+                      Ce div personnalisé vous permet d'afficher d'autres informations : statistiques, conseils, analyse des coûts, etc.
+                    </p> */}
+                    <div className="lg:hidden sm:hidden md:hidden rounded-2xl w-full h-full relative z-10 mt-0">
+                                          {/* <Mapleaf /> */}
+                                          {/* <MapNavigoo/> */}
+                                          <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />
+                                    </div>
+                    <Button 
+                      onClick={() => {
+                        setShowCustomDiv(false);
+                        setResult(null);
+                        setShow(false);
+                      }} 
+                      className="bg-blue-600 hover:bg-blue-800 text-white w-full h-12"
+                    >
+                      Refaire un calcul
+                    </Button>
+                  </div>
+                )}
+
       </div>
       <div className="hidden lg:block mr-5 rounded-2xl p-4 relative w-full h-full z-10 mt-0">
             {/* <Mapleaf /> */}

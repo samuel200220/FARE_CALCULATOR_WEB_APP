@@ -117,11 +117,11 @@ const Headeracc = () => {
                 </Link>
             {/* <Button onClick={toggleLang} className='hidden sm:flex mr-6 bg-transparent border-none shadow-none text-white text-[18px] hover:text-violet-800 cursor-pointer dark:hover:text-violet-600 hover:bg-transparent dark:bg-[#0D1B2A] dark:hover:bg-[#0D1B2A]'><span className='text-xl text-white dark:text-violet-400'><FaGlobe /></span>{lang === "fr" ? "English" : "Français"}</Button> */}
             {/* <ModeToggle /> */}
-                <Link href={"/inscription1"} >
+                <Link href={"/inscription1"} className='hidden lg:flex'>
                 <Button className='cursor-pointer bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>S'inscrire</Button>
                 </Link>
                 <Link href={"/connexion1"} >
-                <Button className='cursor-pointer bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
+                <Button className='cursor-pointer mr-2 bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>Se connecter</Button>
                 </Link>
                 <div className='hidden sm:flex'>
                 <ModeToggle />

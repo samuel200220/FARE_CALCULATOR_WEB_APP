@@ -30,6 +30,11 @@ import { enregistrerCalcul } from '@/app/services/calculService';
 import dynamic from 'next/dynamic';
 import Pricing from '@/components/pricing';
 import EstimationResult from '@/components/EstimationResult';
+import Accsec from '@/components/sections/accsec';
+import Assec1 from '@/components/sections/accsec1';
+import Assec2 from '@/components/sections/accsec2';
+import Footer from '@/components/navbar/footer';
+import Download from '@/components/sections/download';
 
 const libraries: Libraries = ["places"];
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
@@ -40,6 +45,8 @@ const predefinedHours = [
   "18:00", "19:00", "20:00", "21:00",
   "22:00"
 ];
+
+const MapNavigooWrapper = dynamic(() => import('@/components/MapNavigooWrapper.client'), { ssr: false });
 
 const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
@@ -280,6 +287,8 @@ export default function LandingPage() {
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState('');
 
+  const [showCustomDiv, setShowCustomDiv] = useState(false);
+
   const handleCost = async () => {
     setIsLoading(true);
       setProgress(0);
@@ -288,7 +297,7 @@ export default function LandingPage() {
   
     setError('');
     try {
-      const res = await fetch('https://rideandgo.onrender.com/cost', {
+      const res = await fetch('https://fare-calculator.onrender.com/cost', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ start, end, hour }),
@@ -563,7 +572,7 @@ export default function LandingPage() {
                 </button>
               </div> */}
               
-              <div className="bg-white dark:bg-[#0D1B2A] rounded-3xl shadow-lg p-8 w-full max-w-lg mx-auto">
+              <div className="bg-white dark:bg-[#0D1B2A] rounded-3xl shadow-lg mt-2 mb-2 p-8 w-full max-w-lg mx-auto">
                 <h3 className="dark:text-white text-2xl sm:text-4xl font-bold mb-6 text-center">
                   Calculateur de Tarif
                 </h3>
@@ -571,102 +580,123 @@ export default function LandingPage() {
                 {!result ? (
                   <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Champ Départ */}
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FaMapMarkerAlt className="text-blue-600 text-lg" />
-                        </div>
-                        <Input
-                          value={start}
-                          onChange={handleChange}
-                          className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                            errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
-                          }`}
-                          placeholder="Départ"
-                        />
-                        {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
-                        {showSuggestionsStart && (
-                          <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-                            {filteredSuggestions.length > 0 ? (
-                              filteredSuggestions.map((s, index) => (
-                                <li
-                                  key={index}
-                                  onClick={() => handleSelect(s)}
-                                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                                >
-                                  {s}
-                                </li>
-                              ))
-                            ) : (
-                              <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-                            )}
-                          </ul>
-                        )}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaMapMarkerAlt className="text-blue-600 text-lg" />
                       </div>
+                      <Input
+                        value={start}
+                        onChange={handleChange}
+                        className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
+                          errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                        }`}
+                        placeholder="Départ"
+                      />
+                      {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
+                      {showSuggestionsStart && (
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                          {filteredSuggestions.length > 0 ? (
+                            filteredSuggestions.map((s, index) => (
+                              <li
+                                key={index}
+                                onClick={() => handleSelect(s)}
+                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                              >
+                                {s}
+                              </li>
+                            ))
+                          ) : (
+                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
 
-                      {/* Champ Destination */}
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FaLocationArrow className="text-blue-600 text-lg" />
-                        </div>
-                        <Input
-                          value={end}
-                          onChange={handleChanged}
-                          className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                            errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
-                          }`}
-                          placeholder="Destination"
-                        />
-                        {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
-                        {showSuggestionsEnd && (
-                          <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-                            {filteredSuggestionsd.length > 0 ? (
-                              filteredSuggestionsd.map((s, index) => (
-                                <li
-                                  key={index}
-                                  onClick={() => handleSelectd(s)}
-                                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                                >
-                                  {s}
-                                </li>
-                              ))
-                            ) : (
-                              <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-                            )}
-                          </ul>
-                        )}
+                    {/* Champ Destination */}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaLocationArrow className="text-blue-600 text-lg" />
                       </div>
+                      <Input
+                        value={end}
+                        onChange={handleChanged}
+                        className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
+                          errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                        }`}
+                        placeholder="Destination"
+                      />
+                      {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
+                      {showSuggestionsEnd && (
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                          {filteredSuggestionsd.length > 0 ? (
+                            filteredSuggestionsd.map((s, index) => (
+                              <li
+                                key={index}
+                                onClick={() => handleSelectd(s)}
+                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                              >
+                                {s}
+                              </li>
+                            ))
+                          ) : (
+                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
 
-                      {/* Sélection Heure */}
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FaRegClock className="text-blue-600" />
-                        </div>
-                        <select
-                          value={hour}
-                          onChange={(e) => setHour(e.target.value)}
-                          className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
-                            errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
-                          }`}
-                        >
-                          <option value="">Sélectionnez l'heure</option>
-                          {predefinedHours.map((h) => (
-                            <option key={h} value={h}>{h}</option>
-                          ))}
-                        </select>
-                        {errors.hour && <p className="text-red-600 text-sm mt-1">{errors.hour}</p>}
+                    {/* Sélection Heure */}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaRegClock className="text-blue-600" />
                       </div>
-
-                      {/* Bouton Calculer */}
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="text-white bg-blue-700 w-full h-12 hover:bg-violet-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                      <select
+                        value={hour}
+                        onChange={(e) => setHour(e.target.value)}
+                        className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
+                          errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                        }`}
                       >
-                        <FaCalculator className="mr-2" />
-                        {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
-                      </Button>
-                      {error && <p className="text-red-500 text-center mt-2">Problème de connexion au serveur</p>}
+                        <option value="">Sélectionnez l'heure</option>
+                        {predefinedHours.map((h) => (
+                          <option key={h} value={h}>{h}</option>
+                        ))}
+                      </select>
+                      {errors.hour && <p className="text-red-600 text-sm mt-1">{errors.hour}</p>}
+                    </div>
+
+                    {/* Bouton Calculer */}
+                    <Button
+                      type="submit"
+                      disabled={isLoading}
+                      className="text-white bg-blue-700 w-full h-12 hover:bg-violet-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                    >
+                      <FaCalculator className="mr-2" />
+                      {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
+                    </Button>
+                    {error && <p className="text-red-500 text-center mt-2">Problème de connexion au serveur</p>}
                   </form>
+                ) : showCustomDiv ? (
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
+                    {/* <h2 className="text-2xl font-bold mb-4 text-blue-700 dark:text-white">Détails Supplémentaires</h2>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4">
+                      Ce div personnalisé remplace les résultats. Vous pouvez y mettre n'importe quel contenu complémentaire : graphiques, stats, explication des coûts, etc.
+                    </p> */}
+                    <div className="rounded-2xl w-full h-full relative z-10 mt-0">
+                          {/* <Mapleaf /> */}
+                          {/* <MapNavigoo/> */}
+                          <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />
+                    </div>
+                    <Button 
+                      onClick={() => {
+                        setShowCustomDiv(false);
+                        setResult(null);
+                      }} 
+                      className="bg-blue-600 hover:bg-blue-800 text-white w-full h-12 mt-4"
+                    >
+                      Refaire un calcul
+                    </Button>
+                  </div>
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 font-semibold text-lg text-blue-900 dark:text-white">
@@ -696,14 +726,24 @@ export default function LandingPage() {
                       <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
                     </div>
 
-                    <Button
-                      onClick={() => setResult(null)}
-                      className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800 mt-4"
-                    >
-                      Refaire un calcul
-                    </Button>
+                    <div className="flex flex-col gap-3 mt-4">
+                      <Button
+                        onClick={() => setShowCustomDiv(true)}
+                        className="bg-green-600 text-white w-full h-12 hover:bg-green-800"
+                      >
+                        Visualiser le trajet
+                      </Button>
+
+                      <Button
+                        onClick={() => setResult(null)}
+                        className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800"
+                      >
+                        Refaire un calcul
+                      </Button>
+                    </div>
                   </div>
                 )}
+
 
               </div>
 
@@ -718,6 +758,11 @@ export default function LandingPage() {
       estimatedCost={304.5}
       officialCost={243.6}
     /> */}
+      <Accsec />
+      <Assec1/>
+      <Assec2/>
+      <Download/>
+      <Footer/>
     </>
   );
 }
