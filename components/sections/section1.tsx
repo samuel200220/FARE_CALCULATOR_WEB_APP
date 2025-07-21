@@ -5,7 +5,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
-import { FaRegCalendarAlt, FaRegClock, FaCalculator } from 'react-icons/fa';
+import { FaRegCalendarAlt, FaRegClock, FaCalculator, FaCar, FaBus, FaCarSide } from 'react-icons/fa';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import Mapleaf from '../Mapleaf';
@@ -30,6 +30,7 @@ import { Libraries } from "@react-google-maps/api";
 // import MapNavigoo from '../MapNavigoo';
 // import MapNavigooWrapper from '../MapNavigooWrapper';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const libraries: Libraries = ["places"];
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
@@ -218,6 +219,7 @@ useEffect(() => {
     cost: number;
     mint_cost: number;
   }
+  const [showCards, setShowCards] = useState(true);
 
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState('');
@@ -310,6 +312,7 @@ useEffect(() => {
         setIsLoading(true);
         handleCost();
       }
+      setShowCards(false);
     };
   return (
     <section className='w-full h-[850px] p-4 justify-center items-center flex mb-4 mt-0'>
@@ -412,12 +415,39 @@ useEffect(() => {
                       type="submit"
                       // onClick={handleCost}
                       disabled={isLoading}
-                      className="text-white dark:bg-blue-700 dark:text-white dark:hover:bg-violet-900 bg-blue-700 w-full h-12 hover:bg-violet-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                      className="text-white dark:bg-blue-700 dark:text-white dark:hover:bg-green-800 bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
                     >
                       <FaCalculator className="mr-2" />
                       {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
                     </Button>
                   </form>
+                  {showCards && (
+    <div className="w-full flex justify-center flex-wrap gap-4 mt-6">
+      {/* Carte 1 */}
+      <Link href={'https://rideandgo.vercel.app/'}>
+      <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+        <FaCar className="text-orange-500 text-3xl mb-2" />
+        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
+      </div>
+      </Link>
+
+      {/* Carte 2 */}
+      <Link href={'https://lets-go-liart-phi.vercel.app/'}>
+      <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+        <FaBus className="text-orange-500 text-3xl mb-2" />
+        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une agence de voyage?</p>
+      </div>
+      </Link>
+
+      {/* Carte 3 */}
+      <Link href={'#'}>
+      <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+        <FaCarSide className="text-orange-500 text-3xl mb-2" />
+        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
+      </div>
+      </Link>
+    </div>
+  )}
                     {/* <LinearBufferButton /> */}
                     {error && <p className="text-red-500 mt-2">Problème de connexion au serveur</p>}
                 {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}
@@ -465,6 +495,7 @@ useEffect(() => {
                                         onClick={() => {
                                           setResult(null);
                                           setShow(false);
+                                          setShowCards(true);
                                         }}
                                         className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800"
                                       >

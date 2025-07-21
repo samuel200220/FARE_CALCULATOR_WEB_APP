@@ -669,7 +669,7 @@ export default function LandingPage() {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="text-white bg-blue-700 w-full h-12 hover:bg-violet-800 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                      className="text-white bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
                     >
                       <FaCalculator className="mr-2" />
                       {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
@@ -677,26 +677,119 @@ export default function LandingPage() {
                     {error && <p className="text-red-500 text-center mt-2">Problème de connexion au serveur</p>}
                   </form>
                 ) : showCustomDiv ? (
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center">
-                    {/* <h2 className="text-2xl font-bold mb-4 text-blue-700 dark:text-white">Détails Supplémentaires</h2>
-                    <p className="text-gray-700 dark:text-gray-300 mb-4">
-                      Ce div personnalisé remplace les résultats. Vous pouvez y mettre n'importe quel contenu complémentaire : graphiques, stats, explication des coûts, etc.
-                    </p> */}
-                    <div className="rounded-2xl w-full h-full relative z-10 mt-0">
-                          {/* <Mapleaf /> */}
-                          {/* <MapNavigoo/> */}
-                          <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg relative">
+  
+                  {/* Bouton fermer (croix en haut à droite) */}
+                  <button 
+                    onClick={() => {
+                      setShowCustomDiv(false);
+                    }}
+                    className="absolute top-3 right-3 text-gray-500 hover:text-red-600 text-2xl font-bold"
+                  >
+                    &times;
+                  </button>
+
+                  {/* Mini Formulaire pour recalculer sans sortir du mode carte */}
+                  {/* <h3 className="text-xl font-bold text-blue-700 dark:text-white mb-4 text-center">
+                    Recalculer un Trajet
+                  </h3> */}
+
+                  <form onSubmit={handleSubmit} className="space-y-4 mb-4 mt-2">
+                    {/* Champ Départ */}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaMapMarkerAlt className="text-blue-600" />
+                      </div>
+                      <Input
+                        value={start}
+                        onChange={handleChange}
+                        className="bg-gray-200 dark:bg-gray-800 dark:text-white w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                        placeholder="Départ"
+                      />
+                      {showSuggestionsStart && (
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border rounded shadow-lg max-h-40 overflow-y-auto">
+                          {filteredSuggestions.length > 0 ? (
+                            filteredSuggestions.map((s, index) => (
+                              <li
+                                key={index}
+                                onClick={() => handleSelect(s)}
+                                className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer dark:text-white"
+                              >
+                                {s}
+                              </li>
+                            ))
+                          ) : (
+                            <li className="px-4 py-2 text-gray-500 dark:text-white">Aucune suggestion</li>
+                          )}
+                        </ul>
+                      )}
                     </div>
-                    <Button 
-                      onClick={() => {
-                        setShowCustomDiv(false);
-                        setResult(null);
-                      }} 
-                      className="bg-blue-600 hover:bg-blue-800 text-white w-full h-12 mt-4"
+
+                    {/* Champ Destination */}
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaLocationArrow className="text-blue-600" />
+                      </div>
+                      <Input
+                        value={end}
+                        onChange={handleChanged}
+                        className="bg-gray-200 dark:bg-gray-800 dark:text-white w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                        placeholder="Destination"
+                      />
+                      {showSuggestionsEnd && (
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border rounded shadow-lg max-h-40 overflow-y-auto">
+                          {filteredSuggestionsd.length > 0 ? (
+                            filteredSuggestionsd.map((s, index) => (
+                              <li
+                                key={index}
+                                onClick={() => handleSelectd(s)}
+                                className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer dark:text-white"
+                              >
+                                {s}
+                              </li>
+                            ))
+                          ) : (
+                            <li className="px-4 py-2 text-gray-500 dark:text-white">Aucune suggestion</li>
+                          )}
+                        </ul>
+                      )}
+                    </div>
+
+                    {/* Heure */}
+                    <div className='relative'>
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FaRegClock className="text-blue-600" />
+                      </div>
+                    <select
+                      value={hour}
+                      onChange={(e) => setHour(e.target.value)}
+                      className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-10 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
+                          errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                        }`}
                     >
-                      Refaire un calcul
+                      <option value="">Sélectionnez l'heure</option>
+                      {predefinedHours.map((h) => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                    </div>
+
+                    {/* Bouton Calculer */}
+                    <Button 
+                      type="submit"
+                      className="bg-green-600 text-white w-full h-12 hover:bg-green-800"
+                    >
+                      {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
                     </Button>
+                  </form>
+
+                  {/* Carte avec le trajet */}
+                  <div className="rounded-2xl w-full h-96 relative z-10 mt-4">
+                    <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />
                   </div>
+
+                </div>
+
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 font-semibold text-lg text-blue-900 dark:text-white">
