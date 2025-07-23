@@ -34,7 +34,7 @@ export default function Download() {
         {/* Image */}
         <div className="flex-1 p-6 flex justify-center items-center">
           <Image
-            src="/mobile.jpeg" // Remplace par une image mockup mobile si tu en as
+            src="/fare_logo.png" // Remplace par une image mockup mobile si tu en as
             alt="Application FareGo"
             width={350}
             height={700}

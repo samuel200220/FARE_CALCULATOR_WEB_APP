@@ -15,7 +15,7 @@ const MapNavigooWrapper: React.FC<MapNavigooWrapperProps> = ({ startPlaceName, e
   const [searchedPlace, setSearchedPlace] = useState<Place | null>(null);
   const [userLocation, setUserLocation] = useState<GeolocationResult | null>(null);
 
-  const apiClient = new ApiClient('https://gest-geospatiale.onrender.com');
+  const apiClient = new ApiClient('https://map-backend-reactif.onrender.com');
 
   useEffect(() => {
     const fetchRoutes = async () => {

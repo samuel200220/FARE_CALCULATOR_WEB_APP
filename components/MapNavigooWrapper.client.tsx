@@ -18,7 +18,7 @@ const MapNavigooWrapper = ({ startPlaceName, endPlaceName }: { startPlaceName: s
     if (typeof window !== 'undefined') {
       // Lazy load ici uniquement côté client
       const { ApiClient } = require('@navigoo/map-components');
-      const client = new ApiClient('https://gest-geospatiale.onrender.com');
+      const client = new ApiClient('https://map-backend-reactif.onrender.com');
       setApiClient(client);
     }
   }, []);

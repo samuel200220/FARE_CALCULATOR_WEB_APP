@@ -7,7 +7,7 @@ import Header from '@/components/navbar/header';
 import Headeracc from '@/components/navbar/headeracc';
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { FaRegCalendarAlt, FaRegClock, FaCalculator } from 'react-icons/fa';
+import { FaRegCalendarAlt, FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide } from 'react-icons/fa';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import TextField from '@mui/material/TextField';
@@ -400,54 +400,10 @@ export default function LandingPage() {
 
   return (
     <>
-      {/* <Head>
-        <title>FareGo - Estimez vos trajets en quelques clics</title>
-        <meta name="description" content="Estimez vos trajets urbains et interurbains en toute simplicité avec FareGo." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head> */}
       <Headeracc />
 
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
 
-        {/* <header className="relative z-10 bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-4">
-              
-              <div className="flex items-center">
-                <div className="text-2xl font-bold">
-                  <span className="text-orange-500">Fare</span>
-                  <span className="text-blue-600">Go</span>
-                </div>
-              </div>
-
-              
-              <nav className="hidden md:flex space-x-8">
-                <Link href="/calculateur" className="text-gray-700 hover:text-orange-500 transition-colors">
-                  Calculateur
-                </Link>
-                <Link href="/statistiques" className="text-gray-700 hover:text-orange-500 transition-colors">
-                  Statistiques
-                </Link>
-                <Link href="/apropos" className="text-gray-700 hover:text-orange-500 transition-colors">
-                  À propos
-                </Link>
-              </nav>
-
-              
-              <div className="flex items-center space-x-4">
-                <button className="flex items-center text-gray-700 hover:text-orange-500 transition-colors">
-                  FR
-                </button>
-                <Link href="/signin" className="text-gray-700 hover:text-orange-500 transition-colors">
-                  Connexion
-                </Link>
-                <Link href="/signup" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                  S'inscrire
-                </Link>
-              </div>
-            </div>
-          </div>
-        </header> */}
 
         {/* Hero Section */}
         <main className="relative min-h-screen flex items-center">
@@ -494,83 +450,33 @@ export default function LandingPage() {
                     Disponible sur Google Play
                   </button> */}
                 </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+                  <a href="https://lets-go-liart-phi.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer">
+                      <FaBus className="text-orange-500 text-3xl mb-2" />
+                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">
+                        Besoin d'une agence de voyage ?
+                      </p>
+                    </div>
+                  </a>
+
+                  <a href="https://rideandgo.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                      <FaCar className="text-orange-500 text-3xl mb-2" />
+                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
+                    </div>
+                  </a>
+
+                  <a href="#" target="_blank" rel="noopener noreferrer">
+                    <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                      <FaCarSide className="text-orange-500 text-3xl mb-2" />
+                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
+                    </div>
+                  </a>
+                </div>
+
               </div>
 
-              {/* Right Column - Fare Calculator Form */}
-              {/* <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md mx-auto w-full">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Calculer un Tarif</h3>
-                
-              
-                <div className="mb-6">
-                  <div className="flex space-x-4">
-                    {['Économique', 'Confort', 'VIP'].map((type) => (
-                      <label key={type} className="flex items-center">
-                        <input
-                          type="radio"
-                          name="rideType"
-                          value={type}
-                          checked={selectedRideType === type}
-                          onChange={(e) => setSelectedRideType(e.target.value)}
-                          className="w-4 h-4 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className="ml-2 text-gray-700">{type}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Lieu de départ
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Ex : Yaoundé"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Lieu d'arrivée
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Ex : Douala"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Date du trajet
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Heure
-                    </label>
-                    <input
-                      type="time"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                  Calculer le tarif
-                </button>
-              </div> */}
               
               <div className="bg-white dark:bg-[#0D1B2A] rounded-3xl shadow-lg mt-2 mb-2 p-8 w-full max-w-lg mx-auto">
                 <h3 className="dark:text-white text-2xl sm:text-4xl font-bold mb-6 text-center">
@@ -845,12 +751,6 @@ export default function LandingPage() {
         </main>
       </div>
       <Pricing/>
-      {/* <EstimationResult
-      distance={19.9}
-      duration="1h 9min 49s"
-      estimatedCost={304.5}
-      officialCost={243.6}
-    /> */}
       <Accsec />
       <Assec1/>
       <Assec2/>

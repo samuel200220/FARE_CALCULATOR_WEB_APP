@@ -419,7 +419,7 @@ useEffect(() => {
                   {showCards && (
     <div className="w-full flex justify-center flex-wrap gap-4 mt-6">
       {/* Carte 1 */}
-      <Link href={'https://rideandgo.vercel.app/'}>
+      <Link href={'https://rideandgo.vercel.app/'} target="_blank" rel="noopener noreferrer">
       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
         <FaCar className="text-orange-500 text-3xl mb-2" />
         <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
@@ -427,7 +427,7 @@ useEffect(() => {
       </Link>
 
       {/* Carte 2 */}
-      <Link href={'https://lets-go-liart-phi.vercel.app/'}>
+      <Link href={'https://lets-go-liart-phi.vercel.app/'} target="_blank" rel="noopener noreferrer">
       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
         <FaBus className="text-orange-500 text-3xl mb-2" />
         <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une agence de voyage?</p>
@@ -447,58 +447,77 @@ useEffect(() => {
                     {error && <p className="text-red-500 mt-2">Problème de connexion au serveur</p>}
                 {/* <h5>Vous avez utilise {utilisations} fois. Veullez vous connectez</h5> */}
                 {result && !showCustomDiv && (
-                                                  <div className={`lg:w-120 sm:w-120 md:w-120 w-[260px] h-auto relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-hidden transition-all duration-700 ease-in-out ${show ? 'max-h-96 opacity-100 mt-0' : 'max-h-0 opacity-0'}`}>
-                                                    <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
-                                                      <FaMoneyBillAlt />
-                                                      <span className='dark:text-white'>Notre estimation</span>
-                                                    </div>
-                                
-                                                    <div className="flex justify-between gap-2">
-                                                      <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
-                                                        <div className="flex items-center gap-1 font-medium text-blue-700">
-                                                          <MdOutlineDirectionsWalk />
-                                                          <span className='text-blue-700 dark:text-white'>Distance</span>
-                                                        </div>
-                                                        <div className="text-xl font-bold text-black dark:text-white">{result.distance.toFixed(2)} km</div>
-                                                      </div>
-                                                    </div>
-                                
-                                                    <div className="border hover:border-blue-500 rounded p-3 space-y-2">
-                                                      <div className="flex justify-between font-medium">
-                                                        <span className='text-blue-700 dark:text-white'>Cout Estime</span>
-                                                        <span className="font-bold text-blue-700 dark:text-white">{result.cost.toFixed(0)} FCFA</span>
-                                                      </div>
-                                                      <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-                                                        Commander
-                                                      </button>
-                                                    </div>
-                                
-                                                    <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
-                                                      <span className='text-blue-700 dark:text-white'>Tarif Officiel</span>
-                                                      <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
-                                                    </div>
-                                
-                                                    <div className="flex flex-col gap-3 mt-4">
-                                                      <Button
-                                                        onClick={() => setShowCustomDiv(true)}
-                                                        className="bg-green-600 text-white w-full h-12 lg:hidden sm:hidden md:hidden hover:bg-green-800"
-                                                      >
-                                                        Visualiser la carte
-                                                      </Button>
-                                
-                                                      <Button
-                                                        onClick={() => {
-                                                          setResult(null);
-                                                          setShow(false);
-                                                          setShowCards(true);
-                                                        }}
-                                                        className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800"
-                                                      >
-                                                        Refaire un calcul
-                                                      </Button>
-                                                    </div>
-                                                  </div>
-                                                )}
+                <div className={`lg:w-120 sm:w-120 md:w-120 w-[260px] h-auto relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-auto transition-all duration-700 ease-in-out ${show ? 'opacity-100 mt-0' : 'opacity-0'}`}>
+                  
+                  <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
+                    <FaMoneyBillAlt />
+                    <span className='dark:text-white'>Notre estimation</span>
+                  </div>
+
+                  <div className="flex justify-between gap-2">
+                    <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
+                      <div className="flex items-center gap-1 font-medium text-blue-700">
+                        <MdOutlineDirectionsWalk />
+                        <span className='text-blue-700 dark:text-white'>Distance</span>
+                      </div>
+                      <div className="text-xl font-bold text-black dark:text-white">
+                        {result.distance.toFixed(2)} km
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
+                    <span className='text-blue-700 dark:text-white'>Coût Estimé</span>
+                    <span className="font-bold text-blue-700 dark:text-white">{result.cost.toFixed(0)} FCFA</span>
+                  </div>
+
+                  <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
+                    <span className='text-blue-700 dark:text-white'>Tarif Officiel</span>
+                    <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
+                  </div>
+
+                  <div className="flex flex-col gap-3 mt-4">
+                    <Button
+                      onClick={() => setShowCustomDiv(true)}
+                      className="bg-green-600 text-white w-full h-12 lg:hidden sm:hidden md:hidden hover:bg-green-800"
+                    >
+                      Visualiser la carte
+                    </Button>
+
+                    <Button
+                      onClick={() => {
+                        setResult(null);
+                        setShow(false);
+                        setShowCards(true);
+                      }}
+                      className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800"
+                    >
+                      Refaire un calcul
+                    </Button>
+                  </div>
+
+                  <div className='relative items-center flex flex-wrap justify-center gap-4'>
+                    <Link href={'https://rideandgo.vercel.app/'} target="_blank" rel="noopener noreferrer">
+                      <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                        <FaCar className="text-orange-500 text-3xl mb-2" />
+                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
+                      </div>
+                    </Link>
+                    <Link href={'https://lets-go-liart-phi.vercel.app/'} target="_blank" rel="noopener noreferrer">
+                      <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                        <FaBus className="text-orange-500 text-3xl mb-2" />
+                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une agence de voyage?</p>
+                      </div>
+                    </Link>
+                    <Link href={'#'}>
+                      <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                        <FaCarSide className="text-orange-500 text-3xl mb-2" />
+                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              )}
                                 
                                                 {result && showCustomDiv && (
                                                   <div className="lg:w-120 sm:w-120 md:w-120 w-[260px] h-auto relative p-4 dark:bg-gray-800 rounded-md border border-gray-200 bg-white shadow-sm space-y-4 lg:text-sm md:text-sm sm:text-sm overflow-hidden transition-all duration-700 ease-in-out">
@@ -524,7 +543,7 @@ useEffect(() => {
                                                   </div>
                                                 )}
       </div>
-      <div className="hidden lg:block mr-5 rounded-2xl p-4 relative w-full h-full z-10 mt-0">
+      <div className="hidden lg:block mr-5 rounded-2xl ml-4 relative w-full h-full z-10 mt-6">
             {/* <Mapleaf /> */}
             <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />
       </div>                
