@@ -5,7 +5,7 @@ import { FaApple, FaGooglePlay } from 'react-icons/fa';
 
 export default function Download() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-[#0D1B2A] transition-colors duration-500">
+    <div className="flex items-center justify-center bg-gray-50 dark:bg-[#0D1B2A] transition-colors duration-500 mb-20">
       <div className="flex flex-col md:flex-row items-center w-full max-w-6xl p-8 bg-white dark:bg-[#1B263B] rounded-3xl shadow-2xl">
 
         {/* Texte */}

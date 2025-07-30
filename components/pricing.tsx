@@ -39,7 +39,7 @@ const plans = [
 
 export default function Pricing() {
   return (
-    <div className="mb-0 py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-200 via-gray-200 to-gray-200 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen">
+    <div className="mb-0 py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-200 via-gray-200 to-gray-200 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-4xl text-blue-800 dark:text-white font-extrabold mb-4">Nos Formules</h2>
         <p className="text-lg text-black dark:text-gray-300 mb-12">Choisissez le plan qui correspond à vos besoins</p>
