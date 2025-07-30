@@ -7,7 +7,7 @@ export default function FareSections() {
     <div className="flex flex-col items-center justify-center w-full bg-gray-100 dark:bg-[#0D1B2A] transition-colors duration-500">
 
       {/* Section Agences */}
-      <div className="flex flex-col md:flex-row w-full max-w-7xl p-6 min-h-screen">
+      <div className="flex flex-col md:flex-row w-full max-w-7xl p-6">
         {/* Image */}
         <div className="flex-1 flex justify-center items-center p-6">
           <Image
@@ -37,7 +37,7 @@ export default function FareSections() {
       </div>
 
       {/* Section Institutions */}
-      <div className="flex flex-col md:flex-row w-full max-w-7xl p-6 min-h-screen">
+      <div className="flex flex-col md:flex-row w-full max-w-7xl p-6 ">
         {/* Texte */}
         <div className="flex-1 flex flex-col justify-center p-6">
           <h2 className="text-sm text-gray-600 dark:text-gray-300 uppercase tracking-wide">
@@ -67,7 +67,7 @@ export default function FareSections() {
       </div>
 
       {/* Section Conducteurs */}
-      <div className="flex flex-col md:flex-row w-full max-w-7xl p-6 min-h-screen">
+      <div className="flex flex-col md:flex-row w-full max-w-7xl p-6 ">
         {/* Texte */}
         <div className="flex-1 flex flex-col justify-center p-6">
           <h2 className="text-sm text-gray-600 dark:text-gray-300 uppercase tracking-wide">

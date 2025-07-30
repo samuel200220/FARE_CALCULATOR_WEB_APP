@@ -6,6 +6,7 @@ import {
   Menu, Home, User, Settings, LogOut,
   HelpCircle, LayoutDashboard, History, Crown,PartyPopper
 } from 'lucide-react';
+import { ModeToggle } from './ui/mode-toggle';
 
 export default function SidebarToggle() {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +47,10 @@ export default function SidebarToggle() {
           <NavItem href="/historique" icon={<History />} label="Historique" />
           <NavItem href="/aide1" icon={<HelpCircle />} label="Aide" />
           <NavItem href="/connexionpro" icon={<LogOut />} label="Déconnexion" />
+          <div className='flex flex-row space-x-2'>
+            <ModeToggle />
+            <h5>Thème</h5>
+          </div>
         </nav>
       </aside>
 
