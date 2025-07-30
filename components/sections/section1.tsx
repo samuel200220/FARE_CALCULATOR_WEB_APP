@@ -76,17 +76,20 @@ const Section1 = ({}) => {
   const handleChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEnd(value);
-    setShowSuggestionsEnd(true);
-    setShowSuggestionsStart(false);
-
-    if (value.length > 0) {
-      const filtered = destinationSuggestions.filter((s) =>
-        s.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredSuggestionsd(filtered);
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
+  
+    const filtered = destinationSuggestions.filter((s) =>
+      s.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredSuggestionsd(filtered);
+  
+    setShowSuggestionsEnd(value.trim() !== "");
+  
+    if (
+      destinationSuggestions.some(
+        (s) => s.toLowerCase().trim() === value.toLowerCase().trim()
+      )
+    ) {
+      setShowSuggestionsEnd(false);
     }
   };
   // Removed duplicate declaration of start
@@ -95,17 +98,22 @@ const Section1 = ({}) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setStart(value);
-    setShowSuggestionsEnd(false);
-    setShowSuggestionsStart(true);
-
-    if (value.length > 0) {
-      const filtered = suggestions.filter((s) =>
-        s.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
+  
+    const filtered = suggestions.filter((s) =>
+      s.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredSuggestions(filtered);
+  
+    // Affiche suggestions si champ non vide
+    setShowSuggestionsStart(value.trim() !== "");
+  
+    // Masquer les suggestions si l'entrée correspond exactement à une suggestion
+    if (
+      suggestions.some(
+        (s) => s.toLowerCase().trim() === value.toLowerCase().trim()
+      )
+    ) {
+      setShowSuggestionsStart(false);
     }
   };
   const handleSelect = (value: string) => {
@@ -330,6 +338,7 @@ useEffect(() => {
                       <Input
                         value={start}
                         onChange={handleChange}
+                        onBlur={() => setShowSuggestionsStart(false)}
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
                   errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                 }`}
@@ -337,7 +346,8 @@ useEffect(() => {
                       />
                       {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
                       {showSuggestionsStart && (
-                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                        <ul onMouseDown={(e) => e.preventDefault()}
+                        className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
                           {filteredSuggestions.length > 0 ? (
                             filteredSuggestions.map((s, index) => (
                               <li
@@ -363,6 +373,7 @@ useEffect(() => {
                       <Input
                         value={end}
                         onChange={handleChanged}
+                        onBlur={() => setShowSuggestionsEnd(false)}
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
                   errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                 }`}
@@ -370,7 +381,8 @@ useEffect(() => {
                       />
                       {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
                       {showSuggestionsEnd && (
-                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
+                        <ul onMouseDown={(e) => e.preventDefault()}
+                        className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
                           {filteredSuggestionsd.length > 0 ? (
                             filteredSuggestionsd.map((s, index) => (
                               <li
@@ -440,7 +452,7 @@ useEffect(() => {
       </Link>
 
       {/* Carte 3 */}
-      <Link href={'#'}>
+      <Link href={'https://easy-rental-git-review-admin-reseaus-projects.vercel.app/'} target="_blank" rel="noopener noreferrer">
       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
         <FaCarSide className="text-orange-500 text-3xl mb-2" />
         <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
@@ -514,7 +526,7 @@ useEffect(() => {
                         <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une agence de voyage?</p>
                       </div>
                     </Link>
-                    <Link href={'#'}>
+                    <Link href={'https://easy-rental-git-review-admin-reseaus-projects.vercel.app/'} target="_blank" rel="noopener noreferrer">
                       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                         <FaCarSide className="text-orange-500 text-3xl mb-2" />
                         <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>

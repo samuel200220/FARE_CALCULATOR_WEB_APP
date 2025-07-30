@@ -35,6 +35,7 @@ import Assec1 from '@/components/sections/accsec1';
 import Assec2 from '@/components/sections/accsec2';
 import Footer from '@/components/navbar/footer';
 import Download from '@/components/sections/download';
+import { useTranslations } from 'next-intl';
 
 const libraries: Libraries = ["places"];
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
@@ -116,6 +117,7 @@ export default function LandingPage() {
   const [selectedRideType, setSelectedRideType] = useState('Economy');
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   const [inputValue, setInputValue] = useState("");
+  // const t = useTranslations();
   const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
     setAutocomplete(autocompleteInstance);
   };
@@ -452,7 +454,7 @@ export default function LandingPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
                   <a href="https://lets-go-liart-phi.vercel.app/" target="_blank" rel="noopener noreferrer">
-                    <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer">
+                    <div className="ml-18 lg:ml-0 sm:ml-0 w-[200px] lg:w-[180px] sm:w-[180px] flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer">
                       <FaBus className="text-orange-500 text-3xl mb-2" />
                       <p className="text-center text-gray-800 dark:text-white text-sm font-medium">
                         Besoin d'une agence de voyage ?
@@ -461,14 +463,14 @@ export default function LandingPage() {
                   </a>
 
                   <a href="https://rideandgo.vercel.app/" target="_blank" rel="noopener noreferrer">
-                    <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                    <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                       <FaCar className="text-orange-500 text-3xl mb-2" />
                       <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
                     </div>
                   </a>
 
-                  <a href="#" target="_blank" rel="noopener noreferrer">
-                    <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                  <a href="https://easy-rental-git-review-admin-reseaus-projects.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                       <FaCarSide className="text-orange-500 text-3xl mb-2" />
                       <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
                     </div>
@@ -752,8 +754,8 @@ export default function LandingPage() {
       </div>
       <Pricing/>
       <Accsec />
-      <Assec1/>
-      <Assec2/>
+      {/* <Assec1/>
+      <Assec2/> */}
       <Download/>
       <Footer/>
     </>
