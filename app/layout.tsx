@@ -4,14 +4,12 @@ import "./globals.css";
 import { ThemeProvider } from "@/provider/theme-provider";
 import { Toaster } from 'react-hot-toast';
 import { Montserrat } from 'next/font/google';
-import Sidebar from "@/components/sidebar";
-import { NextIntlClientProvider } from 'next-intl';
-import { ReactNode } from 'react';
 
 const font=Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'], // choisis ce que tu veux
   variable: '--font-poppins',
+  display: "swap",
 });
 const montserrat = Montserrat({
   subsets: ['latin'],
