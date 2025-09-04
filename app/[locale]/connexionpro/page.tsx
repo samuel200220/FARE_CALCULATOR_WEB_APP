@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Box, TextField, Button, Stack, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
@@ -14,14 +15,11 @@ interface ConnexionFormData {
 }
 
 export default function Page() {
+  const t = useTranslations('ConnexionPro');
   const theme = useTheme();
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ConnexionFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<ConnexionFormData>();
 
   const onSubmit = async (data: ConnexionFormData) => {
     try {
@@ -29,20 +27,18 @@ export default function Page() {
       const entreprise = res.data;
 
       if (!entreprise || entreprise.motDePasse !== data.motDePasse) {
-        toast.error('Email ou mot de passe incorrect');
+        toast.error(t('messages.loginFailed'));
         return;
       }
 
-      // Enregistrer temporairement les infos en localStorage
       localStorage.setItem('entrepriseConnectee', JSON.stringify(entreprise));
-
-      toast.success('Connexion réussie');
+      toast.success(t('messages.loginSuccess'));
       router.push('/versionpro');
     } catch (error: any) {
       if (error.response?.status === 404) {
-        toast.error("Aucun compte associé à cet email");
+        toast.error(t('messages.accountNotFound'));
       } else {
-        toast.error("Erreur lors de la connexion");
+        toast.error(t('messages.genericError'));
       }
     }
   };
@@ -51,19 +47,14 @@ export default function Page() {
     <div className="min-h-screen flex lg:p-20 p-4 rounded-2xl shadow-lg font-[Poppins]">
       {/* Left Section */}
       <div className="hidden lg:flex w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex-col justify-center">
-        <h1 className="text-4xl font-bold mb-4">
-          Fare Calculator <br /> Votre Tarif à Portée De Main
-        </h1>
-        <p className="text-lg leading-relaxed">
-          Plus besoin de stresser sur le coût du trajet, <br />
-          Avec Fare Calculator, obtenez une estimation <br />
-          rapide du coût de vos déplacements.
-        </p>
+        <h1 className="text-4xl font-bold mb-4">{t('left.title')}</h1>
+        <p className="text-lg leading-relaxed">{t('left.subtitle')}</p>
       </div>
 
       {/* Right Section */}
       <div className="lg:w-1/2 w-full lg:p-16 p-0 bg-white dark:bg-gray-400 flex flex-col rounded-3xl lg:rounded-l-none lg:rounded-r-3xl justify-center">
-        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Connexion</h2>
+        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">{t('title')}</h2>
+        <p className="mb-6 text-center text-gray-600">{t('subtitle')}</p>
 
         <Box
           component="form"
@@ -78,19 +69,19 @@ export default function Page() {
         >
           <Stack spacing={3}>
             <TextField
-              label="Adresse email"
+              label={t('form.email')}
               type="email"
               fullWidth
-              {...register('email', { required: 'Email requis' })}
+              {...register('email', { required: t('form.email') })}
               error={!!errors.email}
               helperText={errors.email?.message}
             />
 
             <TextField
+              label={t('form.password')}
               type="password"
-              label="Mot de passe"
               fullWidth
-              {...register('motDePasse', { required: 'Mot de passe requis' })}
+              {...register('motDePasse', { required: t('form.password') })}
               error={!!errors.motDePasse}
               helperText={errors.motDePasse?.message}
             />
@@ -108,13 +99,13 @@ export default function Page() {
                 },
               }}
             >
-              Se connecter
+              {t('buttons.login')}
             </Button>
 
             <Typography variant="body2" align="center">
-              Pas de compte pro ?{' '}
+              {t('noAccount')}{' '}
               <Link href="/inscriptionpro" className="text-blue-900 ml-1">
-                Cliquez-ici
+                {t('buttons.signupPro')}
               </Link>
             </Typography>
           </Stack>

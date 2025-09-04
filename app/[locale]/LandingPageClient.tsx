@@ -708,14 +708,14 @@ export default function LandingPageClient() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 font-semibold text-lg text-blue-900 dark:text-white">
                       <FaMoneyBillAlt />
-                      Notre estimation
+                      {t('estimationTitle')} {/* "Notre estimation" */}
                     </div>
 
                     <div className="flex justify-between gap-2">
                       <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
                         <div className="flex items-center gap-1 font-medium text-blue-700 dark:text-white">
                           <MdOutlineDirectionsWalk />
-                          Distance
+                          {t('distance')} {/* "Distance" */}
                         </div>
                         <div className="text-xl font-bold text-black dark:text-white">
                           {result.distance.toFixed(2)} km
@@ -724,12 +724,12 @@ export default function LandingPageClient() {
                     </div>
 
                     <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
-                      <span className="text-blue-700 dark:text-white">Coût Estimé</span>
+                      <span className="text-blue-700 dark:text-white">{t('estimatedCost')}</span> {/* "Coût Estimé" */}
                       <span className="font-bold text-blue-700 dark:text-white">{result.cost.toFixed(0)} FCFA</span>
                     </div>
 
                     <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
-                      <span className="text-blue-700 dark:text-white">Tarif Officiel</span>
+                      <span className="text-blue-700 dark:text-white">{t('officialFare')}</span> {/* "Tarif Officiel" */}
                       <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
                     </div>
 
@@ -738,14 +738,14 @@ export default function LandingPageClient() {
                         onClick={() => setShowCustomDiv(true)}
                         className="bg-green-600 text-white w-full h-12 hover:bg-green-800"
                       >
-                        Visualiser le trajet
+                        {t('viewRoute')} {/* "Visualiser le trajet" */}
                       </Button>
 
                       <Button
                         onClick={() => setResult(null)}
                         className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800"
                       >
-                        Refaire un calcul
+                        {t('recalculate')} {/* "Refaire un calcul" */}
                       </Button>
                     </div>
                   </div>

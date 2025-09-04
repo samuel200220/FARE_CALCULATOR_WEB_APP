@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
+import { useTranslations } from 'next-intl';
 
 const font = Poppins({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ interface FormData {
 }
 
 export default function Page() {
+  const t = useTranslations('Inscription'); // Namespace dans tes fichiers JSON
   const theme = useTheme();
   const router = useRouter();
 
@@ -39,36 +41,35 @@ export default function Page() {
 
   const onSubmit = async (data: FormData) => {
     try {
-    const existingUser = await axios.get(
-      `http://localhost:8080/api/utilisateurs/email/${data.email}`
-    );
+      const existingUser = await axios.get(
+        `http://localhost:8080/api/utilisateurs/email/${data.email}`
+      );
 
-    if (existingUser.data) {
-      toast.error('Un compte existe déjà avec cette adresse mail');
-      return;
+      if (existingUser.data) {
+        toast.error(t('errors.emailExists'));
+        return;
+      }
+    } catch (err: any) {
+      if (err.response?.status !== 404) {
+        toast.error(t('errors.emailCheckFailed'));
+        return;
+      }
     }
-  } catch (err: any) {
-    if (err.response?.status !== 404) {
-      toast.error("Erreur lors de la vérification de l'email");
-      return;
-    }
-    // 404 attendu = email non trouvé, donc on continue
-  }
 
     try {
-      const response=await axios.post('http://localhost:8080/api/utilisateurs', {
+      const response = await axios.post('http://localhost:8080/api/utilisateurs', {
         nom: data.nom,
         email: data.email,
       });
 
-      toast.success('Inscription réussie');
+      toast.success(t('success.signup'));
       const idUtilisateur = response.data.id;
       localStorage.setItem("idUtilisateur", idUtilisateur);
       localStorage.removeItem('compteurUtilisation');
       router.push('/connexion1');
     } catch (error) {
       console.error(error);
-      toast.error('Une erreur est survenue');
+      toast.error(t('errors.generic'));
     }
   };
 
@@ -77,12 +78,10 @@ export default function Page() {
       {/* Left Section */}
       <div className="hidden lg:flex w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">
-          Fare Calculator <br /> Votre Tarif à Portée De Main
+          {t('left.title')}
         </h1>
         <p className="text-lg leading-relaxed">
-          Plus besoin de stresser sur le coût du trajet, <br />
-          Avec Fare Calculator, obtenez une estimation <br />
-          rapide du coût de vos déplacements.
+          {t('left.subtitle')}
         </p>
       </div>
 
@@ -91,13 +90,13 @@ export default function Page() {
         <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
           <Link href="/inscriptionpro">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Version Pro
+              {t('buttons.proVersion')}
             </button>
           </Link>
         </div>
 
-        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Inscription</h2>
-        <p className="mb-6 text-center text-gray-600">Créer votre compte gratuitement</p>
+        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">{t('title')}</h2>
+        <p className="mb-6 text-center text-gray-600">{t('subtitle')}</p>
 
         <Box
           component="form"
@@ -114,20 +113,20 @@ export default function Page() {
         >
           <Stack spacing={3} sx={{ fontFamily: 'Poppins, sans-serif' }}>
             <TextField
-              label="Nom d'utilisateur"
+              label={t('form.username')}
               fullWidth
-              {...register('nom', { required: 'Ce champ est requis' })}
+              {...register('nom', { required: t('errors.required') })}
               error={!!errors.nom}
               helperText={errors.nom?.message}
             />
 
             <TextField
               type="email"
-              label="Adresse email"
+              label={t('form.email')}
               placeholder="you@example.com"
               variant="outlined"
               fullWidth
-              {...register('email', { required: 'Email requis' })}
+              {...register('email', { required: t('errors.required') })}
               error={!!errors.email}
               helperText={errors.email?.message}
             />
@@ -145,7 +144,7 @@ export default function Page() {
                 },
               }}
             >
-              S'inscrire
+              {t('buttons.signup')}
             </Button>
 
             <Typography
@@ -156,9 +155,9 @@ export default function Page() {
                 marginBottom: '5px',
               }}
             >
-              Déjà inscrit ?{' '}
+              {t('alreadyRegistered')}{' '}
               <Link href="/connexion1" style={{ color: '#1e3a8a' }}>
-                Cliquez-ici
+                {t('buttons.login')}
               </Link>
             </Typography>
           </Stack>

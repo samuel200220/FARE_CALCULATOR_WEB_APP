@@ -1,8 +1,11 @@
 'use client';
 
 import { Lightbulb } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Pourquoi() {
+  const t = useTranslations('Pourquoi'); // clé principale pour cette page
+
   return (
     <div className="min-h-screen bg-[#0D1B2A] dark:bg-[#0D1B2A] text-white">
       {/* En-tête */}
@@ -10,12 +13,11 @@ export default function Pourquoi() {
         <div className="flex justify-center items-center gap-3 mb-6">
           <Lightbulb className="w-10 h-10 text-yellow-400" />
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
-            Pourquoi Fare Calculator ?
+            {t('header.title')}
           </h1>
         </div>
         <p className="max-w-3xl mx-auto text-lg sm:text-xl font-medium">
-          Nous avons créé Fare Calculator pour répondre à un besoin essentiel : 
-          rendre le transport urbain plus transparent, équitable et accessible à tous.
+          {t('header.subtitle')}
         </p>
       </section>
 
@@ -23,16 +25,10 @@ export default function Pourquoi() {
       <section className="bg-[#fefae0] dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-6 text-center">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-blue-700 dark:text-yellow-400">
-            Le besoin derrière la solution
+            {t('content.title')}
           </h2>
           <p className="text-lg leading-relaxed">
-            Aujourd’hui, les utilisateurs ne savent pas toujours combien coûte un trajet. 
-            Que vous soyez un client occasionnel, un professionnel ou une entreprise, 
-            il est crucial d’estimer précisément un tarif avant d’accepter ou de proposer un service.
-            <br /><br />
-            Fare Calculator permet aux utilisateurs anonymes de faire quelques estimations gratuites, 
-            tout en offrant plus de possibilités aux comptes inscrits ou professionnels. C’est une 
-            solution rapide, efficace et pensée pour tous les profils de voyageurs ou de chauffeurs.
+            {t('content.description')}
           </p>
         </div>
       </section>

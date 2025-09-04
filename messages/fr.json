@@ -21,7 +21,13 @@
     "proVersion": "Version Pro",
     "fareCalculator": "Calculateur de Tarif",
     "calculateFare": "Calculer tarif",
-    "calculating": "Calcul en cours..."
+    "calculating": "Calcul en cours...",
+    "estimationTitle": "Notre estimation",
+    "distance": "Distance",
+    "estimatedCost": "Coût Estimé",
+    "officialFare": "Tarif Officiel",
+    "viewRoute": "Visualiser le trajet",
+    "recalculate": "Refaire un calcul"
   },
   "agency":{
   "travel_agency": "Besoin d'une agence de voyage ?",
@@ -191,7 +197,7 @@
       }
     }
   },
-  "section4": {
+  "Section4": {
     "title": "À Propos de Nous",
     "why": {
       "title": "Pourquoi",
@@ -223,5 +229,179 @@
     "description": "Découvrez une nouvelle façon de vous déplacer avec des services exclusifs et personnalisés.",
     "placeholder": "Entrez votre email",
     "button": "S'inscrire"
+  },
+  "Pourquoi": {
+    "header": {
+      "title": "Pourquoi Fare Calculator ?",
+      "subtitle": "Nous avons créé Fare Calculator pour répondre à un besoin essentiel : rendre le transport urbain plus transparent, équitable et accessible à tous."
+    },
+    "content": {
+      "title": "Le besoin derrière la solution",
+      "description": "Aujourd’hui, les utilisateurs ne savent pas toujours combien coûte un trajet. Que vous soyez un client occasionnel, un professionnel ou une entreprise, il est crucial d’estimer précisément un tarif avant d’accepter ou de proposer un service.\n\nFare Calculator permet aux utilisateurs anonymes de faire quelques estimations gratuites, tout en offrant plus de possibilités aux comptes inscrits ou professionnels. C’est une solution rapide, efficace et pensée pour tous les profils de voyageurs ou de chauffeurs."
+    }
+  },
+  "Vision": {
+    "header": {
+      "title": "Notre Vision",
+      "subtitle": "Construire un futur où chaque trajet est prévisible, juste et connecté, grâce à l'innovation."
+    },
+    "content": {
+      "title": "Une vision d’équité et de technologie",
+      "description": "Notre vision est de rendre le transport urbain intelligent, transparent et équitable. Grâce à Fare Calculator, nous rêvons d’un monde où chaque utilisateur peut prendre des décisions éclairées, planifier ses trajets en toute confiance, et éviter les abus tarifaires.\n\nNous voulons devenir une référence en matière d’estimation tarifaire automatisée, intégrée à des plateformes locales et internationales. Une solution au service de la mobilité durable, inclusive, et propulsée par la donnée."
+    }
+  },
+  "About": {
+    "header": {
+      "title": "À propos de Fare Calculator",
+      "subtitle": "Chez Fare Calculator, nous ne faisons pas que calculer des tarifs. Nous aidons à optimiser les trajets, rendre la mobilité plus accessible et améliorer l’expérience de transport pour tous."
+    },
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Notre mission est de simplifier le calcul des tarifs pour tous types d’utilisateurs : anonymes, inscrits, ou professionnels. En fournissant une estimation juste, rapide et intelligente, Fare Calculator contribue à une mobilité urbaine plus fluide, plus économique et plus responsable."
+    }
+  },
+  "Faq": {
+    "header": {
+      "title": "Aide & Assistance",
+      "subtitle": "Questions Fréquemment Posées"
+    },
+    "search": {
+      "placeholder": "Recherchez une question ou un mot-clé..."
+    },
+    "questions": {
+      "q1": {
+        "question": "Comment utiliser le calculateur de tarif ?",
+        "answer": "Saisissez votre point de départ et d’arrivée, puis cliquez sur 'Calculer'. Le système estimera le coût en fonction de la distance."
+      },
+      "q2": {
+        "question": "Ai-je besoin d’un compte pour faire un calcul ?",
+        "answer": "Non, vous pouvez effectuer jusqu'à 3 calculs gratuitement sans créer de compte."
+      },
+      "q3": {
+        "question": "Comment créer un compte ?",
+        "answer": "Cliquez sur le bouton 'S’inscrire' en haut de la page de calcul et remplissez les informations demandées."
+      },
+      "q4": {
+        "question": "Comment voir l’historique de mes calculs ?",
+        "answer": "Créez un compte, connectez-vous, puis accédez à l’onglet 'Historique'."
+      }
+    },
+    "noResults": "Aucune question ne correspond à votre recherche."
+  },
+  "Inscription": {
+    "title": "Inscription",
+    "subtitle": "Créer votre compte gratuitement",
+    "left": {
+      "title": "Fare Calculator - Votre Tarif à Portée De Main",
+      "subtitle": "Plus besoin de stresser sur le coût du trajet, Avec Fare Calculator, obtenez une estimation rapide du coût de vos déplacements."
+    },
+    "form": {
+      "username": "Nom d'utilisateur",
+      "email": "Adresse email"
+    },
+    "buttons": {
+      "signup": "S'inscrire",
+      "login": "Cliquez-ici",
+      "proVersion": "Version Pro"
+    },
+    "alreadyRegistered": "Déjà inscrit ?",
+    "errors": {
+      "required": "Ce champ est requis",
+      "emailExists": "Un compte existe déjà avec cette adresse mail",
+      "emailCheckFailed": "Erreur lors de la vérification de l'email",
+      "generic": "Une erreur est survenue"
+    },
+    "success": {
+      "signup": "Inscription réussie"
+    }
+  },
+  "Connexion": {
+    "title": "Connexion",
+    "emailLabel": "Adresse email",
+    "emailPlaceholder": "you@example.com",
+    "loginButton": "Se connecter",
+    "noAccount": "Pas de compte ?",
+    "clickHere": "Cliquez ici",
+    "proVersion": "Version Pro",
+    "errors": {
+      "requiredEmail": "Email requis",
+      "notFound": "Aucun compte trouvé avec cette adresse email",
+      "generic": "Erreur lors de la connexion",
+      "success": "Connexion réussie"
+    }
+  },
+  "InscriptionPro": {
+    "title": "Inscription",
+    "subtitle": "Créer votre compte pro gratuitement",
+    "left": {
+      "title": "Fare Calculator Pro - Votre Tarif à Portée De Main",
+      "subtitle": "Plus besoin de stresser sur le coût du trajet, Avec Fare Calculator, obtenez une estimation rapide du coût de vos déplacements."
+    },
+    "form": {
+      "companyName": "Nom de l'entreprise",
+      "companyOwner": "Responsable de l'entreprise",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe"
+    },
+    "buttons": {
+      "signup": "S'inscrire",
+      "standardVersion": "Version Standard",
+      "loginPro": "Cliquez-ici"
+    },
+    "alreadyRegistered": "Déjà inscrit à la version pro ?",
+    "errors": {
+      "required": "Ce champ est requis",
+      "emailExists": "Un compte existe déjà avec cette adresse email",
+      "emailCheckFailed": "Erreur lors de la vérification de l'email",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "generic": "Une erreur est survenue lors de l'inscription"
+    },
+    "success": {
+      "signup": "Inscription réussie"
+    }
+  },
+  "ConnexionPro": {
+    "title": "Connexion",
+    "subtitle": "Connectez-vous à votre compte pro",
+    "left": {
+      "title": "Fare Calculator - Votre Tarif à Portée De Main",
+      "subtitle": "Plus besoin de stresser sur le coût du trajet. Avec Fare Calculator, obtenez une estimation rapide du coût de vos déplacements."
+    },
+    "form": {
+      "email": "Adresse email",
+      "password": "Mot de passe"
+    },
+    "buttons": {
+      "login": "Se connecter",
+      "signupPro": "Cliquez-ici"
+    },
+    "messages": {
+      "loginSuccess": "Connexion réussie",
+      "loginFailed": "Email ou mot de passe incorrect",
+      "accountNotFound": "Aucun compte associé à cet email",
+      "genericError": "Erreur lors de la connexion"
+    },
+    "noAccount": "Pas de compte pro ?"
+  },
+  "Parametres": {
+    "title": "Paramètres",
+    "sections": {
+      "profile": "Informations du profil",
+      "security": "Sécurité",
+      "preferences": "Préférences"
+    },
+    "fields": {
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "notifications": "Notifications",
+      "darkMode": "Mode sombre"
+    },
+    "placeholders": {
+      "fullName": "Votre nom",
+      "email": "email@example.com"
+    }
   }
 }

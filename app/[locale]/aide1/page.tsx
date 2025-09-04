@@ -2,27 +2,30 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, Search } from 'lucide-react';
-
-const faqData = [
-  {
-    question: "Comment utiliser le calculateur de tarif ?",
-    answer: "Saisissez votre point de départ et d’arrivée, puis cliquez sur 'Calculer'. Le système estimera le coût en fonction de la distance.",
-  },
-  {
-    question: "Ai-je besoin d’un compte pour faire un calcul ?",
-    answer: "Non, vous pouvez effectuer jusqu'à 3 calculs gratuitement sans créer de compte.",
-  },
-  {
-    question: "Comment créer un compte ?",
-    answer: "Cliquez sur le bouton 'S’inscrire' en haut de la page de calcul et remplissez les informations demandées.",
-  },
-  {
-    question: "Comment voir l’historique de mes calculs ?",
-    answer: "Créez un compte, connectez-vous, puis accédez à l’onglet 'Historique'.",
-  },
-];
+import { useTranslations } from 'next-intl';
 
 export default function FaqPage() {
+  const t = useTranslations('Faq');
+
+  const faqData = [
+    {
+      question: t('questions.q1.question'),
+      answer: t('questions.q1.answer'),
+    },
+    {
+      question: t('questions.q2.question'),
+      answer: t('questions.q2.answer'),
+    },
+    {
+      question: t('questions.q3.question'),
+      answer: t('questions.q3.answer'),
+    },
+    {
+      question: t('questions.q4.question'),
+      answer: t('questions.q4.answer'),
+    },
+  ];
+
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -33,17 +36,17 @@ export default function FaqPage() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 dark:from-gray-900 dark:via-[#0D1B2A] dark:to-[#0D1B2A] py-10 px-4 sm:px-10">
       <h1 className="text-3xl sm:text-4xl font-bold text-center text-blue-700 dark:text-white mb-2">
-        Aide & Assistance
+        {t('header.title')}
       </h1>
       <p className="text-center text-orange-600 font-semibold text-lg mb-6 dark:text-orange-400">
-        Questions Fréquemment Posées
+        {t('header.subtitle')}
       </p>
 
       <div className="max-w-2xl mx-auto mb-6">
         <div className="relative">
           <input
             type="text"
-            placeholder="Recherchez une question ou un mot-clé..."
+            placeholder={t('search.placeholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10"
@@ -82,7 +85,7 @@ export default function FaqPage() {
 
         {filteredFaq.length === 0 && (
           <div className="text-center text-gray-600 dark:text-gray-300 font-medium">
-            Aucune question ne correspond à votre recherche.
+            {t('noResults')}
           </div>
         )}
       </div>

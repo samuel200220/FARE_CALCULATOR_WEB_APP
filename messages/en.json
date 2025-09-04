@@ -21,7 +21,13 @@
     "proVersion": "Pro Version",
     "fareCalculator": "Fare Calculator",
     "calculateFare": "Calculate Fare",
-    "calculating": "Calculating..."
+    "calculating": "Calculating...",
+    "estimationTitle": "Our Estimate",
+    "distance": "Distance",
+    "estimatedCost": "Estimated Cost",
+    "officialFare": "Official Fare",
+    "viewRoute": "View Route",
+    "recalculate": "Recalculate"
   },
   "agency":{
   "travel_agency": "Need a travel agency?",
@@ -191,7 +197,7 @@
       }
     }
   },
-  "section4": {
+  "Section4": {
     "title": "About Us",
     "why": {
       "title": "Why",
@@ -223,6 +229,180 @@
     "description": "Discover a new way to move with exclusive and personalized services.",
     "placeholder": "Enter your email",
     "button": "Sign up"
+  },
+  "Pourquoi": {
+    "header": {
+      "title": "Why Fare Calculator?",
+      "subtitle": "We created Fare Calculator to address an essential need: making urban transport more transparent, fair, and accessible to everyone."
+    },
+    "content": {
+      "title": "The need behind the solution",
+      "description": "Today, users do not always know how much a trip costs. Whether you are a casual customer, a professional, or a company, it is crucial to estimate a fare accurately before accepting or offering a service.\n\nFare Calculator allows anonymous users to make some free estimates, while offering more possibilities to registered or professional accounts. It's a fast, efficient solution designed for all types of travelers or drivers."
+    }
+  },
+  "Vision": {
+    "header": {
+      "title": "Our Vision",
+      "subtitle": "Building a future where every trip is predictable, fair, and connected through innovation."
+    },
+    "content": {
+      "title": "A vision of fairness and technology",
+      "description": "Our vision is to make urban transport smart, transparent, and fair. Through Fare Calculator, we envision a world where every user can make informed decisions, plan trips with confidence, and avoid fare abuses.\n\nWe aim to become a benchmark for automated fare estimation, integrated with local and international platforms. A solution for sustainable, inclusive mobility, powered by data."
+    }
+  },
+  "About": {
+    "header": {
+      "title": "About Fare Calculator",
+      "subtitle": "At Fare Calculator, we don’t just calculate fares. We help optimize trips, make mobility more accessible, and improve the transportation experience for everyone."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "Our mission is to simplify fare calculation for all types of users: anonymous, registered, or professional. By providing accurate, fast, and intelligent estimates, Fare Calculator contributes to smoother, more economical, and responsible urban mobility."
+    }
+  },
+  "Faq": {
+    "header": {
+      "title": "Help & Support",
+      "subtitle": "Frequently Asked Questions"
+    },
+    "search": {
+      "placeholder": "Search for a question or keyword..."
+    },
+    "questions": {
+      "q1": {
+        "question": "How do I use the fare calculator?",
+        "answer": "Enter your starting point and destination, then click 'Calculate'. The system will estimate the cost based on the distance."
+      },
+      "q2": {
+        "question": "Do I need an account to perform a calculation?",
+        "answer": "No, you can perform up to 3 calculations for free without creating an account."
+      },
+      "q3": {
+        "question": "How do I create an account?",
+        "answer": "Click the 'Sign Up' button at the top of the calculation page and fill in the requested information."
+      },
+      "q4": {
+        "question": "How can I view my calculation history?",
+        "answer": "Create an account, log in, and then access the 'History' tab."
+      }
+    },
+    "noResults": "No questions match your search."
+  },
+  "Inscription": {
+    "title": "Sign Up",
+    "subtitle": "Create your account for free",
+    "left": {
+      "title": "Fare Calculator - Your Fare at Your Fingertips",
+      "subtitle": "No more stress about trip costs. With Fare Calculator, get a quick estimate of your travel expenses."
+    },
+    "form": {
+      "username": "Username",
+      "email": "Email Address"
+    },
+    "buttons": {
+      "signup": "Sign Up",
+      "login": "Click Here",
+      "proVersion": "Pro Version"
+    },
+    "alreadyRegistered": "Already registered?",
+    "errors": {
+      "required": "This field is required",
+      "emailExists": "An account already exists with this email address",
+      "emailCheckFailed": "Error checking the email",
+      "generic": "An error occurred"
+    },
+    "success": {
+      "signup": "Registration successful"
+    }
+  },
+  "Connexion": {
+    "title": "Login",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "loginButton": "Log In",
+    "noAccount": "No account?",
+    "clickHere": "Click here",
+    "proVersion": "Pro Version",
+    "errors": {
+      "requiredEmail": "Email required",
+      "notFound": "No account found with this email",
+      "generic": "Error during login",
+      "success": "Login successful"
+    }
+  },
+  "InscriptionPro": {
+    "title": "Sign Up",
+    "subtitle": "Create your pro account for free",
+    "left": {
+      "title": "Fare Calculator Pro - Your Fare at Your Fingertips",
+      "subtitle": "No more stress about trip costs. With Fare Calculator, get a quick estimate of your travel expenses."
+    },
+    "form": {
+      "companyName": "Company Name",
+      "companyOwner": "Company Owner",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "buttons": {
+      "signup": "Sign Up",
+      "standardVersion": "Standard Version",
+      "loginPro": "Click Here"
+    },
+    "alreadyRegistered": "Already registered for the pro version?",
+    "errors": {
+      "required": "This field is required",
+      "emailExists": "An account already exists with this email",
+      "emailCheckFailed": "Error while checking email",
+      "passwordMismatch": "Passwords do not match",
+      "generic": "An error occurred during registration"
+    },
+    "success": {
+      "signup": "Registration successful"
+    }
+  },
+  "ConnexionPro": {
+    "title": "Login",
+    "subtitle": "Sign in to your pro account",
+    "left": {
+      "title": "Fare Calculator - Your Fare at Your Fingertips",
+      "subtitle": "No more stress about trip costs. With Fare Calculator, get a quick estimate of your travel expenses."
+    },
+    "form": {
+      "email": "Email Address",
+      "password": "Password"
+    },
+    "buttons": {
+      "login": "Login",
+      "signupPro": "Click here"
+    },
+    "messages": {
+      "loginSuccess": "Login successful",
+      "loginFailed": "Incorrect email or password",
+      "accountNotFound": "No account found with this email",
+      "genericError": "Error during login"
+    },
+    "noAccount": "No pro account?"
+  },
+  "Parametres": {
+    "title": "Settings",
+    "sections": {
+      "profile": "Profile Information",
+      "security": "Security",
+      "preferences": "Preferences"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "notifications": "Notifications",
+      "darkMode": "Dark Mode"
+    },
+    "placeholders": {
+      "fullName": "Your name",
+      "email": "email@example.com"
+    }
   }
 
 }

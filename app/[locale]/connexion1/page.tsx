@@ -1,13 +1,15 @@
 'use client';
 
-import Link from 'next/link';
-import { Box, TextField, Button, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Box, TextField, Button, Stack, Typography } from '@mui/material';
 import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
+import { useTranslations } from 'next-intl';
 
 const font = Poppins({
   subsets: ['latin'],
@@ -20,38 +22,30 @@ interface ConnexionFormData {
 }
 
 export default function Page() {
+  const t = useTranslations('Connexion'); // ⚡ clé de traduction
+  const a = useTranslations('ConnexionPro');
   const theme = useTheme();
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ConnexionFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<ConnexionFormData>();
 
   const onSubmit = async (data: ConnexionFormData) => {
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/utilisateurs/email/${data.email}`
-      );
-
+      const res = await axios.get(`http://localhost:8080/api/utilisateurs/email/${data.email}`);
       if (res.data) {
-        toast.success('Connexion réussie');
-
-        // ✅ Stockage de l'utilisateur et de son ID dans localStorage
+        toast.success(t('errors.success'));
         localStorage.setItem('utilisateur', JSON.stringify(res.data));
-        localStorage.setItem('idUtilisateur', res.data.id); // ✅ ID explicite
-
+        localStorage.setItem('idUtilisateur', res.data.id);
         router.push('/accueil');
       } else {
-        toast.error('Aucun compte trouvé avec cette adresse email');
+        toast.error(t('errors.notFound'));
       }
     } catch (error: any) {
       if (error.response?.status === 404) {
-        toast.error('Aucun compte trouvé avec cette adresse email');
+        toast.error(t('errors.notFound'));
       } else {
         console.error(error);
-        toast.error('Erreur lors de la connexion');
+        toast.error(t('errors.generic'));
       }
     }
   };
@@ -61,12 +55,10 @@ export default function Page() {
       {/* Left Section */}
       <div className="hidden lg:flex w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">
-          Fare Calculator <br /> Votre Tarif à Portée De Main
+          Fare Calculator <br /> {t('title')}
         </h1>
         <p className="text-lg leading-relaxed">
-          Plus besoin de stresser sur le coût du trajet, <br />
-          Avec Fare Calculator, obtenez une estimation <br />
-          rapide du coût de vos déplacements.
+          {a('left.subtitle')}
         </p>
       </div>
 
@@ -75,13 +67,12 @@ export default function Page() {
         <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
           <Link href="/inscriptionpro">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Version Pro
+              {t('proVersion')}
             </button>
           </Link>
         </div>
 
-        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Connexion</h2>
-
+        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">{t('title')}</h2>
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -96,11 +87,11 @@ export default function Page() {
           <Stack spacing={3}>
             <TextField
               type="email"
-              label="Adresse email"
-              placeholder="you@example.com"
+              label={t('emailLabel')}
+              placeholder={t('emailPlaceholder')}
               variant="outlined"
               fullWidth
-              {...register('email', { required: 'Email requis' })}
+              {...register('email', { required: t('errors.requiredEmail') })}
               error={!!errors.email}
               helperText={errors.email?.message}
               sx={{ fontFamily: 'Poppins, sans-serif' }}
@@ -119,13 +110,13 @@ export default function Page() {
                 },
               }}
             >
-              Se connecter
+              {t('loginButton')}
             </Button>
 
             <Typography variant="body2" align="center">
-              Pas de compte ?{' '}
+              {t('noAccount')}{' '}
               <Link href="/inscription1" className="text-blue-900 ml-1">
-                Cliquez ici
+                {t('clickHere')}
               </Link>
             </Typography>
           </Stack>

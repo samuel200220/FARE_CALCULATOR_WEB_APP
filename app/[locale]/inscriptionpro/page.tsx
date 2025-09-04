@@ -5,15 +5,10 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import {
-  Box,
-  TextField,
-  Button,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Box, TextField, Button, Stack, Typography } from '@mui/material';
 import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
+import { useTranslations } from 'next-intl';
 
 const font = Poppins({
   subsets: ['latin'],
@@ -30,53 +25,46 @@ interface FormData {
 }
 
 export default function Page() {
+  const t = useTranslations('InscriptionPro');
   const theme = useTheme();
   const router = useRouter();
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<FormData>();
+  const { handleSubmit, register, formState: { errors } } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
     if (data.motDePasse !== data.motDePasseConfirmation) {
-      toast.error('Les mots de passe ne correspondent pas');
+      toast.error(t('errors.passwordMismatch'));
       return;
     }
 
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/entreprises/email/${data.email}`
-      );
-
+      const res = await axios.get(`http://localhost:8080/api/entreprises/email/${data.email}`);
       if (res.data) {
-        toast.error('Un compte existe déjà avec cette adresse email');
+        toast.error(t('errors.emailExists'));
         return;
       }
     } catch (err: any) {
       if (err.response?.status !== 404) {
-        toast.error("Erreur lors de la vérification de l'email");
+        toast.error(t('errors.emailCheckFailed'));
         return;
       }
     }
 
     try {
-      const response= await axios.post('http://localhost:8080/api/entreprises', {
+      const response = await axios.post('http://localhost:8080/api/entreprises', {
         responsableEntreprise: data.responsableEntreprise,
         nomUtilisateurPro: data.nomUtilisateurPro,
         email: data.email,
         motDePasse: data.motDePasse,
       });
 
-      toast.success('Inscription réussie');
-      const idUtilisateur = response.data.id;
-      localStorage.setItem("idUtilisateur", idUtilisateur);
+      toast.success(t('success.signup'));
+      localStorage.setItem("idUtilisateur", response.data.id);
       localStorage.removeItem('compteurUtilisation');
       router.push('/connexionpro');
     } catch (error) {
       console.error(error);
-      toast.error("Une erreur est survenue lors de l'inscription");
+      toast.error(t('errors.generic'));
     }
   };
 
@@ -85,13 +73,9 @@ export default function Page() {
       {/* Left Section */}
       <div className="hidden lg:flex w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex-col justify-center">
         <h1 className="text-4xl font-bold mb-4">
-          Fare Calculator Pro <br /> Votre Tarif à Portée De Main
+          {t('left.title')}
         </h1>
-        <p className="text-lg leading-relaxed">
-          Plus besoin de stresser sur le coût du trajet, <br />
-          Avec Fare Calculator, obtenez une estimation <br />
-          rapide du coût de vos déplacements.
-        </p>
+        <p className="text-lg leading-relaxed">{t('left.subtitle')}</p>
       </div>
 
       {/* Right Section */}
@@ -99,13 +83,13 @@ export default function Page() {
         <div className="flex justify-center lg:justify-end mb-6 mt-2 lg:mt-0">
           <Link href="/inscription1">
             <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              Version Standard
+              {t('buttons.standardVersion')}
             </button>
           </Link>
         </div>
 
-        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">Inscription</h2>
-        <p className="mb-6 text-center text-gray-600">Créer votre compte pro gratuitement</p>
+        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">{t('title')}</h2>
+        <p className="mb-6 text-center text-gray-600">{t('subtitle')}</p>
 
         <Box
           component="form"
@@ -121,47 +105,45 @@ export default function Page() {
         >
           <Stack spacing={3}>
             <TextField
-              label="Nom de l'entreprise"
+              label={t('form.companyName')}
               fullWidth
-              {...register('nomUtilisateurPro', { required: 'Ce champ est requis' })}
+              {...register('nomUtilisateurPro', { required: t('errors.required') })}
               error={!!errors.nomUtilisateurPro}
               helperText={errors.nomUtilisateurPro?.message}
             />
 
             <TextField
-              label="Responsable de l'entreprise"
+              label={t('form.companyOwner')}
               fullWidth
-              {...register('responsableEntreprise', { required: 'Ce champ est requis' })}
+              {...register('responsableEntreprise', { required: t('errors.required') })}
               error={!!errors.responsableEntreprise}
               helperText={errors.responsableEntreprise?.message}
             />
 
             <TextField
               type="email"
-              label="Adresse email"
-              placeholder="you@example.com"
+              label={t('form.email')}
+              placeholder={t('form.email')}
               fullWidth
-              {...register('email', { required: 'Email requis' })}
+              {...register('email', { required: t('errors.required') })}
               error={!!errors.email}
               helperText={errors.email?.message}
             />
 
             <TextField
               type="password"
-              label="Mot de passe"
+              label={t('form.password')}
               fullWidth
-              {...register('motDePasse', { required: 'Mot de passe requis' })}
+              {...register('motDePasse', { required: t('errors.required') })}
               error={!!errors.motDePasse}
               helperText={errors.motDePasse?.message}
             />
 
             <TextField
               type="password"
-              label="Confirmer le mot de passe"
+              label={t('form.confirmPassword')}
               fullWidth
-              {...register('motDePasseConfirmation', {
-                required: 'Confirmation requise',
-              })}
+              {...register('motDePasseConfirmation', { required: t('errors.required') })}
               error={!!errors.motDePasseConfirmation}
               helperText={errors.motDePasseConfirmation?.message}
             />
@@ -179,13 +161,13 @@ export default function Page() {
                 },
               }}
             >
-              S'inscrire
+              {t('buttons.signup')}
             </Button>
 
             <Typography variant="body2" align="center" sx={{ marginBottom: '5px' }}>
-              Déjà inscrit à la version pro ?{' '}
+              {t('alreadyRegistered')}{' '}
               <Link href="/connexionpro" style={{ color: '#1e3a8a' }}>
-                Cliquez-ici
+                {t('buttons.loginPro')}
               </Link>
             </Typography>
           </Stack>

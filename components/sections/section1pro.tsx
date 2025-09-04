@@ -467,14 +467,14 @@ useEffect(() => {
                   
                   <div className="flex items-center gap-2 font-semibold text-lg text-blue-900">
                     <FaMoneyBillAlt />
-                    <span className='dark:text-white'>Notre estimation</span>
+                    <span className='dark:text-white'>{t('estimationTitle')}</span>
                   </div>
 
                   <div className="flex justify-between gap-2">
                     <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
                       <div className="flex items-center gap-1 font-medium text-blue-700">
                         <MdOutlineDirectionsWalk />
-                        <span className='text-blue-700 dark:text-white'>Distance</span>
+                        <span className='text-blue-700 dark:text-white'>{t('distance')}</span>
                       </div>
                       <div className="text-xl font-bold text-black dark:text-white">
                         {result.distance.toFixed(2)} km
@@ -483,12 +483,12 @@ useEffect(() => {
                   </div>
 
                   <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
-                    <span className='text-blue-700 dark:text-white'>Coût Estimé</span>
+                    <span className='text-blue-700 dark:text-white'>{t('estimatedCost')}</span>
                     <span className="font-bold text-blue-700 dark:text-white">{result.cost.toFixed(0)} FCFA</span>
                   </div>
 
                   <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
-                    <span className='text-blue-700 dark:text-white'>Tarif Officiel</span>
+                    <span className='text-blue-700 dark:text-white'>{t('officialFare')}</span>
                     <span className="font-bold text-blue-700 dark:text-white">{result.mint_cost} FCFA</span>
                   </div>
 
@@ -497,7 +497,7 @@ useEffect(() => {
                       onClick={() => setShowCustomDiv(true)}
                       className="bg-green-600 text-white w-full h-12 lg:hidden sm:hidden md:hidden hover:bg-green-800"
                     >
-                      Visualiser la carte
+                      {t('viewRoute')}
                     </Button>
 
                     <Button
