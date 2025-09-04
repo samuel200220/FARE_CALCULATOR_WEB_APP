@@ -15,7 +15,7 @@ import { ModeToggle } from '@/components/ui/mode-toggle'
 import Script from 'next/script'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <>
       {/* <Button variant={'ghost'} className='border border-black'>Mode sombre</Button> */}
@@ -34,4 +34,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page;

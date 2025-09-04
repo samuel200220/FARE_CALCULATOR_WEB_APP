@@ -113,11 +113,14 @@ class CalculService {
   }
 }
 
-export default function LandingPage() {
+export default function LandingPageClient() {
   const [selectedRideType, setSelectedRideType] = useState('Economy');
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   const [inputValue, setInputValue] = useState("");
   // const t = useTranslations();
+  const t = useTranslations('landing');
+  const a = useTranslations('agency');
+  const f = useTranslations('form');
   const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
     setAutocomplete(autocompleteInstance);
   };
@@ -424,30 +427,30 @@ export default function LandingPage() {
               {/* Left Column - Content */}
               <div className="text-white">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                  Estimez votre Tarif Urbain ou Interurbain
+                    {t('heroTitle')}
                 </h1>
                 <p className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
-                  Avec Fare Calculator, obtenez une estimation rapide du coût de vos trajets au Cameroun. 
-                  Transparence, rapidité et simplicité en quelques clics.
+                    {t('heroDescription')}
                 </p>
 
                 {/* App Download Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-12">
                   <Link href={'/accueilano'}>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
-                    Commencer Gratuitement
-                  </button>
-                  </Link>
-                  <Link href={'/inscription1'}>
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
-                    Version Standard
-                  </button>
-                  </Link>
-                  <Link href={'/inscriptionpro'}>
-                  <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
-                    Version Pro
-                  </button>
-                  </Link>
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                        {t('startFree')}
+                    </button>
+                    </Link>
+                    <Link href={'/inscription1'}>
+                    <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                        {t('standardVersion')}
+                    </button>
+                    </Link>
+                    <Link href={'/inscriptionpro'}>
+                    <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                        {t('proVersion')}
+                    </button>
+                    </Link>
+
                   {/* <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
                     Disponible sur Google Play
                   </button> */}
@@ -457,7 +460,7 @@ export default function LandingPage() {
                     <div className="ml-18 lg:ml-0 sm:ml-0 w-[200px] lg:w-[180px] sm:w-[180px] flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer">
                       <FaBus className="text-orange-500 text-3xl mb-2" />
                       <p className="text-center text-gray-800 dark:text-white text-sm font-medium">
-                        Besoin d'une agence de voyage ?
+                        {a('travel_agency')}
                       </p>
                     </div>
                   </a>
@@ -465,14 +468,14 @@ export default function LandingPage() {
                   <a href="https://rideandgo.vercel.app/" target="_blank" rel="noopener noreferrer">
                     <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                       <FaCar className="text-orange-500 text-3xl mb-2" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
+                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_ride')}</p>
                     </div>
                   </a>
 
                   <a href="https://easy-rental-git-review-admin-reseaus-projects.vercel.app/" target="_blank" rel="noopener noreferrer">
                     <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                       <FaCarSide className="text-orange-500 text-3xl mb-2" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
+                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_rental')}</p>
                     </div>
                   </a>
                 </div>
@@ -482,7 +485,7 @@ export default function LandingPage() {
               
               <div className="bg-white dark:bg-[#0D1B2A] rounded-3xl shadow-lg mt-2 mb-2 p-8 w-full max-w-lg mx-auto">
                 <h3 className="dark:text-white text-2xl sm:text-4xl font-bold mb-6 text-center">
-                  Calculateur de Tarif
+                    {t('fareCalculator')}
                 </h3>
 
                 {!result ? (
@@ -498,7 +501,7 @@ export default function LandingPage() {
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
                           errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}
-                        placeholder="Départ"
+                        placeholder={f("go")}
                       />
                       {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
                       {showSuggestionsStart && (
@@ -531,7 +534,7 @@ export default function LandingPage() {
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
                           errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}
-                        placeholder="Destination"
+                        placeholder={f("arrive")}
                       />
                       {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
                       {showSuggestionsEnd && (
@@ -565,7 +568,7 @@ export default function LandingPage() {
                           errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}
                       >
-                        <option value="">Sélectionnez l'heure</option>
+                        <option value="">{f("time")}</option>
                         {predefinedHours.map((h) => (
                           <option key={h} value={h}>{h}</option>
                         ))}
@@ -575,12 +578,12 @@ export default function LandingPage() {
 
                     {/* Bouton Calculer */}
                     <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="text-white bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
-                    >
-                      <FaCalculator className="mr-2" />
-                      {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
+                        type="submit"
+                        disabled={isLoading}
+                        className="text-white bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                        >
+                        <FaCalculator className="mr-2" />
+                        {isLoading ? t('calculating') : t('calculateFare')}
                     </Button>
                     {error && <p className="text-red-500 text-center mt-2">Problème de connexion au serveur</p>}
                   </form>
@@ -612,7 +615,7 @@ export default function LandingPage() {
                         value={start}
                         onChange={handleChange}
                         className="bg-gray-200 dark:bg-gray-800 dark:text-white w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-                        placeholder="Départ"
+                        placeholder={f("go")}
                       />
                       {showSuggestionsStart && (
                         <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border rounded shadow-lg max-h-40 overflow-y-auto">
@@ -642,7 +645,7 @@ export default function LandingPage() {
                         value={end}
                         onChange={handleChanged}
                         className="bg-gray-200 dark:bg-gray-800 dark:text-white w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
-                        placeholder="Destination"
+                        placeholder={f("arrive")}
                       />
                       {showSuggestionsEnd && (
                         <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border rounded shadow-lg max-h-40 overflow-y-auto">
@@ -675,7 +678,7 @@ export default function LandingPage() {
                           errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}
                     >
-                      <option value="">Sélectionnez l'heure</option>
+                      <option value="">{f("time")}</option>
                       {predefinedHours.map((h) => (
                         <option key={h} value={h}>{h}</option>
                       ))}
@@ -683,12 +686,15 @@ export default function LandingPage() {
                     </div>
 
                     {/* Bouton Calculer */}
-                    <Button 
-                      type="submit"
-                      className="bg-green-600 text-white w-full h-12 hover:bg-green-800"
-                    >
-                      {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="text-white bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                        >
+                        <FaCalculator className="mr-2" />
+                        {isLoading ? t('calculating') : t('calculateFare')}
                     </Button>
+
                   </form>
 
                   {/* Carte avec le trajet */}

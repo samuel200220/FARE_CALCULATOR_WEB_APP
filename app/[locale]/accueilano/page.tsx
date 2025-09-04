@@ -18,8 +18,10 @@ import { Button } from '@/components/ui/button'
 import { ModeToggle } from '@/components/ui/mode-toggle'
 import Script from 'next/script'
 import React from 'react'
+import { useTranslations } from 'next-intl';
 
-const page = () => {
+const Page = () => {
+  const t = useTranslations('Section4');
   return (
     <>
       {/* <Button variant={'ghost'} className='border border-black'>Mode sombre</Button> */}
@@ -30,7 +32,7 @@ const page = () => {
       <Section2/>
       {/* <Section3/> */}
       <Section7 />
-      <Section4/>
+      <Section4 />
       <Section5/>
       <StatsSection/>
       <InscriptionSection/>
@@ -39,5 +41,4 @@ const page = () => {
     </>
   )
 }
-
-export default page
+export default Page;

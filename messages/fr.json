@@ -1,0 +1,227 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "common": {
+    "welcome": "Bienvenue",
+    "language": "Langue",
+    "loading": "Chargement..."
+  },
+  "home": {
+    "title": "Bienvenue dans notre application",
+    "description": "Ceci est une application Next.js multilingue"
+  },
+  "landing": {
+    "heroTitle": "Estimez votre Tarif Urbain ou Interurbain",
+    "heroDescription": "Avec Fare Calculator, obtenez une estimation rapide du coût de vos trajets au Cameroun. Transparence, rapidité et simplicité en quelques clics.",
+    "startFree": "Commencer Gratuitement",
+    "standardVersion": "Version Standard",
+    "proVersion": "Version Pro",
+    "fareCalculator": "Calculateur de Tarif",
+    "calculateFare": "Calculer tarif",
+    "calculating": "Calcul en cours..."
+  },
+  "agency":{
+  "travel_agency": "Besoin d'une agence de voyage ?",
+  "need_ride": "Besoin d'une course ?",
+  "need_rental": "Besoin d'une location ?"
+  },
+  "form":{
+    "go":"Départ",
+    "arrive":"Arrivée",
+    "time":"Sélectionnez l'heure",
+    "sugg":"Aucune suggestion"
+  },
+  "pricing": {
+  "title": "Nos Formules",
+  "description": "Choisissez le plan qui correspond à vos besoins",
+  "plans": {
+    "basic": {
+      "title": "Basique",
+      "price": "1000 FCFA",
+      "description": "Fonctionnalités essentielles pour commencer.",
+      "features": [
+        "Calcul tarif illimité",
+        "Suggestions de trajets",
+        "Support communautaire"
+      ],
+      "cta": "Commencer"
+    },
+    "pro": {
+      "title": "Pro",
+      "price": "2500 FCFA",
+      "description": "Parfait pour les utilisateurs fréquents.",
+      "features": [
+        "Calcul temps réel",
+        "Historique personnel",
+        "Optimisation des coûts"
+      ],
+      "cta": "Choisir Pro"
+    },
+    "enterprise": {
+      "title": "Entreprise",
+      "price": "Custom",
+      "description": "Support dédié et infrastructure personnalisée.",
+      "features": [
+        "Statistiques avancées",
+        "Gestion des équipes",
+        "Fonctionnalité exclusive"
+      ],
+      "cta": "Contactez-nous"
+    }
+  }
+},
+"fareSections": {
+  "agencies": {
+    "subtitle": "Fare Calculator pour Agences",
+    "title": "Gérez vos Réservations et Tarifs en Temps Réel",
+    "description": "Simplifiez la gestion de votre flotte, proposez des tarifs flexibles et optimisez vos trajets. Fare Calculator vous aide à digitaliser vos opérations pour toucher plus de clients et améliorer l’expérience passager.",
+    "button": "Inscrire votre Agence"
+  },
+  "institutions": {
+    "subtitle": "Fare Calculator pour Institutions",
+    "title": "Simplifiez la Gestion de vos Transports",
+    "description": "Gérez vos trajets, optimisez les coûts de transport pour votre organisation et accédez à des analyses tarifaires avancées. Fare Calculator propose une solution simple et rapide pour estimer et suivre vos dépenses de mobilité.",
+    "button": "Inscrire votre Institution"
+  },
+  "drivers": {
+    "subtitle": "Fare Calculator pour Conducteurs",
+    "title": "Conduisez et Gagnez à Votre Rythme",
+    "description": "Rejoignez notre réseau de conducteurs et proposez vos trajets en toute liberté. Avec Fare Calculator, vous fixez vos tarifs, gérez vos disponibilités et augmentez vos revenus facilement.",
+    "button": "S’inscrire comme Conducteur"
+  }
+},
+  "download": {
+    "title": "Téléchargez Fare Calculator",
+    "description": "Rejoignez des milliers d’utilisateurs au Cameroun : passagers, conducteurs et agences. Simplifiez vos trajets, calculez vos tarifs et optimisez votre mobilité avec FareGo. Disponible sur iOS et Android.",
+    "app_store": "App Store",
+    "google_play": "Google Play"
+  },
+  "header": {
+    "help": "Aide",
+    "sign_up": "S'inscrire",
+    "sign_in": "Se connecter",
+    "language_switch": "Langue",
+    "english": "English",
+    "french": "Français",
+    "title": "Fare Calculator"
+  },
+  "headerPro": {
+    "title": "Fare Calculator Pro",
+    "dashboard": "Tableau de bord",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "language_switch": "Langue",
+    "english": "Anglais",
+    "french": "Français",
+    "german": "Allemand"
+  },
+  "footer": {
+    "company": "Notre Compagnie",
+    "vision": "Notre Vision",
+    "mission": "Notre Mission",
+    "goals": "Nos objectifs",
+    "originality": "Notre originalité",
+    "recruiting": "Nous Recrutons",
+    "contact": "Informations de contact",
+
+    "support": "Support",
+    "marketplace": "Place de marché",
+    "rentalAgency": "Agence de location",
+    "travelAgency": "Agence de voyage",
+    "carpooling": "Service de covoiturage",
+
+    "legal": "Informations légales",
+    "terms": "Conditions générales d'utilisation",
+    "privacy": "Politique De Confidentialité",
+    "personalInfo": "Vos Informations Personnelles",
+    "cookies": "Cookies",
+
+    "mobileApp": "Application Mobile",
+    "appStore": "App Store",
+    "playStore": "Play Store",
+
+    "followUs": "Suivez nous",
+    "rights": "© 2025 Fare Calculator. Tous droits conservés"
+  },
+  "sidebar": {
+    "brand": "Fare Calculator",
+    "welcome": "Bienvenue",
+    "home": "Accueil",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "theme": "Thème"
+  },
+  "sidebarPro": {
+    "brand": "Fare Calculator",
+    "welcome": "Bienvenue",
+    "home": "Accueil",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "dashboard": "Tableau de Bord",
+    "history": "Historique",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "theme": "Thème"
+  },
+  "titreano": {
+    "mainTitleLine1": "Calculez vos Tarifs de Transport en",
+    "mainTitleLine2": "Temps réel",
+    "description": "Solution professionnelle pour obtenir des devis instantanés et précis",
+    "signup": "S'inscrire",
+    "login": "Se connecter"
+  },
+  "section2": {
+    "title": "Services Associés",
+    "services": {
+      "taxi": {
+        "title": "Réserver un Taxi",
+        "description": "Réservez votre taxi rapidement pour vos trajets quotidiens ou vers l’aéroport. Confort, ponctualité et fiabilité garantis."
+      },
+      "trip": {
+        "title": "Réserver un Voyage",
+        "description": "Planifiez et réservez vos voyages nationaux ou régionaux facilement avec notre agence."
+      },
+      "delivery": {
+        "title": "Chauffeur pour Dépôt",
+        "description": "Bénéficiez d’un chauffeur pour déposer colis ou marchandises. Transport sécurisé, rapide et fiable."
+      }
+    }
+  },
+  "section4": {
+    "title": "À Propos de Nous",
+    "why": {
+      "title": "Pourquoi",
+      "description": "Découvrez pourquoi notre entreprise est le choix idéal pour vos besoins de transport. Une équipe dédiée, un service client exceptionnel, et une expérience de voyage sans stress."
+    },
+    "vision": {
+      "title": "Vision",
+      "description": "Notre vision est de révolutionner le transport avec des solutions innovantes et durables. Un service fiable, écologique et accessible à tous."
+    },
+    "goal": {
+      "title": "Objectif",
+      "description": "Garantir la satisfaction de chaque client grâce à une ponctualité irréprochable et un professionnalisme constant. Étendre notre réseau tout en maintenant l’excellence."
+    }
+  },
+  "Section5": {
+    "title": "Disponible Sur Mobile"
+  },
+  "Section7":{
+    "title": "Ce que disent nos clients"
+  },
+  "StatsSection": {
+    "title": "Statistiques Clés",
+    "taxis": "Taxis",
+    "users": "Utilisateurs",
+    "ridesPerDay": "Nombre de déplacements par jour"
+  },
+  "InscriptionSection": {
+    "title": "Rejoignez-nous dès maintenant",
+    "description": "Découvrez une nouvelle façon de vous déplacer avec des services exclusifs et personnalisés.",
+    "placeholder": "Entrez votre email",
+    "button": "S'inscrire"
+  }
+}

@@ -39,18 +39,20 @@ const Section2 = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
         {services.map((service, index) => (
-          <Link href={service.link} key={index}>
-            <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl border shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 cursor-pointer">
-              <div className="flex flex-col items-center text-center">
-                {service.icon}
-                <h3 className="text-xl font-semibold text-blue-700 dark:text-white mb-2">
-                  {service.title}
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300 text-sm">
-                  {service.description}
-                </p>
+          <Link href={service.link as any} legacyBehavior key={index}>
+            <a>
+              <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl border shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 cursor-pointer">
+                <div className="flex flex-col items-center text-center">
+                  {service.icon}
+                  <h3 className="text-xl font-semibold text-blue-700 dark:text-white mb-2">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
+                    {service.description}
+                  </p>
+                </div>
               </div>
-            </div>
+            </a>
           </Link>
         ))}
       </div>

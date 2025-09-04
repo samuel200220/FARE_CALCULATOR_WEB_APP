@@ -18,7 +18,7 @@ const Page = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (localStorage.getItem("user")) {
-        router.push("/");
+        router.push("/" as any);
       }
     }
   }, []);
@@ -33,7 +33,7 @@ const Page = () => {
           toast.success("Connexion réussie");
           localStorage.setItem("estConnecte", "true");
           localStorage.removeItem("compteurUtilisation");
-          router.push("/");
+          router.push("/" as any);
         } else {
           toast.error("Les identifiants sont incorrects");
         }

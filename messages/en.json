@@ -1,0 +1,228 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "common": {
+    "welcome": "Welcome",
+    "language": "Language",
+    "loading": "Loading..."
+  },
+  "home": {
+    "title": "Welcome to our application",
+    "description": "This is a multilingual Next.js application"
+  },
+  "landing": {
+    "heroTitle": "Estimate your Urban or Interurban Fare",
+    "heroDescription": "With Fare Calculator, get a quick estimate of your trip cost in Cameroon. Transparent, fast, and simple in just a few clicks.",
+    "startFree": "Start Free",
+    "standardVersion": "Standard Version",
+    "proVersion": "Pro Version",
+    "fareCalculator": "Fare Calculator",
+    "calculateFare": "Calculate Fare",
+    "calculating": "Calculating..."
+  },
+  "agency":{
+  "travel_agency": "Need a travel agency?",
+  "need_ride": "Need a ride?",
+  "need_rental": "Need a rental?"
+  },
+  "form": {
+  "go": "Start",
+  "arrive": "End",
+  "time": "Select time",
+  "sugg":"No suggestion"
+},
+"pricing": {
+  "title": "Our Plans",
+  "description": "Choose the plan that fits your needs",
+  "plans": {
+    "basic": {
+      "title": "Basic",
+      "price": "1000 FCFA",
+      "description": "Essential features to get started.",
+      "features": [
+        "Unlimited fare calculations",
+        "Trip suggestions",
+        "Community support"
+      ],
+      "cta": "Get Started"
+    },
+    "pro": {
+      "title": "Pro",
+      "price": "2500 FCFA",
+      "description": "Perfect for frequent users.",
+      "features": [
+        "Real-time calculation",
+        "Personal history",
+        "Cost optimization"
+      ],
+      "cta": "Choose Pro"
+    },
+    "enterprise": {
+      "title": "Enterprise",
+      "price": "Custom",
+      "description": "Dedicated support and custom infrastructure.",
+      "features": [
+        "Advanced statistics",
+        "Team management",
+        "Exclusive features"
+      ],
+      "cta": "Contact Us"
+    }
+  }
+},
+"fareSections": {
+  "agencies": {
+    "subtitle": "Fare Calculator for Agencies",
+    "title": "Manage Your Bookings and Rates in Real Time",
+    "description": "Simplify your fleet management, offer flexible rates, and optimize your routes. Fare Calculator helps you digitize your operations to reach more customers and enhance passenger experience.",
+    "button": "Register Your Agency"
+  },
+  "institutions": {
+    "subtitle": "Fare Calculator for Institutions",
+    "title": "Simplify Your Transport Management",
+    "description": "Manage your trips, optimize transport costs for your organization, and access advanced fare analytics. Fare Calculator provides a simple and fast solution to estimate and track your mobility expenses.",
+    "button": "Register Your Institution"
+  },
+  "drivers": {
+    "subtitle": "Fare Calculator for Drivers",
+    "title": "Drive and Earn at Your Own Pace",
+    "description": "Join our network of drivers and offer your trips freely. With Fare Calculator, you set your rates, manage your availability, and increase your income easily.",
+    "button": "Sign Up as a Driver"
+  }
+},
+"download": {
+    "title": "Download Fare Calculator",
+    "description": "Join thousands of users in Cameroon: passengers, drivers, and agencies. Simplify your trips, calculate your fares, and optimize your mobility with FareGo. Available on iOS and Android.",
+    "app_store": "App Store",
+    "google_play": "Google Play"
+  },
+  "header": {
+    "help": "Help",
+    "sign_up": "Sign Up",
+    "sign_in": "Sign In",
+    "language_switch": "Language",
+    "english": "English",
+    "french": "French",
+    "title": "Fare Calculator"
+  },
+  "headerPro": {
+    "title": "Fare Calculator Pro",
+    "dashboard": "Dashboard",
+    "help": "Help",
+    "logout": "Logout",
+    "language_switch": "Language",
+    "english": "English",
+    "french": "French",
+    "german": "German"
+  },
+  "footer": {
+    "company": "Our Company",
+    "vision": "Our Vision",
+    "mission": "Our Mission",
+    "goals": "Our Goals",
+    "originality": "Our Originality",
+    "recruiting": "We Are Hiring",
+    "contact": "Contact Information",
+
+    "support": "Support",
+    "marketplace": "Marketplace",
+    "rentalAgency": "Rental Agency",
+    "travelAgency": "Travel Agency",
+    "carpooling": "Carpooling Service",
+
+    "legal": "Legal Information",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "personalInfo": "Your Personal Information",
+    "cookies": "Cookies",
+
+    "mobileApp": "Mobile App",
+    "appStore": "App Store",
+    "playStore": "Play Store",
+
+    "followUs": "Follow Us",
+    "rights": "© 2025 Fare Calculator. All rights reserved"
+  },
+  "sidebar": {
+    "brand": "Fare Calculator",
+    "welcome": "Welcome",
+    "home": "Home",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Logout",
+    "theme": "Theme"
+  },
+  "sidebarPro": {
+    "brand": "Fare Calculator",
+    "welcome": "Welcome",
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "history": "History",
+    "help": "Help",
+    "logout": "Logout",
+    "theme": "Theme"
+  },
+  "titreano": {
+    "mainTitleLine1": "Calculate Your Transport Fares in",
+    "mainTitleLine2": "Real Time",
+    "description": "Professional solution to get instant and accurate quotes",
+    "signup": "Sign Up",
+    "login": "Log In"
+  },
+  "section2": {
+    "title": "Associated Services",
+    "services": {
+      "taxi": {
+        "title": "Book a Taxi",
+        "description": "Book your taxi quickly for daily trips or airport transfers. Comfort, punctuality, and reliability guaranteed."
+      },
+      "trip": {
+        "title": "Book a Trip",
+        "description": "Plan and book your national or regional trips easily with our agency."
+      },
+      "delivery": {
+        "title": "Driver for Delivery",
+        "description": "Get a driver to deliver parcels or goods. Secure, fast, and reliable transport."
+      }
+    }
+  },
+  "section4": {
+    "title": "About Us",
+    "why": {
+      "title": "Why",
+      "description": "Discover why our company is the ideal choice for your transportation needs. A dedicated team, exceptional customer service, and a stress-free travel experience."
+    },
+    "vision": {
+      "title": "Vision",
+      "description": "Our vision is to revolutionize transport with innovative and sustainable solutions. Reliable, eco-friendly, and accessible to everyone."
+    },
+    "goal": {
+      "title": "Goal",
+      "description": "Ensure customer satisfaction with impeccable punctuality and consistent professionalism. Expand our network while maintaining excellence."
+    }
+  },
+  "Section5": {
+    "title": "Available on Mobile"
+  },
+  "Section7":{
+    "title": "What our customers say"
+  },
+  "StatsSection": {
+    "title": "Key Statistics",
+    "taxis": "Taxis",
+    "users": "Users",
+    "ridesPerDay": "Rides per day"
+  },
+  "InscriptionSection": {
+    "title": "Join us now",
+    "description": "Discover a new way to move with exclusive and personalized services.",
+    "placeholder": "Enter your email",
+    "button": "Sign up"
+  }
+
+}

@@ -30,6 +30,7 @@ import { Libraries } from "@react-google-maps/api";
 import { enregistrerCalcul } from '@/app/services/calculService';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const libraries: Libraries = ["places"];
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
@@ -107,6 +108,9 @@ class CalculService {
 }
 const Section1ano = ({}) => {
 
+  const t = useTranslations('landing');
+  const a = useTranslations('agency');
+  const f = useTranslations('form');
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   const [inputValue, setInputValue] = useState("");
   const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
@@ -409,7 +413,7 @@ const Section1ano = ({}) => {
   return (
     <section className='w-full h-[850px] p-4 justify-center items-center flex mb-4 mt-0'>
       <div className='lg:w-4xl sm:w-4xl md:w-4xl w-[320px] h-full relative mt-6 lg:ml-6 sm:ml-6 md:ml-6 ml-1 rounded-3xl justify-start pt-10 items-center flex flex-col gap-4 shadow-lg bg-white dark:bg-[#0D1B2A] overflow-hidden transition-all duration-700 ease-in-out '>
-      <h3 className='dark:text-white text-2xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>Calculateur de Tarif</h3>
+      <h3 className='dark:text-white text-2xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>{t('fareCalculator')}</h3>
       <form
       onSubmit={handleSubmit}
       className="space-y-5 max-w-md w-full mx-auto p-4 bg-white dark:bg-gray-900 rounded-lg shadow"
@@ -426,7 +430,7 @@ const Section1ano = ({}) => {
           className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
     errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
   }`}
-          placeholder="Départ"
+          placeholder={f("go")}
         />
         {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
         {showSuggestionsStart && (
@@ -461,7 +465,7 @@ const Section1ano = ({}) => {
           className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
     errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
   }`}
-          placeholder="Destination"
+          placeholder={f("arrive")}
         />
         {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
         {showSuggestionsEnd && (
@@ -496,7 +500,7 @@ const Section1ano = ({}) => {
     errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
   }`}
         >
-          <option value="">Sélectionnez l'heure</option>
+          <option value="">{f("time")}</option>
           {predefinedHours.map((h) => (
             <option key={h} value={h}>
               {h}
@@ -514,7 +518,7 @@ const Section1ano = ({}) => {
         className="text-white dark:bg-blue-700 dark:text-white dark:hover:bg-green-800 bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
       >
         <FaCalculator className="mr-2" />
-        {isLoading ? 'Calcul en cours...' : 'Calculer tarif'}
+        {isLoading ? t('calculating') : t('calculateFare')}
       </Button>
     </form>
     {showCards && (
@@ -523,7 +527,7 @@ const Section1ano = ({}) => {
       <Link href={'https://rideandgo.vercel.app/'} target="_blank" rel="noopener noreferrer">
       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
         <FaCar className="text-orange-500 text-3xl mb-2" />
-        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
+        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_ride')}</p>
       </div>
       </Link>
 
@@ -531,7 +535,7 @@ const Section1ano = ({}) => {
       <Link href={'https://lets-go-liart-phi.vercel.app/'} target="_blank" rel="noopener noreferrer">
       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
         <FaBus className="text-orange-500 text-3xl mb-2" />
-        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une agence de voyage?</p>
+        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('travel_agency')}</p>
       </div>
       </Link>
 
@@ -539,7 +543,7 @@ const Section1ano = ({}) => {
       <Link href={'https://easy-rental-git-review-admin-reseaus-projects.vercel.app/'} target="_blank" rel="noopener noreferrer">
       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
         <FaCarSide className="text-orange-500 text-3xl mb-2" />
-        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
+        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_rental')}</p>
       </div>
       </Link>
     </div>
