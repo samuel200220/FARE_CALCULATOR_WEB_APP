@@ -11,11 +11,11 @@ import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useTranslations } from 'next-intl';
 
-const font = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-});
+// const font = Poppins({
+//   subsets: ['latin'],
+//   weight: ['400', '500', '600', '700'],
+//   variable: '--font-poppins',
+// });
 
 interface ConnexionFormData {
   email: string;
