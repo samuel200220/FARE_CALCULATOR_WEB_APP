@@ -50,7 +50,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <Link
-              href={feature.link}
+              href={feature.link as any}
               key={index}
               className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow hover:shadow-xl transition transform hover:scale-[1.02]"
             >
