@@ -2,9 +2,10 @@ const withNextIntl = require('next-intl/plugin')(
   './i18n/request.ts'
 );
 
-module.exports = withNextIntl({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  typedRoutes: true, // ✅ placé à la racine
   // Autres configurations Next.js
-  experimental: {
-    typedRoutes: true
-  }
-});
+};
+
+module.exports = withNextIntl(nextConfig);
