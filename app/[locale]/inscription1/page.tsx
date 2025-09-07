@@ -13,7 +13,7 @@ import {
   Stack,
   Typography
 } from '@mui/material';
-import { Poppins } from 'next/font/google';
+//import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
 

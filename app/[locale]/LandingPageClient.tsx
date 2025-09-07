@@ -1,41 +1,28 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
-import Head from 'next/head';
 import Link from 'next/link';
-import Header from '@/components/navbar/header';
 import Headeracc from '@/components/navbar/headeracc';
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { FaRegCalendarAlt, FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide } from 'react-icons/fa';
+import { FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide } from 'react-icons/fa';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
-import TextField from '@mui/material/TextField';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
-import { BsClock } from 'react-icons/bs';
-import 'react-time-picker/dist/TimePicker.css';
-import TimePicker from 'react-time-picker';
+//import 'react-time-picker/dist/TimePicker.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import { FaFlagCheckered,FaLocationArrow,FaChevronDown } from 'react-icons/fa';
-import { IconType } from 'react-icons';
-import { LoadScript, Autocomplete } from "@react-google-maps/api";
-
+import { FaLocationArrow} from 'react-icons/fa';
 import { Libraries } from "@react-google-maps/api";
 import { enregistrerCalcul } from '@/app/services/calculService';
 import dynamic from 'next/dynamic';
 import Pricing from '@/components/pricing';
-import EstimationResult from '@/components/EstimationResult';
 import Accsec from '@/components/sections/accsec';
-import Assec1 from '@/components/sections/accsec1';
-import Assec2 from '@/components/sections/accsec2';
 import Footer from '@/components/navbar/footer';
 import Download from '@/components/sections/download';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 const libraries: Libraries = ["places"];
 const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
@@ -415,10 +402,12 @@ export default function LandingPageClient() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
-            <img 
+            <Image 
               src="/acc.jpg" 
               alt="Illustration calcul tarif" 
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              priority // pour forcer le chargement si c’est une image critique (ex: background de la page d’accueil)
             />
           </div>
 

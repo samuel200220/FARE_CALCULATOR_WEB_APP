@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { Car, PackageSearch } from 'lucide-react';
 import { FaPlaneDeparture } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';

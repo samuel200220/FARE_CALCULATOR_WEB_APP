@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Box, TextField, Button, Stack, Typography } from '@mui/material';
-import { Poppins } from 'next/font/google';
+//import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useTranslations } from 'next-intl';
