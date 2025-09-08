@@ -5,7 +5,7 @@ import { routing } from '@/i18n/routing';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function Navigation() {
-  const t = useTranslations('navigation');
+  //const t = useTranslations('navigation');
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();

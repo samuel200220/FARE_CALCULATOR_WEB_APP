@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Switch } from '@headlessui/react';
-import { Bell, Lock, Moon, User } from 'lucide-react';
+import { Bell, Lock, User } from 'lucide-react';
 import SidebarToggle from '@/components/sidebar1';
 import { useTranslations } from 'next-intl';
 

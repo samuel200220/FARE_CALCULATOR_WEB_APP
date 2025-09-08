@@ -17,7 +17,7 @@ const Section5pro = () => {
       </h2>
 
       <div className="flex justify-center relative items-center gap-10">
-        <div className="w-full h-full relative">
+        <div className="w-full h-full">
           <Image
             src="/mobile_img1.png"
             alt="mobile app"

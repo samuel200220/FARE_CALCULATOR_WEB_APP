@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
 import SidebarToggle from "../sidebar1";
-import Navigation from "../Navigation";
+//import Navigation from "../Navigation";
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 

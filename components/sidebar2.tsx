@@ -3,7 +3,7 @@
 import { JSX, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
-  Menu, Home, Settings, LogOut,
+  Menu,
   HelpCircle, PartyPopper
 } from 'lucide-react';
 import { ModeToggle } from './ui/mode-toggle';
