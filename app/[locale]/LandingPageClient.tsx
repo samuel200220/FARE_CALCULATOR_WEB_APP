@@ -12,11 +12,10 @@ import toast from 'react-hot-toast';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
 import 'react-time-picker/dist/TimePicker.css';
-import TimePicker from 'react-time-picker';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import { FaLocationArrow,FaChevronDown } from 'react-icons/fa';
+import { FaLocationArrow } from 'react-icons/fa';
 
-import { Libraries } from "@react-google-maps/api";
+//import { Libraries } from "@react-google-maps/api";
 import { enregistrerCalcul } from '@/app/services/calculService';
 import dynamic from 'next/dynamic';
 import Pricing from '@/components/pricing';
@@ -24,8 +23,9 @@ import Accsec from '@/components/sections/accsec';
 import Footer from '@/components/navbar/footer';
 import Download from '@/components/sections/download';
 import { useTranslations } from 'next-intl';
+import Image from "next/image";
 
-const libraries: Libraries = ["places"];
+// const libraries: Libraries = ["places"];
 // const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
@@ -102,25 +102,25 @@ class CalculService {
 }
 
 export default function LandingPageClient() {
-  const [selectedRideType, setSelectedRideType] = useState('Economy');
+  // const [selectedRideType, setSelectedRideType] = useState('Economy');
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-  const [inputValue, setInputValue] = useState("");
+  // const [inputValue, setInputValue] = useState("");
   // const t = useTranslations();
   const t = useTranslations('landing');
   const a = useTranslations('agency');
   const f = useTranslations('form');
-  const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
-    setAutocomplete(autocompleteInstance);
-  };
+  // const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
+  //   setAutocomplete(autocompleteInstance);
+  // };
   const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
     console.log("Adresse sélectionnée :", place?.formatted_address);
   };
-  const handlePlaceChanged = () => {
-    if (autocomplete) {
-      const place = autocomplete.getPlace();
-      handlePlaceSelected(place);
-    }
-  };
+  // const handlePlaceChanged = () => {
+  //   if (autocomplete) {
+  //     const place = autocomplete.getPlace();
+  //     handlePlaceSelected(place);
+  //   }
+  // };
   const [show, setShow] = useState(false);
   // Removed duplicate declaration of result
   const [showSuggestionsStart, setShowSuggestionsStart] = useState(false);
@@ -175,11 +175,11 @@ export default function LandingPageClient() {
   // Removed duplicate declaration of hour
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const handleSelectHour = (value: string) => {
-    setHour(value);
-    setShowDropdown(false);
-  };
-  const [customOffer, setCustomOffer] = useState('');
+  // const handleSelectHour = (value: string) => {
+  //   setHour(value);
+  //   setShowDropdown(false);
+  // };
+  // const [customOffer, setCustomOffer] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -208,17 +208,17 @@ export default function LandingPageClient() {
     }, []);
 
 
-  useEffect(() => {
-      if (!isLoading) return;
+  // useEffect(() => {
+  //     if (!isLoading) return;
   
-      const timer = setInterval(() => {
-        progressRef.current();
-      }, 100);
+  //     const timer = setInterval(() => {
+  //       progressRef.current();
+  //     }, 100);
   
-      return () => {
-        clearInterval(timer);
-      };
-    }, [isLoading]);
+  //     return () => {
+  //       clearInterval(timer);
+  //     };
+  //   }, [isLoading]);
   
   const [compteur, setCompteur] = useState(0);
   const [bloque, setBloque] = useState(false);
@@ -265,7 +265,7 @@ export default function LandingPageClient() {
   // }, [afficherMessage]);
 
     const { theme } = useTheme();
-    const isDark = theme === 'dark';
+    //const isDark = theme === 'dark';
     const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [hour, setHour] = useState('');
@@ -403,10 +403,11 @@ export default function LandingPageClient() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
-            <img 
-              src="/acc.jpg" 
-              alt="Illustration calcul tarif" 
-              className="w-full h-full object-cover"
+            <Image
+              src="/acc.jpg"
+              alt="Illustration calcul tarif"
+              fill
+              className="object-cover"
             />
           </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Crown } from "lucide-react";
+//import { Crown } from "lucide-react";
 import { FaGlobe } from "react-icons/fa";
 import {
   DropdownMenu,
@@ -12,8 +12,8 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
-import SidebarToggle from "../sidebar1";
-import Navigation from "../Navigation";
+//import SidebarToggle from "../sidebar1";
+//import Navigation from "../Navigation";
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import Sidebar2 from "../sidebar2";

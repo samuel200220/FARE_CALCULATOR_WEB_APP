@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import Image from "next/image";
 
 const Section5 = () => {
   const t = useTranslations('Section5');
@@ -17,7 +18,12 @@ const Section5 = () => {
 
       <div className="flex justify-center relative items-center gap-10">
         <div className="w-full h-full">
-          <img src="/mobile_img1.png" alt="mobile app" className="w-full h-full object-cover" />
+          <Image
+            src="/mobile_img1.png"
+            alt="mobile app"
+            fill
+            className="object-cover"
+          />
         </div>
       </div>
     </section>

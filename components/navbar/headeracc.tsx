@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { FaGlobe } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+// import {
+//   Sheet,
+//   SheetContent,
+//   SheetTrigger,
+// } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,16 +15,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from '../ui/button';
-import { Menu } from 'lucide-react';
+//import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { ModeToggle } from '../ui/mode-toggle';
 import Sidebar2 from '../sidebar2';
-import Navigation from '../Navigation';
+//import Navigation from '../Navigation';
 import { useRouter, usePathname } from 'next/navigation';
 
 const Headeracc = () => {
   const t = useTranslations('header');
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  //const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
   const pathname = usePathname();
 

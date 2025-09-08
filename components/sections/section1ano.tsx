@@ -3,37 +3,37 @@
 import React, { useEffect, useRef } from 'react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { Label } from '../ui/label'
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
-import { FaRegCalendarAlt, FaRegClock, FaCalculator, FaCar, FaBus, FaCarSide } from 'react-icons/fa';
+//import { Label } from '../ui/label'
+//import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+import { FaRegClock, FaCalculator, FaCar, FaBus, FaCarSide } from 'react-icons/fa';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
-import Mapleaf from '../Mapleaf';
-import TextField from '@mui/material/TextField';
-import { useRouter } from 'next/navigation';
+// import Mapleaf from '../Mapleaf';
+// import TextField from '@mui/material/TextField';
+// import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import LinearBufferButton from '../LinearBufferButton';
-import LinearProgress from "@mui/material/LinearProgress";
-import Box from "@mui/material/Box";
+// import LinearBufferButton from '../LinearBufferButton';
+// import LinearProgress from "@mui/material/LinearProgress";
+// import Box from "@mui/material/Box";
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
-import { BsClock } from 'react-icons/bs';
+//import { BsClock } from 'react-icons/bs';
 import 'react-time-picker/dist/TimePicker.css';
-import TimePicker from 'react-time-picker';
+//import TimePicker from 'react-time-picker';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import { FaFlagCheckered,FaLocationArrow,FaChevronDown } from 'react-icons/fa';
-import { IconType } from 'react-icons';
-import { LoadScript, Autocomplete } from "@react-google-maps/api";
+import { FaLocationArrow } from 'react-icons/fa';
+//import { IconType } from 'react-icons';
+//import { LoadScript, Autocomplete } from "@react-google-maps/api";
 
 
-import { Libraries } from "@react-google-maps/api";
+//import { Libraries } from "@react-google-maps/api";
 import { enregistrerCalcul } from '@/app/services/calculService';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-const libraries: Libraries = ["places"];
-const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
+//const libraries: Libraries = ["places"];
+//const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
   "10:00", "11:00", "12:00", "13:00",
@@ -112,19 +112,19 @@ const Section1ano = ({}) => {
   const a = useTranslations('agency');
   const f = useTranslations('form');
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-  const [inputValue, setInputValue] = useState("");
-  const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
-    setAutocomplete(autocompleteInstance);
-  };
+  //const [inputValue, setInputValue] = useState("");
+  // const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
+  //   setAutocomplete(autocompleteInstance);
+  // };
   const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
     console.log("Adresse sélectionnée :", place?.formatted_address);
   };
-  const handlePlaceChanged = () => {
-    if (autocomplete) {
-      const place = autocomplete.getPlace();
-      handlePlaceSelected(place);
-    }
-  };
+  // const handlePlaceChanged = () => {
+  //   if (autocomplete) {
+  //     const place = autocomplete.getPlace();
+  //     handlePlaceSelected(place);
+  //   }
+  // };
   const [show, setShow] = useState(false);
   // Removed duplicate declaration of result
   const [showSuggestionsStart, setShowSuggestionsStart] = useState(false);
@@ -191,11 +191,11 @@ const Section1ano = ({}) => {
 
   const [showCustomDiv, setShowCustomDiv] = useState(false);
 
-  const handleSelectHour = (value: string) => {
-    setHour(value);
-    setShowDropdown(false);
-  };
-  const [customOffer, setCustomOffer] = useState('');
+  // const handleSelectHour = (value: string) => {
+  //   setHour(value);
+  //   setShowDropdown(false);
+  // };
+  //const [customOffer, setCustomOffer] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -282,7 +282,7 @@ const Section1ano = ({}) => {
   // }, [afficherMessage]);
 
     const { theme } = useTheme();
-    const isDark = theme === 'dark';
+    //const isDark = theme === 'dark';
     const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [hour, setHour] = useState('');
@@ -606,19 +606,19 @@ const Section1ano = ({}) => {
                     <Link href={'https://rideandgo.vercel.app/'} target="_blank" rel="noopener noreferrer">
                       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                         <FaCar className="text-orange-500 text-3xl mb-2" />
-                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une course?</p>
+                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d&apos;une course?</p>
                       </div>
                     </Link>
                     <Link href={'https://lets-go-liart-phi.vercel.app/'} target="_blank" rel="noopener noreferrer">
                       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                         <FaBus className="text-orange-500 text-3xl mb-2" />
-                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une agence de voyage?</p>
+                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d&apos;une agence de voyage?</p>
                       </div>
                     </Link>
                     <Link href={'https://easy-rental-git-review-admin-reseaus-projects.vercel.app/'} target="_blank" rel="noopener noreferrer">
                       <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
                         <FaCarSide className="text-orange-500 text-3xl mb-2" />
-                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d'une location?</p>
+                        <p className="text-center text-gray-800 dark:text-white text-sm font-medium">Besoin d&apos;une location?</p>
                       </div>
                     </Link>
                   </div>
