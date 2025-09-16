@@ -12,14 +12,17 @@ const font = Poppins({
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
 });
+
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
 });
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -33,22 +36,28 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
   params,
-}: Readonly<{ children: React.ReactNode; params: { locale: string } }>) {
+}: Readonly<{ 
+  children: React.ReactNode; 
+  params: Promise<{ locale: string }> // 🔥 params est maintenant une Promise
+}>) {
+  // 🔥 Await params pour récupérer locale
+  const { locale } = await params;
+  
   // 🔥 On récupère locale + messages depuis /src/i18n/request.ts
-  const { locale, messages } = await requestConfig({
-    locale: params.locale,
+  const { locale: resolvedLocale, messages } = await requestConfig({
+    locale: locale,
     requestLocale: Promise.resolve(undefined)
   });
 
   return (
     <html
-      lang={locale}
+      lang={resolvedLocale}
       className={`${font.variable} ${montserrat.variable} ${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head />
       <body className="text-black text-[16px] lg:text-[20px] sm:text-[16px] md:text-[16px] bg-gray-200 dark:bg-gray-800">
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -57,10 +66,8 @@ export default async function RootLayout({
           >
             {/* Ton menu latéral reste */}
             {/* <Sidebar /> */}
-
             {/* Le contenu */}
             <main>{children}</main>
-
             {/* Toaster global */}
             <Toaster position="top-left" reverseOrder={false} />
           </ThemeProvider>
