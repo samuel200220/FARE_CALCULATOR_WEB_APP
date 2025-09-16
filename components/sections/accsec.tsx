@@ -59,6 +59,7 @@ export default function FareSections() {
             width={600}
             height={600}
             className="rounded-3xl shadow-2xl object-cover w-full h-full max-h-[700px]"
+            priority
           />
         </div>
       </div>
@@ -86,6 +87,7 @@ export default function FareSections() {
             width={600}
             height={600}
             className="rounded-3xl shadow-2xl object-cover w-full h-full max-h-[700px]"
+            priority
           />
         </div>
       </div>

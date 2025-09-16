@@ -102,16 +102,26 @@ class CalculService {
 }
 
 export default function LandingPageClient() {
+<<<<<<< HEAD
   // const [selectedRideType, setSelectedRideType] = useState('Economy');
+=======
+  const [selectedRideType, setSelectedRideType] = useState('Economy');
+>>>>>>> internationalisation
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   // const [inputValue, setInputValue] = useState("");
   // const t = useTranslations();
   const t = useTranslations('landing');
   const a = useTranslations('agency');
   const f = useTranslations('form');
+<<<<<<< HEAD
   // const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
   //   setAutocomplete(autocompleteInstance);
   // };
+=======
+  const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
+    setAutocomplete(autocompleteInstance);
+  };
+>>>>>>> internationalisation
   const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
     console.log("Adresse sélectionnée :", place?.formatted_address);
   };
@@ -406,8 +416,14 @@ export default function LandingPageClient() {
             <Image
               src="/acc.jpg"
               alt="Illustration calcul tarif"
+<<<<<<< HEAD
               fill
               className="object-cover"
+=======
+              fill  // occupe tout le conteneur parent (nécessite position: relative)
+              className="object-cover rounded-lg"
+              priority // optionnel (pour charger plus vite les images critiques)
+>>>>>>> internationalisation
             />
           </div>
 
@@ -444,7 +460,7 @@ export default function LandingPageClient() {
                     Disponible sur Google Play
                   </button> */}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-2">
                   <a href="https://lets-go-liart-phi.vercel.app/" target="_blank" rel="noopener noreferrer">
                     <div className="ml-18 lg:ml-0 sm:ml-0 w-[200px] lg:w-[180px] sm:w-[180px] flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer">
                       <FaBus className="text-orange-500 text-3xl mb-2" />

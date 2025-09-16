@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
+<<<<<<< HEAD
 //import { Crown } from "lucide-react";
+=======
+import { Crown } from "lucide-react";
+>>>>>>> internationalisation
 import { FaGlobe } from "react-icons/fa";
 import {
   DropdownMenu,
@@ -12,8 +16,12 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
+<<<<<<< HEAD
 //import SidebarToggle from "../sidebar1";
 //import Navigation from "../Navigation";
+=======
+import SidebarToggle from "../sidebar1";
+>>>>>>> internationalisation
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import Sidebar2 from "../sidebar2";
@@ -28,6 +36,13 @@ const Headerano = () => {
     const segments = pathname.split("/");
     segments[1] = locale;
     router.push(segments.join("/") as any);
+<<<<<<< HEAD
+=======
+  };
+  const changeLocale = (locale: string) => {
+    document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    window.location.reload(); // recharge pour appliquer la langue
+>>>>>>> internationalisation
   };
 
   return (
@@ -58,13 +73,18 @@ const Headerano = () => {
 
         {/* Menu Langues */}
         <DropdownMenu>
+<<<<<<< HEAD
           <DropdownMenuTrigger asChild>
+=======
+          <DropdownMenuTrigger id="lang-switcher-trigger" asChild>
+>>>>>>> internationalisation
             <Button className="bg-transparent border-none shadow-none text-white hover:text-violet-800 hover:bg-transparent">
               <FaGlobe className="mr-2" />
               {t("language_switch")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+<<<<<<< HEAD
             <DropdownMenuItem onClick={() => changeLanguage("fr")}>
               {t("french")}
             </DropdownMenuItem>
@@ -72,6 +92,15 @@ const Headerano = () => {
               {t("english")}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => changeLanguage("de")}>
+=======
+            <DropdownMenuItem onClick={() => changeLocale("fr")}>
+              {t("french")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLocale("en")}>
+              {t("english")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLocale("de")}>
+>>>>>>> internationalisation
               {t("german")}
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -94,4 +123,8 @@ const Headerano = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Headerano;
+=======
+export default Headerano;
+>>>>>>> internationalisation

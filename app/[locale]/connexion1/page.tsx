@@ -1,12 +1,20 @@
 'use client';
 
+<<<<<<< HEAD
 //import { useState } from 'react';
+=======
+import { useState } from 'react';
+>>>>>>> internationalisation
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Box, TextField, Button, Stack, Typography } from '@mui/material';
+<<<<<<< HEAD
 //import { Poppins } from 'next/font/google';
+=======
+import { Poppins } from 'next/font/google';
+>>>>>>> internationalisation
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useTranslations } from 'next-intl';
@@ -40,8 +48,13 @@ export default function Page() {
       } else {
         toast.error(t('errors.notFound'));
       }
+<<<<<<< HEAD
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 404) {
+=======
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+>>>>>>> internationalisation
         toast.error(t('errors.notFound'));
       } else {
         console.error(error);

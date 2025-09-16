@@ -1,8 +1,14 @@
 'use client';
 
+<<<<<<< HEAD
 //import Link from 'next/link';
 import React from 'react';
 //import { Button } from '../ui/button';
+=======
+import Link from 'next/link';
+import React from 'react';
+import { Button } from '../ui/button';
+>>>>>>> internationalisation
 import { useTranslations } from 'next-intl';
 
 const Titre = () => {
@@ -27,4 +33,8 @@ const Titre = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Titre;
+=======
+export default Titre;
+>>>>>>> internationalisation

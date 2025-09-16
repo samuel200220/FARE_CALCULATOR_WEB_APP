@@ -39,4 +39,8 @@ const Titreano = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Titreano;
+=======
+export default Titreano;
+>>>>>>> internationalisation

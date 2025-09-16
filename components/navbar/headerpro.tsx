@@ -13,7 +13,10 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
 import SidebarToggle from "../sidebar1";
+<<<<<<< HEAD
 //import Navigation from "../Navigation";
+=======
+>>>>>>> internationalisation
 import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -26,6 +29,13 @@ const Headerpro = () => {
     const segments = pathname.split("/");
     segments[1] = locale;
     router.push(segments.join("/") as any);
+<<<<<<< HEAD
+=======
+  };
+  const changeLocale = (locale: string) => {
+    document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    window.location.reload(); // recharge pour appliquer la langue
+>>>>>>> internationalisation
   };
 
   return (
@@ -70,6 +80,7 @@ const Headerpro = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+<<<<<<< HEAD
             <DropdownMenuItem onClick={() => changeLanguage("fr")}>
               {t("french")}
             </DropdownMenuItem>
@@ -77,6 +88,15 @@ const Headerpro = () => {
               {t("english")}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => changeLanguage("de")}>
+=======
+            <DropdownMenuItem onClick={() => changeLocale("fr")}>
+              {t("french")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLocale("en")}>
+              {t("english")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLocale("de")}>
+>>>>>>> internationalisation
               {t("german")}
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -98,4 +118,8 @@ const Headerpro = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Headerpro;
+=======
+export default Headerpro;
+>>>>>>> internationalisation

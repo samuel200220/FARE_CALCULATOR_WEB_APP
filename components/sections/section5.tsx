@@ -2,7 +2,10 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
+<<<<<<< HEAD
 import Image from "next/image";
+=======
+>>>>>>> internationalisation
 
 const Section5 = () => {
   const t = useTranslations('Section5');
@@ -17,6 +20,7 @@ const Section5 = () => {
       </h2>
 
       <div className="flex justify-center relative items-center gap-10">
+<<<<<<< HEAD
         <div className="w-full h-full relative">
           <Image
             src="/mobile_img1.png"
@@ -24,10 +28,18 @@ const Section5 = () => {
             fill
             className="object-cover"
           />
+=======
+        <div className="w-full h-full">
+          <img src="/mobile_img1.png" alt="mobile app" className="w-full h-full object-cover" />
+>>>>>>> internationalisation
         </div>
       </div>
     </section>
   );
 };
 
+<<<<<<< HEAD
 export default Section5;
+=======
+export default Section5;
+>>>>>>> internationalisation

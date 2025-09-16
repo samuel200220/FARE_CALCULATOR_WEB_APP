@@ -1,6 +1,10 @@
 'use client';
 
+<<<<<<< HEAD
 //import Link from 'next/link';
+=======
+import Link from 'next/link';
+>>>>>>> internationalisation
 import { Car, PackageSearch } from 'lucide-react';
 import { FaPlaneDeparture } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
