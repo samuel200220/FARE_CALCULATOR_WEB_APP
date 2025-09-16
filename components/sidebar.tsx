@@ -3,12 +3,14 @@
 import { JSX, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
-  Menu, Home, User, Settings, LogOut,
-  HelpCircle, LayoutDashboard, History,PartyPopper
+  Menu, Home, Settings, LogOut,
+  HelpCircle, PartyPopper
 } from 'lucide-react';
 import { ModeToggle } from './ui/mode-toggle';
+import { useTranslations } from 'next-intl';
 
 export default function Sidebar() {
+  const t = useTranslations('sidebar');
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -35,19 +37,17 @@ export default function Sidebar() {
         aria-label="Sidebar"
       >
         <div className="p-5 text-2xl font-bold text-blue-700 border-b border-gray-300 dark:border-gray-700">
-          Fare Calculator
+          {t('brand')}
         </div>
         <nav className="p-4 space-y-4 text-gray-700 dark:text-gray-200">
-          <NavItem href="/" icon={<PartyPopper />} label="Bienvenue" />
-          <NavItem href="/accueil" icon={<Home />} label="Accueil" />
-          {/* <NavItem href="/profil1" icon={<User />} label="Profil" /> */}
-          <NavItem href="/parametres" icon={<Settings />} label="Paramètres" />
-          {/* <NavItem href="/historique" icon={<History />} label="Historique" /> */}
-          <NavItem href="/aide1" icon={<HelpCircle />} label="Aide" />
-          <NavItem href="/connexion1" icon={<LogOut />} label="Déconnexion" />
-          <div className='flex flex-row space-x-2'>
+          <NavItem href="/" icon={<PartyPopper />} label={t('welcome')} />
+          <NavItem href="/accueil" icon={<Home />} label={t('home')} />
+          <NavItem href="/parametres" icon={<Settings />} label={t('settings')} />
+          <NavItem href="/aide1" icon={<HelpCircle />} label={t('help')} />
+          <NavItem href="/connexion1" icon={<LogOut />} label={t('logout')} />
+          <div className="flex flex-row space-x-2">
             <ModeToggle />
-            <h5>Thème</h5>
+            <h5>{t('theme')}</h5>
           </div>
         </nav>
       </aside>
@@ -66,7 +66,7 @@ export default function Sidebar() {
 // Composant NavItem avec lien
 function NavItem({ icon, label, href }: { icon: JSX.Element; label: string; href: string }) {
   return (
-    <Link href={href}>
+    <Link href={href as any}>
       <div className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
         {icon}
         <span>{label}</span>

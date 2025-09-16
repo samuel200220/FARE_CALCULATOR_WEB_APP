@@ -1,0 +1,408 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "contact": "Kontakt"
+  },
+  "common": {
+    "welcome": "Willkommen",
+    "language": "Sprache",
+    "loading": "Wird geladen..."
+  },
+  "home": {
+    "title": "Willkommen in unserer Anwendung",
+    "description": "Dies ist eine mehrsprachige Next.js-Anwendung"
+  },
+  "landing": {
+    "heroTitle": "Schätzen Sie Ihren städtischen oder zwischenstädtischen Fahrpreis",
+    "heroDescription": "Mit Fare Calculator erhalten Sie eine schnelle Schätzung Ihrer Fahrtkosten in Kamerun. Transparent, schnell und einfach in nur wenigen Klicks.",
+    "startFree": "Kostenlos starten",
+    "standardVersion": "Standardversion",
+    "proVersion": "Pro-Version",
+    "fareCalculator": "Fahrpreisrechner",
+    "calculateFare": "Fahrpreis berechnen",
+    "calculating": "Berechnung läuft...",
+    "estimationTitle": "Unsere Schätzung",
+  "distance": "Entfernung",
+  "estimatedCost": "Geschätzte Kosten",
+  "officialFare": "Offizieller Tarif",
+  "viewRoute": "Route anzeigen",
+  "recalculate": "Neu berechnen"
+  },
+  "agency":{
+  "travel_agency": "Brauchen Sie ein Reisebüro?",
+  "need_ride": "Brauchen Sie eine Fahrt?",
+  "need_rental": "Brauchen Sie eine Vermietung?"
+  },
+  "form": {
+  "go": "Abfahrt",
+  "arrive": "Ankunft",
+  "time": "Uhrzeit auswählen",
+  "sugg":"Kein Vorschlag"
+},
+"pricing": {
+  "title": "Unsere Pläne",
+  "description": "Wählen Sie den Plan, der zu Ihren Bedürfnissen passt",
+  "plans": {
+    "basic": {
+      "title": "Basis",
+      "price": "1000 FCFA",
+      "description": "Wesentliche Funktionen zum Starten.",
+      "features": [
+        "Unbegrenzte Fahrpreisberechnung",
+        "Fahrvorschläge",
+        "Community-Support"
+      ],
+      "cta": "Loslegen"
+    },
+    "pro": {
+      "title": "Pro",
+      "price": "2500 FCFA",
+      "description": "Perfekt für häufige Benutzer.",
+      "features": [
+        "Echtzeitberechnung",
+        "Persönliche Historie",
+        "Kostenoptimierung"
+      ],
+      "cta": "Pro wählen"
+    },
+    "enterprise": {
+      "title": "Unternehmen",
+      "price": "Custom",
+      "description": "Dedizierter Support und maßgeschneiderte Infrastruktur.",
+      "features": [
+        "Erweiterte Statistiken",
+        "Teamverwaltung",
+        "Exklusive Funktionen"
+      ],
+      "cta": "Kontaktieren Sie uns"
+    }
+  }
+},
+"fareSections": {
+  "agencies": {
+    "subtitle": "Fare Calculator für Agenturen",
+    "title": "Verwalten Sie Ihre Buchungen und Tarife in Echtzeit",
+    "description": "Vereinfachen Sie Ihr Flottenmanagement, bieten Sie flexible Preise an und optimieren Sie Ihre Routen. Fare Calculator hilft Ihnen, Ihre Abläufe zu digitalisieren, um mehr Kunden zu erreichen und das Passagiererlebnis zu verbessern.",
+    "button": "Ihre Agentur registrieren"
+  },
+  "institutions": {
+    "subtitle": "Fare Calculator für Institutionen",
+    "title": "Vereinfachen Sie Ihr Transportmanagement",
+    "description": "Verwalten Sie Ihre Fahrten, optimieren Sie die Transportkosten für Ihre Organisation und greifen Sie auf erweiterte Tarifanalysen zu. Fare Calculator bietet eine einfache und schnelle Lösung zur Schätzung und Verfolgung Ihrer Mobilitätsausgaben.",
+    "button": "Ihre Institution registrieren"
+  },
+  "drivers": {
+    "subtitle": "Fare Calculator für Fahrer",
+    "title": "Fahren und verdienen Sie in Ihrem eigenen Tempo",
+    "description": "Treten Sie unserem Netzwerk von Fahrern bei und bieten Sie Ihre Fahrten frei an. Mit Fare Calculator legen Sie Ihre Preise fest, verwalten Ihre Verfügbarkeit und steigern Ihr Einkommen ganz einfach.",
+    "button": "Als Fahrer registrieren"
+  }
+},
+"download": {
+    "title": "Laden Sie den Fare Calculator herunter",
+    "description": "Schließen Sie sich Tausenden von Nutzern in Kamerun an: Fahrgäste, Fahrer und Agenturen. Vereinfachen Sie Ihre Fahrten, berechnen Sie Ihre Tarife und optimieren Sie Ihre Mobilität mit FareGo. Verfügbar für iOS und Android.",
+    "app_store": "App Store",
+    "google_play": "Google Play"
+  },
+  "header": {
+    "help": "Hilfe",
+    "sign_up": "Registrieren",
+    "sign_in": "Anmelden",
+    "language_switch": "Sprache",
+    "english": "Englisch",
+    "french": "Französisch",
+    "title": "Fare Calculator"
+  },
+  "headerPro": {
+    "title": "Fare Calculator Pro",
+    "dashboard": "Dashboard",
+    "help": "Hilfe",
+    "logout": "Abmelden",
+    "language_switch": "Sprache",
+    "english": "Englisch",
+    "french": "Französisch",
+    "german": "Deutsch"
+  },
+  "footer": {
+    "company": "Unser Unternehmen",
+    "vision": "Unsere Vision",
+    "mission": "Unsere Mission",
+    "goals": "Unsere Ziele",
+    "originality": "Unsere Originalität",
+    "recruiting": "Wir Stellen Ein",
+    "contact": "Kontaktinformationen",
+
+    "support": "Support",
+    "marketplace": "Marktplatz",
+    "rentalAgency": "Vermietungsagentur",
+    "travelAgency": "Reisebüro",
+    "carpooling": "Mitfahrdienst",
+
+    "legal": "Rechtliche Hinweise",
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzrichtlinie",
+    "personalInfo": "Ihre Persönlichen Daten",
+    "cookies": "Cookies",
+
+    "mobileApp": "Mobile App",
+    "appStore": "App Store",
+    "playStore": "Play Store",
+
+    "followUs": "Folgen Sie uns",
+    "rights": "© 2025 Fare Calculator. Alle Rechte vorbehalten"
+  },
+  "sidebar": {
+    "brand": "Fare Calculator",
+    "welcome": "Willkommen",
+    "home": "Startseite",
+    "settings": "Einstellungen",
+    "help": "Hilfe",
+    "logout": "Abmelden",
+    "theme": "Thema"
+  },
+  "sidebarPro": {
+    "brand": "Fare Calculator",
+    "welcome": "Willkommen",
+    "home": "Startseite",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "dashboard": "Dashboard",
+    "history": "Verlauf",
+    "help": "Hilfe",
+    "logout": "Abmelden",
+    "theme": "Thema"
+  },
+  "titreano": {
+  "mainTitleLine1": "Berechnen Sie Ihre Transporttarife in",
+  "mainTitleLine2": "Echtzeit",
+  "description": "Professionelle Lösung, um sofortige und genaue Angebote zu erhalten",
+  "signup": "Registrieren",
+  "login": "Anmelden"
+},
+"section2": {
+    "title": "Verbundene Dienstleistungen",
+    "services": {
+      "taxi": {
+        "title": "Taxi buchen",
+        "description": "Buchen Sie Ihr Taxi schnell für tägliche Fahrten oder Flughafen-Transfers. Komfort, Pünktlichkeit und Zuverlässigkeit garantiert."
+      },
+      "trip": {
+        "title": "Reise buchen",
+        "description": "Planen und buchen Sie Ihre nationalen oder regionalen Reisen einfach mit unserer Agentur."
+      },
+      "delivery": {
+        "title": "Fahrer für Lieferungen",
+        "description": "Profitieren Sie von einem Fahrer für die Lieferung von Paketen oder Waren. Sicherer, schneller und zuverlässiger Transport."
+      }
+    }
+  },
+  "Section4": {
+    "title": "Über uns",
+    "why": {
+      "title": "Warum",
+      "description": "Erfahren Sie, warum unser Unternehmen die ideale Wahl für Ihre Transportbedürfnisse ist. Ein engagiertes Team, außergewöhnlicher Kundenservice und ein stressfreies Reiseerlebnis."
+    },
+    "vision": {
+      "title": "Vision",
+      "description": "Unsere Vision ist es, den Transport mit innovativen und nachhaltigen Lösungen zu revolutionieren. Zuverlässig, umweltfreundlich und für alle zugänglich."
+    },
+    "goal": {
+      "title": "Ziel",
+      "description": "Die Zufriedenheit jedes Kunden durch tadellose Pünktlichkeit und konstante Professionalität sicherstellen. Unser Netzwerk erweitern und gleichzeitig Exzellenz bewahren."
+    }
+  },
+  "Section5": {
+    "title": "Verfügbar auf Mobilgeräten"
+  },
+  "Section7":{
+    "title": "Was unsere Kunden sagen"
+  },
+  "StatsSection": {
+    "title": "Wichtige Statistiken",
+    "taxis": "Taxis",
+    "users": "Benutzer",
+    "ridesPerDay": "Fahrten pro Tag"
+  },
+  "InscriptionSection": {
+    "title": "Treten Sie uns jetzt bei",
+    "description": "Entdecken Sie eine neue Art der Fortbewegung mit exklusiven und personalisierten Dienstleistungen.",
+    "placeholder": "Geben Sie Ihre E-Mail ein",
+    "button": "Registrieren"
+  },
+  "Pourquoi": {
+    "header": {
+      "title": "Warum Fare Calculator?",
+      "subtitle": "Wir haben Fare Calculator entwickelt, um ein wesentliches Bedürfnis zu erfüllen: den städtischen Transport transparenter, fairer und für alle zugänglich zu machen."
+    },
+    "content": {
+      "title": "Der Bedarf hinter der Lösung",
+      "description": "Heute wissen Nutzer nicht immer, wie viel eine Fahrt kostet. Ob Sie ein gelegentlicher Kunde, ein Profi oder ein Unternehmen sind, es ist entscheidend, den Preis genau zu schätzen, bevor Sie einen Service akzeptieren oder anbieten.\n\nFare Calculator ermöglicht anonymen Nutzern einige kostenlose Schätzungen, während registrierte oder professionelle Konten mehr Möglichkeiten erhalten. Es ist eine schnelle, effiziente Lösung für alle Arten von Reisenden oder Fahrern."
+    }
+  },
+  "Vision": {
+    "header": {
+      "title": "Unsere Vision",
+      "subtitle": "Eine Zukunft schaffen, in der jede Fahrt vorhersehbar, fair und vernetzt ist, dank Innovation."
+    },
+    "content": {
+      "title": "Eine Vision von Gerechtigkeit und Technologie",
+      "description": "Unsere Vision ist es, den städtischen Verkehr intelligent, transparent und fair zu gestalten. Mit Fare Calculator stellen wir uns eine Welt vor, in der jeder Nutzer fundierte Entscheidungen treffen, seine Fahrten sicher planen und Tarifmissbrauch vermeiden kann.\n\nWir wollen eine Referenz für automatisierte Tarifschätzungen werden, integriert in lokale und internationale Plattformen. Eine Lösung für nachhaltige, inklusive Mobilität, angetrieben von Daten."
+    }
+  },
+  "About": {
+    "header": {
+      "title": "Über Fare Calculator",
+      "subtitle": "Bei Fare Calculator berechnen wir nicht nur Tarife. Wir helfen, Fahrten zu optimieren, Mobilität zugänglicher zu machen und das Transporterlebnis für alle zu verbessern."
+    },
+    "mission": {
+      "title": "Unsere Mission",
+      "description": "Unsere Mission ist es, die Tarifberechnung für alle Nutzerarten zu vereinfachen: anonym, registriert oder professionell. Durch präzise, schnelle und intelligente Schätzungen trägt Fare Calculator zu einer reibungsloseren, wirtschaftlicheren und verantwortungsvolleren urbanen Mobilität bei."
+    }
+  },
+  "Faq": {
+    "header": {
+      "title": "Hilfe & Unterstützung",
+      "subtitle": "Häufig gestellte Fragen"
+    },
+    "search": {
+      "placeholder": "Suche nach einer Frage oder einem Stichwort..."
+    },
+    "questions": {
+      "q1": {
+        "question": "Wie verwende ich den Tarifrechner?",
+        "answer": "Geben Sie Ihren Startpunkt und Ihr Ziel ein und klicken Sie auf 'Berechnen'. Das System schätzt die Kosten basierend auf der Entfernung."
+      },
+      "q2": {
+        "question": "Brauche ich ein Konto, um eine Berechnung durchzuführen?",
+        "answer": "Nein, Sie können bis zu 3 Berechnungen kostenlos durchführen, ohne ein Konto zu erstellen."
+      },
+      "q3": {
+        "question": "Wie erstelle ich ein Konto?",
+        "answer": "Klicken Sie auf die Schaltfläche 'Registrieren' oben auf der Berechnungsseite und füllen Sie die erforderlichen Informationen aus."
+      },
+      "q4": {
+        "question": "Wie kann ich meine Berechnungshistorie einsehen?",
+        "answer": "Erstellen Sie ein Konto, melden Sie sich an und greifen Sie dann auf den Tab 'Historie' zu."
+      }
+    },
+    "noResults": "Keine Fragen entsprechen Ihrer Suche."
+  },
+  "Inscription": {
+    "title": "Registrierung",
+    "subtitle": "Erstellen Sie kostenlos Ihr Konto",
+    "left": {
+      "title": "Fare Calculator - Ihr Tarif immer griffbereit",
+      "subtitle": "Kein Stress mehr über die Fahrtkosten. Mit Fare Calculator erhalten Sie schnell eine Schätzung Ihrer Reisekosten."
+    },
+    "form": {
+      "username": "Benutzername",
+      "email": "E-Mail-Adresse"
+    },
+    "buttons": {
+      "signup": "Registrieren",
+      "login": "Hier klicken",
+      "proVersion": "Pro-Version"
+    },
+    "alreadyRegistered": "Bereits registriert?",
+    "errors": {
+      "required": "Dieses Feld ist erforderlich",
+      "emailExists": "Es existiert bereits ein Konto mit dieser E-Mail-Adresse",
+      "emailCheckFailed": "Fehler bei der Überprüfung der E-Mail",
+      "generic": "Ein Fehler ist aufgetreten"
+    },
+    "success": {
+      "signup": "Registrierung erfolgreich"
+    }
+  },
+  "Connexion": {
+    "title": "Anmeldung",
+    "emailLabel": "E-Mail-Adresse",
+    "emailPlaceholder": "you@example.com",
+    "loginButton": "Anmelden",
+    "noAccount": "Noch kein Konto?",
+    "clickHere": "Hier klicken",
+    "proVersion": "Pro-Version",
+    "errors": {
+      "requiredEmail": "E-Mail erforderlich",
+      "notFound": "Kein Konto mit dieser E-Mail gefunden",
+      "generic": "Fehler beim Anmelden",
+      "success": "Anmeldung erfolgreich"
+    }
+  },
+  "InscriptionPro": {
+    "title": "Registrierung",
+    "subtitle": "Erstellen Sie Ihr Pro-Konto kostenlos",
+    "left": {
+      "title": "Fare Calculator Pro - Ihr Tarif in Reichweite",
+      "subtitle": "Kein Stress mehr über die Reisekosten. Mit Fare Calculator erhalten Sie schnell eine Kostenschätzung für Ihre Reisen."
+    },
+    "form": {
+      "companyName": "Firmenname",
+      "companyOwner": "Firmenverantwortlicher",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "confirmPassword": "Passwort bestätigen"
+    },
+    "buttons": {
+      "signup": "Registrieren",
+      "standardVersion": "Standardversion",
+      "loginPro": "Hier klicken"
+    },
+    "alreadyRegistered": "Bereits für die Pro-Version registriert?",
+    "errors": {
+      "required": "Dieses Feld ist erforderlich",
+      "emailExists": "Ein Konto mit dieser E-Mail existiert bereits",
+      "emailCheckFailed": "Fehler beim Überprüfen der E-Mail",
+      "passwordMismatch": "Passwörter stimmen nicht überein",
+      "generic": "Fehler bei der Registrierung"
+    },
+    "success": {
+      "signup": "Registrierung erfolgreich"
+    }
+  },
+  "ConnexionPro": {
+    "title": "Anmeldung",
+    "subtitle": "Melden Sie sich bei Ihrem Pro-Konto an",
+    "left": {
+      "title": "Fare Calculator - Ihr Tarif in Reichweite",
+      "subtitle": "Kein Stress mehr über Reisekosten. Mit Fare Calculator erhalten Sie schnell eine Kostenschätzung."
+    },
+    "form": {
+      "email": "E-Mail-Adresse",
+      "password": "Passwort"
+    },
+    "buttons": {
+      "login": "Anmelden",
+      "signupPro": "Hier klicken"
+    },
+    "messages": {
+      "loginSuccess": "Anmeldung erfolgreich",
+      "loginFailed": "E-Mail oder Passwort falsch",
+      "accountNotFound": "Kein Konto mit dieser E-Mail gefunden",
+      "genericError": "Fehler bei der Anmeldung"
+    },
+    "noAccount": "Kein Pro-Konto?"
+  },
+  "Parametres": {
+    "title": "Einstellungen",
+    "sections": {
+      "profile": "Profilinformationen",
+      "security": "Sicherheit",
+      "preferences": "Einstellungen"
+    },
+    "fields": {
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail-Adresse",
+      "currentPassword": "Aktuelles Passwort",
+      "newPassword": "Neues Passwort",
+      "notifications": "Benachrichtigungen",
+      "darkMode": "Dunkler Modus"
+    },
+    "placeholders": {
+      "fullName": "Ihr Name",
+      "email": "email@example.com"
+    }
+  }
+
+}
