@@ -6,11 +6,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Box, TextField, Button, Stack, Typography } from '@mui/material';
-<<<<<<< HEAD
-//import { Poppins } from 'next/font/google';
-=======
 import { Poppins } from 'next/font/google';
->>>>>>> internationalisation
 import { useTheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
 

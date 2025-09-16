@@ -40,11 +40,8 @@
     "next": "^15.5.2",
     "next-auth": "^4.24.11",
     "next-i18next": "^15.4.2",
-<<<<<<< HEAD
-    "next-intl": "^4.3.5",
-=======
+
     "next-intl": "^4.3.9",
->>>>>>> internationalisation
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

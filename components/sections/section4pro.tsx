@@ -60,8 +60,4 @@ const Section4pro = () => {
   );
 };
 
-<<<<<<< HEAD
 export default Section4pro;
-=======
-export default Section4pro;
->>>>>>> internationalisation

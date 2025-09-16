@@ -34,20 +34,11 @@ export default function Page() {
       localStorage.setItem('entrepriseConnectee', JSON.stringify(entreprise));
       toast.success(t('messages.loginSuccess'));
       router.push('/versionpro');
-<<<<<<< HEAD
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        toast.error(t('errors.notFound'));
-      } else {
-        console.error(error);
-        toast.error(t('errors.generic'));
-=======
     } catch (error: any) {
       if (error.response?.status === 404) {
         toast.error(t('messages.accountNotFound'));
       } else {
         toast.error(t('messages.genericError'));
->>>>>>> internationalisation
       }
     }
   };

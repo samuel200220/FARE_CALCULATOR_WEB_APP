@@ -102,26 +102,18 @@ class CalculService {
 }
 
 export default function LandingPageClient() {
-<<<<<<< HEAD
-  // const [selectedRideType, setSelectedRideType] = useState('Economy');
-=======
   const [selectedRideType, setSelectedRideType] = useState('Economy');
->>>>>>> internationalisation
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   // const [inputValue, setInputValue] = useState("");
   // const t = useTranslations();
   const t = useTranslations('landing');
   const a = useTranslations('agency');
   const f = useTranslations('form');
-<<<<<<< HEAD
-  // const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
-  //   setAutocomplete(autocompleteInstance);
-  // };
-=======
+
   const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
     setAutocomplete(autocompleteInstance);
   };
->>>>>>> internationalisation
+
   const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
     console.log("Adresse sélectionnée :", place?.formatted_address);
   };
@@ -416,14 +408,10 @@ export default function LandingPageClient() {
             <Image
               src="/acc.jpg"
               alt="Illustration calcul tarif"
-<<<<<<< HEAD
-              fill
-              className="object-cover"
-=======
+
               fill  // occupe tout le conteneur parent (nécessite position: relative)
               className="object-cover rounded-lg"
               priority // optionnel (pour charger plus vite les images critiques)
->>>>>>> internationalisation
             />
           </div>
 
