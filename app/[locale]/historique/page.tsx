@@ -40,11 +40,13 @@ export default function Historique() {
 
         const data = await res.json();
         setCourses(data);
-      } catch (err: any) {
-        setErreur(err.message);
-      } finally {
-        setLoading(false);
-      }
+      } catch (err: unknown) {
+  if (err instanceof Error) {
+    setErreur(err.message);
+  } else {
+    setErreur("Une erreur inconnue est survenue");
+  }
+}
     };
 
     fetchHistorique();

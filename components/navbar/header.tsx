@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Crown } from "lucide-react";
+//import { Crown } from "lucide-react";
 import { FaGlobe } from "react-icons/fa";
 import {
   DropdownMenu,
@@ -12,21 +12,21 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
-import SidebarToggle from "../sidebar1";
+//import SidebarToggle from "../sidebar1";
 import { useTranslations } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
+//import { useRouter, usePathname } from "next/navigation";
 import Sidebar2 from "../sidebar2";
 
 const Header = () => {
   const t = useTranslations("headerPro");
-  const router = useRouter();
-  const pathname = usePathname();
+  //const router = useRouter();
+  //const pathname = usePathname();
 
-  const changeLanguage = (locale: string) => {
-    const segments = pathname.split("/");
-    segments[1] = locale;
-    router.push(segments.join("/") as any);
-  };
+  // const changeLanguage = (locale: string) => {
+  //   const segments = pathname.split("/");
+  //   segments[1] = locale;
+  //   router.push(segments.join("/") as any);
+  // };
   const changeLocale = (locale: string) => {
     document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
     window.location.reload(); // recharge pour appliquer la langue

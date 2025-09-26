@@ -66,7 +66,7 @@ export default function Sidebar() {
 // Composant NavItem avec lien
 function NavItem({ icon, label, href }: { icon: JSX.Element; label: string; href: string }) {
   return (
-    <Link href={href as any}>
+    <Link href={href}>
       <div className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
         {icon}
         <span>{label}</span>

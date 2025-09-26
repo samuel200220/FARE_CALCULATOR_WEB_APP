@@ -3,7 +3,7 @@
 import { JSX, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
-  Menu, Home, Settings, LogOut,
+  Menu,
   HelpCircle, PartyPopper
 } from 'lucide-react';
 import { ModeToggle } from './ui/mode-toggle';
@@ -63,7 +63,7 @@ export default function Sidebar2() {
 // Composant NavItem avec lien
 function NavItem({ icon, label, href }: { icon: JSX.Element; label: string; href: string }) {
   return (
-    <Link href={href as any}>
+    <Link href={href}>
       <div className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
         {icon}
         <span>{label}</span>

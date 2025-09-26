@@ -34,13 +34,18 @@ export default function Page() {
       localStorage.setItem('entrepriseConnectee', JSON.stringify(entreprise));
       toast.success(t('messages.loginSuccess'));
       router.push('/versionpro');
-    } catch (error: any) {
-      if (error.response?.status === 404) {
-        toast.error(t('messages.accountNotFound'));
-      } else {
-        toast.error(t('messages.genericError'));
-      }
+    } catch (error: unknown) {
+  if (error instanceof Error && "response" in error) {
+    const err = error as { response?: { status?: number } };
+    if (err.response?.status === 404) {
+      toast.error(t('messages.accountNotFound'));
+    } else {
+      toast.error(t('messages.genericError'));
     }
+  } else {
+    toast.error(t('messages.genericError'));
+  }
+}
   };
 
   return (

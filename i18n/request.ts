@@ -1,20 +1,14 @@
+// src/i18n/request.ts
 import { getRequestConfig } from 'next-intl/server';
-import { routing } from './routing';
+import { cookies } from 'next/headers';
 
-export default getRequestConfig(async ({ locale }) => {
-  // Vérifie si la locale est dans la liste des locales supportées
-  const resolvedLocale = typeof locale === 'string' ? locale : routing.defaultLocale;
-  if (!routing.locales.includes(resolvedLocale as any)) {
-    // Utilise la langue par défaut si locale invalide
-    return {
-      locale: routing.defaultLocale,
-      messages: (await import(`../messages/${routing.defaultLocale}.json`)).default
-    };
-  }
+export default getRequestConfig(async () => {
+  const store = cookies();
+  const locale = (await store).get('locale')?.value || 'en'; // fallback = 'en'
+  const messages = (await import(`../messages/${locale}.json`)).default;
 
-  // Retourne la locale courante et ses messages
   return {
-    locale: resolvedLocale, // OBLIGATOIRE
-    messages: (await import(`../messages/${resolvedLocale}.json`)).default
+    locale,
+    messages
   };
 });

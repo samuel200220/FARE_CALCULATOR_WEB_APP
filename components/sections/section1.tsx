@@ -7,7 +7,7 @@ import { Button } from '../ui/button'
 // import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 import { FaRegClock, FaCalculator, FaCar, FaBus, FaCarSide } from 'react-icons/fa';
 import { useState } from 'react';
-import { useTheme } from 'next-themes';
+//import { useTheme } from 'next-themes';
 // import Mapleaf from '../Mapleaf';
 // import TextField from '@mui/material/TextField';
 // import { useRouter } from 'next/navigation';
@@ -52,14 +52,14 @@ const Section1 = ({}) => {
   const t = useTranslations('landing');
   const a = useTranslations('agency');
   const f = useTranslations('form');
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  //const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   //const [inputValue, setInputValue] = useState("");
   // const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
   //   setAutocomplete(autocompleteInstance);
   // };
-  const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
-    console.log("Adresse sélectionnée :", place?.formatted_address);
-  };
+  // const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
+  //   console.log("Adresse sélectionnée :", place?.formatted_address);
+  // };
   // const handlePlaceChanged = () => {
   //   if (autocomplete) {
   //     const place = autocomplete.getPlace();
@@ -133,34 +133,34 @@ const Section1 = ({}) => {
   //   setShowDropdown(false);
   // };
   //const [customOffer, setCustomOffer] = useState('');
-  const [progress, setProgress] = useState(0);
-  const [buffer, setBuffer] = useState(10);
+  //const [progress, setProgress] = useState(0);
+  //const [buffer, setBuffer] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
 
   const [showCustomDiv, setShowCustomDiv] = useState(false);
 
   const progressRef = useRef<() => void>(() => {});
   
-  useEffect(() => {
-      progressRef.current = () => {
-        setProgress((prevProgress) => {
-          if (prevProgress >= 100) {
-            setIsLoading(false);
-            setBuffer(10);
-            return 0;
-          }
+  // useEffect(() => {
+  //     progressRef.current = () => {
+  //       setProgress((prevProgress) => {
+  //         if (prevProgress >= 100) {
+  //           setIsLoading(false);
+  //           setBuffer(10);
+  //           return 0;
+  //         }
   
-          if (prevProgress % 5 === 0) {
-            setBuffer((prevBuffer) => {
-              const newBuffer = prevBuffer + 1 + Math.random() * 10;
-              return newBuffer > 100 ? 100 : newBuffer;
-            });
-          }
+  //         if (prevProgress % 5 === 0) {
+  //           setBuffer((prevBuffer) => {
+  //             const newBuffer = prevBuffer + 1 + Math.random() * 10;
+  //             return newBuffer > 100 ? 100 : newBuffer;
+  //           });
+  //         }
   
-          return prevProgress + 1;
-        });
-      };
-    }, []);
+  //         return prevProgress + 1;
+  //       });
+  //     };
+  //   }, []);
 
 
   useEffect(() => {
@@ -219,7 +219,7 @@ useEffect(() => {
   //   }
   // }, [afficherMessage]);
 
-    const { theme } = useTheme();
+    //const { theme } = useTheme();
     //const isDark = theme === 'dark';
     const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
@@ -280,8 +280,8 @@ useEffect(() => {
 
   const handleCost = async () => {
     setIsLoading(true);
-      setProgress(0);
-      setBuffer(10);
+      //setProgress(0);
+      //setBuffer(10);
     
   
     setError('');

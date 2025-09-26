@@ -3,7 +3,7 @@
 //import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import {
@@ -49,11 +49,13 @@ export default function Page() {
         toast.error(t('errors.emailExists'));
         return;
       }
-    } catch (err: any) {
-      if (err.response?.status !== 404) {
-        toast.error(t('errors.emailCheckFailed'));
-        return;
-      }
+    } catch (err: unknown) {
+  const axiosError = err as AxiosError;
+
+  if (axiosError.response?.status !== 404) {
+    toast.error(t('errors.emailCheckFailed'));
+    return;
+  }
     }
 
     try {

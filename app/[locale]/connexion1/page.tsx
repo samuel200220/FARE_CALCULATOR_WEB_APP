@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+//import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Box, TextField, Button, Stack, Typography } from '@mui/material';
-import { Poppins } from 'next/font/google';
+//import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useTranslations } from 'next-intl';
@@ -40,14 +40,18 @@ export default function Page() {
       } else {
         toast.error(t('errors.notFound'));
       }
-    } catch (error: any) {
-      if (error.response?.status === 404) {
-        toast.error(t('errors.notFound'));
-      } else {
-        console.error(error);
-        toast.error(t('errors.generic'));
-      }
+    } catch (error: unknown) {
+  if (error instanceof Error && "response" in error) {
+    const err = error as { response?: { status?: number } };
+    if (err.response?.status === 404) {
+      toast.error(t('messages.accountNotFound'));
+    } else {
+      toast.error(t('messages.genericError'));
     }
+  } else {
+    toast.error(t('messages.genericError'));
+  }
+}
   };
 
   return (

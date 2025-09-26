@@ -18,7 +18,7 @@ import StatsSection from '@/components/statsection'
 //import { ModeToggle } from '@/components/ui/mode-toggle'
 //import Script from 'next/script'
 import React from 'react'
-import { useTranslations } from 'next-intl';
+//import { useTranslations } from 'next-intl';
 
 const Page = () => {
   //const t = useTranslations('Section4');

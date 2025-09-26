@@ -5,10 +5,17 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+type Plan = {
+  key: 'basic' | 'pro' | 'enterprise';
+  bg: string;
+  textColor: string;
+  href: string;
+};
+
 export default function Pricing() {
   const t = useTranslations('pricing');
 
-  const plans = [
+  const plans: Plan[] = [
     {
       key: 'basic',
       bg: 'bg-gray-100 dark:bg-gray-800',
@@ -55,15 +62,17 @@ export default function Pricing() {
               <p className="mb-6 text-sm">{t(`plans.${plan.key}.description`)}</p>
 
               <ul className="space-y-3 mb-8">
-                {t.raw(`plans.${plan.key}.features`).map((feature: string, i: number) => (
-                  <li key={i} className="flex items-center">
-                    <FaCheckCircle className="text-green-400 mr-2" />
-                    {feature}
-                  </li>
-                ))}
+                {t
+                  .raw(`plans.${plan.key}.features`)
+                  .map((feature: string, i: number) => (
+                    <li key={i} className="flex items-center">
+                      <FaCheckCircle className="text-green-400 mr-2" />
+                      {feature}
+                    </li>
+                  ))}
               </ul>
 
-              <Link href={plan.href as any}>
+              <Link href={plan.href}>
                 <Button
                   className={`w-full ${
                     plan.key === 'enterprise'

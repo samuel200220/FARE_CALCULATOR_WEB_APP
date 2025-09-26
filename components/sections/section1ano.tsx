@@ -7,7 +7,7 @@ import { Button } from '../ui/button'
 //import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 import { FaRegClock, FaCalculator, FaCar, FaBus, FaCarSide } from 'react-icons/fa';
 import { useState } from 'react';
-import { useTheme } from 'next-themes';
+//import { useTheme } from 'next-themes';
 // import Mapleaf from '../Mapleaf';
 // import TextField from '@mui/material/TextField';
 // import { useRouter } from 'next/navigation';
@@ -46,79 +46,79 @@ const MapNavigooWrapper = dynamic(() => import('../MapNavigooWrapper.client'), {
 const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 // Types pour le backend
-interface CreateCalculRequest {
-  utilisateurId: string;
-  lieuDepart: string;
-  lieuArrivee: string;
-  heurePriseEnCharge: string;
-  distanceKm: number;
-  coutEstime: number;
-  tarifOfficiel: number;
-}
+// interface CreateCalculRequest {
+//   utilisateurId: string;
+//   lieuDepart: string;
+//   lieuArrivee: string;
+//   heurePriseEnCharge: string;
+//   distanceKm: number;
+//   coutEstime: number;
+//   tarifOfficiel: number;
+// }
 
-interface CalculResponse {
-  idCalcul: string;
-  utilisateurId: string;
-  dateCalcul: string;
-  lieuDepart: string;
-  lieuArrivee: string;
-  heurePriseEnCharge: string;
-  distanceKm: number;
-  coutEstime: number;
-  tarifOfficiel: number;
-}
+// interface CalculResponse {
+//   idCalcul: string;
+//   utilisateurId: string;
+//   dateCalcul: string;
+//   lieuDepart: string;
+//   lieuArrivee: string;
+//   heurePriseEnCharge: string;
+//   distanceKm: number;
+//   coutEstime: number;
+//   tarifOfficiel: number;
+// }
 
 // Service API
-const API_BASE_URL = 'http://localhost:8080/api';
+//const API_BASE_URL = 'http://localhost:8080/api';
 
-class CalculService {
-  private static async handleResponse(response: Response) {
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: 'Erreur réseau' }));
-      throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
-    }
-    return response.json();
-  }
+// class CalculService {
+//   private static async handleResponse(response: Response) {
+//     if (!response.ok) {
+//       const errorData = await response.json().catch(() => ({ message: 'Erreur réseau' }));
+//       throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
+//     }
+//     return response.json();
+//   }
 
-  static async enregistrerCalcul(request: CreateCalculRequest): Promise<CalculResponse> {
-    const response = await fetch(`${API_BASE_URL}/calculs`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(request),
-    });
-    return this.handleResponse(response);
-  }
+//   static async enregistrerCalcul(request: CreateCalculRequest): Promise<CalculResponse> {
+//     const response = await fetch(`${API_BASE_URL}/calculs`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(request),
+//     });
+//     return this.handleResponse(response);
+//   }
 
-  static async getHistoriqueUtilisateur(utilisateurId: string): Promise<CalculResponse[]> {
-    const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}`);
-    return this.handleResponse(response);
-  }
+//   static async getHistoriqueUtilisateur(utilisateurId: string): Promise<CalculResponse[]> {
+//     const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}`);
+//     return this.handleResponse(response);
+//   }
 
-  static async getDerniersCalculs(utilisateurId: string): Promise<CalculResponse[]> {
-    const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/recent`);
-    return this.handleResponse(response);
-  }
+//   static async getDerniersCalculs(utilisateurId: string): Promise<CalculResponse[]> {
+//     const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/recent`);
+//     return this.handleResponse(response);
+//   }
 
-  static async compterCalculs(utilisateurId: string): Promise<number> {
-    const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/count`);
-    return this.handleResponse(response);
-  }
-}
+//   static async compterCalculs(utilisateurId: string): Promise<number> {
+//     const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/count`);
+//     return this.handleResponse(response);
+//   }
+// }
 const Section1ano = ({}) => {
 
   const t = useTranslations('landing');
   const a = useTranslations('agency');
   const f = useTranslations('form');
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  //const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   //const [inputValue, setInputValue] = useState("");
   // const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
   //   setAutocomplete(autocompleteInstance);
   // };
-  const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
-    console.log("Adresse sélectionnée :", place?.formatted_address);
-  };
+  // const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
+  //   console.log("Adresse sélectionnée :", place?.formatted_address);
+  // };
   // const handlePlaceChanged = () => {
   //   if (autocomplete) {
   //     const place = autocomplete.getPlace();
@@ -158,7 +158,7 @@ const Section1ano = ({}) => {
 
   // Removed duplicate declaration of start
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  //const [showSuggestions, setShowSuggestions] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const value = e.target.value;
   setStart(value);
@@ -187,7 +187,7 @@ const Section1ano = ({}) => {
     setShowSuggestionsStart(false);
   };
   // Removed duplicate declaration of hour
-  const [showDropdown, setShowDropdown] = useState(false);
+  //const [showDropdown, setShowDropdown] = useState(false);
 
   const [showCustomDiv, setShowCustomDiv] = useState(false);
 
@@ -196,32 +196,32 @@ const Section1ano = ({}) => {
   //   setShowDropdown(false);
   // };
   //const [customOffer, setCustomOffer] = useState('');
-  const [progress, setProgress] = useState(0);
-  const [buffer, setBuffer] = useState(10);
+  // const [progress, setProgress] = useState(0);
+  // const [buffer, setBuffer] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
 
   const progressRef = useRef<() => void>(() => {});
   
-  useEffect(() => {
-      progressRef.current = () => {
-        setProgress((prevProgress) => {
-          if (prevProgress >= 100) {
-            setIsLoading(false);
-            setBuffer(10);
-            return 0;
-          }
+  // useEffect(() => {
+  //     progressRef.current = () => {
+  //       setProgress((prevProgress) => {
+  //         if (prevProgress >= 100) {
+  //           setIsLoading(false);
+  //           setBuffer(10);
+  //           return 0;
+  //         }
   
-          if (prevProgress % 5 === 0) {
-            setBuffer((prevBuffer) => {
-              const newBuffer = prevBuffer + 1 + Math.random() * 10;
-              return newBuffer > 100 ? 100 : newBuffer;
-            });
-          }
+  //         if (prevProgress % 5 === 0) {
+  //           setBuffer((prevBuffer) => {
+  //             const newBuffer = prevBuffer + 1 + Math.random() * 10;
+  //             return newBuffer > 100 ? 100 : newBuffer;
+  //           });
+  //         }
   
-          return prevProgress + 1;
-        });
-      };
-    }, []);
+  //         return prevProgress + 1;
+  //       });
+  //     };
+  //   }, []);
 
 
   useEffect(() => {
@@ -281,7 +281,7 @@ const Section1ano = ({}) => {
   //   }
   // }, [afficherMessage]);
 
-    const { theme } = useTheme();
+    //const { theme } = useTheme();
     //const isDark = theme === 'dark';
     const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
@@ -299,8 +299,8 @@ const Section1ano = ({}) => {
 
   const handleCost = async () => {
     setIsLoading(true);
-      setProgress(0);
-      setBuffer(10);
+      // setProgress(0);
+      // setBuffer(10);
     
   
     setError('');
@@ -384,8 +384,8 @@ const Section1ano = ({}) => {
 
   try {
     setIsLoading(true);
-    setProgress(0);
-    setBuffer(10);
+    // setProgress(0);
+    // setBuffer(10);
     await handleCost(); // ta fonction de calcul existante
   } catch (err) {
     setError((err as Error).message);

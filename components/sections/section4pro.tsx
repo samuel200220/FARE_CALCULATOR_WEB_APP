@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 
 const Section4pro = () => {
-  const t = useTranslations('section4');
+  const t = useTranslations('Section4');
 
   const infos = [
     {

@@ -1,14 +1,14 @@
 "use client";
 
 
-import React, { useState } from 'react';
+import React from 'react';
 import { FaGlobe } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+// import {
+//   Sheet,
+//   SheetContent,
+//   SheetTrigger,
+// } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,24 +16,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from '../ui/button';
-import { Menu } from 'lucide-react';
+//import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { ModeToggle } from '../ui/mode-toggle';
 import Sidebar2 from '../sidebar2';
-import { useRouter, usePathname } from 'next/navigation';
-import LangSwitcher from '../LangSwitcher';
+//import { useRouter, usePathname } from 'next/navigation';
+//import LangSwitcher from '../LangSwitcher';
 
 const Headeracc = () => {
   const t = useTranslations('header');
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const router = useRouter();
-  const pathname = usePathname();
+  //const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  //const router = useRouter();
+  //const pathname = usePathname();
 
-  const changeLanguage = (locale: string) => {
-    const segments = pathname.split('/');
-    segments[1] = locale;
-    router.push(segments.join('/') as any);
-  };
+  // const changeLanguage = (locale: string) => {
+  //   const segments = pathname.split('/');
+  //   segments[1] = locale;
+  //   router.push(segments.join('/') as any);
+  // };
   const changeLocale = (locale: string) => {
     document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
     window.location.reload(); // recharge pour appliquer la langue
