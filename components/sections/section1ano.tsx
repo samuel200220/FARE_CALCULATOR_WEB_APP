@@ -43,8 +43,8 @@ const predefinedHours = [
 ];
 const MapNavigooWrapper = dynamic(() => import('../MapNavigooWrapper.client'), { ssr: false });
 
-const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
-const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
+// const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
+// const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 // Types pour le backend
 // interface CreateCalculRequest {
 //   utilisateurId: string;
@@ -107,6 +107,29 @@ const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Gar
 //   }
 // }
 const Section1ano = ({}) => {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [destinationSuggestions, setDestinationSuggestions] = useState<string[]>([]);
+    useEffect(() => {
+      const loadSuggestions = async () => {
+        try {
+          const response = await fetch("/noms.txt");
+          const text = await response.text();
+  
+          // Découpe par ligne et nettoie les espaces vides
+          const noms = text
+            .split("\n")
+            .map((n) => n.trim())
+            .filter((n) => n.length > 0);
+  
+          setSuggestions(noms);
+          setDestinationSuggestions(noms);
+        } catch (error) {
+          console.error("Erreur lors du chargement de noms.txt :", error);
+        }
+      };
+  
+      loadSuggestions();
+    }, []);
 
   const t = useTranslations('landing');
   const a = useTranslations('agency');

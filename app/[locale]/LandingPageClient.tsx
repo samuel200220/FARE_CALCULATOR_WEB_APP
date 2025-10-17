@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Headeracc from '@/components/navbar/headeracc';
 import { Input } from '@/components/ui/input'
@@ -37,8 +37,8 @@ const predefinedHours = [
 
 const MapNavigooWrapper = dynamic(() => import('@/components/MapNavigooWrapper.client'), { ssr: false });
 
-const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
-const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
+// const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
+// const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
 // Types pour le backend
 // interface CreateCalculRequest {
 //   utilisateurId: string;
@@ -102,6 +102,29 @@ const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Gar
 // }
 
 export default function LandingPageClient() {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<string[]>([]);
+  useEffect(() => {
+        const loadSuggestions = async () => {
+          try {
+            const response = await fetch("/noms.txt");
+            const text = await response.text();
+    
+            // Découpe par ligne et nettoie les espaces vides
+            const noms = text
+              .split("\n")
+              .map((n) => n.trim())
+              .filter((n) => n.length > 0);
+    
+            setSuggestions(noms);
+            setDestinationSuggestions(noms);
+          } catch (error) {
+            console.error("Erreur lors du chargement de noms.txt :", error);
+          }
+        };
+    
+        loadSuggestions();
+      }, []);
   // const [selectedRideType, setSelectedRideType] = useState('Economy');
   //const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
   // const [inputValue, setInputValue] = useState("");
@@ -138,17 +161,20 @@ export default function LandingPageClient() {
   const handleChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEnd(value);
-    setShowSuggestionsEnd(true);
-    setShowSuggestionsStart(false);
-
-    if (value.length > 0) {
-      const filtered = destinationSuggestions.filter((s) =>
-        s.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredSuggestionsd(filtered);
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
+  
+    const filtered = destinationSuggestions.filter((s) =>
+      s.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredSuggestionsd(filtered);
+  
+    setShowSuggestionsEnd(value.trim() !== "");
+  
+    if (
+      destinationSuggestions.some(
+        (s) => s.toLowerCase().trim() === value.toLowerCase().trim()
+      )
+    ) {
+      setShowSuggestionsEnd(false);
     }
   };
   // Removed duplicate declaration of start
@@ -157,17 +183,22 @@ export default function LandingPageClient() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setStart(value);
-    setShowSuggestionsEnd(false);
-    setShowSuggestionsStart(true);
-
-    if (value.length > 0) {
-      const filtered = suggestions.filter((s) =>
-        s.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
+  
+    const filtered = suggestions.filter((s) =>
+      s.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredSuggestions(filtered);
+  
+    // Affiche suggestions si champ non vide
+    setShowSuggestionsStart(value.trim() !== "");
+  
+    // Masquer les suggestions si l'entrée correspond exactement à une suggestion
+    if (
+      suggestions.some(
+        (s) => s.toLowerCase().trim() === value.toLowerCase().trim()
+      )
+    ) {
+      setShowSuggestionsStart(false);
     }
   };
   const handleSelect = (value: string) => {
@@ -492,6 +523,7 @@ export default function LandingPageClient() {
                       <Input
                         value={start}
                         onChange={handleChange}
+                        onBlur={() => setShowSuggestionsStart(false)}
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
                           errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}
@@ -525,6 +557,7 @@ export default function LandingPageClient() {
                       <Input
                         value={end}
                         onChange={handleChanged}
+                        onBlur={() => setShowSuggestionsEnd(false)}
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
                           errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}

@@ -15,13 +15,12 @@ const MapNavigooWrapper = ({ startPlaceName, endPlaceName }: { startPlaceName: s
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Lazy load ici uniquement côté client
-      const { ApiClient } = require('@navigoo/map-components');
-      const client = new ApiClient('https://map-backend-reactif.onrender.com');
-      setApiClient(client);
-    }
-  }, []);
+  if (!apiClient && typeof window !== 'undefined') {
+    import('@navigoo/map-components').then(({ ApiClient }) => {
+      setApiClient(new ApiClient('https://map-backend-reactif.onrender.com'));
+    });
+  }
+}, [apiClient]);
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -48,14 +47,21 @@ const MapNavigooWrapper = ({ startPlaceName, endPlaceName }: { startPlaceName: s
         setRoutes(routes);
         setSearchedPlace(end);
       } catch (error) {
-        console.error("Erreur de calcul de l'itinéraire :", error);
+        //toast.error("Erreur lors du trace de la route (Verifiez votre connexion)");
+        console.error(error);
       }
     };
 
     fetchRoutes();
   }, [apiClient, startPlaceName, endPlaceName]);
 
-  if (!apiClient) return null;
+  if (!apiClient) {
+  return (
+    <div className="flex items-center justify-center h-full">
+      <p className="text-gray-500">Chargement de la carte...</p>
+    </div>
+  );
+}
 
   return (
     <div className="relative w-full h-full bg-white dark:bg-[#0D1B2A] rounded-2xl shadow-lg flex flex-col items-center justify-center">
