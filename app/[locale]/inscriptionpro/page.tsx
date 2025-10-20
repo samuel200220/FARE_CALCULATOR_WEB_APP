@@ -2,19 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { Box, TextField, Button, Stack, Typography } from '@mui/material';
-//import { Poppins } from 'next/font/google';
+import { Box, TextField, Button, Stack, Typography, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
-
-// const font = Poppins({
-//   subsets: ['latin'],
-//   weight: ['400', '500', '600', '700'],
-//   variable: '--font-poppins',
-// });
+import { useState } from 'react';
+import { entrepriseService } from '../../services/api';
 
 interface FormData {
   responsableEntreprise: string;
@@ -26,47 +21,77 @@ interface FormData {
 
 export default function Page() {
   const t = useTranslations('InscriptionPro');
+  const a = useTranslations('Connexion');
   const theme = useTheme();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { handleSubmit, register, formState: { errors } } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
+    // Vérifier que les mots de passe correspondent
     if (data.motDePasse !== data.motDePasseConfirmation) {
       toast.error(t('errors.passwordMismatch'));
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
-      const res = await axios.get(`http://localhost:8080/api/entreprises/email/${data.email}`);
-      if (res.data) {
+      // Vérifier si l'email existe déjà
+      const emailExists = await entrepriseService.checkEmailExists(data.email);
+      
+      if (emailExists) {
         toast.error(t('errors.emailExists'));
+        setIsSubmitting(false);
         return;
       }
-    } catch (err: unknown) {
-  const axiosError = err as AxiosError;
 
-  if (axiosError.response?.status !== 404) {
-    toast.error(t('errors.emailCheckFailed'));
-    return;
-  }
-    }
-
-    try {
-      const response = await axios.post('http://localhost:8080/api/entreprises', {
-        responsableEntreprise: data.responsableEntreprise,
-        nomUtilisateurPro: data.nomUtilisateurPro,
+      // Créer l'entreprise
+      const response = await entrepriseService.create({
+        nom: data.nomUtilisateurPro,
+        responsable: data.responsableEntreprise,
         email: data.email,
         motDePasse: data.motDePasse,
       });
 
       toast.success(t('success.signup'));
-      localStorage.setItem("idUtilisateur", response.data.id);
-      localStorage.removeItem('compteurUtilisation');
+      
+      // Sauvegarder l'ID de l'entreprise
+      if (response.id) {
+        localStorage.setItem("idUtilisateur", response.id);
+        localStorage.removeItem('compteurUtilisation');
+      }
+      
       router.push('/connexionpro');
+      
     } catch (error) {
-      console.error(error);
-      toast.error(t('errors.generic'));
+      console.error('Erreur lors de l\'inscription:', error);
+      
+      const axiosError = error as AxiosError;
+      
+      // Gestion des erreurs spécifiques
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 400:
+            toast.error(a('errors.invalidData'));
+            break;
+          case 409:
+            toast.error(t('errors.emailExists'));
+            break;
+          case 500:
+            toast.error(a('errors.serverError'));
+            break;
+          default:
+            toast.error(a('errors.generic'));
+        }
+      } else if (axiosError.request) {
+        toast.error(a('errors.networkError'));
+      } else {
+        toast.error(a('errors.generic'));
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -112,6 +137,7 @@ export default function Page() {
               {...register('nomUtilisateurPro', { required: t('errors.required') })}
               error={!!errors.nomUtilisateurPro}
               helperText={errors.nomUtilisateurPro?.message}
+              disabled={isSubmitting}
             />
 
             <TextField
@@ -120,25 +146,40 @@ export default function Page() {
               {...register('responsableEntreprise', { required: t('errors.required') })}
               error={!!errors.responsableEntreprise}
               helperText={errors.responsableEntreprise?.message}
+              disabled={isSubmitting}
             />
 
             <TextField
               type="email"
               label={t('form.email')}
-              placeholder={t('form.email')}
+              placeholder="entreprise@example.com"
               fullWidth
-              {...register('email', { required: t('errors.required') })}
+              {...register('email', { 
+                required: t('errors.required'),
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: a('errors.invalidEmail')
+                }
+              })}
               error={!!errors.email}
               helperText={errors.email?.message}
+              disabled={isSubmitting}
             />
 
             <TextField
               type="password"
               label={t('form.password')}
               fullWidth
-              {...register('motDePasse', { required: t('errors.required') })}
+              {...register('motDePasse', { 
+                required: t('errors.required'),
+                minLength: {
+                  value: 6,
+                  message: t('errors.passwordTooShort')
+                }
+              })}
               error={!!errors.motDePasse}
               helperText={errors.motDePasse?.message}
+              disabled={isSubmitting}
             />
 
             <TextField
@@ -148,12 +189,14 @@ export default function Page() {
               {...register('motDePasseConfirmation', { required: t('errors.required') })}
               error={!!errors.motDePasseConfirmation}
               helperText={errors.motDePasseConfirmation?.message}
+              disabled={isSubmitting}
             />
 
             <Button
               variant="contained"
               fullWidth
               type="submit"
+              disabled={isSubmitting}
               sx={{
                 fontFamily: 'Poppins, sans-serif',
                 bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
@@ -161,9 +204,16 @@ export default function Page() {
                 '&:hover': {
                   bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
                 },
+                '&:disabled': {
+                  bgcolor: theme.palette.mode === 'light' ? '#93C5FD' : '#415A77',
+                },
               }}
             >
-              {t('buttons.signup')}
+              {isSubmitting ? (
+                <CircularProgress size={24} sx={{ color: 'white' }} />
+              ) : (
+                t('buttons.signup')
+              )}
             </Button>
 
             <Typography variant="body2" align="center" sx={{ marginBottom: '5px' }}>

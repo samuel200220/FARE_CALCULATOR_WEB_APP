@@ -1,57 +1,75 @@
 'use client';
 
-//import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { Box, TextField, Button, Stack, Typography } from '@mui/material';
-//import { Poppins } from 'next/font/google';
+import { Box, TextField, Button, Stack, Typography, CircularProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
-
-// const font = Poppins({
-//   subsets: ['latin'],
-//   weight: ['400', '500', '600', '700'],
-//   variable: '--font-poppins',
-// });
+import { useState } from 'react';
+import { utilisateurService } from '../../services/api';
 
 interface ConnexionFormData {
   email: string;
 }
 
 export default function Page() {
-  const t = useTranslations('Connexion'); // ⚡ clé de traduction
+  const t = useTranslations('Connexion');
   const a = useTranslations('ConnexionPro');
   const theme = useTheme();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<ConnexionFormData>();
 
   const onSubmit = async (data: ConnexionFormData) => {
+    setIsSubmitting(true);
+    
     try {
-      const res = await axios.get(`http://localhost:8080/api/utilisateurs/email/${data.email}`);
-      if (res.data) {
+      // Tentative de connexion
+      const user = await utilisateurService.login(data.email);
+      
+      if (user) {
         toast.success(t('errors.success'));
-        localStorage.setItem('utilisateur', JSON.stringify(res.data));
-        localStorage.setItem('idUtilisateur', res.data.id);
+        
+        // Sauvegarder les informations utilisateur
+        localStorage.setItem('utilisateur', JSON.stringify(user));
+        localStorage.setItem('idUtilisateur', user.id);
+        
+        // Redirection vers l'accueil
         router.push('/accueil');
       } else {
         toast.error(t('errors.notFound'));
       }
-    } catch (error: unknown) {
-  if (error instanceof Error && "response" in error) {
-    const err = error as { response?: { status?: number } };
-    if (err.response?.status === 404) {
-      toast.error(t('messages.accountNotFound'));
-    } else {
-      toast.error(t('messages.genericError'));
+      
+    } catch (error) {
+      console.error('Erreur lors de la connexion:', error);
+      
+      const axiosError = error as AxiosError;
+      
+      // Gestion des erreurs spécifiques
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 404:
+            toast.error(t('messages.accountNotFound'));
+            break;
+          case 500:
+            toast.error(t('messages.serverError'));
+            break;
+          default:
+            toast.error(t('messages.genericError'));
+        }
+      } else if (axiosError.request) {
+        // Pas de réponse du serveur
+        toast.error(t('messages.networkError'));
+      } else {
+        toast.error(t('messages.genericError'));
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-  } else {
-    toast.error(t('messages.genericError'));
-  }
-}
   };
 
   return (
@@ -95,9 +113,16 @@ export default function Page() {
               placeholder={t('emailPlaceholder')}
               variant="outlined"
               fullWidth
-              {...register('email', { required: t('errors.requiredEmail') })}
+              {...register('email', { 
+                required: t('errors.requiredEmail'),
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: t('errors.invalidEmail')
+                }
+              })}
               error={!!errors.email}
               helperText={errors.email?.message}
+              disabled={isSubmitting}
               sx={{ fontFamily: 'Poppins, sans-serif' }}
             />
 
@@ -105,6 +130,7 @@ export default function Page() {
               variant="contained"
               fullWidth
               type="submit"
+              disabled={isSubmitting}
               sx={{
                 fontFamily: 'Poppins, sans-serif',
                 bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
@@ -112,9 +138,16 @@ export default function Page() {
                 '&:hover': {
                   bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
                 },
+                '&:disabled': {
+                  bgcolor: theme.palette.mode === 'light' ? '#93C5FD' : '#415A77',
+                },
               }}
             >
-              {t('loginButton')}
+              {isSubmitting ? (
+                <CircularProgress size={24} sx={{ color: 'white' }} />
+              ) : (
+                t('loginButton')
+              )}
             </Button>
 
             <Typography variant="body2" align="center">

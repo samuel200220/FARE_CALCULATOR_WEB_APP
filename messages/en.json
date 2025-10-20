@@ -109,9 +109,11 @@
     "help": "Help",
     "sign_up": "Sign Up",
     "sign_in": "Sign In",
+    "logout": "Logout",
     "language_switch": "Language",
     "english": "English",
     "french": "French",
+    "german": "German",
     "title": "Farcal"
   },
   "headerPro": {
@@ -309,7 +311,11 @@
       "required": "This field is required",
       "emailExists": "An account already exists with this email address",
       "emailCheckFailed": "Error checking the email",
-      "generic": "An error occurred"
+      "generic": "An error occurred",
+      "invalidEmail":"Invalid Email",
+      "invalidData":"Invalid Data",
+      "serverError": "Server error, please try again later",
+      "networkError": "Unable to connect to server"
     },
     "success": {
       "signup": "Registration successful"
@@ -327,7 +333,14 @@
       "requiredEmail": "Email required",
       "notFound": "No account found with this email",
       "generic": "Error during login",
+      "invalidEmail":"Invalid Email",
       "success": "Login successful"
+    },
+    "messages": {
+      "accountNotFound": "No account found with this email",
+      "serverError": "Server error, please try again later",
+      "networkError": "Unable to connect to server. Check your internet connection.",
+      "genericError": "An error occurred during login"
     }
   },
   "InscriptionPro": {
@@ -355,6 +368,7 @@
       "emailExists": "An account already exists with this email",
       "emailCheckFailed": "Error while checking email",
       "passwordMismatch": "Passwords do not match",
+      "passwordTooShort":"Passwords too short",
       "generic": "An error occurred during registration"
     },
     "success": {
@@ -374,7 +388,15 @@
     },
     "buttons": {
       "login": "Login",
-      "signupPro": "Click here"
+      "signupPro": "Click here",
+      "standardVersion": "Standard Version"
+    },
+    "errors": {
+      "required": "This field is required",
+      "emailExists": "An account already exists with this email",
+      "emailCheckFailed": "Error while checking email",
+      "passwordMismatch": "Passwords do not match",
+      "generic": "An error occurred during registration"
     },
     "messages": {
       "loginSuccess": "Login successful",

@@ -109,9 +109,11 @@
     "help": "Hilfe",
     "sign_up": "Registrieren",
     "sign_in": "Anmelden",
+    "logout": "Abmelden",
     "language_switch": "Sprache",
     "english": "Englisch",
     "french": "Französisch",
+    "german": "Deutsch",
     "title": "Farcal"
   },
   "headerPro": {
@@ -309,7 +311,11 @@
       "required": "Dieses Feld ist erforderlich",
       "emailExists": "Es existiert bereits ein Konto mit dieser E-Mail-Adresse",
       "emailCheckFailed": "Fehler bei der Überprüfung der E-Mail",
-      "generic": "Ein Fehler ist aufgetreten"
+      "generic": "Ein Fehler ist aufgetreten",
+      "invalidEmail":"Invalid E-Mail",
+      "invalidData":"Invalid Data",
+      "serverError": "Server error, please try again later",
+      "networkError": "Unable to connect to server"
     },
     "success": {
       "signup": "Registrierung erfolgreich"
@@ -327,7 +333,14 @@
       "requiredEmail": "E-Mail erforderlich",
       "notFound": "Kein Konto mit dieser E-Mail gefunden",
       "generic": "Fehler beim Anmelden",
+      "invalidEmail":"Invalid Email",
       "success": "Anmeldung erfolgreich"
+    },
+    "messages": {
+      "accountNotFound": "No account found with this email",
+      "serverError": "Server error, please try again later",
+      "networkError": "Unable to connect to server. Check your internet connection.",
+      "genericError": "An error occurred during login"
     }
   },
   "InscriptionPro": {
@@ -355,6 +368,7 @@
       "emailExists": "Ein Konto mit dieser E-Mail existiert bereits",
       "emailCheckFailed": "Fehler beim Überprüfen der E-Mail",
       "passwordMismatch": "Passwörter stimmen nicht überein",
+      "passwordTooShort":"Passwords too short",
       "generic": "Fehler bei der Registrierung"
     },
     "success": {
@@ -374,7 +388,15 @@
     },
     "buttons": {
       "login": "Anmelden",
-      "signupPro": "Hier klicken"
+      "signupPro": "Hier klicken",
+      "standardVersion": "Standardversion"
+    },
+    "errors": {
+      "required": "Dieses Feld ist erforderlich",
+      "emailExists": "Ein Konto mit dieser E-Mail existiert bereits",
+      "emailCheckFailed": "Fehler beim Überprüfen der E-Mail",
+      "passwordMismatch": "Passwörter stimmen nicht überein",
+      "generic": "Fehler bei der Registrierung"
     },
     "messages": {
       "loginSuccess": "Anmeldung erfolgreich",

@@ -109,9 +109,11 @@
     "help": "Aide",
     "sign_up": "S'inscrire",
     "sign_in": "Se connecter",
+    "logout": "Déconnexion",
     "language_switch": "Langue",
     "english": "English",
     "french": "Français",
+    "german": "Allemand",
     "title": "Farcal"
   },
   "headerPro": {
@@ -309,7 +311,11 @@
       "required": "Ce champ est requis",
       "emailExists": "Un compte existe déjà avec cette adresse mail",
       "emailCheckFailed": "Erreur lors de la vérification de l'email",
-      "generic": "Une erreur est survenue"
+      "generic": "Une erreur est survenue",
+      "invalidEmail": "Adresse email invalide",
+      "invalidData":"Données invalides",
+      "serverError": "Erreur serveur, veuillez réessayer plus tard",
+      "networkError":"Impossible de se connecter au serveur"
     },
     "success": {
       "signup": "Inscription réussie"
@@ -327,7 +333,14 @@
       "requiredEmail": "Email requis",
       "notFound": "Aucun compte trouvé avec cette adresse email",
       "generic": "Erreur lors de la connexion",
+      "invalidEmail": "Adresse email invalide",
       "success": "Connexion réussie"
+    },
+    "messages": {
+      "accountNotFound": "Aucun compte trouvé avec cet email",
+      "serverError": "Erreur serveur, veuillez réessayer plus tard",
+      "networkError": "Impossible de se connecter au serveur. Vérifiez votre connexion internet.",
+      "genericError": "Une erreur s'est produite lors de la connexion"
     }
   },
   "InscriptionPro": {
@@ -355,6 +368,7 @@
       "emailExists": "Un compte existe déjà avec cette adresse email",
       "emailCheckFailed": "Erreur lors de la vérification de l'email",
       "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "passwordTooShort":"Mot de passe trop court",
       "generic": "Une erreur est survenue lors de l'inscription"
     },
     "success": {
@@ -374,7 +388,15 @@
     },
     "buttons": {
       "login": "Se connecter",
-      "signupPro": "Cliquez-ici"
+      "signupPro": "Cliquez-ici",
+      "standardVersion": "Version Standard"
+    },
+    "errors": {
+      "required": "Ce champ est requis",
+      "emailExists": "Un compte existe déjà avec cette adresse email",
+      "emailCheckFailed": "Erreur lors de la vérification de l'email",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "generic": "Une erreur est survenue lors de l'inscription"
     },
     "messages": {
       "loginSuccess": "Connexion réussie",

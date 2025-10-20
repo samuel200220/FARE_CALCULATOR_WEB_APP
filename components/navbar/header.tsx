@@ -18,7 +18,7 @@ import { useTranslations } from "next-intl";
 import Sidebar2 from "../sidebar2";
 
 const Header = () => {
-  const t = useTranslations("headerPro");
+  const t = useTranslations("header");
   //const router = useRouter();
   //const pathname = usePathname();
 

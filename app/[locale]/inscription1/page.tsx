@@ -1,9 +1,8 @@
 'use client';
 
-//import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import {
@@ -11,17 +10,13 @@ import {
   TextField,
   Button,
   Stack,
-  Typography
+  Typography,
+  CircularProgress
 } from '@mui/material';
-//import { Poppins } from 'next/font/google';
 import { useTheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
-
-// const font = Poppins({
-//   subsets: ['latin'],
-//   weight: ['400', '500', '600', '700'],
-//   variable: '--font-poppins',
-// });
+import { useState } from 'react';
+import { utilisateurService } from '../../services/api';
 
 interface FormData {
   nom: string;
@@ -29,9 +24,10 @@ interface FormData {
 }
 
 export default function Page() {
-  const t = useTranslations('Inscription'); // Namespace dans tes fichiers JSON
+  const t = useTranslations('Inscription');
   const theme = useTheme();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     handleSubmit,
@@ -40,38 +36,61 @@ export default function Page() {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    
     try {
-      const existingUser = await axios.get(
-        `http://localhost:8080/api/utilisateurs/email/${data.email}`
-      );
-
-      if (existingUser.data) {
+      // Vérifier si l'email existe déjà
+      const emailExists = await utilisateurService.checkEmailExists(data.email);
+      
+      if (emailExists) {
         toast.error(t('errors.emailExists'));
+        setIsSubmitting(false);
         return;
       }
-    } catch (err: unknown) {
-  const axiosError = err as AxiosError;
 
-  if (axiosError.response?.status !== 404) {
-    toast.error(t('errors.emailCheckFailed'));
-    return;
-  }
-    }
-
-    try {
-      const response = await axios.post('http://localhost:8080/api/utilisateurs', {
+      // Créer l'utilisateur
+      const response = await utilisateurService.create({
         nom: data.nom,
         email: data.email,
       });
 
       toast.success(t('success.signup'));
-      const idUtilisateur = response.data.id;
-      localStorage.setItem("idUtilisateur", idUtilisateur);
-      localStorage.removeItem('compteurUtilisation');
+      
+      // Sauvegarder l'ID de l'utilisateur
+      if (response.id) {
+        localStorage.setItem("idUtilisateur", response.id);
+        localStorage.removeItem('compteurUtilisation');
+      }
+      
       router.push('/connexion1');
+      
     } catch (error) {
-      console.error(error);
-      toast.error(t('errors.generic'));
+      console.error('Erreur lors de l\'inscription:', error);
+      
+      const axiosError = error as AxiosError;
+      
+      // Gestion des erreurs spécifiques
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 400:
+            toast.error(t('errors.invalidData'));
+            break;
+          case 409:
+            toast.error(t('errors.emailExists'));
+            break;
+          case 500:
+            toast.error(t('errors.serverError'));
+            break;
+          default:
+            toast.error(t('errors.generic'));
+        }
+      } else if (axiosError.request) {
+        toast.error(t('errors.networkError'));
+      } else {
+        toast.error(t('errors.generic'));
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -120,6 +139,7 @@ export default function Page() {
               {...register('nom', { required: t('errors.required') })}
               error={!!errors.nom}
               helperText={errors.nom?.message}
+              disabled={isSubmitting}
             />
 
             <TextField
@@ -128,15 +148,23 @@ export default function Page() {
               placeholder="you@example.com"
               variant="outlined"
               fullWidth
-              {...register('email', { required: t('errors.required') })}
+              {...register('email', { 
+                required: t('errors.required'),
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: t('errors.invalidEmail')
+                }
+              })}
               error={!!errors.email}
               helperText={errors.email?.message}
+              disabled={isSubmitting}
             />
 
             <Button
               variant="contained"
               fullWidth
               type="submit"
+              disabled={isSubmitting}
               sx={{
                 fontFamily: 'Poppins, sans-serif',
                 bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
@@ -144,9 +172,16 @@ export default function Page() {
                 '&:hover': {
                   bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
                 },
+                '&:disabled': {
+                  bgcolor: theme.palette.mode === 'light' ? '#93C5FD' : '#415A77',
+                },
               }}
             >
-              {t('buttons.signup')}
+              {isSubmitting ? (
+                <CircularProgress size={24} sx={{ color: 'white' }} />
+              ) : (
+                t('buttons.signup')
+              )}
             </Button>
 
             <Typography
