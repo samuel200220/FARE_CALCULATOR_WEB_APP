@@ -1,21 +1,18 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import Headeracc from '@/components/navbar/headeracc';
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide } from 'react-icons/fa';
 import { useState } from 'react';
-//import { useTheme } from 'next-themes';
 import toast from 'react-hot-toast';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
 import 'react-time-picker/dist/TimePicker.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FaLocationArrow } from 'react-icons/fa';
-
-//import { Libraries } from "@react-google-maps/api";
 import { enregistrerCalcul } from '@/app/services/calculService';
 import dynamic from 'next/dynamic';
 import Pricing from '@/components/pricing';
@@ -24,9 +21,8 @@ import Footer from '@/components/navbar/footer';
 import Download from '@/components/sections/download';
 import { useTranslations } from 'next-intl';
 import Image from "next/image";
+import { Place, Route } from '@/lib/types';
 
-// const libraries: Libraries = ["places"];
-// const yaoundeLocation = { lat: 3.8480, lng: 11.5021 };
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
   "10:00", "11:00", "12:00", "13:00",
@@ -37,71 +33,24 @@ const predefinedHours = [
 
 const MapNavigooWrapper = dynamic(() => import('@/components/MapNavigooWrapper.client'), { ssr: false });
 
-// const suggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
-// const destinationSuggestions = ['Douala', 'Yaoundé', 'Kribi', 'Bafoussam', 'Garoua','Melen','Mendong','Obili','Bertoua','Ebolowa','Buea','Limbe','Nkongsamba','Dschang','Bafang','Bamenda','emana','Biyem-Assi','Essos','Akwa','Bonaberi','Bonamoussadi','Bonapriso','Bonanjo','Bonamoussadi Nord','Bonamoussadi Sud','Nsimalen','Mokolo','Simbock','Mvan','Nkolbisson','Nkolmesseng','Eloundem','Carrefour Place','Bastos','Odja'];
-// Types pour le backend
-// interface CreateCalculRequest {
-//   utilisateurId: string;
-//   lieuDepart: string;
-//   lieuArrivee: string;
-//   heurePriseEnCharge: string;
-//   distanceKm: number;
-//   coutEstime: number;
-//   tarifOfficiel: number;
-// }
-
-// interface CalculResponse {
-//   idCalcul: string;
-//   utilisateurId: string;
-//   dateCalcul: string;
-//   lieuDepart: string;
-//   lieuArrivee: string;
-//   heurePriseEnCharge: string;
-//   distanceKm: number;
-//   coutEstime: number;
-//   tarifOfficiel: number;
-// }
-
-// Service API
-//const API_BASE_URL = 'http://localhost:8080/api';
-
-// class CalculService {
-//   private static async handleResponse(response: Response) {
-//     if (!response.ok) {
-//       const errorData = await response.json().catch(() => ({ message: 'Erreur réseau' }));
-//       throw new Error(errorData.message || `Erreur HTTP: ${response.status}`);
-//     }
-//     return response.json();
-//   }
-
-//   static async enregistrerCalcul(request: CreateCalculRequest): Promise<CalculResponse> {
-//     const response = await fetch(`${API_BASE_URL}/calculs`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(request),
-//     });
-//     return this.handleResponse(response);
-//   }
-
-//   static async getHistoriqueUtilisateur(utilisateurId: string): Promise<CalculResponse[]> {
-//     const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}`);
-//     return this.handleResponse(response);
-//   }
-
-//   static async getDerniersCalculs(utilisateurId: string): Promise<CalculResponse[]> {
-//     const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/recent`);
-//     return this.handleResponse(response);
-//   }
-
-//   static async compterCalculs(utilisateurId: string): Promise<number> {
-//     const response = await fetch(`${API_BASE_URL}/calculs/utilisateur/${utilisateurId}/count`);
-//     return this.handleResponse(response);
-//   }
-// }
+const MapNavigoo = dynamic(() => import('../../components/carte').then((mod) => mod.default), {
+  ssr: false,
+});
 
 export default function LandingPageClient() {
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+    const [searchedPlace, setSearchedPlace] = useState<Place | null>(null);
+    const [routes, setRoutes] = useState<Route[]>([]);
+    const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
+  
+    // États pour la recherche de lieux
+    const [departSearchResults, setDepartSearchResults] = useState<Place[]>([]);
+    const [destinationSearchResults, setDestinationSearchResults] = useState<Place[]>([]);
+    const [selectedDepartPlace, setSelectedDepartPlace] = useState<Place | null>(null);
+    const [selectedDestinationPlace, setSelectedDestinationPlace] = useState<Place | null>(null);
+  
+    const backendUrl = 'https://map-backend-reactif.onrender.com';
+  
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState<string[]>([]);
   useEffect(() => {
@@ -125,182 +74,116 @@ export default function LandingPageClient() {
     
         loadSuggestions();
       }, []);
-  // const [selectedRideType, setSelectedRideType] = useState('Economy');
-  //const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-  // const [inputValue, setInputValue] = useState("");
-  // const t = useTranslations();
+
+  // Recherche de lieux via le backend
+    const searchPlaces = async (query: string, type: 'depart' | 'destination') => {
+      if (!query || query.trim() === '') return;
+  
+      try {
+        const response = await fetch(`${backendUrl}/api/places?name=${encodeURIComponent(query)}`);
+        const data = await response.json();
+  
+        if (response.ok && data.success) {
+          const validPlaces = data.data.filter((place: Place) => place.coordinates !== null);
+          if (type === 'depart') {
+            setDepartSearchResults(validPlaces);
+          } else {
+            setDestinationSearchResults(validPlaces);
+          }
+        }
+      } catch (err) {
+        console.error('Search error:', err);
+      }
+    };
+
   const t = useTranslations('landing');
   const a = useTranslations('agency');
   const f = useTranslations('form');
 
-//   const handleLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
-//   // Si tu veux loguer ou déboguer
-//   console.log("Autocomplete chargé :", autocompleteInstance);
-// };
-
-  // const handlePlaceSelected = (place: google.maps.places.PlaceResult | null) => {
-  //   console.log("Adresse sélectionnée :", place?.formatted_address);
-  // };
-  // const handlePlaceChanged = () => {
-  //   if (autocomplete) {
-  //     const place = autocomplete.getPlace();
-  //     handlePlaceSelected(place);
-  //   }
-  // };
-  //const [ setShow] = useState(false);
-  // Removed duplicate declaration of result
   const [showSuggestionsStart, setShowSuggestionsStart] = useState(false);
   const [showSuggestionsEnd, setShowSuggestionsEnd] = useState(false);
+  const [show, setShow] = useState(false);
+  const [showCards, setShowCards] = useState(true);
+
   const handleSelectd = (value: string) => {
     setEnd(value);
-    //setShowSuggestions(false);
     setShowSuggestionsEnd(false);
   };
   const [filteredSuggestionsd, setFilteredSuggestionsd] = useState<string[]>([]);
-  // Removed duplicate declaration of end
+
+  const handlePlaceSelect = (place: Place, type: 'depart' | 'destination') => {
+      if (type === 'depart') {
+        setStart(place.name);
+        setSelectedDepartPlace(place);
+        setDepartSearchResults([]);
+        setShowSuggestionsStart(false);
+      } else {
+        setEnd(place.name);
+        setSelectedDestinationPlace(place);
+        setDestinationSearchResults([]);
+        setShowSuggestionsEnd(false);
+      }
+      setRoutes([]);
+      setSelectedRouteIndex(0);
+    };
+
   const handleChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEnd(value);
+      const value = e.target.value;
+      setEnd(value);
+      setSelectedDestinationPlace(null);
   
-    const filtered = destinationSuggestions.filter((s) =>
-      s.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredSuggestionsd(filtered);
+      const filtered = destinationSuggestions.filter((s) =>
+        s.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredSuggestionsd(filtered);
+      setShowSuggestionsEnd(value.trim() !== "");
   
-    setShowSuggestionsEnd(value.trim() !== "");
+      // Recherche parallèle dans le backend
+      if (value.trim() !== "") {
+        searchPlaces(value, 'destination');
+      } else {
+        setDestinationSearchResults([]);
+      }
   
-    if (
-      destinationSuggestions.some(
-        (s) => s.toLowerCase().trim() === value.toLowerCase().trim()
-      )
-    ) {
-      setShowSuggestionsEnd(false);
-    }
-  };
-  // Removed duplicate declaration of start
+      if (destinationSuggestions.some((s) => s.toLowerCase().trim() === value.toLowerCase().trim())) {
+        setShowSuggestionsEnd(false);
+      }
+    };
+
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setStart(value);
-  
-    const filtered = suggestions.filter((s) =>
-      s.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredSuggestions(filtered);
-  
-    // Affiche suggestions si champ non vide
-    setShowSuggestionsStart(value.trim() !== "");
-  
-    // Masquer les suggestions si l'entrée correspond exactement à une suggestion
-    if (
-      suggestions.some(
-        (s) => s.toLowerCase().trim() === value.toLowerCase().trim()
-      )
-    ) {
-      setShowSuggestionsStart(false);
-    }
-  };
-  const handleSelect = (value: string) => {
-    setStart(value);
-    //setShowSuggestions(false);
-    setShowSuggestionsStart(false);
-  };
-  // Removed duplicate declaration of hour
-  // const [showDropdown, setShowDropdown] = useState(false);
+  const value = e.target.value;
+  setStart(value);
+  setSelectedDepartPlace(null); // Réinitialiser la sélection
 
-  // const handleSelectHour = (value: string) => {
-  //   setHour(value);
-  //   setShowDropdown(false);
-  // };
-  // const [customOffer, setCustomOffer] = useState('');
-  // const [progress, setProgress] = useState(0);
-  // const [buffer, setBuffer] = useState(10);
+  const filtered = suggestions.filter((s) =>
+    s.toLowerCase().includes(value.toLowerCase())
+  );
+  setFilteredSuggestions(filtered);
+  setShowSuggestionsStart(value.trim() !== "");
+
+  // Recherche parallèle dans le backend
+  if (value.trim() !== "") {
+    searchPlaces(value, 'depart');
+  } else {
+    setDepartSearchResults([]);
+  }
+
+  // Masquer si correspondance exacte
+  if (suggestions.some((s) => s.toLowerCase().trim() === value.toLowerCase().trim())) {
+    setShowSuggestionsStart(false);
+  }
+};
+  
   const [isLoading, setIsLoading] = useState(false);
 
-  //const progressRef = useRef<() => void>(() => {});
-  
-  // useEffect(() => {
-  //     progressRef.current = () => {
-  //       setProgress((prevProgress) => {
-  //         if (prevProgress >= 100) {
-  //           setIsLoading(false);
-  //           setBuffer(10);
-  //           return 0;
-  //         }
-  
-  //         if (prevProgress % 5 === 0) {
-  //           setBuffer((prevBuffer) => {
-  //             const newBuffer = prevBuffer + 1 + Math.random() * 10;
-  //             return newBuffer > 100 ? 100 : newBuffer;
-  //           });
-  //         }
-  
-  //         return prevProgress + 1;
-  //       });
-  //     };
-  //   }, []);
-
-
-  // useEffect(() => {
-  //     if (!isLoading) return;
-  
-  //     const timer = setInterval(() => {
-  //       progressRef.current();
-  //     }, 100);
-  
-  //     return () => {
-  //       clearInterval(timer);
-  //     };
-  //   }, [isLoading]);
-  
   const [compteur, setCompteur] = useState(0);
   const [bloque, setBloque] = useState(false);
   const [afficherMessage, setAfficherMessage] = useState(false);
   const [estConnecte, setEstConnecte] = useState(false);
 
-// useEffect(() => {
-//   const connecte = localStorage.getItem("estConnecte") === "true";
-//   setEstConnecte(connecte);
-// }, []);
-
-//   useEffect(() => {
-//     if (estConnecte) {
-//       setBloque(false); // Si connecté, pas de blocage
-//       return; // Ignore le reste
-//     }
-  
-//     const compteurStocke = parseInt(localStorage.getItem("compteurUtilisation") || "0", 10);
-//     setCompteur(compteurStocke);
-  
-//     if (compteurStocke >= 3) {
-//       setBloque(true);
-//       setAfficherMessage(true);
-//     } else {
-//       setBloque(false);
-//     }
-//   }, [estConnecte]);
-  
-
-  // useEffect(() => {
-  //   if (afficherMessage) {
-  //     toast.error("Vous avez atteint la limite de 3 utilisations. Veuillez vous enregistrer pour continuer.", {
-  //       duration: 5000,
-  //       position: 'top-center',
-  //       style: {
-  //         backgroundColor: '#f87171',
-  //         color: '#fff',
-  //         fontSize: '16px',
-  //         padding: '16px',
-  //         borderRadius: '8px',
-  //       },
-  //     });
-  //   }
-  // }, [afficherMessage]);
-
-    //const { theme } = useTheme();
-    //const isDark = theme === 'dark';
-    const [start, setStart] = useState('');
+  const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [hour, setHour] = useState('');
   interface Result {
@@ -316,114 +199,169 @@ export default function LandingPageClient() {
 
   const [showCustomDiv, setShowCustomDiv] = useState(false);
 
-  const handleCost = async () => {
-    setIsLoading(true);
-      //setProgress(0);
-      //setBuffer(10);
-    
+  // Calcul de l'itinéraire avec le backend
+    const calculateRoute = useCallback(async () => {
+      // if (!selectedDepartPlace || !selectedDestinationPlace) {
+      //   toast.error("Veuillez sélectionner un point de départ et une destination valides");
+      //   return;
+      // }
   
-    setError('');
-    try {
-      const res = await fetch('https://fare-calculator.onrender.com/cost', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ start, end, hour }),
-      });
+      setIsLoading(true);
+      setError('');
   
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.detail || 'Erreur de calcul');
-      }
+      try {
+        if (!selectedDepartPlace || !selectedDestinationPlace) {
+          throw new Error('Veuillez sélectionner un point de départ et une destination valides');
+        }
   
-      const data = await res.json();
-      setResult(data);
-      if (estConnecte) {
-        const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
-
-        await enregistrerCalcul({
-          utilisateurId,
-          lieuDepart: start,
-          lieuArrivee: end,
-          heurePriseEnCharge: hour,
-          distanceKm: data.distance,
-          coutEstime: data.cost,
-          tarifOfficiel: data.mint_cost,
+        const startPoint = selectedDepartPlace.coordinates;
+        const endPoint = selectedDestinationPlace.coordinates;
+  
+        if (!startPoint || !endPoint) {
+          throw new Error('Coordonnées invalides');
+        }
+  
+        const response = await fetch(`${backendUrl}/api/routes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            points: [startPoint, endPoint],
+            mode: 'driving',
+            startPlaceName: selectedDepartPlace.name,
+            endPlaceName: selectedDestinationPlace.name,
+          }),
         });
+  
+        const data = await response.json();
+        if (response.ok && data.routes) {
+          setRoutes(data.routes);
+          setSelectedRouteIndex(0);
+          
+          // Calculer aussi le coût si nécessaire
+          if (hour) {
+            await handleCost();
+          }
+        } else {
+          setError(data.error || 'Erreur lors du calcul de l\'itinéraire');
+        }
+      } catch (err) {
+        setError('Erreur lors du calcul de l\'itinéraire');
+        console.error('Route calculation error:', err);
+      } finally {
+        setIsLoading(false);
       }
+    }, [selectedDepartPlace, selectedDestinationPlace, hour]);
 
-      //setShow(true);
-    } catch (err) {
-      setError((err as Error).message);
-    }finally{
-      setIsLoading(false);
-    }
-  };
+  const handleCost = async () => {
+      setError('');
+      try {
+        const res = await fetch('https://fare-calculator.onrender.com/cost', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ start, end, hour }),
+        });
+  
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.detail || 'Erreur de calcul');
+        }
+  
+        const data = await res.json();
+        setResult(data);
+        
+        if (estConnecte) {
+          const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
+          await enregistrerCalcul({
+            utilisateurId,
+            lieuDepart: start,
+            lieuArrivee: end,
+            heurePriseEnCharge: hour,
+            distanceKm: data.distance,
+            coutEstime: data.cost,
+            tarifOfficiel: data.mint_cost,
+          });
+        }
+  
+        setShow(true);
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    };
   const [errors, setErrors] = useState<{ start?: string; end?: string; hour?: string }>({});
   
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const newErrors: typeof errors = {};
-  if (!start.trim()) {
-    newErrors.start = 'Le champ Départ est requis.';
-  } else if (/^\d+$/.test(start.trim())) {
-    newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
-  }
-
-  if (!end.trim()) {
-    newErrors.end = 'Le champ Destination est requis.';
-  } else if (/^\d+$/.test(end.trim())) {
-    newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
-  }
-
-  if (!hour) {
-    newErrors.hour = "L'heure doit être sélectionnée.";
-  }
-
-  setErrors(newErrors);
-
-  // Si erreurs de validation, arrêter ici
-  if (Object.keys(newErrors).length > 0) return;
-
-  // Gestion limite pour utilisateur non connecté
-  if (!estConnecte && compteur >= 3) {
-    toast.error("Vous avez atteint la limite de 3 utilisations. Veuillez vous enregistrer pour continuer.", {
-      duration: 5000,
-      position: 'top-center',
-      style: {
-        backgroundColor: '#fff',
-        color: '#f87171',
-        fontSize: '16px',
-        padding: '16px',
-        borderRadius: '8px',
-      },
-    });
-    return;
-  }
-
-  try {
-    setIsLoading(true);
-    //setProgress(0);
-    //setBuffer(10);
-    await handleCost(); // ta fonction de calcul existante
-  } catch (err) {
-    setError((err as Error).message);
-  } finally {
-    setIsLoading(false);
-  }
-
-  // Incrémentation compteur si utilisateur anonyme
-  if (!estConnecte) {
-    const nouveauCompteur = compteur + 1;
-    localStorage.setItem("compteurUtilisation", nouveauCompteur.toString());
-    setCompteur(nouveauCompteur);
-
-    if (nouveauCompteur >= 3) {
-      setBloque(true);
-      setAfficherMessage(true);
+    const newErrors: typeof errors = {};
+    if (!start.trim()) {
+      newErrors.start = 'Le champ Départ est requis.';
+    } else if (/^\d+$/.test(start.trim())) {
+      newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
     }
-  }
-};
+
+    if (!end.trim()) {
+      newErrors.end = 'Le champ Destination est requis.';
+    } else if (/^\d+$/.test(end.trim())) {
+      newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
+    }
+
+    if (!hour) {
+      newErrors.hour = "L'heure doit être sélectionnée.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    if (!estConnecte && compteur >= 3) {
+      toast.error("Vous avez atteint la limite de 3 utilisations. Veuillez vous enregistrer pour continuer.", {
+        duration: 5000,
+        position: 'top-center',
+        style: {
+          backgroundColor: '#f87171',
+          color: '#fff',
+          fontSize: '16px',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await calculateRoute();
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+
+    if (!estConnecte) {
+      const nouveauCompteur = compteur + 1;
+      localStorage.setItem("compteurUtilisation", nouveauCompteur.toString());
+      setCompteur(nouveauCompteur);
+
+      if (nouveauCompteur >= 3) {
+        setBloque(true);
+        setAfficherMessage(true);
+      }
+    }
+    setShowCards(false);
+  };
+
+  // Combiner les résultats de suggestions locales et backend
+  const getCombinedSuggestions = (type: 'start' | 'end') => {
+    if (type === 'start') {
+      const localSuggestions = filteredSuggestions.slice(0, 5);
+      const backendSuggestions = departSearchResults.slice(0, 5);
+      return { local: localSuggestions, backend: backendSuggestions };
+    } else {
+      const localSuggestions = filteredSuggestionsd.slice(0, 5);
+      const backendSuggestions = destinationSearchResults.slice(0, 5);
+      return { local: localSuggestions, backend: backendSuggestions };
+    }
+  };
 
   return (
     <>
@@ -523,29 +461,38 @@ export default function LandingPageClient() {
                       <Input
                         value={start}
                         onChange={handleChange}
-                        onBlur={() => setShowSuggestionsStart(false)}
+                        onBlur={() => setTimeout(() => setShowSuggestionsStart(false), 200)}
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                          errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                        errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}
                         placeholder={f("go")}
-                      />
+                        id="start"
+                        />
                       {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
                       {showSuggestionsStart && (
-                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-                          {filteredSuggestions.length > 0 ? (
-                            filteredSuggestions.map((s, index) => (
-                              <li
-                                key={index}
-                                onClick={() => handleSelect(s)}
-                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                              >
-                                {s}
-                              </li>
-                            ))
-                          ) : (
-                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-                          )}
-                        </ul>
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-60 overflow-y-auto">
+                                        {getCombinedSuggestions('start').backend.length > 0 && (
+                                          <>
+                                            <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                                              Lieux recommandés
+                                            </li>
+                                            {getCombinedSuggestions('start').backend.map((place) => (
+                                              <li
+                                                key={place.id}
+                                                onClick={() => handlePlaceSelect(place, 'depart')}
+                                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer flex items-center gap-2"
+                                              >
+                                                <FaMapMarkerAlt className="text-blue-500 text-sm" />
+                                                <span>{place.name}</span>
+                                              </li>
+                                            ))}
+                                          </>
+                                        )}
+                                        
+                                        {getCombinedSuggestions('start').backend.length === 0 && getCombinedSuggestions('start').local.length === 0 && (
+                                          <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                                        )}
+                                      </ul>
                       )}
                     </div>
 
@@ -557,29 +504,38 @@ export default function LandingPageClient() {
                       <Input
                         value={end}
                         onChange={handleChanged}
-                        onBlur={() => setShowSuggestionsEnd(false)}
+                        onBlur={() => setTimeout(() => setShowSuggestionsEnd(false), 200)}
                         className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[18px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                          errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                        errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
                         }`}
                         placeholder={f("arrive")}
+                        id="end"
                       />
                       {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
                       {showSuggestionsEnd && (
-                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-40 overflow-y-auto">
-                          {filteredSuggestionsd.length > 0 ? (
-                            filteredSuggestionsd.map((s, index) => (
-                              <li
-                                key={index}
-                                onClick={() => handleSelectd(s)}
-                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
-                              >
-                                {s}
-                              </li>
-                            ))
-                          ) : (
-                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
-                          )}
-                        </ul>
+                        <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-60 overflow-y-auto">
+                                        {getCombinedSuggestions('end').backend.length > 0 && (
+                                          <>
+                                            <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                                              Lieux recommandés
+                                            </li>
+                                            {getCombinedSuggestions('end').backend.map((place) => (
+                                              <li
+                                                key={place.id}
+                                                onClick={() => handlePlaceSelect(place, 'destination')}
+                                                className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer flex items-center gap-2"
+                                              >
+                                                <FaLocationArrow className="text-blue-500 text-sm" />
+                                                <span>{place.name}</span>
+                                              </li>
+                                            ))}
+                                          </>
+                                        )}
+                                        
+                                        {getCombinedSuggestions('end').backend.length === 0 && getCombinedSuggestions('end').local.length === 0 && (
+                                          <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                                        )}
+                                      </ul>
                       )}
                     </div>
 
@@ -643,22 +599,31 @@ export default function LandingPageClient() {
                         onChange={handleChange}
                         className="bg-gray-200 dark:bg-gray-800 dark:text-white w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
                         placeholder={f("go")}
+                        id="start"
                       />
                       {showSuggestionsStart && (
                         <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border rounded shadow-lg max-h-40 overflow-y-auto">
-                          {filteredSuggestions.length > 0 ? (
-                            filteredSuggestions.map((s, index) => (
-                              <li
-                                key={index}
-                                onClick={() => handleSelect(s)}
-                                className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer dark:text-white"
-                              >
-                                {s}
-                              </li>
-                            ))
-                          ) : (
-                            <li className="px-4 py-2 text-gray-500 dark:text-white">Aucune suggestion</li>
-                          )}
+                          {getCombinedSuggestions('start').backend.length > 0 && (
+                                            <>
+                                              <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                                                Lieux recommandés
+                                              </li>
+                                              {getCombinedSuggestions('start').backend.map((place) => (
+                                                <li
+                                                  key={place.id}
+                                                  onClick={() => handlePlaceSelect(place, 'depart')}
+                                                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer flex items-center gap-2"
+                                                >
+                                                  <FaMapMarkerAlt className="text-blue-500 text-sm" />
+                                                  <span>{place.name}</span>
+                                                </li>
+                                              ))}
+                                            </>
+                                          )}
+                                          
+                                          {getCombinedSuggestions('start').backend.length === 0 && getCombinedSuggestions('start').local.length === 0 && (
+                                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                                          )}
                         </ul>
                       )}
                     </div>
@@ -673,22 +638,31 @@ export default function LandingPageClient() {
                         onChange={handleChanged}
                         className="bg-gray-200 dark:bg-gray-800 dark:text-white w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
                         placeholder={f("arrive")}
+                        id="end"
                       />
                       {showSuggestionsEnd && (
                         <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border rounded shadow-lg max-h-40 overflow-y-auto">
-                          {filteredSuggestionsd.length > 0 ? (
-                            filteredSuggestionsd.map((s, index) => (
-                              <li
-                                key={index}
-                                onClick={() => handleSelectd(s)}
-                                className="px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer dark:text-white"
-                              >
-                                {s}
-                              </li>
-                            ))
-                          ) : (
-                            <li className="px-4 py-2 text-gray-500 dark:text-white">Aucune suggestion</li>
-                          )}
+                          {getCombinedSuggestions('end').backend.length > 0 && (
+                                            <>
+                                              <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                                                Lieux recommandés
+                                              </li>
+                                              {getCombinedSuggestions('end').backend.map((place) => (
+                                                <li
+                                                  key={place.id}
+                                                  onClick={() => handlePlaceSelect(place, 'destination')}
+                                                  className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer flex items-center gap-2"
+                                                >
+                                                  <FaLocationArrow className="text-blue-500 text-sm" />
+                                                  <span>{place.name}</span>
+                                                </li>
+                                              ))}
+                                            </>
+                                          )}
+                                          
+                                          {getCombinedSuggestions('end').backend.length === 0 && getCombinedSuggestions('end').local.length === 0 && (
+                                            <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                                          )}
                         </ul>
                       )}
                     </div>
@@ -726,7 +700,16 @@ export default function LandingPageClient() {
 
                   {/* Carte avec le trajet */}
                   <div className="rounded-2xl w-full h-96 relative z-10 mt-4">
-                    <MapNavigooWrapper startPlaceName={start} endPlaceName={end} />
+                    {/* <MapNavigooWrapper startPlaceName={start} endPlaceName={end} /> */}
+                    <div className="relative w-full h-full bg-white dark:bg-[#0D1B2A] rounded-2xl shadow-lg flex flex-col items-center justify-center">
+                      <MapNavigoo
+                      userLocation={userLocation}
+                      searchedPlace={searchedPlace}
+                      routes={routes}
+                      selectedRouteIndex={selectedRouteIndex}
+                      setSelectedRouteIndex={setSelectedRouteIndex}
+                    />
+                    </div>
                   </div>
 
                 </div>
@@ -745,7 +728,14 @@ export default function LandingPageClient() {
                           {t('distance')} {/* "Distance" */}
                         </div>
                         <div className="text-xl font-bold text-black dark:text-white">
-                          {result.distance.toFixed(2)} km
+                          {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
+                        </div>
+                        <div className="flex items-center gap-1 font-medium text-blue-700 dark:text-white">
+                          <MdOutlineDirectionsWalk />
+                          Duree {/* "Duree" */}
+                        </div>
+                        <div className="text-xl font-bold text-black dark:text-white">
+                          {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
                         </div>
                       </div>
                     </div>
@@ -794,3 +784,4 @@ export default function LandingPageClient() {
     </>
   );
 }
+

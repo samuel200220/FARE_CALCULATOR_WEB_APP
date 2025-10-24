@@ -54,7 +54,8 @@
     "recharts": "^2.15.3",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.2.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "wellknown": "^0.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
