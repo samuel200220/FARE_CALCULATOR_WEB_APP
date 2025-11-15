@@ -16,9 +16,12 @@ import { ModeToggle } from "../ui/mode-toggle";
 import { useTranslations } from "next-intl";
 //import { useRouter, usePathname } from "next/navigation";
 import Sidebar2 from "../sidebar2";
+import { useRouter, usePathname } from "next/navigation";
 
 const Header = () => {
   const t = useTranslations("header");
+  const router = useRouter();
+    const pathname = usePathname();
   //const router = useRouter();
   //const pathname = usePathname();
 
@@ -30,6 +33,12 @@ const Header = () => {
   const changeLocale = (locale: string) => {
     document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
     window.location.reload(); // recharge pour appliquer la langue
+    const segments = pathname.split("/"); // ex: ["", "fr", "aide1"]
+    segments[1] = locale; // remplace la langue
+
+    const newUrl = segments.join("/"); // ex: "/en/aide1"
+
+    router.push(newUrl);
   };
 
   return (

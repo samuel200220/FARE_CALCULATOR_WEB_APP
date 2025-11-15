@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Place, Route } from '@/lib/types';
 import { enregistrerCalcul } from '@/app/services/calculService';
+import { event } from "@/lib/gtag";
 
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
@@ -406,7 +407,7 @@ const Section1ano = ({}) => {
                   </>
                 )}
                 
-                {/* {getCombinedSuggestions('start').local.length > 0 && (
+                {getCombinedSuggestions('start').local.length > 0 && (
                   <>
                     <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
                       Suggestions
@@ -421,7 +422,7 @@ const Section1ano = ({}) => {
                       </li>
                     ))}
                   </>
-                )} */}
+                )}
                 
                 {getCombinedSuggestions('start').backend.length === 0 && getCombinedSuggestions('start').local.length === 0 && (
                   <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
@@ -467,7 +468,7 @@ const Section1ano = ({}) => {
                   </>
                 )}
                 
-                {/* {getCombinedSuggestions('end').local.length > 0 && (
+                {getCombinedSuggestions('end').local.length > 0 && (
                   <>
                     <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
                       Suggestions
@@ -482,7 +483,7 @@ const Section1ano = ({}) => {
                       </li>
                     ))}
                   </>
-                )} */}
+                )}
                 
                 {getCombinedSuggestions('end').backend.length === 0 && getCombinedSuggestions('end').local.length === 0 && (
                   <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
@@ -517,6 +518,13 @@ const Section1ano = ({}) => {
           <Button
             type="submit"
             disabled={isLoading}
+               onClick={() =>
+                event({
+                  action: "click_calcul",
+                  category: "interaction",
+                  label: "Bouton Calculer",
+                })
+              }
             className="text-white dark:bg-blue-700 dark:text-white dark:hover:bg-green-800 bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
           >
             <FaCalculator className="mr-2" />

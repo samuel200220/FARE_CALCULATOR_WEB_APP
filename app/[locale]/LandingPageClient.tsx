@@ -22,6 +22,7 @@ import Download from '@/components/sections/download';
 import { useTranslations } from 'next-intl';
 import Image from "next/image";
 import { Place, Route } from '@/lib/types';
+import { event } from "@/lib/gtag";
 
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
@@ -563,6 +564,13 @@ export default function LandingPageClient() {
                     <Button
                         type="submit"
                         disabled={isLoading}
+                        onClick={() =>
+                          event({
+                            action: "click_calcul",
+                            category: "interaction",
+                            label: "Bouton Calculer",
+                          })
+                        }
                         className="text-white bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
                         >
                         <FaCalculator className="mr-2" />
@@ -690,6 +698,13 @@ export default function LandingPageClient() {
                     <Button
                         type="submit"
                         disabled={isLoading}
+                         onClick={() =>
+                          event({
+                            action: "click_calcul",
+                            category: "interaction",
+                            label: "Bouton Calculer",
+                          })
+                        }
                         className="text-white bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
                         >
                         <FaCalculator className="mr-2" />

@@ -14,10 +14,13 @@ import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
 import SidebarToggle from "../sidebar1";
 import { useTranslations } from "next-intl";
+import { useRouter, usePathname } from "next/navigation";
 //import { useRouter, usePathname } from "next/navigation";
 
 const Headerpro = () => {
   const t = useTranslations("headerPro");
+  const router = useRouter();
+  const pathname = usePathname();
   //const router = useRouter();
   //const pathname = usePathname();
 
@@ -29,6 +32,12 @@ const Headerpro = () => {
   const changeLocale = (locale: string) => {
     document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
     window.location.reload(); // recharge pour appliquer la langue
+    const segments = pathname.split("/"); // ex: ["", "fr", "aide1"]
+    segments[1] = locale; // remplace la langue
+
+    const newUrl = segments.join("/"); // ex: "/en/aide1"
+
+    router.push(newUrl);
   };
 
   return (
