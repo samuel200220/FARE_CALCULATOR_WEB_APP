@@ -66,6 +66,8 @@ export default function RootLayout({
   return (
     <html lang="fr" className={poppins.variable} suppressHydrationWarning>
       <head>
+        {/* GOOGLE SITE VERIFICATION */}
+      <meta name="google-site-verification" content="8tvwpqe9FpERjV68ZwbAVbx5LSIxnT63yXzGQu-jocU" />
         {/* ✅ Google Analytics 4 */}
         <Script
           async
