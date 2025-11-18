@@ -23,6 +23,7 @@ import { useTranslations } from 'next-intl';
 import Image from "next/image";
 import { Place, Route } from '@/lib/types';
 import { event } from "@/lib/gtag";
+import QRCode from "react-qr-code";
 
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
@@ -39,6 +40,9 @@ const MapNavigoo = dynamic(() => import('../../components/carte').then((mod) => 
 });
 
 export default function LandingPageClient() {
+  //Url pour l qrcode
+  const url = "https://fare-calculator-web-app-pcto.vercel.app";
+
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
     const [searchedPlace, setSearchedPlace] = useState<Place | null>(null);
     const [routes, setRoutes] = useState<Route[]>([]);
@@ -795,6 +799,13 @@ export default function LandingPageClient() {
       {/* <Assec1/>
       <Assec2/> */}
       <Download/>
+      <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-[#0D1B2A] transition-colors duration-500 mt-3 mb-20 p-4">
+      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">QR Code Farcal</h1>
+
+      <QRCode value={url} size={256} />
+
+      <p className="text-4xl mt-4 text-gray-900 dark:text-white">{t('qrcode')}</p>
+    </div>
       <Footer/>
     </>
   );

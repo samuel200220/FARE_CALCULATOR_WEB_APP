@@ -27,7 +27,8 @@
     "estimatedCost": "Coût Estimé",
     "officialFare": "Tarif Officiel",
     "viewRoute": "Visualiser le trajet",
-    "recalculate": "Refaire un calcul"
+    "recalculate": "Refaire un calcul",
+    "qrcode": "Scannez pour ouvrir l'application"
   },
   "agency":{
   "travel_agency": "Besoin d'une agence de voyage ?",

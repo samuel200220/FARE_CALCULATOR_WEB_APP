@@ -8,7 +8,7 @@ export default function Download() {
   const t = useTranslations('download');
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 dark:bg-[#0D1B2A] transition-colors duration-500 mb-20">
+    <div className="flex items-center justify-center bg-gray-50 dark:bg-[#0D1B2A] transition-colors duration-500 mb-10">
       <div className="flex flex-col md:flex-row items-center w-full max-w-6xl p-8 bg-white dark:bg-[#1B263B] rounded-3xl shadow-2xl">
 
         {/* Texte */}

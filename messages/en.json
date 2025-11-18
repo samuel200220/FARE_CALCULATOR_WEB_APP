@@ -27,7 +27,8 @@
     "estimatedCost": "Estimated Cost",
     "officialFare": "Official Fare",
     "viewRoute": "View Route",
-    "recalculate": "Recalculate"
+    "recalculate": "Recalculate",
+    "qrcode": "Scan to open the application"
   },
   "agency":{
   "travel_agency": "Need a travel agency?",

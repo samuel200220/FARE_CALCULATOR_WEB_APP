@@ -27,7 +27,8 @@
   "estimatedCost": "Geschätzte Kosten",
   "officialFare": "Offizieller Tarif",
   "viewRoute": "Route anzeigen",
-  "recalculate": "Neu berechnen"
+  "recalculate": "Neu berechnen",
+  "qrcode": "Scannen Sie, um die Anwendung zu öffnen"
   },
   "agency":{
   "travel_agency": "Brauchen Sie ein Reisebüro?",
