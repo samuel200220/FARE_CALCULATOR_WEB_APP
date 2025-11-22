@@ -17,6 +17,7 @@ import { useTheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { utilisateurService } from '../../services/api';
+import Googleconnexion from '@/components/googleconnexion';
 
 interface FormData {
   nom: string;
@@ -197,6 +198,7 @@ export default function Page() {
                 {t('buttons.login')}
               </Link>
             </Typography>
+            <Googleconnexion />
           </Stack>
         </Box>
       </div>

@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { entrepriseService } from '../../services/api';
+import Googleconnexion from '@/components/googleconnexion';
 
 interface FormData {
   responsableEntreprise: string;
@@ -222,6 +223,7 @@ export default function Page() {
                 {t('buttons.loginPro')}
               </Link>
             </Typography>
+            {/* <Googleconnexion /> */}
           </Stack>
         </Box>
       </div>

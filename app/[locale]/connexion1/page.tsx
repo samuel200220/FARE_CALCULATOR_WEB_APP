@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { utilisateurService } from '../../services/api';
+import Googleconnexion from '@/components/googleconnexion';
 
 interface ConnexionFormData {
   email: string;
@@ -156,6 +157,7 @@ export default function Page() {
                 {t('clickHere')}
               </Link>
             </Typography>
+            <Googleconnexion />
           </Stack>
         </Box>
       </div>
