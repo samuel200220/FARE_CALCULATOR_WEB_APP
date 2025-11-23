@@ -28,7 +28,8 @@
     "officialFare": "Official Fare",
     "viewRoute": "View Route",
     "recalculate": "Recalculate",
-    "qrcode": "Scan to open the application"
+    "qrcode": "Scan to open the application",
+    "google": "Login with Google"
   },
   "agency":{
   "travel_agency": "Need a travel agency?",

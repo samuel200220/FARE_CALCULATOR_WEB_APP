@@ -28,7 +28,8 @@
     "officialFare": "Tarif Officiel",
     "viewRoute": "Visualiser le trajet",
     "recalculate": "Refaire un calcul",
-    "qrcode": "Scannez pour ouvrir l'application"
+    "qrcode": "Scannez pour ouvrir l'application",
+    "google": "Se connecter avec Google"
   },
   "agency":{
   "travel_agency": "Besoin d'une agence de voyage ?",

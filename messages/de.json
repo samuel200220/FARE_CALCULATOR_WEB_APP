@@ -28,7 +28,8 @@
   "officialFare": "Offizieller Tarif",
   "viewRoute": "Route anzeigen",
   "recalculate": "Neu berechnen",
-  "qrcode": "Scannen Sie, um die Anwendung zu öffnen"
+  "qrcode": "Scannen Sie, um die Anwendung zu öffnen",
+  "google": "Mit Google anmelden"
   },
   "agency":{
   "travel_agency": "Brauchen Sie ein Reisebüro?",
