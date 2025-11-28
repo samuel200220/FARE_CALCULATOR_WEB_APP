@@ -31,6 +31,27 @@
   "qrcode": "Scannen Sie, um die Anwendung zu öffnen",
   "google": "Mit Google anmelden"
   },
+  "Verification": {
+    "success": {
+      "codeResent": "Code erfolgreich erneut gesendet",
+      "verification": "Registrierung erfolgreich! Ein Verifizierungscode wurde an Ihre E-Mail gesendet.",
+      "verificationFailed": "Verifizierung fehlgeschlagen"
+    },
+    "errors": {
+      "resendFailed": "Fehler beim erneuten Senden des Codes",
+      "invalidCode": "Der Code muss 6 Ziffern enthalten"
+    },
+    "buttons": {
+      "verify": "Code überprüfen",
+      "resendCode": "Code erneut senden",
+      "resendCountdown": "Countdown"
+    },
+    "title": "Doppelte E-Mail-Verifizierung",
+    "subtitle": "Wir haben einen Verifizierungscode an {email} gesendet",
+    "form": {
+      "code": "Verifizierungscode"
+    }
+  },
   "agency":{
   "travel_agency": "Brauchen Sie ein Reisebüro?",
   "need_ride": "Brauchen Sie eine Fahrt?",

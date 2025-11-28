@@ -31,6 +31,27 @@
     "qrcode": "Scannez pour ouvrir l'application",
     "google": "Se connecter avec Google"
   },
+  "Verification":{
+    "success":{
+      "codeResent": "Code renvoyé avec success",
+      "verification": "Inscription réussie! Un code de vérification a été envoyé à votre email.",
+      "verificationFailed": "Échec de la vérification"
+    },
+    "errors":{
+      "resendFailed": "Échec de l'envoi du code",
+      "invalidCode":"Le code doit contenir 6 chiffres"
+    },
+    "buttons":{
+      "verify":"Vérifier le code",
+      "resendCode":"Renvoyer le code",
+      "resendCountdown":"Compte a rebours"
+    },
+    "title":"Double verification email",
+    "subtitle":"Nous avons envoyé un code de vérification à {email}",
+    "form":{
+      "code":"Code de vérification"
+    }
+  },
   "agency":{
   "travel_agency": "Besoin d'une agence de voyage ?",
   "need_ride": "Besoin d'une course ?",

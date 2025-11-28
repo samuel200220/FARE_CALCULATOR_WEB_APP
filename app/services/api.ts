@@ -89,6 +89,15 @@ export const utilisateurService = {
     const response = await apiClient.get(`/api/utilisateurs/email/${email}`);
     return response.data;
   },
+  async sendVerificationCode(email: string): Promise<{ success: boolean; message: string }> {
+    const response = await apiClient.post(`${API_BASE_URL}/api/auth/send-verification`, { email });
+    return response.data;
+  },
+
+  async verifyEmail(email: string, code: string): Promise<{ success: boolean; message: string; user?: any }> {
+    const response = await apiClient.post(`${API_BASE_URL}/api/auth/verify-email`, { email, code });
+    return response.data;
+  }
 };
 
 // Service pour les entreprises

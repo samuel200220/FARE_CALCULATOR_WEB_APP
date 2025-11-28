@@ -31,6 +31,27 @@
     "qrcode": "Scan to open the application",
     "google": "Login with Google"
   },
+  "Verification": {
+    "success": {
+      "codeResent": "Code resent successfully",
+      "verification": "Registration successful! A verification code has been sent to your email.",
+      "verificationFailed": "Verification failed"
+    },
+    "errors": {
+      "resendFailed": "Failed to resend the code",
+      "invalidCode": "The code must contain 6 digits"
+    },
+    "buttons": {
+      "verify": "Verify code",
+      "resendCode": "Resend code",
+      "resendCountdown": "Countdown"
+    },
+    "title": "Email double verification",
+    "subtitle": "We have sent a verification code to {email}",
+    "form": {
+      "code": "Verification code"
+    }
+  },
   "agency":{
   "travel_agency": "Need a travel agency?",
   "need_ride": "Need a ride?",

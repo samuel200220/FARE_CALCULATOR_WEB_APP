@@ -2,7 +2,8 @@ import React from 'react'
 import { useTranslations } from 'next-intl';
 
 const loginWithGoogle = () => {
-  window.location.href = "https://farcal-back.onrender.com/oauth2/authorization/google";
+   window.location.href = "https://farcal-back.onrender.com/oauth2/authorization/google";
+  // window.location.href = "http://localhost:8080/oauth2/authorization/google";
 };
 
 export default function Googleconnexion() {

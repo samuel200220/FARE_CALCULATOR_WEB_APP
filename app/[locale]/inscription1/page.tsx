@@ -36,64 +36,64 @@ export default function Page() {
     formState: { errors },
   } = useForm<FormData>();
 
+  console.log("API URL USED:", process.env.NEXT_PUBLIC_API_URL);
+
+
   const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
+  setIsSubmitting(true);
+  
+  try {
+    // Vérifier si l'email existe déjà
+    const emailExists = await utilisateurService.checkEmailExists(data.email);
     
-    try {
-      // Vérifier si l'email existe déjà
-      const emailExists = await utilisateurService.checkEmailExists(data.email);
-      
-      if (emailExists) {
-        toast.error(t('errors.emailExists'));
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Créer l'utilisateur
-      const response = await utilisateurService.create({
-        nom: data.nom,
-        email: data.email,
-      });
-
-      toast.success(t('success.signup'));
-      
-      // Sauvegarder l'ID de l'utilisateur
-      if (response.id) {
-        localStorage.setItem("idUtilisateur", response.id);
-        localStorage.removeItem('compteurUtilisation');
-      }
-      
-      router.push('/connexion1');
-      
-    } catch (error) {
-      console.error('Erreur lors de l\'inscription:', error);
-      
-      const axiosError = error as AxiosError;
-      
-      // Gestion des erreurs spécifiques
-      if (axiosError.response) {
-        switch (axiosError.response.status) {
-          case 400:
-            toast.error(t('errors.invalidData'));
-            break;
-          case 409:
-            toast.error(t('errors.emailExists'));
-            break;
-          case 500:
-            toast.error(t('errors.serverError'));
-            break;
-          default:
-            toast.error(t('errors.generic'));
-        }
-      } else if (axiosError.request) {
-        toast.error(t('errors.networkError'));
-      } else {
-        toast.error(t('errors.generic'));
-      }
-    } finally {
+    if (emailExists) {
+      toast.error(t('errors.emailExists'));
       setIsSubmitting(false);
+      return;
     }
-  };
+
+    // Créer l'utilisateur
+    const response = await utilisateurService.create({
+      nom: data.nom,
+      email: data.email,
+    });
+
+    // Sauvegarder l'email pour la vérification
+    localStorage.setItem('userEmailForVerification', data.email);
+    
+    // Envoyer le code de vérification
+    await utilisateurService.sendVerificationCode(data.email);
+    
+    toast.success(t('success.verificationSent'));
+    
+    // Rediriger vers la page de vérification
+    router.push(`/verification?email=${encodeURIComponent(data.email)}`);
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'inscription:', error);
+    const axiosError = error as AxiosError;
+    
+    if (axiosError.response) {
+      switch (axiosError.response.status) {
+        case 400:
+          toast.error(t('errors.invalidData'));
+          break;
+        case 409:
+          toast.error(t('errors.emailExists'));
+          break;
+        case 500:
+          toast.error(t('errors.serverError'));
+          break;
+        default:
+          toast.error(t('errors.generic'));
+      }
+    } else {
+      toast.error(t('errors.generic'));
+    }
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex lg:p-20 p-4 rounded-3xl shadow-lg">
