@@ -26,6 +26,7 @@ interface FormData {
 
 export default function Page() {
   const t = useTranslations('Inscription');
+  const a = useTranslations('Verification');
   const theme = useTheme();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,7 +65,7 @@ export default function Page() {
     // Envoyer le code de vérification
     await utilisateurService.sendVerificationCode(data.email);
     
-    toast.success(t('success.verificationSent'));
+    toast.success(a('success.verification'));
     
     // Rediriger vers la page de vérification
     router.push(`/verification?email=${encodeURIComponent(data.email)}`);
