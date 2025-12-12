@@ -18,6 +18,9 @@ import { Route, Place } from '@/lib/types';
 import { enregistrerCalcul } from '@/app/services/calculService';
 import { event } from "@/lib/gtag";
 
+// Importer ONNX Runtime
+import * as ort from 'onnxruntime-web';
+
 const predefinedHours = [
   "06:00", "07:00", "08:00", "09:00",
   "10:00", "11:00", "12:00", "13:00",
@@ -75,6 +78,12 @@ const Section1ano = ({}) => {
   const [routesLarges, setRoutesLarges] = useState('oui');
   const [routesTravaux, setRoutesTravaux] = useState('non');
 
+  // Modèle ONNX
+  const [onnxSession, setOnnxSession] = useState<ort.InferenceSession | null>(null);
+  const [modelLoading, setModelLoading] = useState(false);
+  const [currentRouteFinal, setCurrentRouteFinal] = useState<any | null>(null);
+
+
   interface PredictionResult {
     prix_estime_fcfa: number;
     prix_estime_range: string;
@@ -91,6 +100,32 @@ const Section1ano = ({}) => {
     jourSemaine?: string;
     etatRoute?: string;
   }>({});
+
+  // Charger le modèle ONNX au démarrage
+  useEffect(() => {
+    const loadONNXModel = async () => {
+      try {
+        setModelLoading(true);
+        console.log('Chargement du modèle ONNX...');
+        
+        const session = await ort.InferenceSession.create('/model.onnx', {
+          executionProviders: ['wasm'],
+          graphOptimizationLevel: 'all'
+        });
+        
+        setOnnxSession(session);
+        console.log('Modèle ONNX chargé avec succès');
+        toast.success('Modèle de prédiction prêt!');
+      } catch (err) {
+        console.error('Erreur lors du chargement du modèle ONNX:', err);
+        toast.error('Modèle non chargé, utilisation du calcul par API');
+      } finally {
+        setModelLoading(false);
+      }
+    };
+
+    loadONNXModel();
+  }, []);
 
   // Chargement des noms depuis le fichier texte
   useEffect(() => {
@@ -154,7 +189,120 @@ const Section1ano = ({}) => {
   const a = useTranslations('agency');
   const f = useTranslations('form');
 
-  // Recherche de lieux via le backend - CORRIGÉ avec le bon endpoint
+const preprocessInputForONNX = (data: any): Record<string, ort.Tensor> => {
+  const feeds: Record<string, ort.Tensor> = {};
+
+  // Tensor string standardisé
+  const makeString = (value: any) =>
+    new ort.Tensor('string', [String(value)], [1, 1]);
+
+  // Tensor float pour la distance
+  const makeFloat = (value: any) =>
+    new ort.Tensor('float32', new Float32Array([parseFloat(value)]), [1, 1]);
+
+  feeds['pluie'] = makeString(data.pluie);
+  feeds['etat_route'] = makeString(data.etat_route);
+  feeds['heure'] = makeString(data.heure);
+  feeds['jour_semaine'] = makeString(data.jour_semaine);
+  feeds['jour_ferie'] = makeString(data.jour_ferie);
+  feeds['bagages'] = makeString(data.bagages);
+  feeds['routes_larges'] = makeString(data.routes_larges);
+  feeds['routes_travaux'] = makeString(data.routes_travaux);
+  feeds['accident'] = makeString(data.accident);
+  feeds['depart_osm'] = makeString(data.depart_osm);
+  feeds['destination_osm'] = makeString(data.destination_osm);
+
+  // Distance = FLOAT32
+  feeds['distance_km'] = makeFloat(data.distance_km);
+
+  return feeds;
+};
+
+// Fonction de prédiction utilisant ONNX
+const predictWithONNX = async (inputData: any): Promise<number> => {
+  if (!onnxSession) {
+    throw new Error('Modèle ONNX non chargé');
+  }
+
+  try {
+    console.log("Noms des inputs ONNX:", onnxSession.inputNames);
+    
+    // Préparer les tenseurs d'entrée
+    const feeds = preprocessInputForONNX(inputData);
+    
+    // Vérifier que tous les inputs requis sont présents
+    const missingInputs = onnxSession.inputNames.filter(name => !feeds[name]);
+    if (missingInputs.length > 0) {
+      console.warn('Inputs manquants:', missingInputs);
+      
+      // Créer des tenseurs par défaut pour les inputs manquants
+      missingInputs.forEach(inputName => {
+        feeds[inputName] = new ort.Tensor('float32', new Float32Array([0]), [1, 1]);
+      });
+    }
+
+    console.log('Feeds préparés:', Object.keys(feeds));
+    
+    const results = await onnxSession.run(feeds);
+    
+    // Récupérer la prédiction
+    const outputName = onnxSession.outputNames[0];
+    const output = results[outputName];
+    
+    // Extraire la valeur prédite
+    const prediction = output.data[0];
+    
+    console.log('Prédiction ONNX:', prediction);
+    
+    return Number(prediction);
+  } catch (error) {
+    console.error('Erreur lors de la prédiction ONNX:', error);
+    throw error;
+  }
+};
+
+// Fonction de prédiction utilisant l'API externe
+const predictWithAPI = async (predictionData: any): Promise<number> => {
+  console.log('Données envoyées à l\'API de prédiction:', JSON.stringify(predictionData, null, 2));
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 300000);
+
+  const response = await fetch('https://farcal-api-coast.onrender.com/predict', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(predictionData),
+    signal: controller.signal
+  });
+
+  clearTimeout(timeoutId);
+  console.log('Statut de réponse de l\'API de prédiction:', response.status);
+
+  if (!response.ok) {
+    let errorText = 'Erreur serveur';
+    try {
+      errorText = await response.text();
+    } catch {
+      errorText = `Erreur HTTP ${response.status}`;
+    }
+    console.error('Erreur API de prédiction:', errorText);
+    throw new Error(`L'API de prédiction n'est pas disponible (${response.status})`);
+  }
+
+  const result = await response.json();
+  console.log('Résultat de prédiction:', result);
+  
+  if (result.prix_estime_fcfa !== undefined) {
+    return result.prix_estime_fcfa;
+  } else {
+    throw new Error('Format de réponse invalide');
+  }
+};
+
+  // Recherche de lieux via le backend
   const searchPlaces = async (query: string, type: 'depart' | 'destination') => {
     if (!query || query.trim() === '') {
       if (type === 'depart') {
@@ -166,11 +314,9 @@ const Section1ano = ({}) => {
     }
 
     try {
-      // Utiliser le bon endpoint comme dans le fichier 2
       const response = await fetch(`${backendUrl}/api/places?name=${encodeURIComponent(query)}`);
       
       if (!response.ok) {
-        // Ne pas logger les erreurs 404 répétées, juste retourner silencieusement
         if (type === 'depart') {
           setDepartSearchResults([]);
         } else {
@@ -193,7 +339,6 @@ const Section1ano = ({}) => {
         }
       }
     } catch (err) {
-      // Erreur silencieuse - pas de log pour éviter le spam
       if (type === 'depart') {
         setDepartSearchResults([]);
       } else {
@@ -414,6 +559,7 @@ const Section1ano = ({}) => {
     
     if (data.routes && data.routes.length > 0) {
       const route = data.routes[0];
+      console.log("ROUTE STRUCTURE:", JSON.stringify(route, null, 2));
       setRoutes(data.routes);
       setSelectedRouteIndex(0);
       
@@ -440,6 +586,17 @@ const Section1ano = ({}) => {
       };
     }
   };
+
+  const extractDistanceKm = (route: any): number => {
+  if (!route) return 0;
+
+  if (route.distance !== undefined) {
+    return Number(route.distance) / 1000;
+  }
+
+  console.warn("Aucune distance valide trouvée:", route);
+  return 0;
+};
 
   const handleStep1Submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -522,17 +679,13 @@ const Section1ano = ({}) => {
   const handleStep3Submit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    //const distanceToUse = distanceKm || 7.3;
-    //const distanceToUse = (routes[selectedRouteIndex].distance / 1000)
-
-    // Utilisez la distance depuis routes[selectedRouteIndex]
     const currentRoute = routes[selectedRouteIndex];
-    if (!currentRoute) {
-      toast.error("Aucun itinéraire disponible. Veuillez recalculer.");
-      return;
-    }
-    
-    const distanceToUse = currentRoute.distance / 1000; // Convertir mètres en km
+
+console.log("ROUTE SELECTED:", currentRoute);
+
+const distanceToUse = extractDistanceKm(currentRoute);
+
+console.log("DISTANCE USED (KM):", distanceToUse);
     
     setIsLoading(true);
     setError('');
@@ -553,58 +706,73 @@ const Section1ano = ({}) => {
         routes_travaux: routesTravaux
       };
 
-      console.log('Données envoyées à l\'API de prédiction:', JSON.stringify(predictionData, null, 2));
+      console.log('Données pour la prédiction:', JSON.stringify(predictionData, null, 2));
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      let prixEstime: number;
+      let predictionSource = '';
+      let apiResult: any = null;
 
-      const response = await fetch('https://farcal-api-coast.onrender.com/predict', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(predictionData),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-      console.log('Statut de réponse de l\'API de prédiction:', response.status);
-
-      if (!response.ok) {
-        let errorText = 'Erreur serveur';
+      // Essayer d'abord avec ONNX
+      if (onnxSession && !modelLoading) {
         try {
-          errorText = await response.text();
-        } catch {
-          errorText = `Erreur HTTP ${response.status}`;
+          prixEstime = await predictWithONNX(predictionData);
+          predictionSource = 'ONNX';
+          console.log('Prédiction ONNX réussie:', prixEstime);
+        } catch (onnxError) {
+          console.warn('Erreur ONNX, utilisation de l\'API:', onnxError);
+          
+          // Fallback à l'API
+          try {
+            prixEstime = await predictWithAPI(predictionData);
+            predictionSource = 'API (fallback)';
+            console.log('Prédiction API réussie:', prixEstime);
+          } catch (apiError) {
+            console.warn('Erreur API, utilisation du calcul local:', apiError);
+            prixEstime = calculateLocalEstimation(predictionData);
+            predictionSource = 'local (fallback)';
+          }
         }
-        console.error('Erreur API de prédiction:', errorText);
-        throw new Error(`L'API de prédiction n'est pas disponible (${response.status})`);
+      } else {
+        // Si ONNX n'est pas chargé, utiliser l'API directement
+        try {
+          prixEstime = await predictWithAPI(predictionData);
+          predictionSource = 'API (modèle non chargé)';
+          console.log('Prédiction API réussie:', prixEstime);
+        } catch (apiError) {
+          console.warn('Erreur API, utilisation du calcul local:', apiError);
+          prixEstime = calculateLocalEstimation(predictionData);
+          predictionSource = 'local (modèle non chargé)';
+        }
       }
 
-      const result = await response.json();
-      console.log('Résultat de prédiction:', result);
+      // Calcul de la fourchette de prix
+      const prixArrondi = Math.round(prixEstime);
+      const prixMin = Math.round(prixArrondi * 0.85);
+      const prixMax = Math.round(prixArrondi * 1.15);
       
-      if (result.prix_estime_fcfa !== undefined) {
-        setPredictionResult(result);
-        
-        if (estConnecte) {
-          const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
-          await enregistrerCalcul({
-            utilisateurId,
-            lieuDepart: start,
-            lieuArrivee: end,
-            heurePriseEnCharge: hour,
-            distanceKm: distanceToUse,
-            coutEstime: result.prix_estime_fcfa,
-            tarifOfficiel: 0,
-          });
-        }
-        
-        toast.success('Prédiction calculée avec succès!');
-      } else {
-        throw new Error('Format de réponse invalide');
+      const result = {
+        prix_estime_fcfa: prixArrondi,
+        prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
+        message: `Prédiction ${predictionSource}`,
+        lieux_comms: `Trajet de ${start} à ${end}`
+      };
+      
+      setPredictionResult(result);
+      
+      if (estConnecte) {
+        const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
+        await enregistrerCalcul({
+          utilisateurId,
+          lieuDepart: start,
+          lieuArrivee: end,
+          heurePriseEnCharge: hour,
+          distanceKm: distanceToUse,
+          coutEstime: prixArrondi,
+          tarifOfficiel: 0,
+        });
       }
+      
+      toast.success('Prédiction calculée avec succès!');
 
     } catch (err: any) {
       console.error('Erreur complète de prédiction:', err);
@@ -621,28 +789,22 @@ const Section1ano = ({}) => {
       }
       
       // Calcul d'estimation locale
-      const tarifBase = 200;
-      const tarifParKm = 150;
-      const facteurHeure = parseInt(hour.split(':')[0]) >= 18 || parseInt(hour.split(':')[0]) <= 6 ? 1.2 : 1;
-      const facteurPluie = pluie === '1' ? 1.15 : 1;
-      const facteurRoute = etatRoute === 'mauvaise' ? 1.25 : etatRoute === 'moyenne' ? 1.1 : 1;
-      const facteurBagages = bagages === 'oui' ? 1.1 : 1;
+      const prixEstime = calculateLocalEstimation({
+        distance_km: distanceToUse,
+        heure: hour.split(':')[0],
+        etat_route: etatRoute,
+        pluie: pluie,
+        bagages: bagages
+      });
       
-      const prixEstime = Math.round(
-        (tarifBase + (distanceToUse * tarifParKm)) * 
-        facteurHeure * 
-        facteurPluie * 
-        facteurRoute * 
-        facteurBagages
-      );
-      
-      const prixMin = Math.round(prixEstime * 0.85);
-      const prixMax = Math.round(prixEstime * 1.15);
+      const prixArrondi = Math.round(prixEstime);
+      const prixMin = Math.round(prixArrondi * 0.85);
+      const prixMax = Math.round(prixArrondi * 1.15);
       
       const simulatedResult = {
-        prix_estime_fcfa: prixEstime,
+        prix_estime_fcfa: prixArrondi,
         prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
-        message: `Estimation locale basée sur ${distanceToUse.toFixed(2)} km (API indisponible)`,
+        message: `Estimation locale basée sur ${distanceToUse.toFixed(2)} km (erreur système)`,
         lieux_comms: `Trajet de ${start} à ${end}`
       };
       
@@ -651,6 +813,30 @@ const Section1ano = ({}) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Fonction de calcul local de secours (uniquement si ONNX et API échouent)
+  const calculateLocalEstimation = (data: any): number => {
+    const distance = data.distance_km || 10;
+    const hourInt = parseInt(data.heure) || 12;
+    const etatRoute = data.etat_route || 'bonne';
+    const pluie = data.pluie || '0';
+    const bagages = data.bagages || 'non';
+    
+    const tarifBase = 200;
+    const tarifParKm = 150;
+    const facteurHeure = (hourInt >= 18 || hourInt <= 6) ? 1.2 : 1;
+    const facteurPluie = pluie === '1' ? 1.15 : 1;
+    const facteurRoute = etatRoute === 'mauvaise' ? 1.25 : etatRoute === 'moyenne' ? 1.1 : 1;
+    const facteurBagages = bagages === 'oui' ? 1.1 : 1;
+    
+    return Math.round(
+      (tarifBase + (distance * tarifParKm)) * 
+      facteurHeure * 
+      facteurPluie * 
+      facteurRoute * 
+      facteurBagages
+    );
   };
 
   const resetForm = () => {
@@ -717,6 +903,12 @@ const Section1ano = ({}) => {
         <h3 className='dark:text-white text-2xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-black'>{t('fareCalculator')}</h3>
         
         {renderStepIndicator()}
+        
+        {modelLoading && (
+          <div className="text-blue-600 text-sm mb-2">
+            Chargement du modèle de prédiction...
+          </div>
+        )}
         
         {step === 1 ? (
           <form
@@ -924,7 +1116,6 @@ const Section1ano = ({}) => {
                       Distance
                     </div>
                     <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
-                      {/* {distanceKm.toFixed(2)} km */}
                       {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
                     </div>
                   </div>
@@ -1075,7 +1266,7 @@ const Section1ano = ({}) => {
               <Button
                 type="button"
                 onClick={() => setStep(1)}
-                className="bg-gray-500 hover:bg-gray-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                className="bg-violet-500 hover:bg-violet-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
               >
                 <FaArrowLeft />
                 Retour
@@ -1190,7 +1381,7 @@ const Section1ano = ({}) => {
               <Button
                 type="button"
                 onClick={() => setStep(2)}
-                className="bg-gray-500 hover:bg-gray-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                className="bg-violet-500 hover:bg-violet-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
               >
                 <FaArrowLeft />
                 Retour
@@ -1249,6 +1440,9 @@ const Section1ano = ({}) => {
                 <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   Fourchette: {predictionResult.prix_estime_range}
                 </div>
+                {/* <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  {predictionResult.message}
+                </div> */}
               </div>
             
             </div>
