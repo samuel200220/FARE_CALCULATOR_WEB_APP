@@ -29,15 +29,15 @@ const testimonials = [
 export default function Testimonials() {
   const t = useTranslations('Section7');
   return (
-    <div className="dark:bg-[#0D1B2A] bg-white mt-20 p-6">
-        <h2 className="text-xl sm:text-4xl md:text-2xl lg:text-5xl font-bold text-center mb-8 text-blue-600 dark:text-white">
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] mt-20 p-6">
+        <h2 className="text-xl sm:text-4xl md:text-2xl lg:text-5xl font-bold text-center mb-8 text-blue-900 dark:text-white">
             {t('title')}
         </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
         {testimonials.map((t, i) => (
           <div
             key={i}
-            className="bg-gray-200 shadow-md rounded-xl p-6 flex flex-col gap-3 dark:bg-gray-800"
+            className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 flex flex-col gap-3 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
           >
             <div className="flex items-center gap-4">
               <div
@@ -61,7 +61,7 @@ export default function Testimonials() {
               ))}
             </div>
 
-            <p className="text-gray-700 italic dark:text-gray-200">&quot;{t.quote}&quot;</p>
+            <p className="text-gray-700 dark:text-gray-300 italic">&quot;{t.quote}&quot;</p>
           </div>
         ))}
       </div>

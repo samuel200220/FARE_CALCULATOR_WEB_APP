@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-//import { Crown } from "lucide-react";
+import { Crown } from "lucide-react";
 import { FaGlobe } from "react-icons/fa";
 import {
   DropdownMenu,
@@ -12,89 +12,107 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
-//import SidebarToggle from "../sidebar1";
-import { useTranslations } from "next-intl";
-//import { useRouter, usePathname } from "next/navigation";
 import Sidebar2 from "../sidebar2";
+import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 
 const Header = () => {
   const t = useTranslations("header");
   const router = useRouter();
-    const pathname = usePathname();
-  //const router = useRouter();
-  //const pathname = usePathname();
+  const pathname = usePathname();
 
-  // const changeLanguage = (locale: string) => {
-  //   const segments = pathname.split("/");
-  //   segments[1] = locale;
-  //   router.push(segments.join("/") as any);
-  // };
   const changeLocale = (locale: string) => {
     document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
-    window.location.reload(); // recharge pour appliquer la langue
-    const segments = pathname.split("/"); // ex: ["", "fr", "aide1"]
-    segments[1] = locale; // remplace la langue
-
-    const newUrl = segments.join("/"); // ex: "/en/aide1"
-
+    const segments = pathname.split("/");
+    segments[1] = locale;
+    const newUrl = segments.join("/");
     router.push(newUrl);
   };
 
   return (
-    <header className="sticky top-0 z-[100] h-20 flex items-center justify-between px-0 lg:px-4 md:px-4 sm:px-4 py-4 bg-blue-700 w-full dark:bg-[#0D1B2A]">
+    <header className="sticky top-0 z-[100] h-16 md:h-20 flex items-center justify-between px-4 lg:px-6 bg-gradient-to-r from-blue-700 to-violet-700 dark:from-[#0D1B2A] dark:to-gray-900 w-full shadow-lg">
       {/* Logo / Titre */}
-      <nav className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
         <Sidebar2 />
         <Link
-          href="#"
-          scroll={true}
-          className="font-bold text-white items-center text-xl lg:text-3xl sm:text-3xl md:text-3xl ml-11 flex gap-2"
+          href="/"
+          className="font-bold text-white items-center text-xl md:text-2xl lg:text-3xl flex gap-2 hover:opacity-90 transition-opacity"
         >
-          {t("title")}
-          {/* <Crown className="w-6 h-6 text-yellow-400" /> */}
+          <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2">
+              {t("title")}
+            </div>
+            <div className="sm:hidden flex items-center gap-2">
+              <Crown className="w-6 h-6 text-yellow-300" />
+            </div>
+          </div>
         </Link>
-      </nav>
+      </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-4 dark:flex dark:items-center dark:gap-4">
+      {/* Actions - Desktop */}
+      <div className="hidden lg:flex items-center gap-6">
         <Link
           href="/aide1"
-          className="hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800"
+          className="text-white font-medium text-[16px] hover:text-yellow-300 transition-colors relative group"
         >
           {t("help")}
+          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-300 group-hover:w-full transition-all duration-300"></span>
         </Link>
+      </div>
 
-        {/* <Navigation /> */}
-
+      {/* Actions - Mobile & Desktop */}
+      <div className="flex items-center gap-2 md:gap-4">
         {/* Menu Langues */}
         <DropdownMenu>
-          <DropdownMenuTrigger id="lang-switcher-trigger" asChild>
-            <Button className="bg-transparent border-none shadow-none text-white hover:text-violet-800 hover:bg-transparent">
-              <FaGlobe className="mr-2" />
-              {t("language_switch")}
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20"
+            >
+              <FaGlobe className="mr-1 md:mr-2 w-4 h-4" />
+              <span className="hidden sm:inline">{t("language_switch")}</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => changeLocale("fr")}>
-              {t("french")}
+          <DropdownMenuContent align="end" className="min-w-[140px]">
+            <DropdownMenuItem 
+              onClick={() => changeLocale("fr")}
+              className="cursor-pointer hover:bg-blue-50"
+            >
+              🇫🇷 {t("french")}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLocale("en")}>
-              {t("english")}
+            <DropdownMenuItem 
+              onClick={() => changeLocale("en")}
+              className="cursor-pointer hover:bg-blue-50"
+            >
+              🇬🇧 {t("english")}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLocale("de")}>
-              {t("german")}
+            <DropdownMenuItem 
+              onClick={() => changeLocale("de")}
+              className="cursor-pointer hover:bg-blue-50"
+            >
+              🇩🇪 {t("german")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Déconnexion */}
-        <Link href={"/connexion1"} >
-          <Button className='cursor-pointer mr-2 bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>{t("logout")}</Button>
+        {/* Dark / Light mode - Desktop */}
+        <div className="hidden md:flex">
+          <ModeToggle />
+        </div>
+
+        {/* Connexion */}
+        <Link href="/connexion1">
+          <Button 
+            className="bg-gradient-to-r from-violet-600 to-violet-700 hover:from-violet-700 hover:to-violet-800 text-white transform transition-all duration-300 hover:scale-105 active:scale-95 rounded-lg px-4 py-2"
+          >
+            <span className="hidden sm:inline">{t("sign_in")}</span>
+            <span className="sm:hidden">🔑</span>
+          </Button>
         </Link>
 
-        {/* Dark / Light mode */}
-        <div className="hidden sm:flex">
+        {/* Dark / Light mode - Mobile */}
+        <div className="md:hidden">
           <ModeToggle />
         </div>
       </div>

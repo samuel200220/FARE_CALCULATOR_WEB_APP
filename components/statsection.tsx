@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { useTranslations } from 'next-intl';
 
 type Stat = {
-  labelKey: string; // clé de traduction
+  labelKey: string;
   target: number;
 };
 
@@ -49,21 +49,21 @@ export default function StatsSection() {
   return (
     <section
       ref={ref}
-      className="bg-yellow-50 dark:bg-[#0D1B2A] py-16 px-4 sm:px-8 text-center mb-20"
+      className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] py-16 px-4 sm:px-8 text-center mb-20"
     >
-      <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-10">
+      <h2 className="text-3xl font-bold text-blue-900 dark:text-white mb-10">
         {t('title')}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
           >
-            <div className="text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
+            <div className="text-4xl font-extrabold text-blue-600 dark:text-blue-400 mb-2">
               {counts[index]}+
             </div>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-gray-700 dark:text-gray-300">
               {t(stat.labelKey)}
             </p>
           </div>

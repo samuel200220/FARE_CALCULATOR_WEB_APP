@@ -1,6 +1,5 @@
 'use client';
 
-//import Link from 'next/link';
 import { Car, PackageSearch } from 'lucide-react';
 import { FaPlaneDeparture } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
@@ -32,9 +31,9 @@ const Section2Pro = () => {
   return (
     <section
       id="services"
-      className="bg-white dark:bg-[#0D1B2A] pt-10 pb-20 mt-20 px-4 sm:px-6 lg:px-8"
+      className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] pt-10 pb-20 mt-20 px-4 sm:px-6 lg:px-8"
     >
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-blue-700 dark:text-white mb-12">
+      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-blue-900 dark:text-white mb-12">
         {t('title')}
       </h2>
 
@@ -50,10 +49,10 @@ const Section2Pro = () => {
                 rel="noopener noreferrer"
                 className="block"
               >
-                <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl border shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 cursor-pointer">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
                   <div className="flex flex-col items-center text-center">
                     {service.icon}
-                    <h3 className="text-xl font-semibold text-blue-700 dark:text-white mb-2">
+                    <h3 className="text-xl font-semibold text-blue-900 dark:text-white mb-2">
                       {service.title}
                     </h3>
                     <p className="text-gray-700 dark:text-gray-300 text-sm">
@@ -66,10 +65,10 @@ const Section2Pro = () => {
           }
           return (
             <a href={service.link} key={index} className="block">
-              <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl border shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105 cursor-pointer">
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
                 <div className="flex flex-col items-center text-center">
                   {service.icon}
-                  <h3 className="text-xl font-semibold text-blue-700 dark:text-white mb-2">
+                  <h3 className="text-xl font-semibold text-blue-900 dark:text-white mb-2">
                     {service.title}
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 text-sm">
