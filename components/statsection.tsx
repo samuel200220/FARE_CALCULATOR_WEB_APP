@@ -7,63 +7,69 @@ import { useTranslations } from 'next-intl';
 type Stat = {
   labelKey: string;
   target: number;
+  suffix?: string;
 };
 
 const stats: Stat[] = [
-  { labelKey: 'taxis', target: 100 },
-  { labelKey: 'users', target: 5000 },
-  { labelKey: 'ridesPerDay', target: 120 },
+  { labelKey: 'taxis', target: 100, suffix: '+' },
+  { labelKey: 'users', target: 5000, suffix: '+' },
+  { labelKey: 'ridesPerDay', target: 120, suffix: '/j' },
 ];
 
 export default function StatsSection() {
   const [counts, setCounts] = useState(stats.map(() => 0));
-  const { ref, inView } = useInView({ triggerOnce: true });
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
   const t = useTranslations('StatsSection');
 
   useEffect(() => {
     if (!inView) return;
 
     const intervals = stats.map((stat, i) => {
+      const duration = 2000;
+      const steps = 60;
+      const stepTime = duration / steps;
+      let currentStep = 0;
+
       return setInterval(() => {
+        currentStep++;
+        const progress = currentStep / steps;
+        // Ease out function
+        const ease = 1 - Math.pow(1 - progress, 3);
+
         setCounts((prev) => {
           const newCounts = [...prev];
-          if (newCounts[i] < stat.target) {
-            newCounts[i] += Math.ceil(stat.target / 50);
-            if (newCounts[i] > stat.target) newCounts[i] = stat.target;
-          }
+          newCounts[i] = Math.ceil(stat.target * ease);
           return newCounts;
         });
-      }, 30);
+
+        if (currentStep >= steps) {
+          clearInterval(intervals[i]);
+        }
+      }, stepTime);
     });
 
-    const stopAfter = setTimeout(() => {
-      intervals.forEach(clearInterval);
-    }, 2000);
-
-    return () => {
-      intervals.forEach(clearInterval);
-      clearTimeout(stopAfter);
-    };
+    return () => intervals.forEach(i => i && clearInterval(i));
   }, [inView]);
 
   return (
-    <section
-      ref={ref}
-      className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] py-16 px-4 sm:px-8 text-center mb-20"
-    >
-      <h2 className="text-3xl font-bold text-blue-900 dark:text-white mb-10">
+    <section ref={ref} className="py-20 px-4 relative">
+      {/* Background Strip */}
+      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-40 bg-blue-600/5 dark:bg-white/5 -skew-y-2 -z-10" />
+
+      <h2 className="text-3xl font-bold text-center text-blue-900 dark:text-white mb-16">
         {t('title')}
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+            className="group p-8 rounded-3xl bg-white dark:bg-gray-800 shadow-xl border-b-4 border-blue-500 hover:-translate-y-2 transition-transform duration-300 text-center"
           >
-            <div className="text-4xl font-extrabold text-blue-600 dark:text-blue-400 mb-2">
-              {counts[index]}+
+            <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 mb-4 font-mono">
+              {counts[index]}{stat.suffix}
             </div>
-            <p className="text-gray-700 dark:text-gray-300">
+            <p className="text-gray-600 dark:text-gray-300 font-medium text-lg uppercase tracking-wide">
               {t(stat.labelKey)}
             </p>
           </div>

@@ -9,7 +9,7 @@ const Titre = () => {
   const t = useTranslations('titreano');
 
   return (
-    <section className='mb-7 mt-9 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] flex flex-col items-center justify-center px-4 pb-6 overflow-auto'>
+    <section className='mb-7 mt-9 bg-gradient-to-br from-white to-white dark:from-[#0D1B2A] dark:to-[#1B263B] flex flex-col items-center justify-center px-4 pb-6 overflow-auto'>
       <div className='mb-6 mt-9 flex items-center justify-center'>
         <h1 className='text-blue-900 text-center font-bold dark:text-white text-3xl sm:text-5xl md:text-5xl lg:text-6xl'>
           <span className='block text-gray-800 dark:text-white font-bold'>

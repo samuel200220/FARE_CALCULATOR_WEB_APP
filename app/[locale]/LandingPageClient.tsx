@@ -9,7 +9,8 @@ import {
   FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide, 
   FaMoneyBillAlt, FaMapMarkerAlt, FaLocationArrow,
   FaCloudRain, FaRoad, FaCalendarAlt, FaCarCrash,
-  FaSuitcase, FaHardHat, FaArrowRight, FaArrowLeft
+  FaSuitcase, FaHardHat, FaArrowRight, FaArrowLeft,
+  FaExclamationTriangle, FaRoute, FaDollarSign
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
@@ -68,7 +69,6 @@ export default function LandingPageClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [compteur, setCompteur] = useState(0);
   const [bloque, setBloque] = useState(false);
-  const [afficherMessage, setAfficherMessage] = useState(false);
   const [estConnecte, setEstConnecte] = useState(false);
   
   const [start, setStart] = useState('');
@@ -108,6 +108,13 @@ export default function LandingPageClient() {
     jourSemaine?: string;
     etatRoute?: string;
   }>({});
+
+  // Réinitialiser le compteur au chargement de la page
+  useEffect(() => {
+    localStorage.removeItem("compteurUtilisation");
+    setCompteur(0);
+    setBloque(false);
+  }, []);
 
   // Charger le modèle ONNX au démarrage
   useEffect(() => {
@@ -597,21 +604,6 @@ export default function LandingPageClient() {
 
     if (Object.keys(newErrors).length > 0) return;
 
-    if (!estConnecte && compteur >= 3) {
-      toast.error("Vous avez atteint la limite de 3 utilisations. Veuillez vous enregistrer pour continuer.", {
-        duration: 5000,
-        position: 'top-center',
-        style: {
-          backgroundColor: '#f87171',
-          color: '#fff',
-          fontSize: '16px',
-          padding: '16px',
-          borderRadius: '8px',
-        },
-      });
-      return;
-    }
-
     try {
       setIsLoading(true);
       const route = await calculateRoute();
@@ -622,17 +614,6 @@ export default function LandingPageClient() {
       setError((err as Error).message);
     } finally {
       setIsLoading(false);
-    }
-
-    if (!estConnecte) {
-      const nouveauCompteur = compteur + 1;
-      localStorage.setItem("compteurUtilisation", nouveauCompteur.toString());
-      setCompteur(nouveauCompteur);
-
-      if (nouveauCompteur >= 3) {
-        setBloque(true);
-        setAfficherMessage(true);
-      }
     }
   };
 
@@ -656,6 +637,22 @@ export default function LandingPageClient() {
 
   const handleStep3Submit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Vérifier si bloqué avant de calculer
+    if (bloque && !estConnecte) {
+      toast.error("Vous avez atteint la limite de 3 calculs. Veuillez vous enregistrer pour continuer.", {
+        duration: 5000,
+        position: 'top-center',
+        style: {
+          backgroundColor: '#f87171',
+          color: '#fff',
+          fontSize: '16px',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+      return;
+    }
 
     const currentRoute = routes[selectedRouteIndex];
     
@@ -692,11 +689,12 @@ export default function LandingPageClient() {
       // Récupérer le tarif officiel en parallèle
       const officialFarePromise = getOfficialFare(start, end, hour);
 
-      // Essayer d'abord avec ONNX
+      // Essayer d'abord avec ONNX, puis avec l'API en ligne (comme dans section1.tsx)
       if (onnxSession && !modelLoading) {
         try {
           prixEstime = await predictWithONNX(predictionData);
           predictionSource = 'ONNX';
+          console.log('Prédiction ONNX réussie:', prixEstime);
         } catch (onnxError) {
           console.warn('Erreur ONNX, utilisation de l\'API:', onnxError);
           
@@ -705,6 +703,7 @@ export default function LandingPageClient() {
             const apiResult = await predictWithAPI(predictionData);
             prixEstime = apiResult.prix_estime_fcfa;
             predictionSource = 'API (fallback)';
+            console.log('Prédiction API réussie:', prixEstime);
           } catch (apiError) {
             console.warn('Erreur API, utilisation du calcul local:', apiError);
             prixEstime = calculateLocalEstimation(predictionData);
@@ -717,6 +716,7 @@ export default function LandingPageClient() {
           const apiResult = await predictWithAPI(predictionData);
           prixEstime = apiResult.prix_estime_fcfa;
           predictionSource = 'API (modèle non chargé)';
+          console.log('Prédiction API réussie:', prixEstime);
         } catch (apiError) {
           console.warn('Erreur API, utilisation du calcul local:', apiError);
           prixEstime = calculateLocalEstimation(predictionData);
@@ -759,7 +759,23 @@ export default function LandingPageClient() {
         });
       }
       
-      toast.success('Prédiction calculée avec succès!');
+      // Incrémenter le compteur pour les utilisateurs non connectés (uniquement à la dernière étape)
+      if (!estConnecte) {
+        const nouveauCompteur = compteur + 1;
+        setCompteur(nouveauCompteur);
+        
+        if (nouveauCompteur >= 3) {
+          setBloque(true);
+          toast.error("Vous avez atteint la limite de 3 calculs. Veuillez vous enregistrer pour continuer.", {
+            duration: 5000,
+            position: 'top-center',
+          });
+        } else {
+          toast.success('Prédiction calculée avec succès!');
+        }
+      } else {
+        toast.success('Prédiction calculée avec succès!');
+      }
 
     } catch (err: any) {
       console.error('Erreur complète de prédiction:', err);
@@ -798,6 +814,20 @@ export default function LandingPageClient() {
       
       setPredictionResult(simulatedResult);
       setError(`⚠️ Calcul local utilisé (erreur ${errorType})`);
+      
+      // Incrémenter le compteur même pour les erreurs (uniquement à la dernière étape)
+      if (!estConnecte) {
+        const nouveauCompteur = compteur + 1;
+        setCompteur(nouveauCompteur);
+        
+        if (nouveauCompteur >= 3) {
+          setBloque(true);
+          toast.error("Vous avez atteint la limite de 3 calculs. Veuillez vous enregistrer pour continuer.", {
+            duration: 5000,
+            position: 'top-center',
+          });
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -852,6 +882,7 @@ export default function LandingPageClient() {
     setSelectedDestinationPlace(null);
     setDepartSearchResults([]);
     setDestinationSearchResults([]);
+    setShowCustomDiv(false);
   };
 
   const renderStepIndicator = () => (
@@ -859,11 +890,11 @@ export default function LandingPageClient() {
       <div className="flex items-center space-x-2">
         {[1, 2, 3].map((stepNum) => (
           <React.Fragment key={stepNum}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 dark:bg-gray-700 text-gray-500'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === stepNum ? 'bg-purple-600 text-white' : 'bg-gray-300 dark:bg-gray-700 text-gray-500'}`}>
               {stepNum}
             </div>
             {stepNum < 3 && (
-              <div className={`w-12 h-1 ${step > stepNum ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-700'}`} />
+              <div className={`w-12 h-1 ${step > stepNum ? 'bg-purple-600' : 'bg-gray-300 dark:bg-gray-700'}`} />
             )}
           </React.Fragment>
         ))}
@@ -917,7 +948,7 @@ export default function LandingPageClient() {
                 {/* App Download Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-12">
                   <Link href={'/accueilano'}>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
                         {t('startFree')}
                     </button>
                     </Link>
@@ -971,13 +1002,45 @@ export default function LandingPageClient() {
                   </div>
                 )}
 
+                {/* Avertissement de limite de calculs */}
+                {bloque && !estConnecte && (
+                  <div className="mb-4 p-4 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-2xl shadow-lg">
+                    <div className="flex items-center gap-3">
+                      <FaExclamationTriangle className="text-xl" />
+                      <div>
+                        <p className="font-bold">Limite de calculs atteinte</p>
+                        <p className="text-sm opacity-90">
+                          Vous avez effectué {compteur} calculs sur 3 autorisés. Inscrivez-vous pour continuer.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Indicateur de calculs restants */}
+                {!estConnecte && compteur > 0 && !bloque && (
+                  <div className="mb-4 text-center">
+                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 px-4 py-2 rounded-full">
+                      <span className="text-sm text-purple-700 dark:text-purple-300">
+                        Calculs effectués: <span className="font-bold">{compteur}/3</span>
+                      </span>
+                      <div className="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-purple-500 to-green-500 transition-all duration-500"
+                          style={{ width: `${(compteur / 3) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {renderStepIndicator()}
 
                 {!predictionResult ? (
                   <>
                     {step === 1 ? (
                       <form onSubmit={handleStep1Submit} className="space-y-5">
-                        <h4 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-4 flex items-center gap-2">
+                        <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
                           <FaMapMarkerAlt />
                           Informations de trajet
                         </h4>
@@ -985,7 +1048,7 @@ export default function LandingPageClient() {
                         {/* Champ Départ */}
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaMapMarkerAlt className="text-blue-600 text-lg" />
+                            <FaMapMarkerAlt className="text-purple-600 text-lg" />
                           </div>
                           <Input
                             value={start}
@@ -1001,10 +1064,11 @@ export default function LandingPageClient() {
                             }}
                             onBlur={() => setTimeout(() => setShowSuggestionsStart(false), 200)}
                             className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                              errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                              errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
                             }`}
                             placeholder={f("go")}
                             id="start"
+                            disabled={bloque && !estConnecte}
                           />
                           {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
                           
@@ -1019,9 +1083,9 @@ export default function LandingPageClient() {
                                     <li
                                       key={place.id}
                                       onClick={() => handlePlaceSelect(place, 'depart')}
-                                      className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer flex items-center gap-2"
+                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer flex items-center gap-2"
                                     >
-                                      <FaMapMarkerAlt className="text-blue-500 text-sm" />
+                                      <FaMapMarkerAlt className="text-purple-500 text-sm" />
                                       <span>{place.name}</span>
                                     </li>
                                   ))}
@@ -1037,7 +1101,7 @@ export default function LandingPageClient() {
                                     <li
                                       key={`local-${index}`}
                                       onClick={() => handleSelectStart(name)}
-                                      className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer"
                                     >
                                       {name}
                                     </li>
@@ -1055,7 +1119,7 @@ export default function LandingPageClient() {
                         {/* Champ Destination */}
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaLocationArrow className="text-blue-600 text-lg" />
+                            <FaLocationArrow className="text-purple-600 text-lg" />
                           </div>
                           <Input
                             value={end}
@@ -1071,10 +1135,11 @@ export default function LandingPageClient() {
                             }}
                             onBlur={() => setTimeout(() => setShowSuggestionsEnd(false), 200)}
                             className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                              errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                              errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
                             }`}
                             placeholder={f("arrive")}
                             id="end"
+                            disabled={bloque && !estConnecte}
                           />
                           {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
                           
@@ -1089,9 +1154,9 @@ export default function LandingPageClient() {
                                     <li
                                       key={place.id}
                                       onClick={() => handlePlaceSelect(place, 'destination')}
-                                      className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer flex items-center gap-2"
+                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer flex items-center gap-2"
                                     >
-                                      <FaLocationArrow className="text-blue-500 text-sm" />
+                                      <FaLocationArrow className="text-purple-500 text-sm" />
                                       <span>{place.name}</span>
                                     </li>
                                   ))}
@@ -1107,7 +1172,7 @@ export default function LandingPageClient() {
                                     <li
                                       key={`local-${index}`}
                                       onClick={() => handleSelectEnd(name)}
-                                      className="dark:text-white px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-900 cursor-pointer"
+                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer"
                                     >
                                       {name}
                                     </li>
@@ -1124,14 +1189,15 @@ export default function LandingPageClient() {
 
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaRegClock className="text-blue-600" />
+                            <FaRegClock className="text-purple-600" />
                           </div>
                           <select
                             value={hour}
                             onChange={(e) => setHour(e.target.value)}
                             className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
-                              errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                              errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
                             }`}
+                            disabled={bloque && !estConnecte}
                           >
                             <option value="">{f("time")}</option>
                             {predefinedHours.map((h) => (
@@ -1145,7 +1211,7 @@ export default function LandingPageClient() {
 
                         <Button
                           type="submit"
-                          disabled={isLoading}
+                          disabled={isLoading || (bloque && !estConnecte)}
                           onClick={() =>
                             event({
                               action: "click_calcul",
@@ -1153,28 +1219,43 @@ export default function LandingPageClient() {
                               label: "Bouton Calculer",
                             })
                           }
-                          className="text-white dark:bg-blue-700 dark:text-white dark:hover:bg-green-800 bg-blue-700 w-full h-12 hover:bg-green-600 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl flex items-center justify-center gap-2"
+                          className={`text-white dark:bg-purple-700 dark:text-white dark:hover:bg-green-800 w-full h-12 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl flex items-center justify-center gap-2 ${
+                            bloque && !estConnecte 
+                              ? 'bg-gray-500 cursor-not-allowed' 
+                              : 'bg-purple-700 hover:bg-green-600'
+                          }`}
                         >
-                          {isLoading ? t('calculating') : 'Suivant'}
-                          <FaArrowRight />
+                          {bloque && !estConnecte ? (
+                            <span className="flex items-center gap-2">
+                              <FaExclamationTriangle />
+                              Limite atteinte
+                            </span>
+                          ) : isLoading ? (
+                            t('calculating')
+                          ) : (
+                            <>
+                              Suivant
+                              <FaArrowRight />
+                            </>
+                          )}
                         </Button>
                       </form>
                     ) : step === 2 ? (
                       <form onSubmit={handleStep2Submit} className="space-y-4">
-                        <h4 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-4 flex items-center gap-2">
+                        <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
                           <FaCalendarAlt />
                           Conditions de trajet
                         </h4>
 
                         {routes.length > 0 && routes[selectedRouteIndex] && (
-                          <div className="bg-blue-50 dark:bg-gray-800 rounded-lg p-3 mb-4">
+                          <div className="bg-purple-50 dark:bg-gray-800 rounded-lg p-3 mb-4">
                             <div className="grid grid-cols-2 gap-2">
                               <div className="text-center p-2 bg-white dark:bg-gray-700 rounded">
                                 <div className="flex items-center justify-center gap-1 text-sm text-gray-600 dark:text-gray-300">
                                   <MdOutlineDirectionsWalk />
                                   Distance
                                 </div>
-                                <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
+                                <div className="font-bold text-lg text-purple-600 dark:text-purple-400">
                                   {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
                                 </div>
                               </div>
@@ -1183,7 +1264,7 @@ export default function LandingPageClient() {
                                   <FaRegClock />
                                   Durée
                                 </div>
-                                <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
+                                <div className="font-bold text-lg text-purple-600 dark:text-purple-400">
                                   {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
                                 </div>
                               </div>
@@ -1193,14 +1274,15 @@ export default function LandingPageClient() {
 
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaCalendarAlt className="text-blue-600" />
+                            <FaCalendarAlt className="text-purple-600" />
                           </div>
                           <select
                             value={jourSemaine}
                             onChange={(e) => setJourSemaine(e.target.value)}
                             className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
-                              errors.jourSemaine ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-blue-800'
+                              errors.jourSemaine ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
                             }`}
+                            disabled={bloque && !estConnecte}
                           >
                             <option value="">Jour de la semaine</option>
                             <option value="1">Lundi</option>
@@ -1216,7 +1298,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaCalendarAlt className="text-blue-600" />
+                            <FaCalendarAlt className="text-purple-600" />
                             Jour férié?
                           </label>
                           <div className="flex gap-4">
@@ -1226,7 +1308,8 @@ export default function LandingPageClient() {
                                 value="0"
                                 checked={jourFerie === '0'}
                                 onChange={(e) => setJourFerie(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Non</span>
                             </label>
@@ -1236,7 +1319,8 @@ export default function LandingPageClient() {
                                 value="1"
                                 checked={jourFerie === '1'}
                                 onChange={(e) => setJourFerie(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Oui</span>
                             </label>
@@ -1245,7 +1329,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaCloudRain className="text-blue-600" />
+                            <FaCloudRain className="text-purple-600" />
                             Pluie?
                           </label>
                           <div className="flex gap-4">
@@ -1255,7 +1339,8 @@ export default function LandingPageClient() {
                                 value="0"
                                 checked={pluie === '0'}
                                 onChange={(e) => setPluie(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Non</span>
                             </label>
@@ -1265,7 +1350,8 @@ export default function LandingPageClient() {
                                 value="1"
                                 checked={pluie === '1'}
                                 onChange={(e) => setPluie(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Oui</span>
                             </label>
@@ -1274,7 +1360,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaRoad className="text-blue-600" />
+                            <FaRoad className="text-purple-600" />
                             État de la route
                           </label>
                           <select
@@ -1283,6 +1369,7 @@ export default function LandingPageClient() {
                             className={`bg-gray-200 dark:bg-gray-800 dark:text-white w-full h-12 px-3 py-2 rounded-[7px] border ${
                               errors.etatRoute ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300'
                             }`}
+                            disabled={bloque && !estConnecte}
                           >
                             <option value="">Sélectionner</option>
                             <option value="bonne">Bonne</option>
@@ -1294,7 +1381,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaCarCrash className="text-blue-600" />
+                            <FaCarCrash className="text-purple-600" />
                             Accident sur la route?
                           </label>
                           <div className="flex gap-4">
@@ -1304,7 +1391,8 @@ export default function LandingPageClient() {
                                 value="0"
                                 checked={accident === '0'}
                                 onChange={(e) => setAccident(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Non</span>
                             </label>
@@ -1314,7 +1402,8 @@ export default function LandingPageClient() {
                                 value="1"
                                 checked={accident === '1'}
                                 onChange={(e) => setAccident(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Oui</span>
                             </label>
@@ -1325,30 +1414,35 @@ export default function LandingPageClient() {
                           <Button
                             type="button"
                             onClick={() => setStep(1)}
-                            className="bg-gray-500 hover:bg-gray-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                            className="bg-purple-500 hover:bg-purple-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
                           >
                             <FaArrowLeft />
                             Retour
                           </Button>
                           <Button
                             type="submit"
-                            className="bg-blue-700 hover:bg-green-800 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                            disabled={bloque && !estConnecte}
+                            className={`w-1/2 h-12 flex items-center justify-center gap-2 ${
+                              bloque && !estConnecte
+                                ? 'bg-gray-500 cursor-not-allowed'
+                                : 'bg-purple-700 hover:bg-green-800 text-white'
+                            }`}
                           >
-                            Suivant
+                            {bloque && !estConnecte ? 'Bloqué' : 'Suivant'}
                             <FaArrowRight />
                           </Button>
                         </div>
                       </form>
                     ) : (
                       <form onSubmit={handleStep3Submit} className="space-y-4">
-                        <h4 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-4 flex items-center gap-2">
+                        <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
                           <FaSuitcase />
                           Conditions supplémentaires
                         </h4>
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaSuitcase className="text-blue-600" />
+                            <FaSuitcase className="text-purple-600" />
                             Bagages?
                           </label>
                           <div className="flex gap-4">
@@ -1358,7 +1452,8 @@ export default function LandingPageClient() {
                                 value="non"
                                 checked={bagages === 'non'}
                                 onChange={(e) => setBagages(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Non</span>
                             </label>
@@ -1368,7 +1463,8 @@ export default function LandingPageClient() {
                                 value="oui"
                                 checked={bagages === 'oui'}
                                 onChange={(e) => setBagages(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Oui</span>
                             </label>
@@ -1377,7 +1473,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaRoad className="text-blue-600" />
+                            <FaRoad className="text-purple-600" />
                             Routes larges?
                           </label>
                           <div className="flex gap-4">
@@ -1387,7 +1483,8 @@ export default function LandingPageClient() {
                                 value="oui"
                                 checked={routesLarges === 'oui'}
                                 onChange={(e) => setRoutesLarges(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Oui</span>
                             </label>
@@ -1397,7 +1494,8 @@ export default function LandingPageClient() {
                                 value="non"
                                 checked={routesLarges === 'non'}
                                 onChange={(e) => setRoutesLarges(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Non</span>
                             </label>
@@ -1406,7 +1504,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaHardHat className="text-blue-600" />
+                            <FaHardHat className="text-purple-600" />
                             Routes en travaux?
                           </label>
                           <div className="flex gap-4">
@@ -1416,7 +1514,8 @@ export default function LandingPageClient() {
                                 value="non"
                                 checked={routesTravaux === 'non'}
                                 onChange={(e) => setRoutesTravaux(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Non</span>
                             </label>
@@ -1426,29 +1525,49 @@ export default function LandingPageClient() {
                                 value="oui"
                                 checked={routesTravaux === 'oui'}
                                 onChange={(e) => setRoutesTravaux(e.target.value)}
-                                className="text-blue-600"
+                                className="text-purple-600"
+                                disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">Oui</span>
                             </label>
                           </div>
                         </div>
 
+                        {/* Avertissement si bloqué */}
+                        {bloque && !estConnecte && (
+                          <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
+                            <div className="flex items-center gap-3">
+                              <FaExclamationTriangle className="text-red-600 dark:text-red-400 text-xl" />
+                              <div>
+                                <p className="font-semibold text-red-700 dark:text-red-300">Limite de calculs atteinte</p>
+                                <p className="text-sm text-red-600 dark:text-red-400 mt-1">
+                                  Vous avez effectué 3 calculs. Inscrivez-vous pour continuer.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
                         <div className="flex gap-3 pt-2">
                           <Button
                             type="button"
                             onClick={() => setStep(2)}
-                            className="bg-gray-500 hover:bg-gray-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                            className="bg-purple-500 hover:bg-purple-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
                           >
                             <FaArrowLeft />
                             Retour
                           </Button>
                           <Button
                             type="submit"
-                            disabled={isLoading}
-                            className="bg-blue-700 hover:bg-green-800 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                            disabled={isLoading || (bloque && !estConnecte)}
+                            className={`w-1/2 h-12 flex items-center justify-center gap-2 ${
+                              bloque && !estConnecte
+                                ? 'bg-gray-500 cursor-not-allowed'
+                                : 'bg-purple-700 hover:bg-green-800 text-white'
+                            }`}
                           >
-                            <FaCalculator />
-                            {isLoading ? 'Calcul...' : 'Calculer'}
+                            <FaCalculator /> 
+                            {bloque && !estConnecte ? 'Bloqué' : (isLoading ? 'Calcul...' : 'Calculer')}
                           </Button>
                         </div>
                       </form>
@@ -1469,7 +1588,7 @@ export default function LandingPageClient() {
                     <form onSubmit={(e) => { e.preventDefault(); resetForm(); }} className="space-y-4 mb-4 mt-2">
                       <Button
                         type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white w-full h-12"
+                        className="bg-purple-600 hover:bg-purple-700 text-white w-full h-12"
                       >
                         Nouveau calcul
                       </Button>
@@ -1490,17 +1609,17 @@ export default function LandingPageClient() {
 
                     {/* Résumé sous la carte */}
                     {predictionResult && routes.length > 0 && (
-                      <div className="bg-blue-50 dark:bg-gray-700 rounded-lg p-3 space-y-2 mt-4">
+                      <div className="bg-purple-50 dark:bg-gray-700 rounded-lg p-3 space-y-2 mt-4">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="text-center p-2 bg-white dark:bg-gray-600 rounded">
                             <div className="text-xs text-gray-500 dark:text-gray-300">Distance</div>
-                            <div className="font-bold text-blue-600 dark:text-blue-400">
+                            <div className="font-bold text-purple-600 dark:text-purple-400">
                               {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
                             </div>
                           </div>
                           <div className="text-center p-2 bg-white dark:bg-gray-600 rounded">
                             <div className="text-xs text-gray-500 dark:text-gray-300">Durée</div>
-                            <div className="font-bold text-blue-600 dark:text-blue-400">
+                            <div className="font-bold text-purple-600 dark:text-purple-400">
                               {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
                             </div>
                           </div>
@@ -1519,62 +1638,134 @@ export default function LandingPageClient() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <div className="flex items-center gap-2 font-semibold text-lg text-blue-900 dark:text-white">
-                      <FaMoneyBillAlt />
-                      {t('estimationTitle')}
-                    </div>
-
-                    {routes.length > 0 && routes[selectedRouteIndex] && (
-                      <div className="flex justify-between gap-2">
-                        <div className="flex-1 bg-blue-50 dark:bg-gray-800 rounded p-3">
-                          <div className="flex items-center gap-1 font-medium text-blue-700 dark:text-white">
-                            <MdOutlineDirectionsWalk />
-                            {t('distance')}
-                          </div>
-                          <div className="text-xl font-bold text-black dark:text-white">
-                            {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
-                          </div>
-                          <div className="flex items-center gap-1 font-medium text-blue-700 dark:text-white mt-2">
-                            <FaRegClock />
-                            Durée
-                          </div>
-                          <div className="text-xl font-bold text-black dark:text-white">
-                            {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
-                          </div>
+                    <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-800">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full">
+                          <FaMoneyBillAlt className="text-purple-600 dark:text-purple-300 text-2xl" />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-purple-900 dark:text-white">
+                            {t('estimationTitle')}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Trajet: {start} → {end}
+                          </p>
                         </div>
                       </div>
-                    )}
 
-                    {predictionResult && (
-                      <>
-                        <div className="border hover:border-blue-500 rounded p-3 flex justify-between font-medium">
-                          <span className="text-blue-700 dark:text-white">Coût estimé</span>
-                          <span className="font-bold text-blue-700 dark:text-white">{predictionResult.prix_estime_fcfa} FCFA</span>
+                      {routes.length > 0 && routes[selectedRouteIndex] && (
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
+                            <div className="flex items-center gap-2 mb-2">
+                              <MdOutlineDirectionsWalk className="text-purple-600 dark:text-purple-400" />
+                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Distance</span>
+                            </div>
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                              {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
+                            </p>
+                          </div>
+                          <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
+                            <div className="flex items-center gap-2 mb-2">
+                              <FaRegClock className="text-purple-600 dark:text-purple-400" />
+                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Durée</span>
+                            </div>
+                            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                              {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
+                            </p>
+                          </div>
                         </div>
+                      )}
 
-                        <div className="text-sm text-gray-600 dark:text-gray-300 text-center">
-                          Fourchette: {predictionResult.prix_estime_range}
+                      {predictionResult && (
+                        <div className="space-y-4">
+                          <div className="text-center p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200 dark:border-green-800">
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                              <FaDollarSign className="text-green-600 dark:text-green-400 text-xl" />
+                              <span className="text-lg font-medium text-gray-700 dark:text-gray-300">Coût estimé</span>
+                            </div>
+                            <p className="text-4xl font-bold text-green-700 dark:text-green-400 mb-2">
+                              {predictionResult.prix_estime_fcfa} FCFA
+                            </p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              Fourchette: <span className="font-semibold">{predictionResult.prix_estime_range}</span>
+                            </p>
+                          </div>
+
+                          {predictionResult.official_fare && predictionResult.official_fare > 0 && (
+                            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+                              <p className="text-sm text-blue-700 dark:text-blue-300 text-center">
+                                <span className="font-semibold">Tarif officiel:</span> {predictionResult.official_fare} FCFA
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Afficher le compteur de calculs */}
+                          {!estConnecte && (
+                            <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-xl border border-purple-200 dark:border-purple-800">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
+                                  Calculs effectués:
+                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-lg font-bold text-purple-900 dark:text-purple-100">
+                                    {compteur}/3
+                                  </span>
+                                  <div className="w-20 h-2 bg-purple-200 dark:bg-purple-800 rounded-full overflow-hidden">
+                                    <div 
+                                      className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                                      style={{ width: `${(compteur / 3) * 100}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
-
-                      </>
-                    )}
+                      )}
+                    </div>
 
                     <div className="flex flex-col gap-3 mt-4">
                       {routes.length > 0 && (
                         <Button
                           onClick={() => setShowCustomDiv(true)}
-                          className="bg-green-600 text-white w-full h-12 hover:bg-green-800"
+                          className="bg-gradient-to-r from-purple-600 to-blue-600 text-white w-full h-12 hover:from-purple-700 hover:to-blue-700 flex items-center justify-center gap-2"
                         >
+                          <FaRoute />
                           {t('viewRoute')}
                         </Button>
                       )}
 
-                      <Button
-                        onClick={resetForm}
-                        className="bg-blue-600 text-white w-full h-12 hover:bg-blue-800"
-                      >
-                        {t('recalculate')}
-                      </Button>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Button
+                          onClick={() => {
+                            resetForm();
+                            setPredictionResult(null);
+                          }}
+                          className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white w-full h-12 hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center gap-2"
+                        >
+                          <FaArrowLeft />
+                          Nouveau trajet
+                        </Button>
+                        
+                        <Button
+                          onClick={() => {
+                            const newCompteur = compteur + 1;
+                            setCompteur(newCompteur);
+                            if (newCompteur >= 3) {
+                              setBloque(true);
+                            }
+                            setPredictionResult(null);
+                            setStep(1);
+                          }}
+                          disabled={bloque && !estConnecte}
+                          className={`bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full h-12 hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-2 ${
+                            bloque && !estConnecte ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                        >
+                          <FaCalculator />
+                          {t('recalculate')}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}

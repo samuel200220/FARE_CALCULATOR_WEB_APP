@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/provider/theme-provider";
 import { Toaster } from "react-hot-toast";
 import localFont from "next/font/local";
 import Head from "next/head";
+import RouteLoading from "@/components/ui/route-loading";
+import { Suspense } from "react";
 
 const poppins = localFont({
   src: [
@@ -147,7 +149,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans bg-gradient-to-br from-gray-200 to-gray-200 dark:from-[#0D1B2A] dark:to-[#1B263B] text-gray-800 dark:text-gray-200 antialiased min-h-screen transition-colors duration-300">
+      <body className="font-sans bg-gradient-to-br from-[#F0F2F5] to-[#F0F2F5] dark:from-[#0D1B2A] dark:to-[#1B263B] text-gray-800 dark:text-gray-200 antialiased min-h-screen transition-colors duration-300">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -155,6 +157,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="min-h-screen flex flex-col">
+            <Suspense fallback={null}>
+              <RouteLoading />
+            </Suspense>
             {children}
           </div>
           <Toaster 

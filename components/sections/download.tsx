@@ -37,7 +37,7 @@ export default function Download() {
         {/* Image */}
         <div className="flex-1 p-6 flex justify-center items-center">
           <Image
-            src="/logo.svg"
+            src="/logo_farcal.png"
             alt="Application FareGo"
             width={350}
             height={700}

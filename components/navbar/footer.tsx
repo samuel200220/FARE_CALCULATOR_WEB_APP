@@ -2,16 +2,8 @@
 
 import React from "react";
 import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-  FaGlobe,
-  FaApple,
-  FaGooglePlay,
-  FaMapMarkerAlt,
-  FaPhone,
-  FaEnvelope
+  FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaGlobe,
+  FaApple, FaGooglePlay, FaPhone, FaEnvelope
 } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
@@ -19,163 +11,86 @@ const Footer = () => {
   const t = useTranslations("footer");
 
   return (
-    <footer className="bg-gradient-to-b from-gray-800 to-gray-900 dark:from-[#0D1B2A] dark:to-gray-950 text-white pt-12 pb-8 relative overflow-hidden">
-      {/* Effet de fond */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 to-violet-900/10"></div>
-      
+    <footer className="bg-gray-950 text-white pt-20 pb-10 relative overflow-hidden border-t border-white/10">
+      {/* Subtle Glows */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-[100px] pointer-events-none" />
+
       <div className="container mx-auto px-4 md:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-          {/* Our Company */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg text-white mb-4 pb-2 border-b border-blue-500/30 inline-block">
-              {t("company")}
-            </h3>
-            <ul className="space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
+          {/* Company */}
+          <div className="space-y-6">
+            <h3 className="font-bold text-lg text-white mb-4">{t("company")}</h3>
+            <ul className="space-y-3 text-sm text-gray-400">
               {["vision", "mission", "goals", "originality", "recruiting", "contact"].map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-gray-300 hover:text-white transition-colors flex items-center gap-2 group"
-                  >
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    {t(item)}
-                  </a>
-                </li>
+                <li key={item}><a href="#" className="hover:text-blue-400 transition-colors">{t(item)}</a></li>
               ))}
             </ul>
           </div>
 
           {/* Support */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg text-white mb-4 pb-2 border-b border-blue-500/30 inline-block">
-              {t("support")}
-            </h3>
-            <ul className="space-y-3">
+          <div className="space-y-6">
+            <h3 className="font-bold text-lg text-white mb-4">{t("support")}</h3>
+            <ul className="space-y-3 text-sm text-gray-400">
               {["marketplace", "rentalAgency", "travelAgency", "carpooling"].map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-gray-300 hover:text-white transition-colors flex items-center gap-2 group"
-                  >
-                    <span className="w-1.5 h-1.5 bg-violet-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    {t(item)}
-                  </a>
-                </li>
+                <li key={item}><a href="#" className="hover:text-blue-400 transition-colors">{t(item)}</a></li>
               ))}
             </ul>
           </div>
 
-          {/* Legal Information */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg text-white mb-4 pb-2 border-b border-blue-500/30 inline-block">
-              {t("legal")}
-            </h3>
-            <ul className="space-y-3">
+          {/* Legal */}
+          <div className="space-y-6">
+            <h3 className="font-bold text-lg text-white mb-4">{t("legal")}</h3>
+            <ul className="space-y-3 text-sm text-gray-400">
               {["terms", "privacy", "personalInfo", "cookies"].map((item) => (
-                <li key={item}>
-                  <a 
-                    href="#" 
-                    className="text-gray-300 hover:text-white transition-colors flex items-center gap-2 group"
-                  >
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                    {t(item)}
-                  </a>
-                </li>
+                <li key={item}><a href="#" className="hover:text-blue-400 transition-colors">{t(item)}</a></li>
               ))}
             </ul>
           </div>
 
-          {/* Mobile App */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg text-white mb-4 pb-2 border-b border-blue-500/30 inline-block">
-              {t("mobileApp")}
-            </h3>
-            <div className="space-y-4">
-              <a 
-                href="#" 
-                className="flex items-center gap-3 p-3 bg-gray-700/50 hover:bg-gray-700 rounded-xl transition-all duration-300 group"
-              >
-                <div className="p-2 bg-gray-800 rounded-lg group-hover:scale-110 transition-transform">
-                  <FaApple className="w-6 h-6" />
-                </div>
+          {/* Apps */}
+          <div className="space-y-6 lg:col-span-1">
+            <h3 className="font-bold text-lg text-white mb-4">{t("mobileApp")}</h3>
+            <div className="flex flex-col gap-3">
+              <a href="#" className="flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5">
+                <FaApple className="w-8 h-8" />
                 <div>
-                  <div className="text-sm text-gray-400">Download on</div>
-                  <div className="font-semibold">{t("appStore")}</div>
+                  <div className="text-xs text-gray-400">Download on</div>
+                  <div className="font-bold text-sm">{t("appStore")}</div>
                 </div>
               </a>
-              <a 
-                href="#" 
-                className="flex items-center gap-3 p-3 bg-gray-700/50 hover:bg-gray-700 rounded-xl transition-all duration-300 group"
-              >
-                <div className="p-2 bg-gray-800 rounded-lg group-hover:scale-110 transition-transform">
-                  <FaGooglePlay className="w-6 h-6" />
-                </div>
+              <a href="#" className="flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5">
+                <FaGooglePlay className="w-7 h-7 ml-0.5" />
                 <div>
-                  <div className="text-sm text-gray-400">Get it on</div>
-                  <div className="font-semibold">{t("playStore")}</div>
+                  <div className="text-xs text-gray-400">Get it on</div>
+                  <div className="font-bold text-sm">{t("playStore")}</div>
                 </div>
               </a>
             </div>
           </div>
 
-          {/* Contact & Social */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg text-white mb-4 pb-2 border-b border-blue-500/30 inline-block">
-              {t("followUs")}
-            </h3>
-            
-            {/* Social Icons */}
-            <div className="flex gap-3 mb-6">
-              {[
-                { icon: <FaTwitter />, color: "hover:text-blue-400", bg: "hover:bg-blue-500/20" },
-                { icon: <FaFacebookF />, color: "hover:text-blue-600", bg: "hover:bg-blue-600/20" },
-                { icon: <FaInstagram />, color: "hover:text-pink-500", bg: "hover:bg-pink-500/20" },
-                { icon: <FaLinkedinIn />, color: "hover:text-blue-500", bg: "hover:bg-blue-500/20" },
-              ].map((social, index) => (
-                <a 
-                  key={index}
-                  href="#" 
-                  className={`p-3 bg-gray-700/50 rounded-full ${social.color} ${social.bg} transition-all duration-300 hover:scale-110`}
-                  aria-label={`Social media ${index}`}
-                >
-                  {social.icon}
+          {/* Social & Contact */}
+          <div className="space-y-6">
+            <h3 className="font-bold text-lg text-white mb-4">{t("followUs")}</h3>
+            <div className="flex gap-4">
+              {[FaTwitter, FaFacebookF, FaInstagram, FaLinkedinIn].map((Icon, i) => (
+                <a key={i} href="#" className="p-3 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition-all">
+                  <Icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
-
-            {/* Language Selector */}
-            <div className="flex items-center gap-2 p-3 bg-gray-700/50 rounded-lg">
-              <FaGlobe className="text-blue-400" />
-              <span className="flex-1">Français</span>
-              <span className="text-gray-400">▼</span>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-2 mt-4 text-sm text-gray-300">
-              <div className="flex items-center gap-2">
-                <FaPhone className="text-green-400 w-4 h-4" />
-                <span>+33 1 23 45 67 89</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaEnvelope className="text-yellow-400 w-4 h-4" />
-                <span>contact@entreprise.com</span>
-              </div>
+            <div className="space-y-3 text-sm text-gray-400 mt-6 pt-6 border-t border-white/5">
+              <div className="flex items-center gap-3"><FaPhone className="text-blue-500" /> +33 1 23 45 67 89</div>
+              <div className="flex items-center gap-3"><FaEnvelope className="text-violet-500" /> contact@farcal.com</div>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-700 my-6"></div>
-
-        {/* Bottom note */}
-        <div className="text-center text-gray-400 text-sm">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>{t("rights")}</div>
-            <div className="flex gap-6 text-xs">
-              <a href="#" className="hover:text-white transition-colors">Accessibilité</a>
-              <a href="#" className="hover:text-white transition-colors">Mentions légales</a>
-              <a href="#" className="hover:text-white transition-colors">Gestion des cookies</a>
-            </div>
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+          <div>{t("rights")}</div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-white">Accessibilité</a>
+            <a href="#" className="hover:text-white">Mentions légales</a>
           </div>
         </div>
       </div>

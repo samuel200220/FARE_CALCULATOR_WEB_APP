@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-//import { Crown } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import { FaGlobe } from "react-icons/fa";
 import {
   DropdownMenu,
@@ -12,90 +11,88 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ModeToggle } from "../ui/mode-toggle";
-//import SidebarToggle from "../sidebar1";
 import { useTranslations } from "next-intl";
-//import { useRouter, usePathname } from "next/navigation";
-import Sidebar2 from "../sidebar2";
 import { useRouter, usePathname } from "next/navigation";
+import Sidebar from "../sidebar";
 
 const Headerano = () => {
   const a = useTranslations('titreano');
   const t = useTranslations("headerPro");
   const router = useRouter();
-    const pathname = usePathname();
-  //const router = useRouter();
-  //const pathname = usePathname();
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
 
-  // const changeLanguage = (locale: string) => {
-  //   const segments = pathname.split("/");
-  //   segments[1] = locale;
-  //   router.push(segments.join("/") as any);
-  // };
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const changeLocale = (locale: string) => {
     document.cookie = `locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;
-    window.location.reload(); // recharge pour appliquer la langue
-    const segments = pathname.split("/"); // ex: ["", "fr", "aide1"]
-    segments[1] = locale; // remplace la langue
-
-    const newUrl = segments.join("/"); // ex: "/en/aide1"
-
+    window.location.reload();
+    const segments = pathname.split("/");
+    segments[1] = locale;
+    const newUrl = segments.join("/");
     router.push(newUrl);
   };
 
   return (
-    <header className="sticky top-0 z-[100] h-20 flex items-center justify-between px-0 lg:px-4 md:px-4 sm:px-4 py-4 bg-blue-700 w-full dark:bg-[#0D1B2A]">
+    <header className={`
+        fixed top-0 left-0 right-0 z-[100] h-20 px-4 transition-all duration-300
+        flex items-center justify-between
+        ${scrolled
+        ? 'bg-white/80 dark:bg-[#0D1B2A]/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/5 shadow-sm'
+        : 'bg-transparent'}
+    `}>
       {/* Logo / Titre */}
-      <nav className="flex items-center gap-6">
-        <Sidebar2 />
+      <nav className="flex items-center gap-4">
+        <Sidebar />
         <Link
           href="#"
           scroll={true}
-          className="font-bold text-white items-center text-xl lg:text-3xl sm:text-3xl md:text-3xl ml-11 flex gap-2"
+          className={`font-bold text-xl lg:text-3xl ml-2 flex gap-2 transition-colors ${scrolled ? 'text-blue-900 dark:text-white' : 'text-blue-900 dark:text-white'}`}
         >
           Fare Calculator
-          {/* <Crown className="w-6 h-6 text-yellow-400" /> */}
         </Link>
       </nav>
 
       {/* Actions */}
-      <div className="flex items-center gap-4 dark:flex dark:items-center dark:gap-4">
+      <div className="flex items-center gap-4">
         <Link
           href="/aide1"
-          className="hidden lg:flex text-white text-sm font-medium text-[18px] hover:text-violet-800"
+          className={`hidden lg:flex text-sm font-medium hover:text-violet-600 transition-colors ${scrolled ? 'text-gray-700 dark:text-gray-300' : 'text-gray-700 dark:text-gray-300'}`}
         >
           {t("help")}
         </Link>
 
-        {/* <Navigation /> */}
-
         {/* Menu Langues */}
         <DropdownMenu>
           <DropdownMenuTrigger id="lang-switcher-trigger" asChild>
-            <Button className="bg-transparent border-none shadow-none text-white hover:text-violet-800 hover:bg-transparent">
+            <Button variant="ghost" className={`hover:bg-black/5 dark:hover:bg-white/10 ${scrolled ? 'text-gray-700 dark:text-gray-300' : 'text-gray-700 dark:text-gray-300'}`}>
               <FaGlobe className="mr-2" />
               {t("language_switch")}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => changeLocale("fr")}>
-              {t("french")}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLocale("en")}>
-              {t("english")}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLocale("de")}>
-              {t("german")}
-            </DropdownMenuItem>
+          <DropdownMenuContent align="end" className="bg-white/90 dark:bg-[#0D1B2A]/90 backdrop-blur-xl border-gray-200 dark:border-gray-800">
+            <DropdownMenuItem onClick={() => changeLocale("fr")}>{t("french")}</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLocale("en")}>{t("english")}</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLocale("de")}>{t("german")}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Link href={"/inscription1"} className='hidden lg:flex'>
-                <Button className='cursor-pointer bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 text-[18px] text-white transform transition-transform duration-300 ease-in-out hover:scale-105'>{a("signup")}</Button>
-                </Link>
-                <Link href={"/connexion1"} >
-                <Button className='cursor-pointer mr-2 bg-violet-800 dark:bg-violet-900 hover:bg-violet-800 dark:hover:bg-violet-900 transform transition-transform duration-300 ease-in-out hover:scale-105 lg:text-[18px] md:text-[18px] sm:text-[18px] text-[16px] text-white'>{a("login")}</Button>
-                </Link>
-        {/* Déconnexion */}
+        <div className="hidden lg:flex gap-3">
+          <Link href={"/connexion1"}>
+            <Button variant="ghost" className="text-gray-700 dark:text-white hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-white/5">
+              {a("login")}
+            </Button>
+          </Link>
+          <Link href={"/inscription1"}>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 shadow-lg shadow-blue-500/20 transition-all hover:scale-105">
+              {a("signup")}
+            </Button>
+          </Link>
+        </div>
 
         {/* Dark / Light mode */}
         <div className="hidden sm:flex">
@@ -105,6 +102,5 @@ const Headerano = () => {
     </header>
   );
 };
-
 
 export default Headerano;

@@ -258,5 +258,5 @@ export default function Carte({ userLocation, searchedPlace, routes, selectedRou
     }
   }, [userLocation, searchedPlace, routes, selectedRouteIndex, setSelectedRouteIndex]);
 
-  return <div className="w-full h-screen" ref={mapContainerRef} />;
+  return <div className="w-full h-screen relative z-0" ref={mapContainerRef} />;
 }
