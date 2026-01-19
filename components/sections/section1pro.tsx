@@ -955,18 +955,18 @@ const Section1pro = ({}) => {
       
       setPredictionResult(result);
       
-      if (estConnecte) {
-        const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
-        await enregistrerCalcul({
-          utilisateurId,
-          lieuDepart: start,
-          lieuArrivee: end,
-          heurePriseEnCharge: hour,
-          distanceKm: distanceToUse,
-          coutEstime: prixArrondi,
-          tarifOfficiel: 0,
-        });
-      }
+      // if (estConnecte) {
+      //   const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
+      //   await enregistrerCalcul({
+      //     utilisateurId,
+      //     lieuDepart: start,
+      //     lieuArrivee: end,
+      //     heurePriseEnCharge: hour,
+      //     distanceKm: distanceToUse,
+      //     coutEstime: prixArrondi,
+      //     tarifOfficiel: 0,
+      //   });
+      // }
       
       toast.success('Prédiction calculée avec succès!');
 

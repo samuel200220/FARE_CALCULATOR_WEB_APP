@@ -1,37 +1,46 @@
-const API_URL = 'http://localhost:8080/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export interface CalculRequest {
-  utilisateurId: string;
+  idUtilisateur: string;
   lieuDepart: string;
   lieuArrivee: string;
   heurePriseEnCharge: string;
   distanceKm: number;
   coutEstime: number;
   tarifOfficiel: number;
+  jourSemaine?: string;
+  jourFerie?: string;
+  pluie?: string;
+  etatRoute?: string;
+  accident?: string;
+  bagages?: string;
+  routesLarges?: string;
+  routesTravaux?: string;
 }
 
-export interface CalculResponse extends CalculRequest {
-  idCalcul: string;
-  dateCalcul: string;
-}
-
-export async function enregistrerCalcul(data: CalculRequest): Promise<CalculResponse> {
-  const res = await fetch(`${API_URL}/calculs`, {
+export async function enregistrerCalcul(data: CalculRequest): Promise<any> {
+  console.log('Envoi du calcul au backend:', data);
+  
+  const res = await fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
     body: JSON.stringify(data),
   });
 
   if (!res.ok) {
-    const error = await res.text();
-    throw new Error(error || 'Erreur lors de la sauvegarde');
+    const errorText = await res.text();
+    console.error('Erreur backend:', errorText);
+    throw new Error(errorText || 'Erreur lors de la sauvegarde du calcul');
   }
 
-  return await res.json();
+  return await res.text();
 }
 
-export async function getHistorique(utilisateurId: string): Promise<CalculResponse[]> {
-  const res = await fetch(`${API_URL}/calculs/utilisateur/${utilisateurId}`);
-  if (!res.ok) throw new Error('Erreur historique');
+export async function getHistorique(utilisateurId: string): Promise<any[]> {
+  const res = await fetch(`${API_URL}/api/calculs-utilisateur/utilisateur/${utilisateurId}`);
+  if (!res.ok) throw new Error('Erreur lors de la récupération de l\'historique');
   return await res.json();
 }

@@ -746,18 +746,18 @@ export default function LandingPageClient() {
       
       setPredictionResult(result);
       
-      if (estConnecte) {
-        const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
-        await enregistrerCalcul({
-          utilisateurId,
-          lieuDepart: start,
-          lieuArrivee: end,
-          heurePriseEnCharge: hour,
-          distanceKm: distanceToUse,
-          coutEstime: prixArrondi,
-          tarifOfficiel: officialFareResult?.mint_cost || 0,
-        });
-      }
+      // if (estConnecte) {
+      //   const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
+      //   await enregistrerCalcul({
+      //     utilisateurId,
+      //     lieuDepart: start,
+      //     lieuArrivee: end,
+      //     heurePriseEnCharge: hour,
+      //     distanceKm: distanceToUse,
+      //     coutEstime: prixArrondi,
+      //     tarifOfficiel: officialFareResult?.mint_cost || 0,
+      //   });
+      // }
       
       // Incrémenter le compteur pour les utilisateurs non connectés (uniquement à la dernière étape)
       if (!estConnecte) {

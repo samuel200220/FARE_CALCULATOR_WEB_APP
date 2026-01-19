@@ -967,18 +967,18 @@ const Section1ano = ({}) => {
       
       setPredictionResult(result);
       
-      if (estConnecte) {
-        const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
-        await enregistrerCalcul({
-          utilisateurId,
-          lieuDepart: start,
-          lieuArrivee: end,
-          heurePriseEnCharge: hour,
-          distanceKm: distanceToUse,
-          coutEstime: prixArrondi,
-          tarifOfficiel: 0,
-        });
-      }
+      // if (estConnecte) {
+      //   const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
+      //   await enregistrerCalcul({
+      //     utilisateurId,
+      //     lieuDepart: start,
+      //     lieuArrivee: end,
+      //     heurePriseEnCharge: hour,
+      //     distanceKm: distanceToUse,
+      //     coutEstime: prixArrondi,
+      //     tarifOfficiel: 0,
+      //   });
+      // }
       
       // Incrémenter le compteur
       const nouveauCompteur = compteur + 1;

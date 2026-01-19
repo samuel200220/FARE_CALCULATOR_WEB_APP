@@ -7,6 +7,7 @@ import localFont from "next/font/local";
 import Head from "next/head";
 import RouteLoading from "@/components/ui/route-loading";
 import { Suspense } from "react";
+import { AuthProvider } from "@/context/AuthContext";
 
 const poppins = localFont({
   src: [
@@ -160,7 +161,9 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <RouteLoading />
             </Suspense>
-            {children}
+            <AuthProvider>
+              {children}
+            </AuthProvider>
           </div>
           <Toaster 
             position="top-right" 

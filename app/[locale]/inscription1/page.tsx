@@ -16,7 +16,8 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { utilisateurService } from '../../services/api';
+import { utilisateurService } from '@/app/services/api';
+import { useAuth } from '@/context/AuthContext';
 import Googleconnexion from '@/components/googleconnexion';
 
 interface FormData {
@@ -29,6 +30,7 @@ export default function Page() {
   const a = useTranslations('Verification');
   const theme = useTheme();
   const router = useRouter();
+  const { setUser } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -37,75 +39,59 @@ export default function Page() {
     formState: { errors },
   } = useForm<FormData>();
 
-  console.log("API URL USED:", process.env.NEXT_PUBLIC_API_URL);
-
-
   const onSubmit = async (data: FormData) => {
-  setIsSubmitting(true);
-  
-  try {
-    // Vérifier si l'email existe déjà
-    const emailExists = await utilisateurService.checkEmailExists(data.email);
-    
-    if (emailExists) {
-      toast.error(t('errors.emailExists'));
-      setIsSubmitting(false);
-      return;
-    }
+    setIsSubmitting(true);
 
-    // Créer l'utilisateur
-    const response = await utilisateurService.create({
-      nom: data.nom,
-      email: data.email,
-    });
+    try {
+      // Appel de l'API pour l'inscription
+      const response = await utilisateurService.register({
+        nom: data.nom,
+        email: data.email,
+      });
 
-    // Sauvegarder l'email pour la vérification
-    localStorage.setItem('userEmailForVerification', data.email);
-    
-    // Envoyer le code de vérification
-    await utilisateurService.sendVerificationCode(data.email);
-    
-    toast.success(a('success.verification'));
-    
-    // Rediriger vers la page de vérification
-    router.push(`/verification?email=${encodeURIComponent(data.email)}`);
-    
-  } catch (error) {
-    console.error('Erreur lors de l\'inscription:', error);
-    const axiosError = error as AxiosError;
-    
-    if (axiosError.response) {
-      switch (axiosError.response.status) {
-        case 400:
-          toast.error(t('errors.invalidData'));
-          break;
-        case 409:
-          toast.error(t('errors.emailExists'));
-          break;
-        case 500:
-          toast.error(t('errors.serverError'));
-          break;
-        default:
-          toast.error(t('errors.generic'));
+      // Stocker le token
+      localStorage.setItem('token', response.token);
+
+      // Mettre l'utilisateur dans le contexte Auth
+      setUser(response.user);
+
+      // Stockage optionnel pour compatibilité
+      localStorage.setItem('utilisateur', JSON.stringify(response.user));
+      localStorage.setItem('idUtilisateur', response.user.id);
+
+      toast.success(a('success.verification'));
+
+      // Redirection vers l'accueil
+      router.push('/accueil');
+    } catch (error) {
+      console.error('Erreur lors de l\'inscription:', error);
+      const axiosError = error as AxiosError;
+
+      if (axiosError.response) {
+        switch (axiosError.response.status) {
+          case 409:
+            toast.error(t('errors.emailExists'));
+            break;
+          case 500:
+            toast.error(t('errors.serverError'));
+            break;
+          default:
+            toast.error(t('errors.generic'));
+        }
+      } else {
+        toast.error(t('errors.generic'));
       }
-    } else {
-      toast.error(t('errors.generic'));
+    } finally {
+      setIsSubmitting(false);
     }
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen flex lg:p-20 p-4 rounded-3xl shadow-lg">
       {/* Left Section */}
       <div className="hidden lg:flex w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex-col justify-center">
-        <h1 className="text-4xl font-bold mb-4">
-          {t('left.title')}
-        </h1>
-        <p className="text-lg leading-relaxed">
-          {t('left.subtitle')}
-        </p>
+        <h1 className="text-4xl font-bold mb-4">{t('left.title')}</h1>
+        <p className="text-lg leading-relaxed">{t('left.subtitle')}</p>
       </div>
 
       {/* Right Section */}
@@ -135,6 +121,7 @@ export default function Page() {
           }}
         >
           <Stack spacing={3} sx={{ fontFamily: 'Poppins, sans-serif' }}>
+            {/* Nom */}
             <TextField
               label={t('form.username')}
               fullWidth
@@ -144,6 +131,7 @@ export default function Page() {
               disabled={isSubmitting}
             />
 
+            {/* Email */}
             <TextField
               type="email"
               label={t('form.email')}
@@ -162,6 +150,7 @@ export default function Page() {
               disabled={isSubmitting}
             />
 
+            {/* Submit */}
             <Button
               variant="contained"
               fullWidth
@@ -179,26 +168,22 @@ export default function Page() {
                 },
               }}
             >
-              {isSubmitting ? (
-                <CircularProgress size={24} sx={{ color: 'white' }} />
-              ) : (
-                t('buttons.signup')
-              )}
+              {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : t('buttons.signup')}
             </Button>
 
+            {/* Lien vers connexion */}
             <Typography
               variant="body2"
               align="center"
-              sx={{
-                fontFamily: 'Poppins, sans-serif',
-                marginBottom: '5px',
-              }}
+              sx={{ fontFamily: 'Poppins, sans-serif', marginBottom: '5px' }}
             >
               {t('alreadyRegistered')}{' '}
               <Link href="/connexion1" style={{ color: '#1e3a8a' }}>
                 {t('buttons.login')}
               </Link>
             </Typography>
+
+            {/* Google connexion */}
             <Googleconnexion />
           </Stack>
         </Box>

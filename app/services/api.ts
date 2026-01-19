@@ -1,26 +1,27 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 
-// Configuration de l'URL de base
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// Créer une instance axios avec configuration par défaut
-const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
+const api = axios.create({
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Important pour CORS avec credentials
 });
 
-// Intercepteur pour les requêtes
-apiClient.interceptors.request.use(
+// axios.get('/api/dashboard', {
+//   headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+// });
+
+// Intercepteur pour ajouter le token aux requêtes
+api.interceptors.request.use(
   (config) => {
-    // Vous pouvez ajouter des tokens d'authentification ici
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
     return config;
   },
   (error) => {
@@ -28,74 +29,45 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Intercepteur pour les réponses
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
-    if (error.response) {
-      // Le serveur a répondu avec un code d'erreur
-      console.error('Erreur API:', error.response.status, error.response.data);
-    } else if (error.request) {
-      // La requête a été faite mais pas de réponse
-      console.error('Pas de réponse du serveur:', error.request);
-    } else {
-      // Erreur lors de la configuration de la requête
-      console.error('Erreur de configuration:', error.message);
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Service pour les utilisateurs
 export const utilisateurService = {
-  // Créer un utilisateur
-  create: async (data: { nom: string; email: string }) => {
-    const response = await apiClient.post('/api/utilisateurs', data);
+  // Connexion avec email
+  async login(email: string) {
+    const response = await api.post('/api/auth/login', { email });
     return response.data;
   },
 
-  // Récupérer par ID
-  getById: async (id: string) => {
-    const response = await apiClient.get(`/api/utilisateurs/${id}`);
+  // Inscription
+  async register(data: { nom: string; email: string }) {
+    const response = await api.post('/api/utilisateurs/register', data);
     return response.data;
   },
 
-  // Récupérer par email
-  getByEmail: async (email: string) => {
-    const response = await apiClient.get(`/api/utilisateurs/email/${email}`);
+  // Récupérer l'utilisateur courant
+  async getCurrentUser() {
+    const response = await api.get('/api/utilisateurs/me');
     return response.data;
   },
 
-  // Supprimer un utilisateur
-  delete: async (id: string) => {
-    await apiClient.delete(`/api/utilisateurs/${id}`);
+  // Vérifier si l'email existe
+  async checkEmailExists(email: string) {
+    const response = await api.get(`/api/auth/check-email/${email}`);
+    return response.data.exists;
   },
 
-  // Vérifier si un email existe
-  checkEmailExists: async (email: string): Promise<boolean> => {
-    try {
-      await apiClient.get(`/api/utilisateurs/email/${email}`);
-      return true;
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response?.status === 404) {
-        return false;
-      }
-      throw error;
-    }
+  // Créer un utilisateur (pour compatibilité)
+  async create(data: { nom: string; email: string }) {
+    return this.register(data);
   },
-  // Login par email
-  login: async (email: string) => {
-    const response = await apiClient.get(`/api/utilisateurs/email/${email}`);
-    return response.data;
-  },
-  async sendVerificationCode(email: string): Promise<{ success: boolean; message: string }> {
-    const response = await apiClient.post(`${API_BASE_URL}/api/auth/send-verification`, { email });
+
+  // Envoyer le code de vérification
+  async sendVerificationCode(email: string) {
+    const response = await api.post('/api/auth/send-verification', { email });
     return response.data;
   },
 
-  async verifyEmail(email: string, code: string): Promise<{ success: boolean; message: string; user?: any }> {
-    const response = await apiClient.post(`${API_BASE_URL}/api/auth/verify-email`, { email, code });
+  // Vérifier le code
+  async verifyCode(email: string, code: string) {
+    const response = await api.post('/api/auth/verify-code', { email, code });
     return response.data;
   }
 };
@@ -109,31 +81,36 @@ export const entrepriseService = {
     email: string;
     motDePasse: string;
   }) => {
-    const response = await apiClient.post('/api/entreprises', data);
+    const response = await api.post('/api/entreprises', data);
+    return response.data;
+  },
+
+  async getCurrentEnterprise() {
+    const response = await api.get('/api/entreprises/me');
     return response.data;
   },
 
   // Récupérer par ID
   getById: async (id: string) => {
-    const response = await apiClient.get(`/api/entreprises/${id}`);
+    const response = await api.get(`/api/entreprises/${id}`);
     return response.data;
   },
 
   // Récupérer par email
   getByEmail: async (email: string) => {
-    const response = await apiClient.get(`/api/entreprises/email/${email}`);
+    const response = await api.get(`/api/entreprises/email/${email}`);
     return response.data;
   },
 
   // Supprimer une entreprise
   delete: async (id: string) => {
-    await apiClient.delete(`/api/entreprises/${id}`);
+    await api.delete(`/api/entreprises/${id}`);
   },
 
   // Vérifier si un email existe
   checkEmailExists: async (email: string): Promise<boolean> => {
     try {
-      await apiClient.get(`/api/entreprises/email/${email}`);
+      await api.get(`/api/entreprises/email/${email}`);
       return true;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -144,14 +121,16 @@ export const entrepriseService = {
     }
   },
 
-  // Login par email et mot de passe
-  login: async (email: string, motDePasse: string) => {
-    const response = await apiClient.post('/api/entreprises/login', {
-      email,
-      motDePasse,
-    });
-    return response.data;
-  },
+// entrepriseService.ts
+login: async (email: string, motDePasse: string) => {
+  const response = await api.post('/api/entreprises/login', {
+    email,
+    motDePasse,
+  });
+  // Ici response.data contient déjà le JSON avec token + entreprise
+  return response.data;
+},
+
 };
 
-export default apiClient;
+export default api;

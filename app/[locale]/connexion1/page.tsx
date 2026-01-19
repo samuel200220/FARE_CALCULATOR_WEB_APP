@@ -9,7 +9,8 @@ import { useTheme } from '@mui/material/styles';
 import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { utilisateurService } from '../../services/api';
+import { utilisateurService } from '@/app/services/api';
+import { useAuth } from '@/context/AuthContext';
 import Googleconnexion from '@/components/googleconnexion';
 
 interface ConnexionFormData {
@@ -21,52 +22,48 @@ export default function Page() {
   const a = useTranslations('ConnexionPro');
   const theme = useTheme();
   const router = useRouter();
+  const { setUser } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<ConnexionFormData>();
 
   const onSubmit = async (data: ConnexionFormData) => {
     setIsSubmitting(true);
-    
     try {
-      // Tentative de connexion
-      const user = await utilisateurService.login(data.email);
-      
-      if (user) {
-        toast.success(t('errors.success'));
-        
-        // Sauvegarder les informations utilisateur
-        localStorage.setItem('utilisateur', JSON.stringify(user));
-        localStorage.setItem('idUtilisateur', user.id);
-        
-        // Redirection vers l'accueil
-        router.push('/accueil');
-      } else {
-        toast.error(t('errors.notFound'));
-      }
-      
+      // Appel du endpoint login
+      const response = await utilisateurService.login(data.email);
+
+      // Stockage du token
+      localStorage.setItem('token', response.token);
+
+      // Mettre l'utilisateur dans le contexte
+      setUser(response.user);
+
+      // Stockage optionnel de l'utilisateur et ID pour compatibilité
+      localStorage.setItem('utilisateur', JSON.stringify(response.user));
+      localStorage.setItem('idUtilisateur', response.user.id);
+
+      toast.success(t('errors.success'));
+
+      // Redirection vers l'accueil
+      router.push('/accueil');
     } catch (error) {
       console.error('Erreur lors de la connexion:', error);
-      
       const axiosError = error as AxiosError;
-      
-      // Gestion des erreurs spécifiques
+
       if (axiosError.response) {
         switch (axiosError.response.status) {
-          case 404:
-            toast.error(t('messages.accountNotFound'));
+          case 401:
+            toast.error(t('errors.notFound'));
             break;
           case 500:
-            toast.error(t('messages.serverError'));
+            toast.error(t('errors.serverError'));
             break;
           default:
-            toast.error(t('messages.genericError'));
+            toast.error(t('errors.generic'));
         }
-      } else if (axiosError.request) {
-        // Pas de réponse du serveur
-        toast.error(t('messages.networkError'));
       } else {
-        toast.error(t('messages.genericError'));
+        toast.error(t('errors.generic'));
       }
     } finally {
       setIsSubmitting(false);
@@ -80,9 +77,7 @@ export default function Page() {
         <h1 className="text-4xl font-bold mb-4">
           Fare Calculator <br /> {t('title')}
         </h1>
-        <p className="text-lg leading-relaxed">
-          {a('left.subtitle')}
-        </p>
+        <p className="text-lg leading-relaxed">{a('left.subtitle')}</p>
       </div>
 
       {/* Right Section */}
@@ -96,6 +91,7 @@ export default function Page() {
         </div>
 
         <h2 className="text-2xl text-center lg:text-start font-bold mb-6">{t('title')}</h2>
+
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -108,13 +104,14 @@ export default function Page() {
           }}
         >
           <Stack spacing={3}>
+            {/* Email */}
             <TextField
               type="email"
               label={t('emailLabel')}
               placeholder={t('emailPlaceholder')}
               variant="outlined"
               fullWidth
-              {...register('email', { 
+              {...register('email', {
                 required: t('errors.requiredEmail'),
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -127,6 +124,7 @@ export default function Page() {
               sx={{ fontFamily: 'Poppins, sans-serif' }}
             />
 
+            {/* Submit */}
             <Button
               variant="contained"
               fullWidth
@@ -144,19 +142,18 @@ export default function Page() {
                 },
               }}
             >
-              {isSubmitting ? (
-                <CircularProgress size={24} sx={{ color: 'white' }} />
-              ) : (
-                t('loginButton')
-              )}
+              {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : t('loginButton')}
             </Button>
 
+            {/* Footer */}
             <Typography variant="body2" align="center">
               {t('noAccount')}{' '}
               <Link href="/inscription1" className="text-blue-900 ml-1">
                 {t('clickHere')}
               </Link>
             </Typography>
+
+            {/* Google Login */}
             <Googleconnexion />
           </Stack>
         </Box>

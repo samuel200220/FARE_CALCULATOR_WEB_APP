@@ -30,20 +30,26 @@ export default function Page() {
     setIsSubmitting(true);
     
     try {
-      // Tentative de connexion
-      const entreprise = await entrepriseService.login(data.email, data.motDePasse);
-      
-      if (entreprise) {
-        toast.success(t('messages.loginSuccess'));
-        
-        // Sauvegarder les informations de l'entreprise
-        localStorage.setItem('entrepriseConnectee', JSON.stringify(entreprise));
-        localStorage.setItem('idUtilisateur', entreprise.id);
-        localStorage.setItem('userType', 'pro');
-        
-        // Redirection vers la version pro
-        router.push('/versionpro');
-      }
+      const response = await entrepriseService.login(data.email, data.motDePasse);
+
+// Correction ici
+const entrepriseData = response.user;
+
+if (!entrepriseData) {
+  throw new Error('Login failed: entreprise non trouvée');
+}
+
+// Stockage
+localStorage.setItem('token', response.token);
+localStorage.setItem('entreprise', JSON.stringify(entrepriseData));
+localStorage.setItem('entrepriseId', entrepriseData.id);
+
+console.log('Login response:', response);
+console.log('Entreprise:', entrepriseData);
+
+    toast.success(t('messages.loginSuccess'));
+
+      router.push('/versionpro');
       
     } catch (error) {
       console.error('Erreur lors de la connexion:', error);
