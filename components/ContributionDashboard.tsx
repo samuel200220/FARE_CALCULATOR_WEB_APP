@@ -17,9 +17,17 @@ import {
   FaTimes,
   FaChartBar,
   FaChartPie,
-  FaFilter
+  FaFilter,
+  FaSpinner
 } from 'react-icons/fa';
 import { MdRoute } from 'react-icons/md';
+import {
+  fetchContributions,
+  createContribution,
+  updateContribution,
+  deleteContribution,
+  type Contribution
+} from '@/app/services/contributionService';
 
 // Import Recharts components
 import {
@@ -29,39 +37,6 @@ import {
   ScatterChart, Scatter
 } from 'recharts';
 import { useRouter } from 'next/navigation';
-
-// TYPES
-interface Contribution {
-  id: string;
-  timestamp: string;
-  depart_osm: string;
-  destination_osm: string;
-  distance_km: number;
-  prix_paye: number;
-  pluie: boolean;
-  etat_route: 'excellent' | 'bon' | 'moyen' | 'mauvais';
-  routes_travaux: boolean;
-  accident: boolean;
-  heure: string;
-  jour_semaine: string;
-  jour_ferie: boolean;
-  bagages: boolean;
-  routes_larges: boolean;
-}
-
-// MOCK DATA
-const MOCK: Contribution[] = [
-  { id: '1', timestamp: '2024-12-10T08:30:00', depart_osm: 'Bastos', destination_osm: 'Melen', distance_km: 8.5, prix_paye: 500, pluie: false, etat_route: 'bon', routes_travaux: false, accident: false, heure: '08:30', jour_semaine: 'Lundi', jour_ferie: false, bagages: true, routes_larges: true },
-  { id: '2', timestamp: '2024-12-09T17:45:00', depart_osm: 'Ngoa-Ekele', destination_osm: 'Essos', distance_km: 6.2, prix_paye: 400, pluie: true, etat_route: 'moyen', routes_travaux: true, accident: false, heure: '17:45', jour_semaine: 'Dimanche', jour_ferie: false, bagages: false, routes_larges: false },
-  { id: '3', timestamp: '2024-12-08T12:00:00', depart_osm: 'Mokolo', destination_osm: 'Omnisport', distance_km: 4.8, prix_paye: 300, pluie: false, etat_route: 'excellent', routes_travaux: false, accident: false, heure: '12:00', jour_semaine: 'Samedi', jour_ferie: false, bagages: false, routes_larges: true },
-  { id: '4', timestamp: '2024-12-07T09:15:00', depart_osm: 'Odza', destination_osm: 'Carrefour Warda', distance_km: 10.3, prix_paye: 700, pluie: false, etat_route: 'bon', routes_travaux: false, accident: true, heure: '09:15', jour_semaine: 'Vendredi', jour_ferie: false, bagages: true, routes_larges: true },
-  { id: '5', timestamp: '2024-12-06T16:30:00', depart_osm: 'Mvog-Mbi', destination_osm: 'Tsinga', distance_km: 5.5, prix_paye: 350, pluie: true, etat_route: 'mauvais', routes_travaux: true, accident: false, heure: '16:30', jour_semaine: 'Jeudi', jour_ferie: false, bagages: false, routes_larges: false },
-  { id: '6', timestamp: '2024-12-05T07:00:00', depart_osm: 'Elig-Edzoa', destination_osm: 'Biyem-Assi', distance_km: 7.1, prix_paye: 450, pluie: false, etat_route: 'bon', routes_travaux: false, accident: false, heure: '07:00', jour_semaine: 'Mercredi', jour_ferie: false, bagages: true, routes_larges: true },
-  { id: '7', timestamp: '2024-12-04T14:20:00', depart_osm: 'Ekounou', destination_osm: 'Santa Barbara', distance_km: 9.8, prix_paye: 600, pluie: false, etat_route: 'excellent', routes_travaux: false, accident: false, heure: '14:20', jour_semaine: 'Mardi', jour_ferie: false, bagages: false, routes_larges: true },
-  { id: '8', timestamp: '2024-12-03T11:00:00', depart_osm: 'Nkolndongo', destination_osm: 'Acacias', distance_km: 3.2, prix_paye: 250, pluie: false, etat_route: 'bon', routes_travaux: false, accident: false, heure: '11:00', jour_semaine: 'Lundi', jour_ferie: false, bagages: false, routes_larges: false },
-  { id: '9', timestamp: '2024-12-02T18:45:00', depart_osm: 'Mendong', destination_osm: 'Emana', distance_km: 12.5, prix_paye: 800, pluie: true, etat_route: 'moyen', routes_travaux: false, accident: true, heure: '18:45', jour_semaine: 'Dimanche', jour_ferie: false, bagages: true, routes_larges: false },
-  { id: '10', timestamp: '2024-12-01T13:30:00', depart_osm: 'Nlongkak', destination_osm: 'Damas', distance_km: 6.7, prix_paye: 400, pluie: false, etat_route: 'bon', routes_travaux: false, accident: false, heure: '13:30', jour_semaine: 'Samedi', jour_ferie: false, bagages: false, routes_larges: true }
-];
 
 // Couleurs pour les graphiques
 const CHART_COLORS = {
@@ -86,14 +61,48 @@ const PIE_CHART_COLORS = [
 
 export default function ContributionDashboard() {
   const router = useRouter();
-  const [data, setData] = useState<Contribution[]>(MOCK);
+  const [data, setData] = useState<Contribution[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [modal, setModal] = useState(false);
   const [edit, setEdit] = useState<Contribution | null>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [selectedChart, setSelectedChart] = useState<'daily' | 'price' | 'conditions' | 'distribution'>('daily');
   const [dateRange, setDateRange] = useState<'7days' | '30days' | 'all'>('7days');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Fonction de filtrage par date - DÉPLACÉE AU DÉBUT
+  // Charger les données depuis l'API
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const contributions = await fetchContributions();
+      
+      // Trier par date décroissante
+      const sortedData = contributions.sort((a, b) => 
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      );
+      
+      setData(sortedData);
+    } catch (err: any) {
+      console.error('Erreur lors du chargement des données:', err);
+      
+      if (err.response?.status === 401) {
+        setError('Votre session a expiré. Veuillez vous reconnecter.');
+        router.push('/connexion1');
+      } else {
+        setError(err.response?.data?.message || 'Erreur de chargement des données');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fonction de filtrage par date
   const filterDataByDateRange = (data: Contribution[], range: '7days' | '30days' | 'all') => {
     const now = new Date();
     const cutoffDate = new Date();
@@ -132,6 +141,66 @@ export default function ContributionDashboard() {
       console.error('Erreur lors de l\'export:', error);
     } finally {
       setIsExporting(false);
+    }
+  };
+
+  // Gestion de la soumission du formulaire
+  const handleSaveContribution = async (formData: any) => {
+    try {
+      setIsSubmitting(true);
+      
+      // Préparer les données pour l'envoi
+      const contributionData = {
+        depart_osm: formData.depart_osm,
+        destination_osm: formData.destination_osm,
+        distance_km: parseFloat(formData.distance_km) || 0,
+        prix_paye: parseInt(formData.prix_paye) || 0,
+        heure: formData.heure,
+        jour_semaine: formData.jour_semaine,
+        jour_ferie: Boolean(formData.jour_ferie),
+        pluie: Boolean(formData.pluie),
+        etat_route: formData.etat_route,
+        routes_travaux: Boolean(formData.routes_travaux),
+        accident: Boolean(formData.accident),
+        bagages: Boolean(formData.bagages),
+        routes_larges: Boolean(formData.routes_larges),
+      };
+      
+      if (edit) {
+        await updateContribution(edit.id, contributionData);
+      } else {
+        await createContribution(contributionData);
+      }
+      
+      await loadData();
+      setModal(false);
+      setEdit(null);
+    } catch (err: any) {
+      console.error('Erreur lors de la sauvegarde:', err);
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Erreur lors de la sauvegarde';
+      alert(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Gestion de la suppression
+  const handleDeleteContribution = async (id: string) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette contribution ?')) {
+      return;
+    }
+    
+    try {
+      await deleteContribution(id);
+      await loadData();
+    } catch (err: any) {
+      console.error('Erreur lors de la suppression:', err);
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Erreur lors de la suppression';
+      alert(errorMessage);
     }
   };
 
@@ -176,28 +245,31 @@ export default function ContributionDashboard() {
         prixMoyen: avgPrice,
       }))
       .sort((a, b) => {
-        // Trier par date (plus récent en premier)
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       })
-      .slice(0, 10); // Limiter à 10 derniers jours
+      .slice(0, 10);
   }, [data, dateRange]);
 
   // Données pour le graphique par état de route
   const roadConditionData = useMemo(() => {
-    const filteredData = filterDataByDateRange(data, dateRange);
-    const conditionMap = new Map<string, number>();
-    
-    filteredData.forEach(item => {
-      const condition = item.etat_route;
-      conditionMap.set(condition, (conditionMap.get(condition) || 0) + 1);
-    });
-    
-    return Array.from(conditionMap.entries()).map(([name, value]) => ({
-      name: name.charAt(0).toUpperCase() + name.slice(1),
-      value,
-      count: value,
-    }));
-  }, [data, dateRange]);
+  const conditionMap = new Map<string, number>();
+
+  data.forEach(c => {
+    if (typeof c.etat_route !== 'string' || c.etat_route.trim() === '') {
+      return;
+    }
+
+    const key = c.etat_route.trim();
+
+    conditionMap.set(key, (conditionMap.get(key) || 0) + 1);
+  });
+
+  return Array.from(conditionMap.entries()).map(([name, value]) => ({
+    name: name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Inconnu',
+    value,
+    count: value,
+  }));
+}, [data]);
 
   // Données pour le graphique par jour de la semaine
   const dayOfWeekData = useMemo(() => {
@@ -309,20 +381,52 @@ export default function ContributionDashboard() {
     },
   };
 
+  // Afficher un état de chargement
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] flex items-center justify-center">
+        <div className="text-center">
+          <FaSpinner className="animate-spin text-4xl text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-300">Chargement des données...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Afficher une erreur
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl">
+            <p className="font-bold">Erreur de chargement</p>
+            <p>{error}</p>
+            <button
+              onClick={loadData}
+              className="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+            >
+              Réessayer
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           {/* Bouton retour */}
-    <button
-      onClick={() => router.back()}
-      className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-3 rounded-xl font-medium transition-all duration-300 shadow-sm hover:shadow"
-    >
-      <FaArrowLeft />
-      <span className="hidden md:inline">Retour</span>
-    </button>
-    
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-3 rounded-xl font-medium transition-all duration-300 shadow-sm hover:shadow"
+          >
+            <FaArrowLeft />
+            <span className="hidden md:inline">Retour</span>
+          </button>
+          
           <div>
             <h1 className="text-2xl md:text-4xl font-bold text-blue-900 dark:text-white mb-2">
               Dashboard de Contribution
@@ -346,10 +450,10 @@ export default function ContributionDashboard() {
             
             <button
               onClick={handleExportCSV}
-              disabled={isExporting}
+              disabled={isExporting || data.length === 0}
               className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white px-4 py-3 rounded-xl font-medium transition-all duration-300 disabled:opacity-50"
             >
-              <FaDownload />
+              {isExporting ? <FaSpinner className="animate-spin" /> : <FaDownload />}
               {isExporting ? 'Export...' : 'Exporter CSV'}
             </button>
             
@@ -734,13 +838,16 @@ export default function ContributionDashboard() {
             </h4>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart
-                data={[
-                  { name: 'Melen', value: 4 },
-                  { name: 'Essos', value: 3 },
-                  { name: 'Omnisport', value: 2 },
-                  { name: 'Biyem-Assi', value: 2 },
-                  { name: 'Acacias', value: 1 },
-                ]}
+                data={(() => {
+                  const destMap = new Map<string, number>();
+                  data.forEach(item => {
+                    destMap.set(item.destination_osm, (destMap.get(item.destination_osm) || 0) + 1);
+                  });
+                  return Array.from(destMap.entries())
+                    .map(([name, value]) => ({ name, value }))
+                    .sort((a, b) => b.value - a.value)
+                    .slice(0, 5);
+                })()}
                 layout="vertical"
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
@@ -791,13 +898,16 @@ export default function ContributionDashboard() {
             </h4>
             <ResponsiveContainer width="100%" height={200}>
               <AreaChart
-                data={[
-                  { heure: '08:00', count: 2 },
-                  { heure: '12:00', count: 3 },
-                  { heure: '14:00', count: 1 },
-                  { heure: '16:00', count: 2 },
-                  { heure: '18:00', count: 1 },
-                ]}
+                data={(() => {
+                  const hourMap = new Map<string, number>();
+                  data.forEach(item => {
+                    const hour = item.heure.substring(0, 2);
+                    hourMap.set(hour, (hourMap.get(hour) || 0) + 1);
+                  });
+                  return Array.from(hourMap.entries())
+                    .map(([heure, count]) => ({ heure: `${heure}:00`, count }))
+                    .sort((a, b) => a.heure.localeCompare(b.heure));
+                })()}
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.1} />
@@ -878,7 +988,10 @@ export default function ContributionDashboard() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-300">
-                      {c.distance_km.toFixed(1)} km
+                      {typeof c.distance_km === 'number'
+  ? `${c.distance_km.toFixed(1)} km`
+  : '—'}
+
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <span className="font-semibold text-green-600 dark:text-green-400">
@@ -910,11 +1023,7 @@ export default function ContributionDashboard() {
                           <FaEdit />
                         </button>
                         <button 
-                          onClick={() => {
-                            if (confirm('Êtes-vous sûr de vouloir supprimer cette contribution ?')) {
-                              setData(data.filter(x => x.id !== c.id));
-                            }
-                          }}
+                          onClick={() => handleDeleteContribution(c.id)}
                           className="p-2 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-colors duration-200 text-red-600 dark:text-red-400"
                           title="Supprimer"
                         >
@@ -934,18 +1043,8 @@ export default function ContributionDashboard() {
           <Modal 
             contribution={edit} 
             onClose={() => setModal(false)} 
-            onSave={(d: any) => {
-              if (edit) {
-                setData(data.map(c => c.id === edit.id ? { ...c, ...d } : c));
-              } else {
-                setData([{ 
-                  id: Date.now().toString(), 
-                  timestamp: new Date().toISOString(), 
-                  ...d 
-                }, ...data]);
-              }
-              setModal(false);
-            }} 
+            onSave={handleSaveContribution}
+            isSubmitting={isSubmitting}
           />
         )}
       </div>
@@ -954,7 +1053,7 @@ export default function ContributionDashboard() {
 }
 
 // MODAL COMPONENT
-function Modal({ contribution, onClose, onSave }: any) {
+function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState(contribution || {
     depart_osm: '', destination_osm: '', distance_km: 0, prix_paye: 0,
@@ -962,7 +1061,19 @@ function Modal({ contribution, onClose, onSave }: any) {
     heure: '', jour_semaine: '', jour_ferie: false, bagages: false, routes_larges: false
   });
 
-  const update = (k: string, v: any) => setForm({ ...form, [k]: v });
+  const update = (k: string, v: any) => {
+    // Convertir les nombres
+    if (k === 'distance_km') {
+      setForm({ ...form, [k]: parseFloat(v) || 0 });
+    } else if (k === 'prix_paye') {
+      setForm({ ...form, [k]: parseInt(v) || 0 });
+    } else if (k === 'heure') {
+      // Formater l'heure si nécessaire
+      setForm({ ...form, [k]: v });
+    } else {
+      setForm({ ...form, [k]: v });
+    }
+  };
 
   const renderBooleanIcon = (value: boolean) => 
     value ? <FaCheck className="text-green-600 dark:text-green-400" /> : <FaTimes className="text-red-600 dark:text-red-400" />;
@@ -1006,10 +1117,10 @@ function Modal({ contribution, onClose, onSave }: any) {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  { l: 'Départ', k: 'depart_osm', t: 'text', p: 'Bastos' },
-                  { l: 'Arrivée', k: 'destination_osm', t: 'text', p: 'Melen' },
-                  { l: 'Distance (km)', k: 'distance_km', t: 'number', p: '8.5' },
-                  { l: 'Prix (FCFA)', k: 'prix_paye', t: 'number', p: '500' }
+                  { l: 'Départ', k: 'depart_osm', t: 'text', p: 'Bonamoussadi' },
+                  { l: 'Arrivée', k: 'destination_osm', t: 'text', p: 'Akwa' },
+                  { l: 'Distance (km)', k: 'distance_km', t: 'number', p: '10.2' },
+                  { l: 'Prix (FCFA)', k: 'prix_paye', t: 'number', p: '2500' }
                 ].map(f => (
                   <div key={f.k} className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -1018,7 +1129,7 @@ function Modal({ contribution, onClose, onSave }: any) {
                     <input 
                       type={f.t} 
                       value={form[f.k] || ''} 
-                      onChange={e => update(f.k, f.t === 'number' ? parseFloat(e.target.value) || 0 : e.target.value)}
+                      onChange={e => update(f.k, e.target.value)}
                       placeholder={f.p}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                     />
@@ -1224,10 +1335,11 @@ function Modal({ contribution, onClose, onSave }: any) {
           ) : (
             <button 
               onClick={() => onSave(form)}
-              className="ml-auto flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white rounded-xl font-medium transition-colors"
+              disabled={isSubmitting}
+              className="ml-auto flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white rounded-xl font-medium transition-colors disabled:opacity-50"
             >
-              <FaCheck />
-              Enregistrer
+              {isSubmitting ? <FaSpinner className="animate-spin" /> : <FaCheck />}
+              {isSubmitting ? 'Enregistrement...' : 'Enregistrer'}
             </button>
           )}
         </div>
