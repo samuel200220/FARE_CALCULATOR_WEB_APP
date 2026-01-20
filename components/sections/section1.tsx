@@ -954,25 +954,24 @@ const Section1 = ({}) => {
       };
       
       setPredictionResult(result);
-      const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
+      //const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
   try {
     await enregistrerCalcul({
-      idUtilisateur: utilisateurId,
-      lieuDepart: start,
-      lieuArrivee: end,
-      heurePriseEnCharge: hour,
-      distanceKm: distanceToUse,
-      coutEstime: prixArrondi,
-      tarifOfficiel: 0,
-      jourSemaine: jourSemaine,
-      jourFerie: jourFerie,
-      pluie: pluie,
-      etatRoute: etatRoute,
-      accident: accident,
-      bagages: bagages,
-      routesLarges: routesLarges,
-      routesTravaux: routesTravaux
-    });
+  lieuDepart: start,
+  lieuArrivee: end,
+  heurePriseEnCharge: hour,
+  distanceKm: distanceToUse,
+  coutEstime: prixArrondi,
+  tarifOfficiel: 0,
+  jourSemaine,
+  jourFerie,
+  pluie,
+  etatRoute,
+  accident,
+  bagages,
+  routesLarges,
+  routesTravaux
+});
     console.log('Calcul enregistré avec succès');
     toast.success('Calcul enregistré dans votre historique');
   } catch (error) {

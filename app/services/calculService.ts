@@ -1,7 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export interface CalculRequest {
-  idUtilisateur: string;
   lieuDepart: string;
   lieuArrivee: string;
   heurePriseEnCharge: string;
@@ -18,29 +17,45 @@ export interface CalculRequest {
   routesTravaux?: string;
 }
 
-export async function enregistrerCalcul(data: CalculRequest): Promise<any> {
-  console.log('Envoi du calcul au backend:', data);
-  
-  const res = await fetch(API_URL, {
+export async function enregistrerCalcul(data: CalculRequest): Promise<string> {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    throw new Error("Utilisateur non authentifié");
+  }
+
+  const res = await fetch(`${API_URL}/api/calculs-utilisateur`, {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(data),
   });
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.error('Erreur backend:', errorText);
-    throw new Error(errorText || 'Erreur lors de la sauvegarde du calcul');
+    throw new Error(errorText);
   }
 
   return await res.text();
 }
 
-export async function getHistorique(utilisateurId: string): Promise<any[]> {
-  const res = await fetch(`${API_URL}/api/calculs-utilisateur/utilisateur/${utilisateurId}`);
-  if (!res.ok) throw new Error('Erreur lors de la récupération de l\'historique');
+export async function getHistorique(): Promise<any[]> {
+  const token = localStorage.getItem('token');
+
+  const res = await fetch(
+    `${API_URL}/api/calculs-utilisateur/me`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Erreur lors de la récupération de l'historique");
+  }
+
   return await res.json();
 }

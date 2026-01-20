@@ -955,18 +955,29 @@ const Section1pro = ({}) => {
       
       setPredictionResult(result);
       
-      // if (estConnecte) {
-      //   const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
-      //   await enregistrerCalcul({
-      //     utilisateurId,
-      //     lieuDepart: start,
-      //     lieuArrivee: end,
-      //     heurePriseEnCharge: hour,
-      //     distanceKm: distanceToUse,
-      //     coutEstime: prixArrondi,
-      //     tarifOfficiel: 0,
-      //   });
-      // }
+      try {
+    await enregistrerCalcul({
+  lieuDepart: start,
+  lieuArrivee: end,
+  heurePriseEnCharge: hour,
+  distanceKm: distanceToUse,
+  coutEstime: prixArrondi,
+  tarifOfficiel: 0,
+  jourSemaine,
+  jourFerie,
+  pluie,
+  etatRoute,
+  accident,
+  bagages,
+  routesLarges,
+  routesTravaux
+});
+    console.log('Calcul enregistré avec succès');
+    toast.success('Calcul enregistré dans votre historique');
+  } catch (error) {
+    console.error('Erreur lors de l\'enregistrement du calcul:', error);
+    toast.error('Erreur lors de l\'enregistrement du calcul');
+  }
       
       toast.success('Prédiction calculée avec succès!');
 

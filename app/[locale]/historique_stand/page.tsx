@@ -9,7 +9,7 @@ import {
   CloudRain,
   Route
 } from 'lucide-react';
-import SidebarToggle from '@/components/sidebar1';
+import Sidebar2 from '@/components/sidebar2';
 import { getHistorique } from '@/app/services/calculService';
 
 interface Calcul {
@@ -60,7 +60,7 @@ export default function Historique() {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
-      <SidebarToggle />
+      <Sidebar2 />
 
       <h1 className="text-3xl font-bold text-center text-blue-700 dark:text-white mb-8">
         Historique des Calculs
