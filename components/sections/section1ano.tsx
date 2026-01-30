@@ -241,7 +241,8 @@ const Section1ano = ({}) => {
   useEffect(() => {
     const loadPlaceNames = async () => {
       try {
-        const response = await fetch('/noms.txt');
+        // const response = await fetch('/noms.txt');
+        const response = await fetch('/lieux.txt');
         if (response.ok) {
           const text = await response.text();
           const names = text
@@ -1293,12 +1294,27 @@ const Section1ano = ({}) => {
         )}
 
         {/* Bouton Nouveau calcul */}
-        <Button
+        {/* <Button
           onClick={resetForm}
           className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-xl shadow-lg"
         >
           Nouveau calcul
-        </Button>
+        </Button> */}
+        <div className="flex gap-3 pt-4">
+                    <Button
+                      type="button"
+                      onClick={() => setStep(3)}
+                      className="flex-1 h-12 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-700 hover:to-violet-600 text-white"
+                    >
+                      <FaArrowLeft /> Retour
+                    </Button>
+                    <Button
+          onClick={resetForm}
+          className="flex-1 h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-xl shadow-lg"
+        >
+          Nouveau calcul
+        </Button> 
+                  </div>
       </div>
     </motion.div>
   );
@@ -1883,9 +1899,6 @@ const Section1ano = ({}) => {
                                 )}
                               </div>
                               
-                              <div className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
-                                Le prix se met à jour automatiquement lorsque vous modifiez les paramètres
-                              </div>
                             </div>
                           </div>
                         </motion.div>

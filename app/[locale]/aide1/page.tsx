@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import Sidebar2 from '@/components/sidebar2';
 
 export default function FaqPage() {
   const t = useTranslations('Faq');
@@ -35,6 +36,7 @@ export default function FaqPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 dark:from-gray-900 dark:via-[#0D1B2A] dark:to-[#0D1B2A] py-10 px-4 sm:px-10">
+      <Sidebar2 />
       <h1 className="text-3xl sm:text-4xl font-bold text-center text-blue-700 dark:text-white mb-2">
         {t('header.title')}
       </h1>

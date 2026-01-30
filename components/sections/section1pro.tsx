@@ -240,7 +240,8 @@ const Section1pro = ({}) => {
   useEffect(() => {
     const loadPlaceNames = async () => {
       try {
-        const response = await fetch('/noms.txt');
+        // const response = await fetch('/noms.txt');
+        const response = await fetch('/lieux.txt');
         if (response.ok) {
           const text = await response.text();
           const names = text

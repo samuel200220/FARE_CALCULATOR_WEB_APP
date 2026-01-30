@@ -18,7 +18,9 @@ import {
   FaChartBar,
   FaChartPie,
   FaFilter,
-  FaSpinner
+  FaSpinner,
+  FaMapMarkerAlt,
+  FaLocationArrow
 } from 'react-icons/fa';
 import { MdRoute } from 'react-icons/md';
 import {
@@ -252,24 +254,24 @@ export default function ContributionDashboard() {
 
   // Données pour le graphique par état de route
   const roadConditionData = useMemo(() => {
-  const conditionMap = new Map<string, number>();
+    const conditionMap = new Map<string, number>();
 
-  data.forEach(c => {
-    if (typeof c.etat_route !== 'string' || c.etat_route.trim() === '') {
-      return;
-    }
+    data.forEach(c => {
+      if (typeof c.etat_route !== 'string' || c.etat_route.trim() === '') {
+        return;
+      }
 
-    const key = c.etat_route.trim();
+      const key = c.etat_route.trim();
 
-    conditionMap.set(key, (conditionMap.get(key) || 0) + 1);
-  });
+      conditionMap.set(key, (conditionMap.get(key) || 0) + 1);
+    });
 
-  return Array.from(conditionMap.entries()).map(([name, value]) => ({
-    name: name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Inconnu',
-    value,
-    count: value,
-  }));
-}, [data]);
+    return Array.from(conditionMap.entries()).map(([name, value]) => ({
+      name: name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Inconnu',
+      value,
+      count: value,
+    }));
+  }, [data]);
 
   // Données pour le graphique par jour de la semaine
   const dayOfWeekData = useMemo(() => {
@@ -1061,6 +1063,138 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
     heure: '', jour_semaine: '', jour_ferie: false, bagages: false, routes_larges: false
   });
 
+  // États pour les suggestions
+  const [placeNames, setPlaceNames] = useState<string[]>([]);
+  const [showSuggestionsDepart, setShowSuggestionsDepart] = useState(false);
+  const [showSuggestionsDestination, setShowSuggestionsDestination] = useState(false);
+  const [filteredSuggestionsDepart, setFilteredSuggestionsDepart] = useState<string[]>([]);
+  const [filteredSuggestionsDestination, setFilteredSuggestionsDestination] = useState<string[]>([]);
+
+  // Charger la liste des lieux au montage du modal
+  useEffect(() => {
+    const loadPlaceNames = async () => {
+      try {
+        // Essayer de charger depuis le fichier lieux.txt
+        const response = await fetch('/lieux.txt');
+        if (response.ok) {
+          const text = await response.text();
+          const names = text
+            .split('\n')
+            .map(name => {
+              let cleanName = name.trim();
+              cleanName = cleanName.replace(/,$/, '');
+              return cleanName.split(',').map(part => part.trim());
+            })
+            .flat()
+            .filter(name => 
+              name && 
+              name.length > 0 && 
+              name !== 'undefined' && 
+              name !== 'null' &&
+              !name.includes('Response body') &&
+              !name.includes('Server response') &&
+              !name.includes('Code Details')
+            );
+          
+          const uniqueNames = [...new Set(names)].sort((a, b) => a.localeCompare(b));
+          
+          if (uniqueNames.length > 0) {
+            setPlaceNames(uniqueNames);
+          } else {
+            // Liste de secours
+            setPlaceNames([
+              "mvan", "Melen 8", "Yaoundé", "Douala", "Garoua", "Maroua", "Bafoussam",
+              "Bamenda", "Ngaoundéré", "Bertoua", "Ebolowa", "Kumba",
+              "Limbe", "Kribi", "Mbalmayo", "Edea", "Foumban", "Dschang", "Nkongsamba",
+              "Buea", "Kumbo", "Mbouda", "Loum", "Nkoteng", "Monatélé", "Bafia",
+              "Obala", "Sangmélima", "Mfou", "Soa", "Ngoumou", "Makak", "Nanga Eboko",
+              "Eséka", "Muyuka", "Tiko", "Penja", "Manjo", "Bali", "Bamendjou",
+              "Baham", "Bandjoun", "Bayangam", "Bangangté", "Bazou", "Tonga",
+              "Galim", "Tibati", "Meiganga", "Djohong", "Batouri", "Ndelele",
+              "Yokadouma", "Moloundou", "Gari Gombo", "Kette", "Mindourou",
+              "Abong Mbang", "Dimako", "Doumé", "Lomié", "Messok", "Ndoukoula",
+              "Figuil", "Poli", "Rey Bouba", "Tcholliré", "Guider", "Lagdo",
+              "Ngong", "Touboro", "Vina", "Ngaoundal", "Tibati", "Banyo", "Mayo Banyo",
+              "Kontcha", "Ngaoui", "Dir", "Mbe", "Nkambe", "Wum", "Fundong",
+              "Belo", "Mbengwi", "Andek", "Njikwa", "Ako", "Misaje", "Ndu",
+              "Nwa", "Zhoa", "Bamessing", "Babessi", "Bafut", "Mankon",
+              "Santa", "Pinyin", "Bambui", "Bawock", "Mendankwe", "Nkwen",
+              "Atuakom", "Bafanji", "Bambili", "Bambui", "Bamendankwe"
+            ]);
+          }
+        } else {
+          // Liste de secours si le fichier n'est pas trouvé
+          setPlaceNames([
+            "mvan", "Melen 8", "Yaoundé", "Douala", "Garoua", "Maroua", "Bafoussam",
+            "Bamenda", "Ngaoundéré", "Bertoua", "Ebolowa", "Kumba",
+            "Limbe", "Kribi", "Mbalmayo", "Edea", "Foumban", "Dschang", "Nkongsamba",
+            "Buea", "Kumbo", "Mbouda", "Loum", "Nkoteng", "Monatélé", "Bafia",
+            "Obala", "Sangmélima", "Mfou", "Soa", "Ngoumou", "Makak", "Nanga Eboko",
+            "Eséka", "Muyuka", "Tiko", "Penja", "Manjo", "Bali", "Bamendjou",
+            "Baham", "Bandjoun", "Bayangam", "Bangangté", "Bazou", "Tonga"
+          ]);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des noms:", error);
+        // Liste de secours en cas d'erreur
+        setPlaceNames([
+          "mvan", "Melen 8", "Yaoundé", "Douala", "Garoua", "Maroua", "Bafoussam",
+          "Bamenda", "Ngaoundéré", "Bertoua", "Ebolowa", "Kumba",
+          "Limbe", "Kribi", "Mbalmayo", "Edea", "Foumban"
+        ]);
+      }
+    };
+    
+    loadPlaceNames();
+  }, []);
+
+  // Gestionnaire pour le champ départ
+  const handleDepartChange = (value: string) => {
+    setForm({ ...form, depart_osm: value });
+    
+    if (value.trim() !== "") {
+      const filtered = placeNames.filter(name =>
+        name.toLowerCase().includes(value.toLowerCase())
+      ).slice(0, 10); // Augmenter à 10 suggestions
+      
+      setFilteredSuggestionsDepart(filtered);
+      setShowSuggestionsDepart(filtered.length > 0);
+    } else {
+      setShowSuggestionsDepart(false);
+      setFilteredSuggestionsDepart([]);
+    }
+  };
+
+  // Gestionnaire pour le champ destination
+  const handleDestinationChange = (value: string) => {
+    setForm({ ...form, destination_osm: value });
+    
+    if (value.trim() !== "") {
+      const filtered = placeNames.filter(name =>
+        name.toLowerCase().includes(value.toLowerCase())
+      ).slice(0, 10); // Augmenter à 10 suggestions
+      
+      setFilteredSuggestionsDestination(filtered);
+      setShowSuggestionsDestination(filtered.length > 0);
+    } else {
+      setShowSuggestionsDestination(false);
+      setFilteredSuggestionsDestination([]);
+    }
+  };
+
+  // Sélectionner une suggestion de départ
+  const handleSelectDepart = (name: string) => {
+    setForm({ ...form, depart_osm: name });
+    setShowSuggestionsDepart(false);
+  };
+
+  // Sélectionner une suggestion de destination
+  const handleSelectDestination = (name: string) => {
+    setForm({ ...form, destination_osm: name });
+    setShowSuggestionsDestination(false);
+  };
+
+  // Fonction pour mettre à jour le formulaire
   const update = (k: string, v: any) => {
     // Convertir les nombres
     if (k === 'distance_km') {
@@ -1074,6 +1208,14 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
       setForm({ ...form, [k]: v });
     }
   };
+
+  // Réinitialiser les suggestions quand on change d'étape
+  useEffect(() => {
+    if (step !== 1) {
+      setShowSuggestionsDepart(false);
+      setShowSuggestionsDestination(false);
+    }
+  }, [step]);
 
   const renderBooleanIcon = (value: boolean) => 
     value ? <FaCheck className="text-green-600 dark:text-green-400" /> : <FaTimes className="text-red-600 dark:text-red-400" />;
@@ -1116,25 +1258,104 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                 Informations du Trajet
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { l: 'Départ', k: 'depart_osm', t: 'text', p: 'Bonamoussadi' },
-                  { l: 'Arrivée', k: 'destination_osm', t: 'text', p: 'Akwa' },
-                  { l: 'Distance (km)', k: 'distance_km', t: 'number', p: '10.2' },
-                  { l: 'Prix (FCFA)', k: 'prix_paye', t: 'number', p: '2500' }
-                ].map(f => (
-                  <div key={f.k} className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {f.l}
-                    </label>
+                {/* Champ Départ avec suggestions */}
+                <div className="space-y-2 relative">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Départ
+                  </label>
+                  <div className="relative">
                     <input 
-                      type={f.t} 
-                      value={form[f.k] || ''} 
-                      onChange={e => update(f.k, e.target.value)}
-                      placeholder={f.p}
+                      type="text" 
+                      value={form.depart_osm} 
+                      onChange={e => handleDepartChange(e.target.value)}
+                      placeholder="Ex: Mvan, Yaoundé, Douala..."
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                     />
+                    {showSuggestionsDepart && filteredSuggestionsDepart.length > 0 && (
+                      <div className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                          Suggestions
+                        </div>
+                        {filteredSuggestionsDepart.map((name, index) => (
+                          <div
+                            key={`depart-${index}`}
+                            onClick={() => handleSelectDepart(name)}
+                            className="px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/30 cursor-pointer text-gray-800 dark:text-white border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                          >
+                            <div className="flex items-center gap-2">
+                              <FaMapMarkerAlt className="text-blue-500 text-sm" />
+                              {name}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                ))}
+                </div>
+
+                {/* Champ Destination avec suggestions */}
+                <div className="space-y-2 relative">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Arrivée
+                  </label>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      value={form.destination_osm} 
+                      onChange={e => handleDestinationChange(e.target.value)}
+                      placeholder="Ex: Melen 8, Douala, Garoua..."
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                    />
+                    {showSuggestionsDestination && filteredSuggestionsDestination.length > 0 && (
+                      <div className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                          Suggestions
+                        </div>
+                        {filteredSuggestionsDestination.map((name, index) => (
+                          <div
+                            key={`destination-${index}`}
+                            onClick={() => handleSelectDestination(name)}
+                            className="px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-900/30 cursor-pointer text-gray-800 dark:text-white border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                          >
+                            <div className="flex items-center gap-2">
+                              <FaLocationArrow className="text-blue-500 text-sm" />
+                              {name}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Champ Distance */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Distance (km)
+                  </label>
+                  <input 
+                    type="number" 
+                    step="0.1"
+                    value={form.distance_km || ''} 
+                    onChange={e => update('distance_km', e.target.value)}
+                    placeholder="10.2"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                  />
+                </div>
+
+                {/* Champ Prix */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Prix (FCFA)
+                  </label>
+                  <input 
+                    type="number" 
+                    value={form.prix_paye || ''} 
+                    onChange={e => update('prix_paye', e.target.value)}
+                    placeholder="2500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                  />
+                </div>
               </div>
             </div>
           )}
