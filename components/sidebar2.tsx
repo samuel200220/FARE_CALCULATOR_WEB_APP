@@ -74,7 +74,7 @@ export default function Sidebar2() {
     { href: '/accueil',    icon: <Home />,        label: t('home'),      requiresAuth: true },
     { href: '/profil1',    icon: <User />,        label: t('profile'),   requiresAuth: true },
     { href: '/historique_stand', icon: <History />,     label: t('history'),   requiresAuth: true },
-    { href: '/parametres', icon: <Settings />,    label: t('settings'),  requiresAuth: true },
+    // { href: '/parametres', icon: <Settings />,    label: t('settings'),  requiresAuth: true },
     { href: '/aide1',      icon: <HelpCircle />,  label: t('help') },
     { href: '#',           icon: <LogOut />,      label: t('logout'),    requiresAuth: true, isLogout: true },
   ];
