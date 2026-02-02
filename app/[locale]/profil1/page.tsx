@@ -5,7 +5,8 @@ import { Calendar, Clock, MapPin, DollarSign, CloudRain, Briefcase, AlertTriangl
 import Sidebar2 from '@/components/sidebar2';
 import { useAuth } from '@/context/AuthContext';
 import { getHistorique } from '@/app/services/calculService';
-import { utilisateurService } from '@/app/services/api'; // Importez utilisateurService
+import { utilisateurService } from '@/app/services/api';
+import { useTranslations } from 'next-intl';
 
 interface Trip {
   id: string;
@@ -32,6 +33,8 @@ interface UserProfile {
 }
 
 export default function UserDashboard() {
+  const t = useTranslations('dashboard');
+  const h = useTranslations('history');
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [trips, setTrips] = useState<Trip[]>([]);
@@ -132,7 +135,7 @@ export default function UserDashboard() {
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Chargement...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">{t('loading')}</p>
         </div>
       </div>
     );
@@ -142,7 +145,7 @@ export default function UserDashboard() {
     return (
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center text-red-600 dark:text-red-400">
-          <p>Erreur: {error}</p>
+          <p>{t('error')}: {error}</p>
         </div>
       </div>
     );
@@ -166,11 +169,11 @@ export default function UserDashboard() {
           <div className='flex gap-2'>
             <Sidebar2 />
             <h1 className="text-3xl font-bold text-violet-800 dark:text-violet-400 mb-2">
-              Mon Tableau de Bord
+              {t('title')}
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Gérez votre profil et consultez l'historique de vos trajets
+            {t('subtitle')}
           </p>
         </div>
 
@@ -187,7 +190,7 @@ export default function UserDashboard() {
                     {userProfile.name}
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Membre depuis {new Date(userProfile.memberSince).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+                    {t('profile.memberSince')}{" "} {new Date(userProfile.memberSince).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -208,7 +211,7 @@ export default function UserDashboard() {
             </div>
             <button className="px-4 py-2 bg-white dark:bg-gray-800 border border-violet-300 dark:border-violet-700 text-violet-700 dark:text-violet-400 rounded-lg hover:bg-violet-50 dark:hover:bg-violet-950 transition-colors flex items-center space-x-2">
               <Edit2 className="w-4 h-4" />
-              <span>Modifier</span>
+              <span>{t('profile.edit')}</span>
             </button>
           </div>
         </div>
@@ -218,7 +221,7 @@ export default function UserDashboard() {
           <div className="bg-violet-50 dark:bg-violet-950 rounded-lg p-6 border border-violet-200 dark:border-violet-800">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-violet-600 dark:text-violet-400 mb-1">Total Trajets</p>
+                <p className="text-sm text-violet-600 dark:text-violet-400 mb-1">{t('stats.totalTrips')}</p>
                 <p className="text-3xl font-bold text-violet-800 dark:text-violet-300">{trips.length}</p>
               </div>
               <MapPin className="w-12 h-12 text-violet-600 dark:text-violet-400" />
@@ -228,7 +231,7 @@ export default function UserDashboard() {
           <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600 dark:text-blue-400 mb-1">Prix Moyen Estimé</p>
+                <p className="text-sm text-blue-600 dark:text-blue-400 mb-1">{t('stats.avgPrice')}</p>
                 <p className="text-3xl font-bold text-blue-800 dark:text-blue-300">
                   {trips.length > 0 
                     ? Math.round(trips.reduce((sum, t) => sum + t.estimatedPrice, 0) / trips.length) 
@@ -242,7 +245,7 @@ export default function UserDashboard() {
           <div className="bg-violet-50 dark:bg-violet-950 rounded-lg p-6 border border-violet-200 dark:border-violet-800">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-violet-600 dark:text-violet-400 mb-1">Contributions</p>
+                <p className="text-sm text-violet-600 dark:text-violet-400 mb-1">{t('stats.contributions')}</p>
                 <p className="text-3xl font-bold text-violet-800 dark:text-violet-300">
                   {trips.filter(t => t.actualPrice).length}
                 </p>
@@ -255,17 +258,17 @@ export default function UserDashboard() {
         {/* Trips Section Header */}
         <div className="mb-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-            Historique des Trajets
+            {t('trips.title')}
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Consultez vos trajets passés et contribuez en indiquant les prix réels payés
+            {t('trips.subtitle')}
           </p>
         </div>
 
         {/* Trips List */}
         {trips.length === 0 ? (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-            Aucun trajet enregistré
+            {t('trips.noTrips')}
           </div>
         ) : (
           <div className="space-y-4">
@@ -280,7 +283,7 @@ export default function UserDashboard() {
                     <div className="flex items-start space-x-3">
                       <MapPin className="w-5 h-5 text-violet-600 dark:text-violet-400 mt-1" />
                       <div className="flex-1">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Départ</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{t('trips.departure')}</p>
                         <p className="font-semibold text-gray-900 dark:text-white">{trip.departureLocation}</p>
                       </div>
                     </div>
@@ -288,7 +291,7 @@ export default function UserDashboard() {
                     <div className="flex items-start space-x-3">
                       <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-1" />
                       <div className="flex-1">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Arrivée</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{t('trips.arrival')}</p>
                         <p className="font-semibold text-gray-900 dark:text-white">{trip.arrivalLocation}</p>
                       </div>
                     </div>
@@ -318,25 +321,25 @@ export default function UserDashboard() {
                         {trip.isRaining && (
                           <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center space-x-1">
                             <CloudRain className="w-3 h-3" />
-                            <span>Pluie</span>
+                            <span>{t('labels.rain')}</span>
                           </span>
                         )}
                         {trip.hasLuggage && (
                           <span className="px-3 py-1 rounded-full text-xs font-medium bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300 flex items-center space-x-1">
                             <Briefcase className="w-3 h-3" />
-                            <span>Bagages</span>
+                            <span>{t('labels.luggage')}</span>
                           </span>
                         )}
                         {trip.hasAccident && (
                           <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 flex items-center space-x-1">
                             <AlertTriangle className="w-3 h-3" />
-                            <span>Accident</span>
+                            <span>{t('labels.accident')}</span>
                           </span>
                         )}
                         {trip.isHoliday && (
                           <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 flex items-center space-x-1">
                             <Sun className="w-3 h-3" />
-                            <span>Jour férié</span>
+                            <span>{t('labels.holiday')}</span>
                           </span>
                         )}
                       </div>
@@ -345,7 +348,7 @@ export default function UserDashboard() {
                     <div className="flex items-end justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
                       <div className="space-y-2">
                         <div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">Prix estimé</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{t('trips.estimatedPrice')}</p>
                           <p className="text-lg font-bold text-violet-700 dark:text-violet-400">
                             {trip.estimatedPrice.toLocaleString()} FCFA
                           </p>
@@ -356,7 +359,7 @@ export default function UserDashboard() {
                               type="number"
                               value={editPrice}
                               onChange={(e) => setEditPrice(e.target.value)}
-                              placeholder="Prix réel"
+                              placeholder={t('trips.actualPrice')}
                               className="w-32 px-3 py-1 text-sm border border-blue-600 dark:border-blue-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                             />
                             <button
@@ -374,9 +377,11 @@ export default function UserDashboard() {
                           </div>
                         ) : (
                           <div>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Prix réel payé</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('trips.actualPrice')}</p>
                             <p className="text-lg font-bold text-blue-700 dark:text-blue-400">
-                              {trip.actualPrice ? `${trip.actualPrice.toLocaleString()} FCFA` : 'Non renseigné'}
+                              {trip.actualPrice
+    ? `${trip.actualPrice.toLocaleString()} FCFA`
+    : t('trips.notProvided')}
                             </p>
                           </div>
                         )}
@@ -387,7 +392,7 @@ export default function UserDashboard() {
                           className="px-4 py-2 bg-violet-600 dark:bg-violet-900 text-white rounded-lg hover:bg-violet-700 dark:hover:bg-violet-800 transition-colors flex items-center space-x-2"
                         >
                           <Edit2 className="w-4 h-4" />
-                          <span className="text-sm">Contribuer</span>
+                          <span className="text-sm">{t('trips.contribute')}</span>
                         </button>
                       )}
                     </div>

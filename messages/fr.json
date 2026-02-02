@@ -448,5 +448,191 @@
       "fullName": "Votre nom",
       "email": "email@example.com"
     }
+  },
+  "dashboard": {
+    "title": "Mon Tableau de Bord",
+    "subtitle": "Gérez votre profil et consultez l'historique de vos trajets",
+
+    "profile": {
+      "memberSince": "Membre depuis",
+      "edit": "Modifier"
+    },
+
+    "stats": {
+      "totalTrips": "Total Trajets",
+      "avgPrice": "Prix Moyen Estimé",
+      "contributions": "Contributions"
+    },
+
+    "trips": {
+      "title": "Historique des Trajets",
+      "subtitle": "Consultez vos trajets passés et contribuez en indiquant les prix réels payés",
+      "noTrips": "Aucun trajet enregistré",
+      "departure": "Départ",
+      "arrival": "Arrivée",
+      "conditions": "Conditions",
+      "estimatedPrice": "Prix estimé",
+      "actualPrice": "Prix réel payé",
+      "notProvided": "Non renseigné",
+      "contribute": "Contribuer"
+    },
+
+    "loading": "Chargement...",
+    "error": "Erreur lors du chargement des données"
+  },
+  "history": {
+    "title": "Historique des Calculs",
+
+    "loading": "Chargement en cours...",
+    "empty": "Aucun calcul enregistré.",
+    "unknownError": "Une erreur inconnue est survenue",
+
+    "labels": {
+      "departure": "Départ",
+      "arrival": "Arrivée",
+      "distance": "Distance",
+      "day": "Jour",
+      "rain": "Pluie",
+      "road": "Route",
+      "luggage": "Bagages",
+      "works": "Travaux",
+      "officialPrice": "Officiel"
+    }
+  },
+  "steps": {
+    "step1": {
+      "title": "Calculateur de Tarif",
+      "next": "Suivant",
+      "calculate": "Calculer tarif",
+      "calculating": "Calcul en cours..."
+    },
+    "step2": {
+      "title": "Conditions de trajet",
+      "dayOfWeek": "Jour de la semaine",
+      "days": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+      },
+      "publicHoliday": "Jour Férié",
+      "rain": "Pluie",
+      "accident": "Accident",
+      "roadCondition": "État de la route",
+      "roadConditions": {
+        "good": "Bonne",
+        "average": "Moyenne",
+        "bad": "Mauvaise"
+      },
+      "back": "Retour",
+      "next": "Suivant"
+    },
+    "step3": {
+      "title": "Conditions supplémentaires",
+      "luggage": "Bagages",
+      "wideRoads": "Routes Larges",
+      "roadWorks": "Travaux",
+      "yes": "Oui",
+      "no": "Non",
+      "calculate": "Calculer",
+      "back": "Retour"
+    }
+  },
+  "floatingFrame": {
+    "title": "Estimation en direct",
+    "departure": "Départ",
+    "arrival": "Arrivée",
+    "distance": "Distance",
+    "duration": "Durée",
+    "estimatedPrice": "Prix estimé",
+    "calculating": "Calcul en cours...",
+    "priceUpdateInfo": "Le prix se met à jour automatiquement lorsque vous modifiez les paramètres"
+  },
+  "resultCard": {
+    "title": "Estimation du prix",
+    "predictionAI": "Prédiction IA",
+    "estimatedRange": "Fourchette estimée",
+    "departure": "Départ",
+    "arrival": "Arrivée",
+    "time": "Heure",
+    "distance": "Distance",
+    "duration": "Durée",
+    "predictionDetails": "Détails de la prédiction",
+    "source": "Source",
+    "trip": "Trajet",
+    "newCalculation": "Nouveau calcul"
+  },
+  "map": {
+    "showMap": "Voir la carte",
+    "hideMap": "Masquer carte"
+  },
+  "loading": {
+    "model": "Chargement du modèle de prédiction...",
+    "contributeData": "Contribuer"
+  },
+  "suggestions": {
+    "recommendedPlaces": "Lieux recommandés",
+    "localSuggestions": "Suggestions locales",
+    "noSuggestions": "Aucune suggestion"
+  },
+  "calculator": {
+    "tripInformation": "Informations de trajet",
+    "tripConditions": "Conditions de trajet",
+    "additionalConditions": "Conditions supplémentaires",
+    "dayOfWeek": "Jour de la semaine",
+    "monday": "Lundi",
+    "tuesday": "Mardi",
+    "wednesday": "Mercredi",
+    "thursday": "Jeudi",
+    "friday": "Vendredi",
+    "saturday": "Samedi",
+    "sunday": "Dimanche",
+    "select": "Sélectionner",
+    "publicHoliday": "Jour férié ?",
+    "yes": "Oui",
+    "no": "Non",
+    "rain": "Pluie ?",
+    "roadCondition": "État de la route",
+    "good": "Bonne",
+    "average": "Moyenne",
+    "bad": "Mauvaise",
+    "accident": "Accident sur la route ?",
+    "luggage": "Bagages ?",
+    "wideRoads": "Routes larges ?",
+    "roadWorks": "Routes en travaux ?",
+    "next": "Suivant",
+    "back": "Retour",
+    "calculate": "Calculer",
+    "calculating": "Calcul...",
+    "limitReached": "Limite atteinte",
+    "blocked": "Bloqué"
+  },
+  "limits": {
+    "title": "Limite de calculs atteinte",
+    "description": "Vous avez effectué {count} calculs sur 3 autorisés. Inscrivez-vous pour continuer.",
+    "blockedMessage": "Vous avez effectué 3 calculs. Inscrivez-vous pour continuer.",
+    "calculationsMade": "Calculs effectués: {current}/3",
+    "calc":"Calculs effectués"
+  },
+  "suggestions": {
+    "recommendedPlaces": "Lieux recommandés",
+    "localSuggestions": "Suggestions locales",
+    "noSuggestions": "Aucune suggestion"
+  },
+  "results": {
+    "estimationTitle": "Estimation du prix",
+    "tripSummary": "Trajet: {start} → {end}",
+    "distance": "Distance",
+    "duration": "Durée",
+    "estimatedCost": "Coût estimé",
+    "range": "Fourchette",
+    "officialFare": "Tarif officiel",
+    "viewRoute": "Visualiser le trajet",
+    "newTrip": "Nouveau trajet",
+    "recalculate": "Refaire un calcul",
+    "calculationsCount": "Calculs effectués:"
   }
 }

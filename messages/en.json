@@ -448,6 +448,192 @@
       "fullName": "Your name",
       "email": "email@example.com"
     }
+  },
+  "dashboard": {
+    "title": "My Dashboard",
+    "subtitle": "Manage your profile and view your trip history",
+
+    "profile": {
+      "memberSince": "Member since",
+      "edit": "Edit"
+    },
+
+    "stats": {
+      "totalTrips": "Total Trips",
+      "avgPrice": "Average Estimated Price",
+      "contributions": "Contributions"
+    },
+
+    "trips": {
+      "title": "Trip History",
+      "subtitle": "View your past trips and contribute actual prices paid",
+      "noTrips": "No trips recorded",
+      "departure": "Departure",
+      "arrival": "Arrival",
+      "conditions": "Conditions",
+      "estimatedPrice": "Estimated price",
+      "actualPrice": "Actual price paid",
+      "notProvided": "Not provided",
+      "contribute": "Contribute"
+    },
+
+    "loading": "Loading...",
+    "error": "Error while loading data"
+  },
+  "history": {
+    "title": "Calculation History",
+
+    "loading": "Loading...",
+    "empty": "No calculations recorded.",
+    "unknownError": "An unknown error occurred",
+
+    "labels": {
+      "departure": "Departure",
+      "arrival": "Arrival",
+      "distance": "Distance",
+      "day": "Day",
+      "rain": "Rain",
+      "road": "Road",
+      "luggage": "Luggage",
+      "works": "Road works",
+      "officialPrice": "Official"
+    }
+  },
+  "steps": {
+    "step1": {
+      "title": "Fare Calculator",
+      "next": "Next",
+      "calculate": "Calculate fare",
+      "calculating": "Calculating..."
+    },
+    "step2": {
+      "title": "Trip Conditions",
+      "dayOfWeek": "Day of the week",
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "publicHoliday": "Public Holiday",
+      "rain": "Rain",
+      "accident": "Accident",
+      "roadCondition": "Road condition",
+      "roadConditions": {
+        "good": "Good",
+        "average": "Average",
+        "bad": "Bad"
+      },
+      "back": "Back",
+      "next": "Next"
+    },
+    "step3": {
+      "title": "Additional Conditions",
+      "luggage": "Luggage",
+      "wideRoads": "Wide Roads",
+      "roadWorks": "Road Works",
+      "yes": "Yes",
+      "no": "No",
+      "calculate": "Calculate",
+      "back": "Back"
+    }
+  },
+  "floatingFrame": {
+    "title": "Live Estimation",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "distance": "Distance",
+    "duration": "Duration",
+    "estimatedPrice": "Estimated Price",
+    "calculating": "Calculating...",
+    "priceUpdateInfo": "Price updates automatically when you change parameters"
+  },
+  "resultCard": {
+    "title": "Price Estimation",
+    "predictionAI": "AI Prediction",
+    "estimatedRange": "Estimated range",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "time": "Time",
+    "distance": "Distance",
+    "duration": "Duration",
+    "predictionDetails": "Prediction details",
+    "source": "Source",
+    "trip": "Trip",
+    "newCalculation": "New calculation"
+  },
+  "map": {
+    "showMap": "Show map",
+    "hideMap": "Hide map"
+  },
+  "loading": {
+    "model": "Loading prediction model...",
+    "contributeData": "Contributing data..."
+  },
+  "suggestions": {
+    "recommendedPlaces": "Recommended places",
+    "localSuggestions": "Local suggestions",
+    "noSuggestions": "No suggestions"
+  },
+  "calculator": {
+    "tripInformation": "Trip Information",
+    "tripConditions": "Trip Conditions",
+    "additionalConditions": "Additional Conditions",
+    "dayOfWeek": "Day of the week",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "select": "Select",
+    "publicHoliday": "Public Holiday?",
+    "yes": "Yes",
+    "no": "No",
+    "rain": "Rain?",
+    "roadCondition": "Road condition",
+    "good": "Good",
+    "average": "Average",
+    "bad": "Bad",
+    "accident": "Accident on the road?",
+    "luggage": "Luggage?",
+    "wideRoads": "Wide roads?",
+    "roadWorks": "Road works?",
+    "next": "Next",
+    "back": "Back",
+    "calculate": "Calculate",
+    "calculating": "Calculating...",
+    "limitReached": "Limit reached",
+    "blocked": "Blocked"
+  },
+  "limits": {
+    "title": "Calculation limit reached",
+    "description": "You have performed {count} calculations out of 3 allowed. Sign up to continue.",
+    "blockedMessage": "You have performed 3 calculations. Sign up to continue.",
+    "calculationsMade": "Calculations made: {current}/3",
+    "calc":"Calculations made"
+  },
+  "suggestions": {
+    "recommendedPlaces": "Recommended places",
+    "localSuggestions": "Local suggestions",
+    "noSuggestions": "No suggestions"
+  },
+  "results": {
+    "estimationTitle": "Price Estimation",
+    "tripSummary": "Trip: {start} → {end}",
+    "distance": "Distance",
+    "duration": "Duration",
+    "estimatedCost": "Estimated cost",
+    "range": "Range",
+    "officialFare": "Official fare",
+    "viewRoute": "View route",
+    "newTrip": "New trip",
+    "recalculate": "Recalculate",
+    "calculationsCount": "Calculations made:"
   }
 
 }
