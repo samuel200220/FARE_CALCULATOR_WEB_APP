@@ -96,7 +96,7 @@ export default function LandingPageClient() {
     prix_estime_range: string;
     message: string;
     lieux_comms: string;
-    official_fare?: number;
+    // official_fare?: number;
   }
   
   const [predictionResult, setPredictionResult] = useState<PredictionResult | null>(null);
@@ -702,7 +702,7 @@ export default function LandingPageClient() {
       let officialFareResult: any = null;
 
       // Récupérer le tarif officiel en parallèle
-      const officialFarePromise = getOfficialFare(start, end, hour);
+      //const officialFarePromise = getOfficialFare(start, end, hour);
 
       // Essayer d'abord avec ONNX, puis avec l'API en ligne (comme dans section1.tsx)
       if (onnxSession && !modelLoading) {
@@ -740,11 +740,11 @@ export default function LandingPageClient() {
       }
 
       // Récupérer le tarif officiel
-      try {
-        officialFareResult = await officialFarePromise;
-      } catch (err) {
-        console.warn('Tarif officiel non disponible:', err);
-      }
+      // try {
+      //   officialFareResult = await officialFarePromise;
+      // } catch (err) {
+      //   console.warn('Tarif officiel non disponible:', err);
+      // }
 
       // Calcul de la fourchette de prix
       const prixArrondi = Math.round(prixEstime);
@@ -756,7 +756,7 @@ export default function LandingPageClient() {
         prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
         message: `Prédiction ${predictionSource}`,
         lieux_comms: `Trajet de ${start} à ${end}`,
-        official_fare: officialFareResult?.mint_cost || 0
+        // official_fare: officialFareResult?.mint_cost || 0
       };
       
       setPredictionResult(result);
@@ -824,7 +824,7 @@ export default function LandingPageClient() {
         prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
         message: `Estimation locale basée sur ${distanceToUse.toFixed(2)} km (erreur système)`,
         lieux_comms: `Trajet de ${start} à ${end}`,
-        official_fare: 0
+        // official_fare: 0
       };
       
       setPredictionResult(simulatedResult);
@@ -1706,13 +1706,13 @@ export default function LandingPageClient() {
                             </p>
                           </div>
 
-                          {predictionResult.official_fare && predictionResult.official_fare > 0 && (
+                          {/* {predictionResult.official_fare && predictionResult.official_fare > 0 && (
                             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
                               <p className="text-sm text-blue-700 dark:text-blue-300 text-center">
                                 <span className="font-semibold">{resultsT('officialFare')}:</span> {predictionResult.official_fare} FCFA
                               </p>
                             </div>
-                          )}
+                          )} */}
 
                           {/* Afficher le compteur de calculs */}
                           {!estConnecte && (
