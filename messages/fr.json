@@ -1,0 +1,452 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "common": {
+    "welcome": "Bienvenue",
+    "language": "Langue",
+    "loading": "Chargement..."
+  },
+  "home": {
+    "title": "Bienvenue dans notre application",
+    "description": "Ceci est une application Next.js multilingue"
+  },
+  "landing": {
+    "heroTitle": "Estimez votre Tarif Urbain ou Interurbain",
+    "heroDescription": "Avec Fare Calculator, obtenez une estimation rapide du coût de vos trajets au Cameroun. Transparence, rapidité et simplicité en quelques clics.",
+    "startFree": "Commencer Gratuitement",
+    "standardVersion": "Version Standard",
+    "proVersion": "Version Pro",
+    "fareCalculator": "Calculateur de Tarif",
+    "calculateFare": "Calculer tarif",
+    "calculating": "Calcul en cours...",
+    "estimationTitle": "Notre estimation",
+    "distance": "Distance",
+    "estimatedCost": "Coût Estimé",
+    "officialFare": "Tarif Officiel",
+    "viewRoute": "Visualiser le trajet",
+    "recalculate": "Refaire un calcul",
+    "qrcode": "Scannez pour ouvrir l'application",
+    "google": "Se connecter avec Google"
+  },
+  "Verification":{
+    "success":{
+      "codeResent": "Code renvoyé avec success",
+      "verification": "Inscription réussie! Un code de vérification a été envoyé à votre email.",
+      "verificationFailed": "Échec de la vérification"
+    },
+    "errors":{
+      "resendFailed": "Échec de l'envoi du code",
+      "invalidCode":"Le code doit contenir 6 chiffres"
+    },
+    "buttons":{
+      "verify":"Vérifier le code",
+      "resendCode":"Renvoyer le code",
+      "resendCountdown":"Compte a rebours"
+    },
+    "title":"Double verification email",
+    "subtitle":"Nous avons envoyé un code de vérification à {email}",
+    "form":{
+      "code":"Code de vérification"
+    }
+  },
+  "agency":{
+  "travel_agency": "Besoin d'une agence de voyage ?",
+  "need_ride": "Besoin d'une course ?",
+  "need_rental": "Besoin d'une location ?"
+  },
+  "form":{
+    "go":"Départ",
+    "arrive":"Arrivée",
+    "time":"Sélectionnez l'heure",
+    "sugg":"Aucune suggestion"
+  },
+  "pricing": {
+  "title": "Nos Formules",
+  "description": "Choisissez le plan qui correspond à vos besoins",
+  "plans": {
+    "basic": {
+      "title": "Basique",
+      "price": "1000 FCFA",
+      "description": "Fonctionnalités essentielles pour commencer.",
+      "features": [
+        "Calcul tarif illimité",
+        "Suggestions de trajets",
+        "Support communautaire"
+      ],
+      "cta": "Commencer"
+    },
+    "pro": {
+      "title": "Pro",
+      "price": "2500 FCFA",
+      "description": "Parfait pour les utilisateurs fréquents.",
+      "features": [
+        "Calcul temps réel",
+        "Historique personnel",
+        "Optimisation des coûts"
+      ],
+      "cta": "Choisir Pro"
+    },
+    "enterprise": {
+      "title": "Entreprise",
+      "price": "Custom",
+      "description": "Support dédié et infrastructure personnalisée.",
+      "features": [
+        "Statistiques avancées",
+        "Gestion des équipes",
+        "Fonctionnalité exclusive"
+      ],
+      "cta": "Contactez-nous"
+    }
+  }
+},
+"fareSections": {
+  "agencies": {
+    "subtitle": "Fare Calculator pour Agences",
+    "title": "Gérez vos Réservations et Tarifs en Temps Réel",
+    "description": "Simplifiez la gestion de votre flotte, proposez des tarifs flexibles et optimisez vos trajets. Fare Calculator vous aide à digitaliser vos opérations pour toucher plus de clients et améliorer l’expérience passager.",
+    "button": "Inscrire votre Agence"
+  },
+  "institutions": {
+    "subtitle": "Fare Calculator pour Institutions",
+    "title": "Simplifiez la Gestion de vos Transports",
+    "description": "Gérez vos trajets, optimisez les coûts de transport pour votre organisation et accédez à des analyses tarifaires avancées. Fare Calculator propose une solution simple et rapide pour estimer et suivre vos dépenses de mobilité.",
+    "button": "Inscrire votre Institution"
+  },
+  "drivers": {
+    "subtitle": "Fare Calculator pour Conducteurs",
+    "title": "Conduisez et Gagnez à Votre Rythme",
+    "description": "Rejoignez notre réseau de conducteurs et proposez vos trajets en toute liberté. Avec Fare Calculator, vous fixez vos tarifs, gérez vos disponibilités et augmentez vos revenus facilement.",
+    "button": "S’inscrire comme Conducteur"
+  }
+},
+  "download": {
+    "title": "Téléchargez Fare Calculator",
+    "description": "Rejoignez des milliers d’utilisateurs au Cameroun : passagers, conducteurs et agences. Simplifiez vos trajets, calculez vos tarifs et optimisez votre mobilité avec FareGo. Disponible sur iOS et Android.",
+    "app_store": "App Store",
+    "google_play": "Google Play"
+  },
+  "header": {
+    "help": "Aide",
+    "sign_up": "S'inscrire",
+    "sign_in": "Se connecter",
+    "logout": "Déconnexion",
+    "language_switch": "Langue",
+    "english": "English",
+    "french": "Français",
+    "german": "Allemand",
+    "title": "Farcal"
+  },
+  "headerPro": {
+    "title": "Farcal Pro",
+    "dashboard": "Tableau de bord",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "language_switch": "Langue",
+    "english": "Anglais",
+    "french": "Français",
+    "german": "Allemand"
+  },
+  "footer": {
+    "company": "Notre Compagnie",
+    "vision": "Notre Vision",
+    "mission": "Notre Mission",
+    "goals": "Nos objectifs",
+    "originality": "Notre originalité",
+    "recruiting": "Nous Recrutons",
+    "contact": "Informations de contact",
+
+    "support": "Support",
+    "marketplace": "Place de marché",
+    "rentalAgency": "Agence de location",
+    "travelAgency": "Agence de voyage",
+    "carpooling": "Service de covoiturage",
+
+    "legal": "Informations légales",
+    "terms": "Conditions générales d'utilisation",
+    "privacy": "Politique De Confidentialité",
+    "personalInfo": "Vos Informations Personnelles",
+    "cookies": "Cookies",
+
+    "mobileApp": "Application Mobile",
+    "appStore": "App Store",
+    "playStore": "Play Store",
+
+    "followUs": "Suivez nous",
+    "rights": "© 2025 Fare Calculator. Tous droits conservés"
+  },
+  "sidebar": {
+    "brand": "Fare Calculator",
+    "welcome": "Bienvenue",
+    "home": "Accueil",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "theme": "Thème"
+  },
+  "sidebarPro": {
+    "brand": "Fare Calculator",
+    "welcome": "Bienvenue",
+    "home": "Accueil",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "dashboard": "Tableau de Bord",
+    "history": "Historique",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "theme": "Thème"
+  },
+  "titreano": {
+    "mainTitleLine1": "Calculez vos Tarifs de Transport en",
+    "mainTitleLine2": "Temps réel",
+    "description": "Solution professionnelle pour obtenir des devis instantanés et précis",
+    "signup": "S'inscrire",
+    "login": "Se connecter"
+  },
+  "section2": {
+    "title": "Services Associés",
+    "services": {
+      "taxi": {
+        "title": "Réserver un Taxi",
+        "description": "Réservez votre taxi rapidement pour vos trajets quotidiens ou vers l’aéroport. Confort, ponctualité et fiabilité garantis."
+      },
+      "trip": {
+        "title": "Réserver un Voyage",
+        "description": "Planifiez et réservez vos voyages nationaux ou régionaux facilement avec notre agence."
+      },
+      "delivery": {
+        "title": "Chauffeur pour Dépôt",
+        "description": "Bénéficiez d’un chauffeur pour déposer colis ou marchandises. Transport sécurisé, rapide et fiable."
+      }
+    }
+  },
+  "Section4": {
+    "title": "À Propos de Nous",
+    "why": {
+      "title": "Pourquoi",
+      "description": "Découvrez pourquoi notre entreprise est le choix idéal pour vos besoins de transport. Une équipe dédiée, un service client exceptionnel, et une expérience de voyage sans stress."
+    },
+    "vision": {
+      "title": "Vision",
+      "description": "Notre vision est de révolutionner le transport avec des solutions innovantes et durables. Un service fiable, écologique et accessible à tous."
+    },
+    "goal": {
+      "title": "Objectif",
+      "description": "Garantir la satisfaction de chaque client grâce à une ponctualité irréprochable et un professionnalisme constant. Étendre notre réseau tout en maintenant l’excellence."
+    }
+  },
+  "Section5": {
+    "title": "Disponible Sur Mobile"
+  },
+  "Section7":{
+    "title": "Ce que disent nos clients"
+  },
+  "StatsSection": {
+    "title": "Statistiques Clés",
+    "taxis": "Taxis",
+    "users": "Utilisateurs",
+    "ridesPerDay": "Nombre de déplacements par jour"
+  },
+  "InscriptionSection": {
+    "title": "Rejoignez-nous dès maintenant",
+    "description": "Découvrez une nouvelle façon de vous déplacer avec des services exclusifs et personnalisés.",
+    "placeholder": "Entrez votre email",
+    "button": "S'inscrire"
+  },
+  "Pourquoi": {
+    "header": {
+      "title": "Pourquoi Fare Calculator ?",
+      "subtitle": "Nous avons créé Fare Calculator pour répondre à un besoin essentiel : rendre le transport urbain plus transparent, équitable et accessible à tous."
+    },
+    "content": {
+      "title": "Le besoin derrière la solution",
+      "description": "Aujourd’hui, les utilisateurs ne savent pas toujours combien coûte un trajet. Que vous soyez un client occasionnel, un professionnel ou une entreprise, il est crucial d’estimer précisément un tarif avant d’accepter ou de proposer un service.\n\nFare Calculator permet aux utilisateurs anonymes de faire quelques estimations gratuites, tout en offrant plus de possibilités aux comptes inscrits ou professionnels. C’est une solution rapide, efficace et pensée pour tous les profils de voyageurs ou de chauffeurs."
+    }
+  },
+  "Vision": {
+    "header": {
+      "title": "Notre Vision",
+      "subtitle": "Construire un futur où chaque trajet est prévisible, juste et connecté, grâce à l'innovation."
+    },
+    "content": {
+      "title": "Une vision d’équité et de technologie",
+      "description": "Notre vision est de rendre le transport urbain intelligent, transparent et équitable. Grâce à Fare Calculator, nous rêvons d’un monde où chaque utilisateur peut prendre des décisions éclairées, planifier ses trajets en toute confiance, et éviter les abus tarifaires.\n\nNous voulons devenir une référence en matière d’estimation tarifaire automatisée, intégrée à des plateformes locales et internationales. Une solution au service de la mobilité durable, inclusive, et propulsée par la donnée."
+    }
+  },
+  "About": {
+    "header": {
+      "title": "À propos de Fare Calculator",
+      "subtitle": "Chez Fare Calculator, nous ne faisons pas que calculer des tarifs. Nous aidons à optimiser les trajets, rendre la mobilité plus accessible et améliorer l’expérience de transport pour tous."
+    },
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Notre mission est de simplifier le calcul des tarifs pour tous types d’utilisateurs : anonymes, inscrits, ou professionnels. En fournissant une estimation juste, rapide et intelligente, Fare Calculator contribue à une mobilité urbaine plus fluide, plus économique et plus responsable."
+    }
+  },
+  "Faq": {
+    "header": {
+      "title": "Aide & Assistance",
+      "subtitle": "Questions Fréquemment Posées"
+    },
+    "search": {
+      "placeholder": "Recherchez une question ou un mot-clé..."
+    },
+    "questions": {
+      "q1": {
+        "question": "Comment utiliser le calculateur de tarif ?",
+        "answer": "Saisissez votre point de départ et d’arrivée, puis cliquez sur 'Calculer'. Le système estimera le coût en fonction de la distance."
+      },
+      "q2": {
+        "question": "Ai-je besoin d’un compte pour faire un calcul ?",
+        "answer": "Non, vous pouvez effectuer jusqu'à 3 calculs gratuitement sans créer de compte."
+      },
+      "q3": {
+        "question": "Comment créer un compte ?",
+        "answer": "Cliquez sur le bouton 'S’inscrire' en haut de la page de calcul et remplissez les informations demandées."
+      },
+      "q4": {
+        "question": "Comment voir l’historique de mes calculs ?",
+        "answer": "Créez un compte, connectez-vous, puis accédez à l’onglet 'Historique'."
+      }
+    },
+    "noResults": "Aucune question ne correspond à votre recherche."
+  },
+  "Inscription": {
+    "title": "Inscription",
+    "subtitle": "Créer votre compte gratuitement",
+    "left": {
+      "title": "Fare Calculator - Votre Tarif à Portée De Main",
+      "subtitle": "Plus besoin de stresser sur le coût du trajet, Avec Fare Calculator, obtenez une estimation rapide du coût de vos déplacements."
+    },
+    "form": {
+      "username": "Nom d'utilisateur",
+      "email": "Adresse email"
+    },
+    "buttons": {
+      "signup": "S'inscrire",
+      "login": "Cliquez-ici",
+      "proVersion": "Version Pro"
+    },
+    "alreadyRegistered": "Déjà inscrit ?",
+    "errors": {
+      "required": "Ce champ est requis",
+      "emailExists": "Un compte existe déjà avec cette adresse mail",
+      "emailCheckFailed": "Erreur lors de la vérification de l'email",
+      "generic": "Une erreur est survenue",
+      "invalidEmail": "Adresse email invalide",
+      "invalidData":"Données invalides",
+      "serverError": "Erreur serveur, veuillez réessayer plus tard",
+      "networkError":"Impossible de se connecter au serveur"
+    },
+    "success": {
+      "signup": "Inscription réussie"
+    }
+  },
+  "Connexion": {
+    "title": "Connexion",
+    "emailLabel": "Adresse email",
+    "emailPlaceholder": "you@example.com",
+    "loginButton": "Se connecter",
+    "noAccount": "Pas de compte ?",
+    "clickHere": "Cliquez ici",
+    "proVersion": "Version Pro",
+    "errors": {
+      "requiredEmail": "Email requis",
+      "notFound": "Aucun compte trouvé avec cette adresse email",
+      "generic": "Erreur lors de la connexion",
+      "invalidEmail": "Adresse email invalide",
+      "success": "Connexion réussie"
+    },
+    "messages": {
+      "accountNotFound": "Aucun compte trouvé avec cet email",
+      "serverError": "Erreur serveur, veuillez réessayer plus tard",
+      "networkError": "Impossible de se connecter au serveur. Vérifiez votre connexion internet.",
+      "genericError": "Une erreur s'est produite lors de la connexion"
+    }
+  },
+  "InscriptionPro": {
+    "title": "Inscription",
+    "subtitle": "Créer votre compte pro gratuitement",
+    "left": {
+      "title": "Fare Calculator Pro - Votre Tarif à Portée De Main",
+      "subtitle": "Plus besoin de stresser sur le coût du trajet, Avec Fare Calculator, obtenez une estimation rapide du coût de vos déplacements."
+    },
+    "form": {
+      "companyName": "Nom de l'entreprise",
+      "companyOwner": "Responsable de l'entreprise",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe"
+    },
+    "buttons": {
+      "signup": "S'inscrire",
+      "standardVersion": "Version Standard",
+      "loginPro": "Cliquez-ici"
+    },
+    "alreadyRegistered": "Déjà inscrit à la version pro ?",
+    "errors": {
+      "required": "Ce champ est requis",
+      "emailExists": "Un compte existe déjà avec cette adresse email",
+      "emailCheckFailed": "Erreur lors de la vérification de l'email",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "passwordTooShort":"Mot de passe trop court",
+      "generic": "Une erreur est survenue lors de l'inscription"
+    },
+    "success": {
+      "signup": "Inscription réussie"
+    }
+  },
+  "ConnexionPro": {
+    "title": "Connexion",
+    "subtitle": "Connectez-vous à votre compte pro",
+    "left": {
+      "title": "Fare Calculator - Votre Tarif à Portée De Main",
+      "subtitle": "Plus besoin de stresser sur le coût du trajet. Avec Fare Calculator, obtenez une estimation rapide du coût de vos déplacements."
+    },
+    "form": {
+      "email": "Adresse email",
+      "password": "Mot de passe"
+    },
+    "buttons": {
+      "login": "Se connecter",
+      "signupPro": "Cliquez-ici",
+      "standardVersion": "Version Standard"
+    },
+    "errors": {
+      "required": "Ce champ est requis",
+      "emailExists": "Un compte existe déjà avec cette adresse email",
+      "emailCheckFailed": "Erreur lors de la vérification de l'email",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "generic": "Une erreur est survenue lors de l'inscription"
+    },
+    "messages": {
+      "loginSuccess": "Connexion réussie",
+      "loginFailed": "Email ou mot de passe incorrect",
+      "accountNotFound": "Aucun compte associé à cet email",
+      "genericError": "Erreur lors de la connexion"
+    },
+    "noAccount": "Pas de compte pro ?"
+  },
+  "Parametres": {
+    "title": "Paramètres",
+    "sections": {
+      "profile": "Informations du profil",
+      "security": "Sécurité",
+      "preferences": "Préférences"
+    },
+    "fields": {
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "notifications": "Notifications",
+      "darkMode": "Mode sombre"
+    },
+    "placeholders": {
+      "fullName": "Votre nom",
+      "email": "email@example.com"
+    }
+  }
+}
