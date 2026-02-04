@@ -823,43 +823,50 @@ const Section1pro = ({}) => {
 };
 
   const handleStep1Submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const newErrors: typeof errors = {};
-    if (!start.trim()) {
-      newErrors.start = 'Le champ Départ est requis.';
-    }
+  // Vérifier si les lieux sont identiques (case-insensitive, trim)
+  if (start.trim().toLowerCase() === end.trim().toLowerCase()) {
+    toast.error("Le lieu de départ et la destination doivent être différents", {
+      position: 'top-right',
+    });
+    return;
+  }
 
-    if (!end.trim()) {
-      newErrors.end = 'Le champ Destination est requis.';
-    }
+  const newErrors: typeof errors = {};
+  if (!start.trim()) {
+    newErrors.start = 'Le champ Départ est requis.';
+  }
 
-    if (!hour) {
-      newErrors.hour = "L'heure doit être sélectionnée.";
-    }
+  if (!end.trim()) {
+    newErrors.end = 'Le champ Destination est requis.';
+  }
 
-    setErrors(newErrors);
+  if (!hour) {
+    newErrors.hour = "L'heure doit être sélectionnée.";
+  }
 
-    if (Object.keys(newErrors).length > 0) return;
+  setErrors(newErrors);
 
+  if (Object.keys(newErrors).length > 0) return;
 
-    try {
-      setIsLoading(true);
-      const route = await calculateRoute();
-      if (route) {
-        setStep(2);
-        setShowCards(false);
-        // Afficher la carte automatiquement sur desktop
-        if (window.innerWidth >= 1024) {
-          setShowMap(true);
-        }
+  try {
+    setIsLoading(true);
+    const route = await calculateRoute();
+    if (route) {
+      setStep(2);
+      setShowCards(false);
+      // Afficher la carte automatiquement sur desktop
+      if (window.innerWidth >= 1024) {
+        setShowMap(true);
       }
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (err) {
+    setError((err as Error).message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();

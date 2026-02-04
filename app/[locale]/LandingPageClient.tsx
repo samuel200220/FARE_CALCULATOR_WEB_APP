@@ -587,41 +587,50 @@ export default function LandingPageClient() {
   };
 
   const handleStep1Submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const newErrors: typeof errors = {};
-    if (!start.trim()) {
-      newErrors.start = 'Le champ Départ est requis.';
-    } else if (/^\d+$/.test(start.trim())) {
-      newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
+  const newErrors: typeof errors = {};
+  
+  // Vérifier si les lieux sont identiques (case-insensitive, trim)
+  if (start.trim().toLowerCase() === end.trim().toLowerCase()) {
+    toast.error("Le lieu de départ et la destination doivent être différents", {
+      position: 'bottom-right',
+    });
+    return;
+  }
+
+  if (!start.trim()) {
+    newErrors.start = 'Le champ Départ est requis.';
+  } else if (/^\d+$/.test(start.trim())) {
+    newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
+  }
+
+  if (!end.trim()) {
+    newErrors.end = 'Le champ Destination est requis.';
+  } else if (/^\d+$/.test(end.trim())) {
+    newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
+  }
+
+  if (!hour) {
+    newErrors.hour = "L'heure doit être sélectionnée.";
+  }
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) return;
+
+  try {
+    setIsLoading(true);
+    const route = await calculateRoute();
+    if (route) {
+      setStep(2);
     }
-
-    if (!end.trim()) {
-      newErrors.end = 'Le champ Destination est requis.';
-    } else if (/^\d+$/.test(end.trim())) {
-      newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
-    }
-
-    if (!hour) {
-      newErrors.hour = "L'heure doit être sélectionnée.";
-    }
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) return;
-
-    try {
-      setIsLoading(true);
-      const route = await calculateRoute();
-      if (route) {
-        setStep(2);
-      }
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  } catch (err) {
+    setError((err as Error).message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
