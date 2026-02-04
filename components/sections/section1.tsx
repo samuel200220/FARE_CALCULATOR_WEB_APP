@@ -131,6 +131,12 @@ const Draggable: React.FC<DraggableProps> = ({
 
 const Section1 = ({}) => {
   const router = useRouter();
+  const steps = useTranslations('steps');
+  const floating = useTranslations('floatingFrame');
+  const result = useTranslations('resultCard');
+  const mapT = useTranslations('map');
+  const loadingT = useTranslations('loading');
+  const suggestionsT = useTranslations('suggestions');
   const [step, setStep] = useState(1);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [searchedPlace, setSearchedPlace] = useState<any>(null);
@@ -817,43 +823,50 @@ const Section1 = ({}) => {
 };
 
   const handleStep1Submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const newErrors: typeof errors = {};
-    if (!start.trim()) {
-      newErrors.start = 'Le champ Départ est requis.';
-    }
+  // Vérifier si les lieux sont identiques (case-insensitive, trim)
+  if (start.trim().toLowerCase() === end.trim().toLowerCase()) {
+    toast.error("Le lieu de départ et la destination doivent être différents", {
+      position: 'top-right',
+    });
+    return;
+  }
 
-    if (!end.trim()) {
-      newErrors.end = 'Le champ Destination est requis.';
-    }
+  const newErrors: typeof errors = {};
+  if (!start.trim()) {
+    newErrors.start = 'Le champ Départ est requis.';
+  }
 
-    if (!hour) {
-      newErrors.hour = "L'heure doit être sélectionnée.";
-    }
+  if (!end.trim()) {
+    newErrors.end = 'Le champ Destination est requis.';
+  }
 
-    setErrors(newErrors);
+  if (!hour) {
+    newErrors.hour = "L'heure doit être sélectionnée.";
+  }
 
-    if (Object.keys(newErrors).length > 0) return;
+  setErrors(newErrors);
 
+  if (Object.keys(newErrors).length > 0) return;
 
-    try {
-      setIsLoading(true);
-      const route = await calculateRoute();
-      if (route) {
-        setStep(2);
-        setShowCards(false);
-        // Afficher la carte automatiquement sur desktop
-        if (window.innerWidth >= 1024) {
-          setShowMap(true);
-        }
+  try {
+    setIsLoading(true);
+    const route = await calculateRoute();
+    if (route) {
+      setStep(2);
+      setShowCards(false);
+      // Afficher la carte automatiquement sur desktop
+      if (window.innerWidth >= 1024) {
+        setShowMap(true);
       }
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (err) {
+    setError((err as Error).message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1156,11 +1169,11 @@ const Section1 = ({}) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <FaMoneyBillAlt className="text-white text-xl" />
-            <h3 className="text-xl font-bold text-white">Estimation du prix</h3>
+            <h3 className="text-xl font-bold text-white">{result('title')}</h3>
           </div>
           <div className="flex items-center gap-2">
             <FaInfoCircle className="text-blue-200 text-sm" />
-            <span className="text-blue-100 text-sm font-medium">Prédiction IA</span>
+            <span className="text-blue-100 text-sm font-medium">{result('predictionAI')}</span>
           </div>
         </div>
       </div>
@@ -1173,7 +1186,7 @@ const Section1 = ({}) => {
             {predictionResult.prix_estime_fcfa} FCFA
           </div>
           <div className="text-gray-600 dark:text-gray-300 mt-2">
-            Fourchette estimée: <span className="font-semibold">{predictionResult.prix_estime_range}</span>
+            {result('estimatedRange')}: <span className="font-semibold">{predictionResult.prix_estime_range}</span>
           </div>
         </div>
 
@@ -1182,7 +1195,7 @@ const Section1 = ({}) => {
           <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <FaMapMarkerAlt className="text-blue-600 dark:text-blue-400" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Départ</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{result('departure')}</div>
               <div className="font-medium dark:text-white">{start}</div>
             </div>
           </div>
@@ -1190,7 +1203,7 @@ const Section1 = ({}) => {
           <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <FaLocationArrow className="text-blue-600 dark:text-blue-400" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Arrivée</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{result('arrival')}</div>
               <div className="font-medium dark:text-white">{end}</div>
             </div>
           </div>
@@ -1198,7 +1211,7 @@ const Section1 = ({}) => {
           <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <FaRegClock className="text-blue-600 dark:text-blue-400" />
             <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">Heure</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{result('time')}</div>
               <div className="font-medium dark:text-white">{hour}</div>
             </div>
           </div>
@@ -1209,7 +1222,7 @@ const Section1 = ({}) => {
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-4 rounded-xl">
             <div className="flex items-center gap-2 mb-2">
               <MdOutlineDirectionsWalk className="text-blue-600 dark:text-blue-400" />
-              <div className="text-sm text-gray-600 dark:text-gray-300">Distance</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{result('distance')}</div>
             </div>
             <div className="text-2xl font-bold text-gray-800 dark:text-white">
               {routes[0]?.distance ? `${(routes[0].distance / 1000).toFixed(1)} km` : 'N/A'}
@@ -1219,7 +1232,7 @@ const Section1 = ({}) => {
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-4 rounded-xl">
             <div className="flex items-center gap-2 mb-2">
               <FaRegClock className="text-blue-600 dark:text-blue-400" />
-              <div className="text-sm text-gray-600 dark:text-gray-300">Durée</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{result('duration')}</div>
             </div>
             <div className="text-2xl font-bold text-gray-800 dark:text-white">
               {routes[0]?.duration ? `${(routes[0].duration / 60).toFixed(0)} min` : 'N/A'}
@@ -1229,26 +1242,35 @@ const Section1 = ({}) => {
 
         {/* Informations supplémentaires */}
         <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 mb-6">
-          <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">Détails de la prédiction</div>
+          <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">{result('predictionDetails')}</div>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">Source:</span>
+              <span className="text-gray-500 dark:text-gray-400">{result('source')}:</span>
               <span className="font-medium dark:text-white">{predictionResult.message}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">Trajet:</span>
+              <span className="text-gray-500 dark:text-gray-400">{result('trip')}:</span>
               <span className="font-medium dark:text-white">{predictionResult.lieux_comms}</span>
             </div>
           </div>
         </div>
 
         {/* Bouton Nouveau calcul */}
-        <Button
-          onClick={resetForm}
-          className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-xl shadow-lg"
-        >
-          Nouveau calcul
-        </Button>
+        <div className="flex gap-3 pt-4">
+                            <Button
+                              type="button"
+                              onClick={() => setStep(3)}
+                              className="flex-1 h-12 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-700 hover:to-violet-600 text-white"
+                            >
+                              <FaArrowLeft /> {steps('step3.back')}
+                            </Button>
+                            <Button
+                  onClick={resetForm}
+                  className="flex-1 h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-xl shadow-lg"
+                >
+                  {result('newCalculation')}
+                </Button> 
+                          </div>
       </div>
     </motion.div>
   );
@@ -1278,7 +1300,7 @@ const Section1 = ({}) => {
           >
             <FaChartLine className="text-base animate-bounce-slow" />
             <span className="hidden sm:inline text-sm font-bold">
-              Contribuer
+              {loadingT('contributeData')}
             </span>
           </button>
         </div>
@@ -1294,7 +1316,7 @@ const Section1 = ({}) => {
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
               className="w-4 h-4 border-2 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full"
             />
-            Chargement du modèle de prédiction...
+            {loadingT('model')}
           </motion.div>
         )}
         
@@ -1334,7 +1356,7 @@ const Section1 = ({}) => {
                     {getCombinedSuggestions('start').backend.length > 0 && (
                       <>
                         <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                          Lieux recommandés
+                          {suggestionsT('recommendedPlaces')}
                         </li>
                         {getCombinedSuggestions('start').backend.map((place: Place) => (
                           <li
@@ -1352,7 +1374,7 @@ const Section1 = ({}) => {
                     {getCombinedSuggestions('start').local.length > 0 && (
                       <>
                         <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                          Suggestions locales
+                          {suggestionsT('localSuggestions')}
                         </li>
                         {getCombinedSuggestions('start').local.map((name: string, index: number) => (
                           <li
@@ -1367,7 +1389,7 @@ const Section1 = ({}) => {
                     )}
                     
                     {getCombinedSuggestions('start').backend.length === 0 && getCombinedSuggestions('start').local.length === 0 && (
-                      <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                      <li className="dark:text-white px-4 py-2 text-gray-500">{suggestionsT('noSuggestions')}</li>
                     )}
                   </ul>
                 )}
@@ -1396,7 +1418,7 @@ const Section1 = ({}) => {
                     {getCombinedSuggestions('end').backend.length > 0 && (
                       <>
                         <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                          Lieux recommandés
+                          {suggestionsT('recommendedPlaces')}
                         </li>
                         {getCombinedSuggestions('end').backend.map((place: Place) => (
                           <li
@@ -1414,7 +1436,7 @@ const Section1 = ({}) => {
                     {getCombinedSuggestions('end').local.length > 0 && (
                       <>
                         <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                          Suggestions locales
+                          {suggestionsT('localSuggestions')}
                         </li>
                         {getCombinedSuggestions('end').local.map((name: string, index: number) => (
                           <li
@@ -1429,7 +1451,7 @@ const Section1 = ({}) => {
                     )}
                     
                     {getCombinedSuggestions('end').backend.length === 0 && getCombinedSuggestions('end').local.length === 0 && (
-                      <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                      <li className="dark:text-white px-4 py-2 text-gray-500">{suggestionsT('noSuggestions')}</li>
                     )}
                   </ul>
                 )}
@@ -1478,7 +1500,7 @@ const Section1 = ({}) => {
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
-                    Suivant <FaArrowRight />
+                    {steps('step1.next')} <FaArrowRight />
                   </span>
                 )}
               </Button>
@@ -1529,7 +1551,7 @@ const Section1 = ({}) => {
                 >
                   <h4 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-4 flex items-center gap-2">
                     <FaCalendarAlt />
-                    Conditions de trajet
+                    {steps('step2.title')}
                   </h4>
 
                   {/* Distance et durée */}
@@ -1543,7 +1565,7 @@ const Section1 = ({}) => {
                         <div className="text-center p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                           <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-1">
                             <MdOutlineDirectionsWalk />
-                            Distance
+                            {result('distance')}
                           </div>
                           <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
                             {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
@@ -1552,7 +1574,7 @@ const Section1 = ({}) => {
                         <div className="text-center p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                           <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-1">
                             <FaRegClock />
-                            Durée
+                            {result('duration')}
                           </div>
                           <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
                             {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
@@ -1576,14 +1598,14 @@ const Section1 = ({}) => {
                           : 'border-gray-300 hover:border-blue-500/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
                       }`}
                     >
-                      <option value="">Jour de la semaine</option>
-                      <option value="1">Lundi</option>
-                      <option value="2">Mardi</option>
-                      <option value="3">Mercredi</option>
-                      <option value="4">Jeudi</option>
-                      <option value="5">Vendredi</option>
-                      <option value="6">Samedi</option>
-                      <option value="7">Dimanche</option>
+                      <option value="">{steps('step2.dayOfWeek')}</option>
+                      <option value="1">{steps('step2.days.monday')}</option>
+                      <option value="2">{steps('step2.days.tuesday')}</option>
+                      <option value="3">{steps('step2.days.wednesday')}</option>
+                      <option value="4">{steps('step2.days.thursday')}</option>
+                      <option value="5">{steps('step2.days.friday')}</option>
+                      <option value="6">{steps('step2.days.saturday')}</option>
+                      <option value="7">{steps('step2.days.sunday')}</option>
                     </select>
                     {errors.jourSemaine && <p className="text-red-600 text-sm mt-1 ml-1">{errors.jourSemaine}</p>}
                   </div>
@@ -1591,7 +1613,7 @@ const Section1 = ({}) => {
                   {/* Toggles pour Étape 2 */}
                   <div className="grid grid-cols-2 gap-3">
                     <ToggleButton 
-                      label="Jour Férié"
+                      label={steps('step2.publicHoliday')}
                       icon={<FaCalendarAlt />}
                       value={jourFerie}
                       setValue={setJourFerie}
@@ -1599,7 +1621,7 @@ const Section1 = ({}) => {
                       inactiveValue="0"
                     />
                     <ToggleButton 
-                      label="Pluie"
+                      label={steps('step2.rain')}
                       icon={<FaCloudRain />}
                       value={pluie}
                       setValue={setPluie}
@@ -1607,7 +1629,7 @@ const Section1 = ({}) => {
                       inactiveValue="0"
                     />
                     <ToggleButton 
-                      label="Accident"
+                      label={steps('step2.accident')}
                       icon={<FaCarCrash />}
                       value={accident}
                       setValue={setAccident}
@@ -1630,10 +1652,10 @@ const Section1 = ({}) => {
                           : 'border-gray-300 hover:border-blue-500/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
                       }`}
                     >
-                      <option value="">État de la route</option>
-                      <option value="bonne">Bonne</option>
-                      <option value="moyenne">Moyenne</option>
-                      <option value="mauvaise">Mauvaise</option>
+                      <option value="">{steps('step2.roadCondition')}</option>
+                      <option value="bonne">{steps('step2.roadConditions.good')}</option>
+                      <option value="moyenne">{steps('step2.roadConditions.average')}</option>
+                      <option value="mauvaise">{steps('step2.roadConditions.bad')}</option>
                     </select>
                     {errors.etatRoute && <p className="text-red-600 text-sm mt-1 ml-1">{errors.etatRoute}</p>}
                   </div>
@@ -1644,13 +1666,13 @@ const Section1 = ({}) => {
                       onClick={() => setStep(1)}
                       className="flex-1 h-12 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-700 hover:to-violet-600 text-white"
                     >
-                      <FaArrowLeft /> Retour
+                      <FaArrowLeft /> {steps('step2.back')}
                     </Button>
                     <Button
                       type="submit"
                       className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-emerald-500 hover:from-blue-700 hover:to-emerald-600 text-white"
                     >
-                      Suivant <FaArrowRight />
+                      {steps('step2.next')} <FaArrowRight />
                     </Button>
                   </div>
                 </motion.form>
@@ -1666,7 +1688,7 @@ const Section1 = ({}) => {
                       variant="ghost"
                       className="text-gray-500 hover:text-gray-700"
                     >
-                      ✕ Masquer carte
+                      ✕ {('mapT.hideMap')}
                     </Button>
                   </div>
                   
@@ -1698,7 +1720,7 @@ const Section1 = ({}) => {
                               <FaArrowsAlt className="text-gray-400 text-sm" />
                               <h3 className="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
                                 <FaCalculator className="text-blue-600" />
-                                Estimation en direct
+                                {floating('title')}
                               </h3>
                             </div>
                             <button 
@@ -1714,12 +1736,12 @@ const Section1 = ({}) => {
                             <div className="space-y-2">
                               <div className="flex items-center gap-2 text-sm">
                                 <FaMapMarkerAlt className="text-blue-500" />
-                                <span className="font-medium text-gray-700 dark:text-gray-300">Départ:</span>
+                                <span className="font-medium text-gray-700 dark:text-gray-300">{floating('departure')}:</span>
                                 <span className="text-gray-900 dark:text-white truncate">{floatingFrame.depart}</span>
                               </div>
                               <div className="flex items-center gap-2 text-sm">
                                 <FaLocationArrow className="text-blue-500" />
-                                <span className="font-medium text-gray-700 dark:text-gray-300">Arrivée:</span>
+                                <span className="font-medium text-gray-700 dark:text-gray-300">{floating('arrival')}:</span>
                                 <span className="text-gray-900 dark:text-white truncate">{floatingFrame.arrivee}</span>
                               </div>
                             </div>
@@ -1729,7 +1751,7 @@ const Section1 = ({}) => {
                               <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3">
                                 <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 mb-1">
                                   <MdOutlineDirectionsWalk />
-                                  Distance
+                                  {floating('distance')}
                                 </div>
                                 <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
                                   {floatingFrame.distance.toFixed(2)} km
@@ -1738,7 +1760,7 @@ const Section1 = ({}) => {
                               <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3">
                                 <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 mb-1">
                                   <FaRegClock />
-                                  Durée
+                                  {floating('duration')}
                                 </div>
                                 <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
                                   {floatingFrame.duree.toFixed(0)} min
@@ -1750,7 +1772,7 @@ const Section1 = ({}) => {
                             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                               <div className="text-center">
                                 <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                                  Prix estimé
+                                  {floating('estimatedPrice')}
                                 </div>
                                 {floatingFrame.isCalculating ? (
                                   <div className="flex items-center justify-center gap-2">
@@ -1759,7 +1781,7 @@ const Section1 = ({}) => {
                                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                                       className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full"
                                     />
-                                    <span className="text-gray-600 dark:text-gray-400">Calcul en cours...</span>
+                                    <span className="text-gray-600 dark:text-gray-400">{floating('calculating')}</span>
                                   </div>
                                 ) : (
                                   <>
@@ -1774,7 +1796,7 @@ const Section1 = ({}) => {
                               </div>
                               
                               <div className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
-                                Le prix se met à jour automatiquement lorsque vous modifiez les paramètres
+                                {floating('priceUpdateInfo')}
                               </div>
                             </div>
                           </div>
@@ -1810,13 +1832,13 @@ const Section1 = ({}) => {
                   >
                     <h4 className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-4 flex items-center gap-2">
                       <FaSuitcase />
-                      Conditions supplémentaires
+                      {steps('step3.title')}
                     </h4>
 
                     {/* Toggles pour Étape 3 */}
                     <div className="grid grid-cols-2 gap-3">
                       <ToggleButton 
-                        label="Bagages"
+                        label={steps('step3.luggage')}
                         icon={<FaSuitcase />}
                         value={bagages}
                         setValue={setBagages}
@@ -1824,7 +1846,7 @@ const Section1 = ({}) => {
                         inactiveValue="non"
                       />
                       <ToggleButton 
-                        label="Routes Larges"
+                        label={steps('step3.wideRoads')}
                         icon={<FaRoad />}
                         value={routesLarges}
                         setValue={setRoutesLarges}
@@ -1832,7 +1854,7 @@ const Section1 = ({}) => {
                         inactiveValue="non"
                       />
                       <ToggleButton 
-                        label="Travaux"
+                        label={steps('step3.roadWorks')}
                         icon={<FaHardHat />}
                         value={routesTravaux}
                         setValue={setRoutesTravaux}
@@ -1847,14 +1869,14 @@ const Section1 = ({}) => {
                         onClick={() => setStep(2)}
                         className="flex-1 h-12 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-700 hover:to-violet-600 text-white"
                       >
-                        <FaArrowLeft /> Retour
+                        <FaArrowLeft /> {steps('step3.back')}
                       </Button>
                       <Button
                         type="submit"
                         disabled={isLoading}
                         className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-emerald-500 hover:from-blue-700 hover:to-emerald-600 text-white"
                       >
-                        <FaCalculator /> {isLoading ? 'Calcul...' : 'Calculer'}
+                        <FaCalculator /> {isLoading ? loadingT('model') : steps('step3.calculate')}
                       </Button>
                     </div>
                   </motion.form>
@@ -1871,7 +1893,7 @@ const Section1 = ({}) => {
                       variant="ghost"
                       className="text-gray-500 hover:text-gray-700"
                     >
-                      ✕ Masquer carte
+                      ✕ {('mapT.hideMap')}
                     </Button>
                   </div>
                   
@@ -1903,7 +1925,7 @@ const Section1 = ({}) => {
                               <FaArrowsAlt className="text-gray-400 text-sm" />
                               <h3 className="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
                                 <FaCalculator className="text-blue-600" />
-                                Estimation en direct
+                                {floating('title')}
                               </h3>
                             </div>
                             <button 
@@ -1919,12 +1941,12 @@ const Section1 = ({}) => {
                             <div className="space-y-2">
                               <div className="flex items-center gap-2 text-sm">
                                 <FaMapMarkerAlt className="text-blue-500" />
-                                <span className="font-medium text-gray-700 dark:text-gray-300">Départ:</span>
+                                <span className="font-medium text-gray-700 dark:text-gray-300">{floating('departure')}:</span>
                                 <span className="text-gray-900 dark:text-white truncate">{floatingFrame.depart}</span>
                               </div>
                               <div className="flex items-center gap-2 text-sm">
                                 <FaLocationArrow className="text-blue-500" />
-                                <span className="font-medium text-gray-700 dark:text-gray-300">Arrivée:</span>
+                                <span className="font-medium text-gray-700 dark:text-gray-300">{floating('arrival')}:</span>
                                 <span className="text-gray-900 dark:text-white truncate">{floatingFrame.arrivee}</span>
                               </div>
                             </div>
@@ -1934,7 +1956,7 @@ const Section1 = ({}) => {
                               <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3">
                                 <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 mb-1">
                                   <MdOutlineDirectionsWalk />
-                                  Distance
+                                  {floating('distance')}
                                 </div>
                                 <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
                                   {floatingFrame.distance.toFixed(2)} km
@@ -1943,7 +1965,7 @@ const Section1 = ({}) => {
                               <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3">
                                 <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 mb-1">
                                   <FaRegClock />
-                                  Durée
+                                  {floating('duration')}
                                 </div>
                                 <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
                                   {floatingFrame.duree.toFixed(0)} min
@@ -1955,7 +1977,7 @@ const Section1 = ({}) => {
                             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                               <div className="text-center">
                                 <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                                  Prix estimé
+                                  {floating('estimatedPrice')}
                                 </div>
                                 {floatingFrame.isCalculating ? (
                                   <div className="flex items-center justify-center gap-2">
@@ -1964,7 +1986,7 @@ const Section1 = ({}) => {
                                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                                       className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full"
                                     />
-                                    <span className="text-gray-600 dark:text-gray-400">Calcul en cours...</span>
+                                    <span className="text-gray-600 dark:text-gray-400">{floating('calculating')}</span>
                                   </div>
                                 ) : (
                                   <>
@@ -2006,7 +2028,7 @@ const Section1 = ({}) => {
           onClick={() => setShowMap(true)}
           className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-xl lg:hidden"
         >
-          Voir la carte
+          {mapT('map.showMap')}
         </Button>
       )}
     </section>

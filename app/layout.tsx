@@ -8,6 +8,7 @@ import Head from "next/head";
 import RouteLoading from "@/components/ui/route-loading";
 import { Suspense } from "react";
 import { AuthProvider } from "@/context/AuthContext";
+import ClientGuard from "@/components/auth/ClientGuard";
 
 const poppins = localFont({
   src: [
@@ -85,19 +86,19 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#0D1B2A" />
         <meta name="color-scheme" content="dark light" />
-        
+
         {/* GOOGLE SITE VERIFICATION */}
         <meta name="google-site-verification" content="8tvwpqe9FpERjV68ZwbAVbx5LSIxnT63yXzGQu-jocU" />
-        
+
         {/* Préchargement des ressources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
+
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        
+
         {/* ✅ Google Analytics 4 */}
         <Script
           async
@@ -162,11 +163,13 @@ export default function RootLayout({
               <RouteLoading />
             </Suspense>
             <AuthProvider>
-              {children}
+              <ClientGuard>
+                {children}
+              </ClientGuard>
             </AuthProvider>
           </div>
-          <Toaster 
-            position="top-right" 
+          <Toaster
+            position="top-right"
             reverseOrder={false}
             toastOptions={{
               duration: 4000,
@@ -211,7 +214,7 @@ export default function RootLayout({
             }}
           />
         </ThemeProvider>
-        
+
         {/* Script pour la détection du thème système */}
         <Script id="theme-detection" strategy="beforeInteractive">
           {`
@@ -227,7 +230,7 @@ export default function RootLayout({
             })();
           `}
         </Script>
-        
+
         {/* Script pour le smooth scrolling */}
         <Script id="smooth-scroll" strategy="afterInteractive">
           {`

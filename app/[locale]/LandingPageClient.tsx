@@ -96,7 +96,7 @@ export default function LandingPageClient() {
     prix_estime_range: string;
     message: string;
     lieux_comms: string;
-    official_fare?: number;
+    // official_fare?: number;
   }
   
   const [predictionResult, setPredictionResult] = useState<PredictionResult | null>(null);
@@ -200,6 +200,11 @@ export default function LandingPageClient() {
   const t = useTranslations('landing');
   const a = useTranslations('agency');
   const f = useTranslations('form');
+  const calc = useTranslations('calculator');
+  const limitsT = useTranslations('limits');
+  const suggestionsT = useTranslations('suggestions');
+  const resultsT = useTranslations('results');
+  const loadingT = useTranslations('loading');
 
   // Fonction de prédiction utilisant ONNX
   const preprocessInputForONNX = (data: any): Record<string, ort.Tensor> => {
@@ -582,41 +587,50 @@ export default function LandingPageClient() {
   };
 
   const handleStep1Submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const newErrors: typeof errors = {};
-    if (!start.trim()) {
-      newErrors.start = 'Le champ Départ est requis.';
-    } else if (/^\d+$/.test(start.trim())) {
-      newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
+  const newErrors: typeof errors = {};
+  
+  // Vérifier si les lieux sont identiques (case-insensitive, trim)
+  if (start.trim().toLowerCase() === end.trim().toLowerCase()) {
+    toast.error("Le lieu de départ et la destination doivent être différents", {
+      position: 'bottom-right',
+    });
+    return;
+  }
+
+  if (!start.trim()) {
+    newErrors.start = 'Le champ Départ est requis.';
+  } else if (/^\d+$/.test(start.trim())) {
+    newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
+  }
+
+  if (!end.trim()) {
+    newErrors.end = 'Le champ Destination est requis.';
+  } else if (/^\d+$/.test(end.trim())) {
+    newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
+  }
+
+  if (!hour) {
+    newErrors.hour = "L'heure doit être sélectionnée.";
+  }
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) return;
+
+  try {
+    setIsLoading(true);
+    const route = await calculateRoute();
+    if (route) {
+      setStep(2);
     }
-
-    if (!end.trim()) {
-      newErrors.end = 'Le champ Destination est requis.';
-    } else if (/^\d+$/.test(end.trim())) {
-      newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
-    }
-
-    if (!hour) {
-      newErrors.hour = "L'heure doit être sélectionnée.";
-    }
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) return;
-
-    try {
-      setIsLoading(true);
-      const route = await calculateRoute();
-      if (route) {
-        setStep(2);
-      }
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  } catch (err) {
+    setError((err as Error).message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -688,7 +702,7 @@ export default function LandingPageClient() {
       let officialFareResult: any = null;
 
       // Récupérer le tarif officiel en parallèle
-      const officialFarePromise = getOfficialFare(start, end, hour);
+      //const officialFarePromise = getOfficialFare(start, end, hour);
 
       // Essayer d'abord avec ONNX, puis avec l'API en ligne (comme dans section1.tsx)
       if (onnxSession && !modelLoading) {
@@ -726,11 +740,11 @@ export default function LandingPageClient() {
       }
 
       // Récupérer le tarif officiel
-      try {
-        officialFareResult = await officialFarePromise;
-      } catch (err) {
-        console.warn('Tarif officiel non disponible:', err);
-      }
+      // try {
+      //   officialFareResult = await officialFarePromise;
+      // } catch (err) {
+      //   console.warn('Tarif officiel non disponible:', err);
+      // }
 
       // Calcul de la fourchette de prix
       const prixArrondi = Math.round(prixEstime);
@@ -742,7 +756,7 @@ export default function LandingPageClient() {
         prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
         message: `Prédiction ${predictionSource}`,
         lieux_comms: `Trajet de ${start} à ${end}`,
-        official_fare: officialFareResult?.mint_cost || 0
+        // official_fare: officialFareResult?.mint_cost || 0
       };
       
       setPredictionResult(result);
@@ -810,7 +824,7 @@ export default function LandingPageClient() {
         prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
         message: `Estimation locale basée sur ${distanceToUse.toFixed(2)} km (erreur système)`,
         lieux_comms: `Trajet de ${start} à ${end}`,
-        official_fare: 0
+        // official_fare: 0
       };
       
       setPredictionResult(simulatedResult);
@@ -999,7 +1013,7 @@ export default function LandingPageClient() {
 
                 {modelLoading && (
                   <div className="text-blue-600 text-sm mb-2 text-center">
-                    Chargement du modèle de prédiction...
+                    {loadingT('model')}
                   </div>
                 )}
 
@@ -1009,9 +1023,9 @@ export default function LandingPageClient() {
                     <div className="flex items-center gap-3">
                       <FaExclamationTriangle className="text-xl" />
                       <div>
-                        <p className="font-bold">Limite de calculs atteinte</p>
+                        <p className="font-bold">{limitsT('title')}</p>
                         <p className="text-sm opacity-90">
-                          Vous avez effectué {compteur} calculs sur 3 autorisés. Inscrivez-vous pour continuer.
+                          {limitsT('description', { count: compteur })}
                         </p>
                       </div>
                     </div>
@@ -1023,7 +1037,7 @@ export default function LandingPageClient() {
                   <div className="mb-4 text-center">
                     <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 px-4 py-2 rounded-full">
                       <span className="text-sm text-purple-700 dark:text-purple-300">
-                        Calculs effectués: <span className="font-bold">{compteur}/3</span>
+                        {limitsT('calculationsMade', { current: compteur })}
                       </span>
                       <div className="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div 
@@ -1043,7 +1057,7 @@ export default function LandingPageClient() {
                       <form onSubmit={handleStep1Submit} className="space-y-5">
                         <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
                           <FaMapMarkerAlt />
-                          Informations de trajet
+                          {calc('tripInformation')}
                         </h4>
 
                         {/* Champ Départ */}
@@ -1078,7 +1092,7 @@ export default function LandingPageClient() {
                               {getCombinedSuggestions('start').backend.length > 0 && (
                                 <>
                                   <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                                    Lieux recommandés
+                                    {suggestionsT('recommendedPlaces')}
                                   </li>
                                   {getCombinedSuggestions('start').backend.map((place: Place) => (
                                     <li
@@ -1096,7 +1110,7 @@ export default function LandingPageClient() {
                               {getCombinedSuggestions('start').local.length > 0 && (
                                 <>
                                   <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                                    Suggestions locales
+                                    {suggestionsT('localSuggestions')}
                                   </li>
                                   {getCombinedSuggestions('start').local.map((name: string, index: number) => (
                                     <li
@@ -1111,7 +1125,7 @@ export default function LandingPageClient() {
                               )}
                               
                               {getCombinedSuggestions('start').backend.length === 0 && getCombinedSuggestions('start').local.length === 0 && (
-                                <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                                <li className="dark:text-white px-4 py-2 text-gray-500">{suggestionsT('noSuggestions')}</li>
                               )}
                             </ul>
                           )}
@@ -1149,7 +1163,7 @@ export default function LandingPageClient() {
                               {getCombinedSuggestions('end').backend.length > 0 && (
                                 <>
                                   <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                                    Lieux recommandés
+                                    {suggestionsT('recommendedPlaces')}
                                   </li>
                                   {getCombinedSuggestions('end').backend.map((place: Place) => (
                                     <li
@@ -1167,7 +1181,7 @@ export default function LandingPageClient() {
                               {getCombinedSuggestions('end').local.length > 0 && (
                                 <>
                                   <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
-                                    Suggestions locales
+                                    {suggestionsT('localSuggestions')}
                                   </li>
                                   {getCombinedSuggestions('end').local.map((name: string, index: number) => (
                                     <li
@@ -1182,7 +1196,7 @@ export default function LandingPageClient() {
                               )}
                               
                               {getCombinedSuggestions('end').backend.length === 0 && getCombinedSuggestions('end').local.length === 0 && (
-                                <li className="dark:text-white px-4 py-2 text-gray-500">Aucune suggestion</li>
+                                <li className="dark:text-white px-4 py-2 text-gray-500">{suggestionsT('noSuggestions')}</li>
                               )}
                             </ul>
                           )}
@@ -1229,13 +1243,13 @@ export default function LandingPageClient() {
                           {bloque && !estConnecte ? (
                             <span className="flex items-center gap-2">
                               <FaExclamationTriangle />
-                              Limite atteinte
+                              {calc('limitReached')}
                             </span>
                           ) : isLoading ? (
                             t('calculating')
                           ) : (
                             <>
-                              Suivant
+                              {calc('next')}
                               <FaArrowRight />
                             </>
                           )}
@@ -1245,7 +1259,7 @@ export default function LandingPageClient() {
                       <form onSubmit={handleStep2Submit} className="space-y-4">
                         <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
                           <FaCalendarAlt />
-                          Conditions de trajet
+                          {calc('tripConditions')}
                         </h4>
 
                         {routes.length > 0 && routes[selectedRouteIndex] && (
@@ -1254,7 +1268,7 @@ export default function LandingPageClient() {
                               <div className="text-center p-2 bg-white dark:bg-gray-700 rounded">
                                 <div className="flex items-center justify-center gap-1 text-sm text-gray-600 dark:text-gray-300">
                                   <MdOutlineDirectionsWalk />
-                                  Distance
+                                  {resultsT('distance')}
                                 </div>
                                 <div className="font-bold text-lg text-purple-600 dark:text-purple-400">
                                   {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
@@ -1263,7 +1277,7 @@ export default function LandingPageClient() {
                               <div className="text-center p-2 bg-white dark:bg-gray-700 rounded">
                                 <div className="flex items-center justify-center gap-1 text-sm text-gray-600 dark:text-gray-300">
                                   <FaRegClock />
-                                  Durée
+                                  {resultsT('duration')}
                                 </div>
                                 <div className="font-bold text-lg text-purple-600 dark:text-purple-400">
                                   {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
@@ -1285,14 +1299,14 @@ export default function LandingPageClient() {
                             }`}
                             disabled={bloque && !estConnecte}
                           >
-                            <option value="">Jour de la semaine</option>
-                            <option value="1">Lundi</option>
-                            <option value="2">Mardi</option>
-                            <option value="3">Mercredi</option>
-                            <option value="4">Jeudi</option>
-                            <option value="5">Vendredi</option>
-                            <option value="6">Samedi</option>
-                            <option value="7">Dimanche</option>
+                            <option value="">{calc('dayOfWeek')}</option>
+                            <option value="1">{calc('monday')}</option>
+                            <option value="2">{calc('tuesday')}</option>
+                            <option value="3">{calc('wednesday')}</option>
+                            <option value="4">{calc('thursday')}</option>
+                            <option value="5">{calc('friday')}</option>
+                            <option value="6">{calc('saturday')}</option>
+                            <option value="7">{calc('sunday')}</option>
                           </select>
                           {errors.jourSemaine && <p className="text-red-600 text-sm mt-1">{errors.jourSemaine}</p>}
                         </div>
@@ -1300,7 +1314,7 @@ export default function LandingPageClient() {
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                             <FaCalendarAlt className="text-purple-600" />
-                            Jour férié?
+                            {calc('publicHoliday')}
                           </label>
                           <div className="flex gap-4">
                             <label className="flex items-center gap-2">
@@ -1312,7 +1326,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Non</span>
+                              <span className="dark:text-white">{calc('no')}</span>
                             </label>
                             <label className="flex items-center gap-2">
                               <input
@@ -1323,7 +1337,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Oui</span>
+                              <span className="dark:text-white">{calc('yes')}</span>
                             </label>
                           </div>
                         </div>
@@ -1331,7 +1345,7 @@ export default function LandingPageClient() {
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                             <FaCloudRain className="text-purple-600" />
-                            Pluie?
+                            {calc('rain')}
                           </label>
                           <div className="flex gap-4">
                             <label className="flex items-center gap-2">
@@ -1343,7 +1357,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Non</span>
+                              <span className="dark:text-white">{calc('no')}</span>
                             </label>
                             <label className="flex items-center gap-2">
                               <input
@@ -1354,7 +1368,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Oui</span>
+                              <span className="dark:text-white">{calc('yes')}</span>
                             </label>
                           </div>
                         </div>
@@ -1362,7 +1376,7 @@ export default function LandingPageClient() {
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                             <FaRoad className="text-purple-600" />
-                            État de la route
+                            {calc('roadCondition')}
                           </label>
                           <select
                             value={etatRoute}
@@ -1372,10 +1386,10 @@ export default function LandingPageClient() {
                             }`}
                             disabled={bloque && !estConnecte}
                           >
-                            <option value="">Sélectionner</option>
-                            <option value="bonne">Bonne</option>
-                            <option value="moyenne">Moyenne</option>
-                            <option value="mauvaise">Mauvaise</option>
+                            <option value="">{calc('select')}</option>
+                            <option value="bonne">{calc('good')}</option>
+                            <option value="moyenne">{calc('average')}</option>
+                            <option value="mauvaise">{calc('bad')}</option>
                           </select>
                           {errors.etatRoute && <p className="text-red-600 text-sm mt-1">{errors.etatRoute}</p>}
                         </div>
@@ -1383,7 +1397,7 @@ export default function LandingPageClient() {
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                             <FaCarCrash className="text-purple-600" />
-                            Accident sur la route?
+                            {calc('accident')}
                           </label>
                           <div className="flex gap-4">
                             <label className="flex items-center gap-2">
@@ -1395,7 +1409,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Non</span>
+                              <span className="dark:text-white">{calc('no')}</span>
                             </label>
                             <label className="flex items-center gap-2">
                               <input
@@ -1406,7 +1420,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Oui</span>
+                              <span className="dark:text-white">{calc('yes')}</span>
                             </label>
                           </div>
                         </div>
@@ -1418,7 +1432,7 @@ export default function LandingPageClient() {
                             className="bg-purple-500 hover:bg-purple-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
                           >
                             <FaArrowLeft />
-                            Retour
+                            {calc('back')}
                           </Button>
                           <Button
                             type="submit"
@@ -1429,7 +1443,7 @@ export default function LandingPageClient() {
                                 : 'bg-purple-700 hover:bg-green-800 text-white'
                             }`}
                           >
-                            {bloque && !estConnecte ? 'Bloqué' : 'Suivant'}
+                            {bloque && !estConnecte ? calc('blocked') : calc('next')}
                             <FaArrowRight />
                           </Button>
                         </div>
@@ -1438,13 +1452,13 @@ export default function LandingPageClient() {
                       <form onSubmit={handleStep3Submit} className="space-y-4">
                         <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
                           <FaSuitcase />
-                          Conditions supplémentaires
+                          {calc('additionalConditions')}
                         </h4>
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                             <FaSuitcase className="text-purple-600" />
-                            Bagages?
+                            {calc('luggage')}
                           </label>
                           <div className="flex gap-4">
                             <label className="flex items-center gap-2">
@@ -1456,7 +1470,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Non</span>
+                              <span className="dark:text-white">{calc('no')}</span>
                             </label>
                             <label className="flex items-center gap-2">
                               <input
@@ -1467,7 +1481,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Oui</span>
+                              <span className="dark:text-white">{calc('yes')}</span>
                             </label>
                           </div>
                         </div>
@@ -1475,7 +1489,7 @@ export default function LandingPageClient() {
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                             <FaRoad className="text-purple-600" />
-                            Routes larges?
+                            {calc('wideRoads')}
                           </label>
                           <div className="flex gap-4">
                             <label className="flex items-center gap-2">
@@ -1487,7 +1501,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Oui</span>
+                              <span className="dark:text-white">{calc('yes')}</span>
                             </label>
                             <label className="flex items-center gap-2">
                               <input
@@ -1498,7 +1512,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Non</span>
+                              <span className="dark:text-white">{calc('no')}</span>
                             </label>
                           </div>
                         </div>
@@ -1506,7 +1520,7 @@ export default function LandingPageClient() {
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                             <FaHardHat className="text-purple-600" />
-                            Routes en travaux?
+                            {calc('roadWorks')}
                           </label>
                           <div className="flex gap-4">
                             <label className="flex items-center gap-2">
@@ -1518,7 +1532,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Non</span>
+                              <span className="dark:text-white">{calc('no')}</span>
                             </label>
                             <label className="flex items-center gap-2">
                               <input
@@ -1529,7 +1543,7 @@ export default function LandingPageClient() {
                                 className="text-purple-600"
                                 disabled={bloque && !estConnecte}
                               />
-                              <span className="dark:text-white">Oui</span>
+                              <span className="dark:text-white">{calc('yes')}</span>
                             </label>
                           </div>
                         </div>
@@ -1540,9 +1554,9 @@ export default function LandingPageClient() {
                             <div className="flex items-center gap-3">
                               <FaExclamationTriangle className="text-red-600 dark:text-red-400 text-xl" />
                               <div>
-                                <p className="font-semibold text-red-700 dark:text-red-300">Limite de calculs atteinte</p>
+                                <p className="font-semibold text-red-700 dark:text-red-300">{limitsT('title')}</p>
                                 <p className="text-sm text-red-600 dark:text-red-400 mt-1">
-                                  Vous avez effectué 3 calculs. Inscrivez-vous pour continuer.
+                                  {limitsT('blockedMessage')}
                                 </p>
                               </div>
                             </div>
@@ -1556,7 +1570,7 @@ export default function LandingPageClient() {
                             className="bg-purple-500 hover:bg-purple-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
                           >
                             <FaArrowLeft />
-                            Retour
+                            {calc('back')}
                           </Button>
                           <Button
                             type="submit"
@@ -1568,7 +1582,7 @@ export default function LandingPageClient() {
                             }`}
                           >
                             <FaCalculator /> 
-                            {bloque && !estConnecte ? 'Bloqué' : (isLoading ? 'Calcul...' : 'Calculer')}
+                            {bloque && !estConnecte ? calc('blocked') : (isLoading ? calc('calculating') : calc('calculate'))}
                           </Button>
                         </div>
                       </form>
@@ -1591,7 +1605,7 @@ export default function LandingPageClient() {
                         type="submit"
                         className="bg-purple-600 hover:bg-purple-700 text-white w-full h-12"
                       >
-                        Nouveau calcul
+                        {resultsT('newTrip')}
                       </Button>
                     </form>
 
@@ -1613,13 +1627,13 @@ export default function LandingPageClient() {
                       <div className="bg-purple-50 dark:bg-gray-700 rounded-lg p-3 space-y-2 mt-4">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="text-center p-2 bg-white dark:bg-gray-600 rounded">
-                            <div className="text-xs text-gray-500 dark:text-gray-300">Distance</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-300">{resultsT('distance')}</div>
                             <div className="font-bold text-purple-600 dark:text-purple-400">
                               {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
                             </div>
                           </div>
                           <div className="text-center p-2 bg-white dark:bg-gray-600 rounded">
-                            <div className="text-xs text-gray-500 dark:text-gray-300">Durée</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-300">{resultsT('duration')}</div>
                             <div className="font-bold text-purple-600 dark:text-purple-400">
                               {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
                             </div>
@@ -1628,7 +1642,7 @@ export default function LandingPageClient() {
 
                         <div className="grid grid-cols-2 gap-2 mt-2">
                           <div className="text-center p-2 bg-white dark:bg-gray-600 rounded">
-                            <div className="text-xs text-gray-500 dark:text-gray-300">Coût estimé</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-300">{resultsT('estimatedCost')}</div>
                             <div className="font-bold text-green-600 dark:text-green-400">
                               {predictionResult.prix_estime_fcfa} FCFA
                             </div>
@@ -1646,10 +1660,10 @@ export default function LandingPageClient() {
                         </div>
                         <div>
                           <h3 className="text-xl font-bold text-purple-900 dark:text-white">
-                            {t('estimationTitle')}
+                            {resultsT('estimationTitle')}
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-300">
-                            Trajet: {start} → {end}
+                            {resultsT('tripSummary', { start, end })}
                           </p>
                         </div>
                       </div>
@@ -1659,7 +1673,7 @@ export default function LandingPageClient() {
                           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
                             <div className="flex items-center gap-2 mb-2">
                               <MdOutlineDirectionsWalk className="text-purple-600 dark:text-purple-400" />
-                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Distance</span>
+                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{resultsT('distance')}</span>
                             </div>
                             <p className="text-2xl font-bold text-gray-900 dark:text-white">
                               {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
@@ -1668,7 +1682,7 @@ export default function LandingPageClient() {
                           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
                             <div className="flex items-center gap-2 mb-2">
                               <FaRegClock className="text-purple-600 dark:text-purple-400" />
-                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Durée</span>
+                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{resultsT('duration')}</span>
                             </div>
                             <p className="text-2xl font-bold text-gray-900 dark:text-white">
                               {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
@@ -1682,30 +1696,30 @@ export default function LandingPageClient() {
                           <div className="text-center p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200 dark:border-green-800">
                             <div className="flex items-center justify-center gap-2 mb-2">
                               <FaDollarSign className="text-green-600 dark:text-green-400 text-xl" />
-                              <span className="text-lg font-medium text-gray-700 dark:text-gray-300">Coût estimé</span>
+                              <span className="text-lg font-medium text-gray-700 dark:text-gray-300">{resultsT('estimatedCost')}</span>
                             </div>
                             <p className="text-4xl font-bold text-green-700 dark:text-green-400 mb-2">
                               {predictionResult.prix_estime_fcfa} FCFA
                             </p>
                             <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Fourchette: <span className="font-semibold">{predictionResult.prix_estime_range}</span>
+                              {resultsT('range')}: <span className="font-semibold">{predictionResult.prix_estime_range}</span>
                             </p>
                           </div>
 
-                          {predictionResult.official_fare && predictionResult.official_fare > 0 && (
+                          {/* {predictionResult.official_fare && predictionResult.official_fare > 0 && (
                             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
                               <p className="text-sm text-blue-700 dark:text-blue-300 text-center">
-                                <span className="font-semibold">Tarif officiel:</span> {predictionResult.official_fare} FCFA
+                                <span className="font-semibold">{resultsT('officialFare')}:</span> {predictionResult.official_fare} FCFA
                               </p>
                             </div>
-                          )}
+                          )} */}
 
                           {/* Afficher le compteur de calculs */}
                           {!estConnecte && (
                             <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-xl border border-purple-200 dark:border-purple-800">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
-                                  Calculs effectués:
+                                  {resultsT('calculationsCount')}
                                 </span>
                                 <div className="flex items-center gap-2">
                                   <span className="text-lg font-bold text-purple-900 dark:text-purple-100">
@@ -1745,7 +1759,7 @@ export default function LandingPageClient() {
                           className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white w-full h-12 hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center gap-2"
                         >
                           <FaArrowLeft />
-                          Nouveau trajet
+                          {resultsT('newTrip')}
                         </Button>
                         
                         <Button

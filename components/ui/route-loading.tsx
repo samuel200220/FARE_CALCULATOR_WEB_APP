@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Crown, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 
 // Créer un composant séparé pour la logique qui utilise useSearchParams
 function RouteLoadingContent() {
@@ -123,7 +124,14 @@ function RouteLoadingContent() {
               animate={{ rotate: 360 }}
               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
             >
-              <Crown className="w-12 h-12 text-yellow-500" />
+              {/* <Crown className="w-12 h-12 text-yellow-500" /> */}
+              <Image
+                src="/logo_farcal.png"
+                alt="Logo Farcal"
+                width={110}
+                height={110}
+                priority
+              />
             </motion.div>
           </div>
 

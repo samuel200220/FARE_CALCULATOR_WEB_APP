@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import SidebarToggle from '@/components/sidebar1';
 import { getHistorique } from '@/app/services/calculService';
+import { useTranslations } from 'next-intl';
 
 interface Calcul {
   id: string;
@@ -35,6 +36,7 @@ interface Calcul {
 }
 
 export default function Historique() {
+  const t = useTranslations('history');
   const [courses, setCourses] = useState<Calcul[]>([]);
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState('');
@@ -63,18 +65,18 @@ export default function Historique() {
       <SidebarToggle />
 
       <h1 className="text-3xl font-bold text-center text-blue-700 dark:text-white mb-8">
-        Historique des Calculs
+        {t('title')}
       </h1>
 
       {loading ? (
         <p className="text-center text-gray-600 dark:text-gray-300">
-          Chargement en cours...
+          {t('loading')}
         </p>
       ) : erreur ? (
-        <p className="text-center text-red-600 dark:text-red-400">{erreur}</p>
+        <p className="text-center text-red-600 dark:text-red-400">{erreur || t('unknownError')}</p>
       ) : courses.length === 0 ? (
         <p className="text-center text-gray-600 dark:text-gray-300">
-          Aucun calcul enregistré.
+          {t('empty')}
         </p>
       ) : (
         <div className="max-w-4xl mx-auto space-y-6">
@@ -89,11 +91,11 @@ export default function Historique() {
                 <div className="space-y-2">
                   <div className="flex items-center text-gray-700 dark:text-white">
                     <MapPin className="mr-2 text-blue-600" />
-                    <strong>Départ :</strong>&nbsp;{course.lieuDepart}
+                    <strong>{t('labels.departure')} :</strong>&nbsp;{course.lieuDepart}
                   </div>
                   <div className="flex items-center text-gray-700 dark:text-white">
                     <Navigation className="mr-2 text-green-600" />
-                    <strong>Arrivée :</strong>&nbsp;{course.lieuArrivee}
+                    <strong>{t('labels.arrival')} :</strong>&nbsp;{course.lieuArrivee}
                   </div>
                 </div>
 
@@ -113,19 +115,19 @@ export default function Historique() {
                 <div className="text-right font-semibold text-blue-700 dark:text-blue-400">
                   {course.coutEstime.toLocaleString()} FCFA
                   <div className="text-sm text-gray-500">
-                    Officiel : {course.tarifOfficiel.toLocaleString()} FCFA
+                    {t('labels.officialPrice')} : {course.tarifOfficiel.toLocaleString()} FCFA
                   </div>
                 </div>
               </div>
 
               {/* Conditions */}
               <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-600 dark:text-gray-300">
-                <span>Distance : {course.distanceKm} km</span>
-                <span>Jour : {course.jourSemaine}</span>
-                <span>Pluie : {course.pluie}</span>
-                <span>Route : {course.etatRoute}</span>
-                <span>Bagages : {course.bagages}</span>
-                <span>Travaux : {course.routesTravaux}</span>
+                <span>{t('labels.distance')} : {course.distanceKm} km</span>
+                <span>{t('labels.day')} : {course.jourSemaine}</span>
+                <span>{t('labels.rain')} : {course.pluie}</span>
+                <span>{t('labels.road')} : {course.etatRoute}</span>
+                <span>{t('labels.luggage')} : {course.bagages}</span>
+                <span>{t('labels.works')} : {course.routesTravaux}</span>
               </div>
             </div>
           ))}
