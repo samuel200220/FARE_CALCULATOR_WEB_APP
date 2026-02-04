@@ -16,17 +16,17 @@ function RouteLoadingContent() {
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      
+
       // Vérifier si on clique sur un lien Next.js interne
       const link = target.closest('a');
-      
-      if (link && 
-          link.getAttribute('href') && 
-          !link.getAttribute('href')?.startsWith('#') &&
-          link.getAttribute('target') !== '_blank' &&
-          !link.getAttribute('download') &&
-          !link.classList.contains('no-loading') &&
-          link.getAttribute('href')?.startsWith('/')
+
+      if (link &&
+        link.getAttribute('href') &&
+        !link.getAttribute('href')?.startsWith('#') &&
+        link.getAttribute('target') !== '_blank' &&
+        !link.getAttribute('download') &&
+        !link.classList.contains('no-loading') &&
+        link.getAttribute('href')?.startsWith('/')
       ) {
         setIsLoading(true);
         setProgress(0);
@@ -34,7 +34,7 @@ function RouteLoadingContent() {
     };
 
     document.addEventListener('click', handleClick);
-    
+
     return () => {
       document.removeEventListener('click', handleClick);
     };
@@ -65,7 +65,7 @@ function RouteLoadingContent() {
         setIsLoading(false);
         setProgress(0);
       }, 500);
-      
+
       return () => clearTimeout(timer);
     }
   }, [pathname, searchParams]);
@@ -86,7 +86,7 @@ function RouteLoadingContent() {
         exit={{ opacity: 0 }}
         className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-white/80 to-violet-50/80 dark:from-gray-900/80 dark:via-gray-800/80 dark:to-gray-900/80 backdrop-blur-md"
       />
-      
+
       {/* Contenu au centre */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
         {/* Cercle de progression principal */}
@@ -102,7 +102,7 @@ function RouteLoadingContent() {
               fill="transparent"
               className="text-gray-200 dark:text-gray-700"
             />
-            
+
             {/* Cercle de progression avec dégradé */}
             <circle
               cx="50"
@@ -130,6 +130,7 @@ function RouteLoadingContent() {
                 alt="Logo Farcal"
                 width={110}
                 height={110}
+                style={{ height: 'auto' }}
                 priority
               />
             </motion.div>
@@ -152,7 +153,7 @@ function RouteLoadingContent() {
           <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
             Chargement en cours
           </h3>
-          
+
           {/* Pourcentage */}
           <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent">
             {progress}%

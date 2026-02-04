@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { parse } from 'wellknown';
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { Map, Marker, Source, Layer, Popup, MapRef, LngLatBoundsLike, MapMouseEvent, ViewStateChangeEvent } from 'react-map-gl/mapbox';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import { Place, Route } from '../lib/types';
 
 interface CarteProps {
@@ -14,249 +13,322 @@ interface CarteProps {
   setSelectedRouteIndex: (index: number) => void;
 }
 
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+
 export default function Carte({ userLocation, searchedPlace, routes, selectedRouteIndex, setSelectedRouteIndex }: CarteProps) {
-  const mapRef = useRef<L.Map | null>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const markerRef = useRef<L.Marker | null>(null);
-  const routeLayerRef = useRef<L.LayerGroup | null>(null);
-  const clickMarkerRef = useRef<L.Marker | null>(null);
-  const routePolylinesRef = useRef<L.Polyline[]>([]);
+  const mapRef = useRef<MapRef>(null);
+  const [viewState, setViewState] = useState({
+    latitude: 3.8480, // Center on Yaoundé
+    longitude: 11.5021,
+    zoom: 12
+  });
 
-  const backendUrl = 'https://map-backend-reactif.onrender.com';
+  const [popupInfo, setPopupInfo] = useState<{
+    lng: number;
+    lat: number;
+    name: string;
+    type: 'depart' | 'destination';
+  } | null>(null);
 
-  const parseWKTLineString = (wkt: string): [number, number][] => {
-    try {
-      const geo = parse(wkt);
-      if (geo && geo.type === 'LineString' && Array.isArray(geo.coordinates)) {
-        return geo.coordinates.map(([lng, lat]: [number, number]) => [lat, lng] as [number, number]);
-      }
-    } catch (error) {
-      console.error('wellknown parsing failed:', error);
-    }
-    const match = wkt.match(/LINESTRING\s*\(([^)]+)\)/);
-    if (match) {
-      const coords = match[1]
-        .split(',')
-        .map(coord => {
-          const [lng, lat] = coord.trim().split(' ').map(Number);
-          return [lat, lng] as [number, number];
-        });
-      return coords;
-    }
-    return [];
-  };
+  // Convert routes into GeoJSON for Mapbox
+  const routeData = useMemo(() => {
+    if (!routes || routes.length === 0) return null;
 
-  const fetchClosestPlace = async (lat: number, lng: number): Promise<Place | null> => {
-    try {
-      const response = await fetch(`${backendUrl}/api/places/closest?lat=${lat}&lng=${lng}`);
-      const data = await response.json();
-      if (response.ok && data.success && data.data) {
-        return data.data as Place;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error fetching closest place:', error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    if (mapContainerRef.current && !mapRef.current) {
-      const maxZoom = 16;
-      mapRef.current = L.map(mapContainerRef.current, {
-        center: [7.365, 12.3], // Centre approximatif du Cameroun
-        zoom: 7, // Zoom ajusté pour voir l'ensemble du Cameroun
-        minZoom: 6,
-        maxZoom: maxZoom,
-        maxBounds: [
-          [1.65, 8.4], // Coin sud-ouest du Cameroun
-          [13.08, 16.2], // Coin nord-est du Cameroun
-        ],
-        maxBoundsViscosity: 1.0,
-      });
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: maxZoom,
-        tileSize: 256,
-        zoomOffset: 0,
-      }).addTo(mapRef.current);
-
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      });
-
-      routeLayerRef.current = L.layerGroup().addTo(mapRef.current);
-
-      mapRef.current.on('click', async (e: L.LeafletMouseEvent) => {
-        const { lat, lng } = e.latlng;
-        const closestPlace = await fetchClosestPlace(lat, lng);
-        const placeName = closestPlace?.name || 'Position sélectionnée';
-
-        if (clickMarkerRef.current) {
-          mapRef.current?.removeLayer(clickMarkerRef.current);
-          clickMarkerRef.current = null;
-        } else {
-          clickMarkerRef.current = L.marker([lat, lng], { icon: L.icon({ iconUrl: '/M3.png', iconSize: [24, 41] }) })
-            .addTo(mapRef.current!)
-            .bindPopup(`
-              <b>${placeName}</b><br>
-              Lat: ${lat.toFixed(6)}<br>
-              Lng: ${lng.toFixed(6)}
-            `)
-            .openPopup();
+    const features = routes.map((route, index) => {
+      const coordinates: [number, number][] = [];
+      route.steps.forEach((step) => {
+        // Mapbox and standard GeoJSON use [lng, lat]
+        const match = step.geometry.match(/LINESTRING\s*\(([^)]+)\)/);
+        if (match) {
+          const coords = match[1]
+            .split(',')
+            .map(coord => {
+              const cleaned = coord.trim().split(/\s+/);
+              if (cleaned.length >= 2) {
+                const lng = parseFloat(cleaned[0]);
+                const lat = parseFloat(cleaned[1]);
+                if (!isNaN(lng) && !isNaN(lat)) {
+                  return [lng, lat] as [number, number];
+                }
+              }
+              return null;
+            })
+            .filter((c): c is [number, number] => c !== null);
+          coordinates.push(...coords);
         }
       });
+
+      return {
+        type: 'Feature' as const,
+        properties: {
+          index,
+          isSelected: index === selectedRouteIndex,
+        },
+        geometry: {
+          type: 'LineString' as const,
+          coordinates
+        }
+      };
+    });
+
+    return {
+      type: 'FeatureCollection' as const,
+      features
+    };
+  }, [routes, selectedRouteIndex]);
+
+  // Extract start and end points for the selected route
+  const routePoints = useMemo(() => {
+    if (!routes || routes.length === 0 || !routes[selectedRouteIndex]) {
+      console.log('Map debug: No routes or selected route index invalid');
+      return null;
     }
 
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-    };
-  }, []);
+    const route = routes[selectedRouteIndex];
+    const firstStep = route.steps[0];
+    const lastStep = route.steps[route.steps.length - 1];
 
+    if (!firstStep || !lastStep) {
+      console.log('Map debug: First or last step missing');
+      return null;
+    }
+
+    const parseFirstPoint = (wkt: string): [number, number] | null => {
+      const match = wkt.match(/LINESTRING\s*\(([^)]+)\)/);
+      if (match) {
+        const firstCoord = match[1].split(',')[0].trim().split(/\s+/);
+        if (firstCoord.length >= 2) {
+          return [parseFloat(firstCoord[0]), parseFloat(firstCoord[1])];
+        }
+      }
+      return null;
+    };
+
+    const parseLastPoint = (wkt: string): [number, number] | null => {
+      const match = wkt.match(/LINESTRING\s*\(([^)]+)\)/);
+      if (match) {
+        const coords = match[1].split(',');
+        const lastCoord = coords[coords.length - 1].trim().split(/\s+/);
+        if (lastCoord.length >= 2) {
+          return [parseFloat(lastCoord[0]), parseFloat(lastCoord[1])];
+        }
+      }
+      return null;
+    };
+
+    const start = parseFirstPoint(firstStep.geometry);
+    const end = parseLastPoint(lastStep.geometry);
+
+    if (!start || !end) {
+      console.log('Map debug: Parsing failed for start or end point', { start, end });
+      return null;
+    }
+
+    console.log('Map debug: Route points calculated', { start, end });
+
+    return {
+      start: { lng: start[0], lat: start[1], name: route.startPlaceName || 'Départ' },
+      end: { lng: end[0], lat: end[1], name: route.endPlaceName || 'Arrivée' }
+    };
+  }, [routes, selectedRouteIndex]);
+
+  // Handle map click
+  const handleMapClick = (e: MapMouseEvent) => {
+    const { lng, lat } = e.lngLat;
+    console.log('Map debug: Clicked at:', lat, lng);
+    setPopupInfo(null); // Close popup on map click
+  };
+
+  const handleMove = (evt: ViewStateChangeEvent) => {
+    setViewState(evt.viewState);
+  };
+
+  // Effect to handle camera moves (fitBounds etc)
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Nettoyer les couches précédentes
-    if (routeLayerRef.current) {
-      routeLayerRef.current.clearLayers();
-    }
-    if (markerRef.current) {
-      markerRef.current.remove();
-      markerRef.current = null;
-    }
-    if (clickMarkerRef.current) {
-      clickMarkerRef.current.remove();
-      clickMarkerRef.current = null;
-    }
-
-    routePolylinesRef.current = [];
-
-    // Fonction pour centrer la carte sur un point avec un marqueur
-    const centerOnPoint = async (lat: number, lng: number, placeName: string, zoom: number = 16) => {
-      let displayName = placeName;
-      if (placeName === 'Votre position') {
-        const closestPlace = await fetchClosestPlace(lat, lng);
-        displayName = closestPlace?.name || placeName;
-      }
-      
-      // Supprimer l'ancien marqueur s'il existe
-      if (markerRef.current) {
-        markerRef.current.remove();
-        markerRef.current = null;
-      }
-      
-      mapRef.current!.setView([lat, lng], zoom, { animate: true });
-      markerRef.current = L.marker([lat, lng], { icon: L.icon({ iconUrl: '/M2.png', iconSize: [24, 41] }) })
-        .addTo(mapRef.current!)
-        .bindPopup(`
-          <b>${displayName}</b><br>
-          Lat: ${lat.toFixed(6)}<br>
-          Lng: ${lng.toFixed(6)}
-        `)
-        .openPopup();
-    };
-
     if (routes && routes.length > 0) {
-      // Gérer les itinéraires
-      let allCoordinates: [number, number][] = [];
-      routes.forEach((route, index) => {
-        const coordinates: [number, number][] = [];
-        route.steps.forEach((step) => {
-          const latLngs = parseWKTLineString(step.geometry);
-          if (latLngs.length > 0) {
-            coordinates.push(...latLngs);
-          } else {
-            console.error('Invalid geometry for step:', step.geometry);
+      const allCoords: [number, number][] = [];
+      routes.forEach(route => {
+        route.steps.forEach(step => {
+          const match = step.geometry.match(/LINESTRING\s*\(([^)]+)\)/);
+          if (match) {
+            match[1].split(',').forEach(coord => {
+              const cleaned = coord.trim().split(/\s+/);
+              if (cleaned.length >= 2) {
+                const lng = parseFloat(cleaned[0]);
+                const lat = parseFloat(cleaned[1]);
+                if (!isNaN(lng) && !isNaN(lat)) {
+                  allCoords.push([lng, lat]);
+                }
+              }
+            });
           }
         });
-
-        if (coordinates.length > 0) {
-          // Définir la couleur : vert pour la route sélectionnée, noir pour les autres
-          const color = index === selectedRouteIndex ? 'green' : 'black';
-          const weight = index === selectedRouteIndex ? 5 : 3;
-          const opacity = index === selectedRouteIndex ? 1.0 : 0.5;
-
-          const polyline = L.polyline(coordinates, { color, weight, opacity })
-            .addTo(routeLayerRef.current!)
-            .on('click', (e: L.LeafletMouseEvent) => {
-              // Stopper la propagation pour éviter le clic sur la carte
-              L.DomEvent.stopPropagation(e);
-              // Mettre à jour l'index de la route sélectionnée
-              setSelectedRouteIndex(index);
-              // Mettre à jour les couleurs des polylines
-              routePolylinesRef.current.forEach((pl, i) => {
-                pl.setStyle({
-                  color: i === index ? 'green' : 'black',
-                  weight: i === index ? 5 : 3,
-                  opacity: i === index ? 1.0 : 0.5,
-                });
-              });
-              // Afficher un popup au centre de la route
-              const bounds = polyline.getBounds();
-              const center = bounds.getCenter();
-              L.popup()
-                .setLatLng(center)
-                .setContent(`
-                  <b>Route ${index + 1}</b><br>
-                  Distance: ${route.distance.toFixed(2)} m<br>
-                  Durée: ${(route.duration / 60).toFixed(2)} min<br>
-                  Départ: ${route.startPlaceName || 'Départ'}<br>
-                  Destination: ${route.endPlaceName || 'Destination'}
-                `)
-                .openOn(mapRef.current!);
-            });
-
-          routePolylinesRef.current.push(polyline);
-          allCoordinates = [...allCoordinates, ...coordinates];
-
-          // Ajouter des marqueurs pour la première route uniquement
-          if (index === selectedRouteIndex) {
-            const startPoint = coordinates[0];
-            const endPoint = coordinates[coordinates.length - 1];
-            (async () => {
-              let startPlaceName = route.startPlaceName || 'Départ';
-              if (route.startPlaceName === 'Votre position') {
-                const closestStartPlace = await fetchClosestPlace(startPoint[1], startPoint[0]);
-                startPlaceName = closestStartPlace?.name || route.startPlaceName;
-              }
-              L.marker(startPoint, { icon: L.icon({ iconUrl: '/M4.png', iconSize: [24, 41] }) })
-                .addTo(routeLayerRef.current!)
-                .bindPopup(`
-                  <b>${startPlaceName}</b><br>
-                  Lat: ${startPoint[0].toFixed(6)}<br>
-                  Lng: ${startPoint[1].toFixed(6)}
-                `);
-              L.marker(endPoint, { icon: L.icon({ iconUrl: '/M1.png', iconSize: [24, 41] }) })
-                .addTo(routeLayerRef.current!)
-                .bindPopup(`
-                  <b>${route.endPlaceName || 'Destination'}</b><br>
-                  Lat: ${endPoint[0].toFixed(6)}<br>
-                  Lng: ${endPoint[1].toFixed(6)}
-                `);
-            })();
-          }
-        }
       });
 
-      if (allCoordinates.length > 0) {
-        mapRef.current!.fitBounds(L.latLngBounds(allCoordinates));
+      if (allCoords.length > 0) {
+        const bounds = allCoords.reduce((acc, coord) => {
+          return [
+            Math.min(acc[0], coord[0]),
+            Math.min(acc[1], coord[1]),
+            Math.max(acc[2], coord[0]),
+            Math.max(acc[3], coord[1])
+          ];
+        }, [allCoords[0][0], allCoords[0][1], allCoords[0][0], allCoords[0][1]]);
+
+        mapRef.current.fitBounds(
+          [bounds[0], bounds[1], bounds[2], bounds[3]] as LngLatBoundsLike,
+          { padding: 80, duration: 1000 }
+        );
       }
     } else if (searchedPlace && searchedPlace.coordinates) {
-      const { lat, lng } = searchedPlace.coordinates;
-      centerOnPoint(lat, lng, searchedPlace.name);
+      mapRef.current.flyTo({
+        center: [searchedPlace.coordinates.lng, searchedPlace.coordinates.lat],
+        zoom: 14,
+        duration: 2000
+      });
     } else if (userLocation) {
-      const { latitude, longitude } = userLocation;
-      centerOnPoint(latitude, longitude, 'Votre position');
-    } else {
-      mapRef.current!.setView([7.365, 12.3], 7, { animate: true });
+      mapRef.current.flyTo({
+        center: [userLocation.longitude, userLocation.latitude],
+        zoom: 14,
+        duration: 2000
+      });
     }
-  }, [userLocation, searchedPlace, routes, selectedRouteIndex, setSelectedRouteIndex]);
+  }, [userLocation, searchedPlace, routes]);
 
-  return <div className="w-full h-screen relative z-0" ref={mapContainerRef} />;
+  if (!MAPBOX_TOKEN) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-red-500 p-4 text-center">
+        Erreur: Token Mapbox manquant. Veuillez ajouter NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN dans votre fichier .env
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full h-screen relative z-0">
+      <Map
+        ref={mapRef}
+        {...viewState}
+        onMove={handleMove}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapboxAccessToken={MAPBOX_TOKEN}
+        onClick={handleMapClick}
+        style={{ width: '100%', height: '100%' }}
+      >
+        {/* Route Layers */}
+        {routeData && (
+          <Source id="route-source" type="geojson" data={routeData}>
+            <Layer
+              id="route-layer-inactive"
+              type="line"
+              filter={['!', ['get', 'isSelected']]}
+              paint={{
+                'line-color': '#4B5563', // gray-600
+                'line-width': 4,
+                'line-opacity': 0.4
+              }}
+            />
+            <Layer
+              id="route-layer-active"
+              type="line"
+              filter={['get', 'isSelected']}
+              paint={{
+                'line-color': '#10b981', // green-500
+                'line-width': 6,
+                'line-opacity': 1.0
+              }}
+            />
+          </Source>
+        )}
+
+        {/* Departure/Arrival Markers */}
+        {routePoints && (
+          <>
+            <Marker
+              longitude={routePoints.start.lng}
+              latitude={routePoints.start.lat}
+              anchor="bottom"
+              onClick={e => {
+                e.originalEvent.stopPropagation();
+                setPopupInfo({ ...routePoints.start, type: 'depart' });
+              }}
+            >
+              <div className="flex flex-col items-center cursor-pointer group" style={{ zIndex: 10 }}>
+                <img src="/M4.png" alt="Départ" className="w-8 h-11 transition-transform group-hover:scale-110" />
+                <div className="bg-blue-600 text-white px-2 py-0.5 rounded shadow text-[10px] font-bold mt-1 uppercase tracking-wider">Départ</div>
+              </div>
+            </Marker>
+
+            <Marker
+              longitude={routePoints.end.lng}
+              latitude={routePoints.end.lat}
+              anchor="bottom"
+              onClick={e => {
+                e.originalEvent.stopPropagation();
+                setPopupInfo({ ...routePoints.end, type: 'destination' });
+              }}
+            >
+              <div className="flex flex-col items-center cursor-pointer group" style={{ zIndex: 10 }}>
+                <img src="/M1.png" alt="Destination" className="w-8 h-11 transition-transform group-hover:scale-110" />
+                <div className="bg-red-600 text-white px-2 py-0.5 rounded shadow text-[10px] font-bold mt-1 uppercase tracking-wider">Arrivée</div>
+              </div>
+            </Marker>
+          </>
+        )}
+
+        {/* User Location Marker (fallback if no route) */}
+        {userLocation && !routePoints && (
+          <Marker
+            longitude={userLocation.longitude}
+            latitude={userLocation.latitude}
+            anchor="bottom"
+          >
+            <div className="flex flex-col items-center">
+              <img src="/M2.png" alt="User Location" className="w-8 h-11" />
+              <div className="bg-white px-2 py-1 rounded shadow text-xs font-bold mt-1">Vous</div>
+            </div>
+          </Marker>
+        )}
+
+        {/* Searched Place Marker (if no route) */}
+        {searchedPlace && searchedPlace.coordinates && !routePoints && (
+          <Marker
+            longitude={searchedPlace.coordinates.lng}
+            latitude={searchedPlace.coordinates.lat}
+            anchor="bottom"
+          >
+            <div className="flex flex-col items-center">
+              <img src="/M3.png" alt="Searched Location" className="w-8 h-11" />
+              <div className="bg-white px-2 py-1 rounded shadow text-xs font-bold mt-1 truncate max-w-[100px]">{searchedPlace.name}</div>
+            </div>
+          </Marker>
+        )}
+
+        {/* Popups */}
+        {popupInfo && (
+          <Popup
+            anchor="top"
+            longitude={popupInfo.lng}
+            latitude={popupInfo.lat}
+            onClose={() => setPopupInfo(null)}
+            closeButton={true}
+            closeOnClick={false}
+            className="z-50"
+          >
+            <div className="p-2 min-w-[150px]">
+              <h3 className="font-bold text-gray-900 border-b pb-1 mb-1">
+                {popupInfo.type === 'depart' ? '📍 Point de départ' : '🏁 Destination'}
+              </h3>
+              <p className="text-sm font-medium text-blue-600 mb-2 leading-tight">{popupInfo.name}</p>
+              <div className="text-[11px] text-gray-500 space-y-0.5">
+                <div><span className="font-semibold">Lat:</span> {popupInfo.lat.toFixed(6)}</div>
+                <div><span className="font-semibold">Lng:</span> {popupInfo.lng.toFixed(6)}</div>
+              </div>
+            </div>
+          </Popup>
+        )}
+      </Map>
+    </div>
+  );
 }

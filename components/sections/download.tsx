@@ -41,6 +41,7 @@ export default function Download() {
             alt="Application FareGo"
             width={350}
             height={700}
+            style={{ height: 'auto' }}
             className="rounded-3xl shadow-xl object-cover max-h-[700px]"
           />
         </div>

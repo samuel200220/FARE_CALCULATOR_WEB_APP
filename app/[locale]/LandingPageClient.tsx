@@ -5,8 +5,8 @@ import Link from 'next/link';
 import Headeracc from '@/components/navbar/headeracc';
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { 
-  FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide, 
+import {
+  FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide,
   FaMoneyBillAlt, FaMapMarkerAlt, FaLocationArrow,
   FaCloudRain, FaRoad, FaCalendarAlt, FaCarCrash,
   FaSuitcase, FaHardHat, FaArrowRight, FaArrowLeft,
@@ -51,30 +51,30 @@ export default function LandingPageClient() {
   const [searchedPlace, setSearchedPlace] = useState<Place | null>(null);
   const [routes, setRoutes] = useState<Route[]>([]);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
-  
+
   // États pour la recherche de lieux
   const [departSearchResults, setDepartSearchResults] = useState<Place[]>([]);
   const [destinationSearchResults, setDestinationSearchResults] = useState<Place[]>([]);
   const [selectedDepartPlace, setSelectedDepartPlace] = useState<Place | null>(null);
   const [selectedDestinationPlace, setSelectedDestinationPlace] = useState<Place | null>(null);
-  
+
   const backendUrl = 'https://map-backend-reactif.onrender.com';
-  
+
   const [placeNames, setPlaceNames] = useState<string[]>([]);
   const [showSuggestionsStart, setShowSuggestionsStart] = useState(false);
   const [showSuggestionsEnd, setShowSuggestionsEnd] = useState(false);
   const [filteredSuggestionsStart, setFilteredSuggestionsStart] = useState<string[]>([]);
   const [filteredSuggestionsEnd, setFilteredSuggestionsEnd] = useState<string[]>([]);
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [compteur, setCompteur] = useState(0);
   const [bloque, setBloque] = useState(false);
   const [estConnecte, setEstConnecte] = useState(false);
-  
+
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [hour, setHour] = useState('');
-  
+
   // Nouvelles variables pour les étapes 2 et 3
   const [jourSemaine, setJourSemaine] = useState('');
   const [jourFerie, setJourFerie] = useState('0');
@@ -84,13 +84,13 @@ export default function LandingPageClient() {
   const [bagages, setBagages] = useState('non');
   const [routesLarges, setRoutesLarges] = useState('oui');
   const [routesTravaux, setRoutesTravaux] = useState('non');
-  
+
   // Modèle ONNX
   const [onnxSession, setOnnxSession] = useState<ort.InferenceSession | null>(null);
   const [modelLoading, setModelLoading] = useState(false);
-  
+
   const [showCustomDiv, setShowCustomDiv] = useState(false);
-  
+
   interface PredictionResult {
     prix_estime_fcfa: number;
     prix_estime_range: string;
@@ -98,12 +98,12 @@ export default function LandingPageClient() {
     lieux_comms: string;
     // official_fare?: number;
   }
-  
+
   const [predictionResult, setPredictionResult] = useState<PredictionResult | null>(null);
   const [error, setError] = useState('');
-  const [errors, setErrors] = useState<{ 
-    start?: string; 
-    end?: string; 
+  const [errors, setErrors] = useState<{
+    start?: string;
+    end?: string;
     hour?: string;
     jourSemaine?: string;
     etatRoute?: string;
@@ -122,12 +122,12 @@ export default function LandingPageClient() {
       try {
         setModelLoading(true);
         console.log('Chargement du modèle ONNX...');
-        
+
         const session = await ort.InferenceSession.create('/model.onnx', {
           executionProviders: ['wasm'],
           graphOptimizationLevel: 'all'
         });
-        
+
         setOnnxSession(session);
         console.log('Modèle ONNX chargé avec succès');
         toast.success('Modèle de prédiction prêt!', { position: 'bottom-right' });
@@ -158,18 +158,18 @@ export default function LandingPageClient() {
               return cleanName.split(',').map(part => part.trim());
             })
             .flat()
-            .filter(name => 
-              name && 
-              name.length > 0 && 
-              name !== 'undefined' && 
+            .filter(name =>
+              name &&
+              name.length > 0 &&
+              name !== 'undefined' &&
               name !== 'null' &&
               !name.includes('Response body') &&
               !name.includes('Server response') &&
               !name.includes('Code Details')
             );
-          
+
           const uniqueNames = [...new Set(names)].sort((a, b) => a.localeCompare(b));
-          
+
           if (uniqueNames.length > 0) {
             setPlaceNames(uniqueNames);
           } else {
@@ -250,7 +250,7 @@ export default function LandingPageClient() {
       const outputName = onnxSession.outputNames[0];
       const output = results[outputName];
       const prediction = output.data[0];
-      
+
       return Number(prediction);
     } catch (error) {
       console.error('Erreur lors de la prédiction ONNX:', error);
@@ -259,13 +259,13 @@ export default function LandingPageClient() {
   };
 
   // Fonction de prédiction utilisant l'API externe
-  const predictWithAPI = async (predictionData: any): Promise<{prix_estime_fcfa: number}> => {
+  const predictWithAPI = async (predictionData: any): Promise<{ prix_estime_fcfa: number }> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
     const response = await fetch('https://farcal-api-coast.onrender.com/predict', {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
@@ -287,7 +287,7 @@ export default function LandingPageClient() {
     }
 
     const result = await response.json();
-    
+
     if (result.prix_estime_fcfa !== undefined) {
       return result;
     } else {
@@ -296,7 +296,7 @@ export default function LandingPageClient() {
   };
 
   // Fonction pour obtenir le tarif officiel (ancienne API)
-  const getOfficialFare = async (start: string, end: string, hour: string): Promise<{cost: number, mint_cost: number, distance: number} | null> => {
+  const getOfficialFare = async (start: string, end: string, hour: string): Promise<{ cost: number, mint_cost: number, distance: number } | null> => {
     try {
       const res = await fetch('https://fare-calculator.onrender.com/cost', {
         method: 'POST',
@@ -315,6 +315,8 @@ export default function LandingPageClient() {
     }
   };
 
+  const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+
   // Recherche de lieux via le backend
   const searchPlaces = async (query: string, type: 'depart' | 'destination') => {
     if (!query || query.trim() === '') {
@@ -328,7 +330,7 @@ export default function LandingPageClient() {
 
     try {
       const response = await fetch(`${backendUrl}/api/places?name=${encodeURIComponent(query)}`);
-      
+
       if (!response.ok) {
         if (type === 'depart') {
           setDepartSearchResults([]);
@@ -339,12 +341,12 @@ export default function LandingPageClient() {
       }
 
       const data = await response.json();
-      
+
       if (data.success && Array.isArray(data.data)) {
-        const validPlaces = data.data.filter((place: Place) => 
+        const validPlaces = data.data.filter((place: Place) =>
           place && place.coordinates && place.coordinates.lat && place.coordinates.lng
         );
-        
+
         if (type === 'depart') {
           setDepartSearchResults(validPlaces.slice(0, 5));
         } else {
@@ -352,6 +354,7 @@ export default function LandingPageClient() {
         }
       }
     } catch (err) {
+      console.error('Error with backend search:', err);
       if (type === 'depart') {
         setDepartSearchResults([]);
       } else {
@@ -384,7 +387,7 @@ export default function LandingPageClient() {
     const filtered = placeNames.filter(name =>
       name.toLowerCase().includes(value.toLowerCase())
     ).slice(0, 5);
-    
+
     setFilteredSuggestionsStart(filtered);
     setShowSuggestionsStart(value.trim() !== "");
 
@@ -407,7 +410,7 @@ export default function LandingPageClient() {
     const filtered = placeNames.filter(name =>
       name.toLowerCase().includes(value.toLowerCase())
     ).slice(0, 5);
-    
+
     setFilteredSuggestionsEnd(filtered);
     setShowSuggestionsEnd(value.trim() !== "");
 
@@ -445,58 +448,32 @@ export default function LandingPageClient() {
     setError('');
 
     try {
-      let startPoint, endPoint;
-      
-      if (selectedDepartPlace?.coordinates) {
-        startPoint = selectedDepartPlace.coordinates;
-      } else {
-        const searchResponse = await fetch(
-          `${backendUrl}/api/places?name=${encodeURIComponent(start)}`
-        );
-        
-        if (searchResponse.ok) {
-          const searchData = await searchResponse.json();
-          if (searchData.success && Array.isArray(searchData.data) && searchData.data.length > 0) {
-            const firstPlace = searchData.data[0];
-            if (firstPlace.coordinates) {
-              startPoint = firstPlace.coordinates;
-            } else {
-              startPoint = { lat: 3.8480, lng: 11.5021 };
-            }
-          } else {
-            startPoint = { lat: 3.8480, lng: 11.5021 };
-          }
-        } else {
-          startPoint = { lat: 3.8480, lng: 11.5021 };
-        }
-      }
-      
-      if (selectedDestinationPlace?.coordinates) {
-        endPoint = selectedDestinationPlace.coordinates;
-      } else {
-        const searchResponse = await fetch(
-          `${backendUrl}/api/places?name=${encodeURIComponent(end)}`
-        );
-        
-        if (searchResponse.ok) {
-          const searchData = await searchResponse.json();
-          if (searchData.success && Array.isArray(searchData.data) && searchData.data.length > 0) {
-            const firstPlace = searchData.data[0];
-            if (firstPlace.coordinates) {
-              endPoint = firstPlace.coordinates;
-            } else {
-              endPoint = { lat: 4.0511, lng: 9.7679 };
-            }
-          } else {
-            endPoint = { lat: 4.0511, lng: 9.7679 };
-          }
-        } else {
-          endPoint = { lat: 4.0511, lng: 9.7679 };
+      let startCoords = selectedDepartPlace?.coordinates;
+      let endCoords = selectedDestinationPlace?.coordinates;
+
+      // Si pas de coordonnées, on utilise le backend pour trouver le premier résultat
+      if (!startCoords) {
+        const res = await fetch(`${backendUrl}/api/places?name=${encodeURIComponent(start)}`);
+        const data = await res.json();
+        if (data.success && data.data?.length > 0) {
+          startCoords = data.data[0].coordinates;
         }
       }
 
+      if (!endCoords) {
+        const res = await fetch(`${backendUrl}/api/places?name=${encodeURIComponent(end)}`);
+        const data = await res.json();
+        if (data.success && data.data?.length > 0) {
+          endCoords = data.data[0].coordinates;
+        }
+      }
+
+      if (!startCoords || !endCoords) {
+        throw new Error('Impossible de localiser les points de départ ou d\'arrivée');
+      }
+
       const requestBody = {
-        points: [startPoint, endPoint],
+        points: [startCoords, endCoords],
         mode: 'driving',
         startPlaceName: start,
         endPlaceName: end,
@@ -504,7 +481,7 @@ export default function LandingPageClient() {
 
       const response = await fetch(`${backendUrl}/api/routes`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
@@ -512,125 +489,85 @@ export default function LandingPageClient() {
       });
 
       if (!response.ok) {
-        throw new Error(`Erreur ${response.status}: ${response.statusText}`);
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('La réponse du serveur n\'est pas du JSON valide');
+        throw new Error('Erreur lors du calcul de l\'itinéraire via le serveur');
       }
 
       const data = await response.json();
-      return handleRouteData(data);
-      
+      if (data.routes && data.routes.length > 0) {
+        setRoutes(data.routes);
+        setSelectedRouteIndex(0);
+        toast.success('Itinéraire calculé avec succès!');
+        return data.routes[0];
+      } else {
+        throw new Error('Aucun itinéraire trouvé');
+      }
+
     } catch (err: any) {
       const errorMessage = err.message || 'Erreur lors du calcul de l\'itinéraire';
       setError(errorMessage);
       console.error('Route calculation error:', err);
-      
-      const defaultDistance = Math.random() * 20 + 5;
-      const defaultDuration = defaultDistance * 3;
-      
-      const defaultRoute = {
-        distance: defaultDistance * 1000,
-        duration: defaultDuration * 60,
-        startPlaceName: start,
-        endPlaceName: end,
-        steps: []
-      };
-      
-      setRoutes([defaultRoute]);
-      setSelectedRouteIndex(0);
-      
-      toast.error("Utilisation de distance par défaut pour continuer le calcul.");
-      return defaultRoute;
+      toast.error(errorMessage);
+      return null;
     } finally {
       setIsLoading(false);
     }
-  }, [start, end, selectedDepartPlace, selectedDestinationPlace]);
-
-  const handleRouteData = (data: any) => {
-    if (data.routes && data.routes.length > 0) {
-      const route = data.routes[0];
-      setRoutes(data.routes);
-      setSelectedRouteIndex(0);
-      
-      toast.success('Itinéraire calculé avec succès!');
-      
-      return route;
-    } else if (data.error) {
-      throw new Error(data.error);
-    } else if (data.message) {
-      throw new Error(data.message);
-    } else {
-      const defaultDistance = Math.random() * 20 + 5;
-      const defaultDuration = defaultDistance * 3;
-      
-      toast.error('Utilisation de distance par défaut. Vous pouvez continuer.');
-      
-      return {
-        distance: defaultDistance * 1000,
-        duration: defaultDuration * 60,
-        routes: []
-      };
-    }
-  };
+  }, [start, end, selectedDepartPlace, selectedDestinationPlace, backendUrl]);
 
   const extractDistanceKm = (route: any): number => {
     if (!route) return 0;
-    
+
     if (route.distance !== undefined) {
       return Number(route.distance) / 1000;
     }
-    
+
     return 0;
   };
 
   const handleStep1Submit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const newErrors: typeof errors = {};
-  
-  // Vérifier si les lieux sont identiques (case-insensitive, trim)
-  if (start.trim().toLowerCase() === end.trim().toLowerCase()) {
-    toast.error("Le lieu de départ et la destination doivent être différents", {
-      position: 'bottom-right',
-    });
-    return;
-  }
+    const newErrors: typeof errors = {};
 
-  if (!start.trim()) {
-    newErrors.start = 'Le champ Départ est requis.';
-  } else if (/^\d+$/.test(start.trim())) {
-    newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
-  }
-
-  if (!end.trim()) {
-    newErrors.end = 'Le champ Destination est requis.';
-  } else if (/^\d+$/.test(end.trim())) {
-    newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
-  }
-
-  if (!hour) {
-    newErrors.hour = "L'heure doit être sélectionnée.";
-  }
-
-  setErrors(newErrors);
-
-  if (Object.keys(newErrors).length > 0) return;
-
-  try {
-    setIsLoading(true);
-    const route = await calculateRoute();
-    if (route) {
-      setStep(2);
+    // Vérifier si les lieux sont identiques (case-insensitive, trim)
+    if (start.trim().toLowerCase() === end.trim().toLowerCase()) {
+      toast.error("Le lieu de départ et la destination doivent être différents", {
+        position: 'bottom-right',
+      });
+      return;
     }
-  } catch (err) {
-    setError((err as Error).message);
-  } finally {
-    setIsLoading(false);
-  }
-};
+
+    if (!start.trim()) {
+      newErrors.start = 'Le champ Départ est requis.';
+    } else if (/^\d+$/.test(start.trim())) {
+      newErrors.start = 'Le champ Départ ne peut pas contenir uniquement des chiffres.';
+    }
+
+    if (!end.trim()) {
+      newErrors.end = 'Le champ Destination est requis.';
+    } else if (/^\d+$/.test(end.trim())) {
+      newErrors.end = 'Le champ Destination ne peut pas contenir uniquement des chiffres.';
+    }
+
+    if (!hour) {
+      newErrors.hour = "L'heure doit être sélectionnée.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    try {
+      setIsLoading(true);
+      const route = await calculateRoute();
+      if (route) {
+        setStep(2);
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -670,14 +607,14 @@ export default function LandingPageClient() {
     }
 
     const currentRoute = routes[selectedRouteIndex];
-    
+
     if (!currentRoute) {
       toast.error("Aucun itinéraire disponible. Veuillez recalculer.");
       return;
     }
 
     const distanceToUse = extractDistanceKm(currentRoute);
-    
+
     setIsLoading(true);
     setError('');
 
@@ -712,7 +649,7 @@ export default function LandingPageClient() {
           console.log('Prédiction ONNX réussie:', prixEstime);
         } catch (onnxError) {
           console.warn('Erreur ONNX, utilisation de l\'API:', onnxError);
-          
+
           // Fallback à l'API
           try {
             const apiResult = await predictWithAPI(predictionData);
@@ -750,7 +687,7 @@ export default function LandingPageClient() {
       const prixArrondi = Math.round(prixEstime);
       const prixMin = Math.round(prixArrondi * 0.85);
       const prixMax = Math.round(prixArrondi * 1.15);
-      
+
       const result = {
         prix_estime_fcfa: prixArrondi,
         prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
@@ -758,9 +695,9 @@ export default function LandingPageClient() {
         lieux_comms: `Trajet de ${start} à ${end}`,
         // official_fare: officialFareResult?.mint_cost || 0
       };
-      
+
       setPredictionResult(result);
-      
+
       // if (estConnecte) {
       //   const utilisateurId = localStorage.getItem("utilisateurId") || 'anonymous';
       //   await enregistrerCalcul({
@@ -773,12 +710,12 @@ export default function LandingPageClient() {
       //     tarifOfficiel: officialFareResult?.mint_cost || 0,
       //   });
       // }
-      
+
       // Incrémenter le compteur pour les utilisateurs non connectés (uniquement à la dernière étape)
       if (!estConnecte) {
         const nouveauCompteur = compteur + 1;
         setCompteur(nouveauCompteur);
-        
+
         if (nouveauCompteur >= 3) {
           setBloque(true);
           toast.error("Vous avez atteint la limite de 3 calculs. Veuillez vous enregistrer pour continuer.", {
@@ -794,7 +731,7 @@ export default function LandingPageClient() {
 
     } catch (err: any) {
       console.error('Erreur complète de prédiction:', err);
-      
+
       let errorType = 'réseau';
       if (err.name === 'AbortError') {
         errorType = 'timeout';
@@ -805,7 +742,7 @@ export default function LandingPageClient() {
       } else {
         toast.error("Erreur API. Utilisation d'une estimation locale basée sur la distance.");
       }
-      
+
       // Calcul d'estimation locale
       const prixEstime = calculateLocalEstimation({
         distance_km: distanceToUse,
@@ -814,11 +751,11 @@ export default function LandingPageClient() {
         pluie: pluie,
         bagages: bagages
       });
-      
+
       const prixArrondi = Math.round(prixEstime);
       const prixMin = Math.round(prixArrondi * 0.85);
       const prixMax = Math.round(prixArrondi * 1.15);
-      
+
       const simulatedResult = {
         prix_estime_fcfa: prixArrondi,
         prix_estime_range: `${prixMin} - ${prixMax} FCFA`,
@@ -826,15 +763,15 @@ export default function LandingPageClient() {
         lieux_comms: `Trajet de ${start} à ${end}`,
         // official_fare: 0
       };
-      
+
       setPredictionResult(simulatedResult);
       setError(`⚠️ Calcul local utilisé (erreur ${errorType})`);
-      
+
       // Incrémenter le compteur même pour les erreurs (uniquement à la dernière étape)
       if (!estConnecte) {
         const nouveauCompteur = compteur + 1;
         setCompteur(nouveauCompteur);
-        
+
         if (nouveauCompteur >= 3) {
           setBloque(true);
           toast.error("Vous avez atteint la limite de 3 calculs. Veuillez vous enregistrer pour continuer.", {
@@ -855,19 +792,19 @@ export default function LandingPageClient() {
     const etatRoute = data.etat_route || 'bonne';
     const pluie = data.pluie || '0';
     const bagages = data.bagages || 'non';
-    
+
     const tarifBase = 200;
     const tarifParKm = 150;
     const facteurHeure = (hourInt >= 18 || hourInt <= 6) ? 1.2 : 1;
     const facteurPluie = pluie === '1' ? 1.15 : 1;
     const facteurRoute = etatRoute === 'mauvaise' ? 1.25 : etatRoute === 'moyenne' ? 1.1 : 1;
     const facteurBagages = bagages === 'oui' ? 1.1 : 1;
-    
+
     return Math.round(
-      (tarifBase + (distance * tarifParKm)) * 
-      facteurHeure * 
-      facteurPluie * 
-      facteurRoute * 
+      (tarifBase + (distance * tarifParKm)) *
+      facteurHeure *
+      facteurPluie *
+      facteurRoute *
       facteurBagages
     );
   };
@@ -954,29 +891,29 @@ export default function LandingPageClient() {
               {/* Left Column - Content */}
               <div className="text-white">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                    {t('heroTitle')}
+                  {t('heroTitle')}
                 </h1>
                 <p className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
-                    {t('heroDescription')}
+                  {t('heroDescription')}
                 </p>
 
                 {/* App Download Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-12">
                   <Link href={'/accueilano'}>
                     <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
-                        {t('startFree')}
+                      {t('startFree')}
                     </button>
-                    </Link>
-                    <Link href={'/inscription1'}>
+                  </Link>
+                  <Link href={'/inscription1'}>
                     <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
-                        {t('standardVersion')}
+                      {t('standardVersion')}
                     </button>
-                    </Link>
-                    <Link href={'/inscriptionpro'}>
+                  </Link>
+                  <Link href={'/inscriptionpro'}>
                     <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
-                        {t('proVersion')}
+                      {t('proVersion')}
                     </button>
-                    </Link>
+                  </Link>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-2">
                   <a href="https://lets-go-liart-phi.vercel.app/" target="_blank" rel="noopener noreferrer">
@@ -1008,7 +945,7 @@ export default function LandingPageClient() {
               {/* Right Column - Calculator */}
               <div className="bg-white dark:bg-[#0D1B2A] rounded-3xl shadow-lg mt-2 mb-2 p-8 w-full max-w-lg mx-auto">
                 <h3 className="dark:text-white text-2xl sm:text-4xl font-bold mb-6 text-center">
-                    {t('fareCalculator')}
+                  {t('fareCalculator')}
                 </h3>
 
                 {modelLoading && (
@@ -1040,7 +977,7 @@ export default function LandingPageClient() {
                         {limitsT('calculationsMade', { current: compteur })}
                       </span>
                       <div className="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div 
+                        <div
                           className="h-full bg-gradient-to-r from-purple-500 to-green-500 transition-all duration-500"
                           style={{ width: `${(compteur / 3) * 100}%` }}
                         />
@@ -1078,15 +1015,14 @@ export default function LandingPageClient() {
                               }
                             }}
                             onBlur={() => setTimeout(() => setShowSuggestionsStart(false), 200)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                              errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
-                            }`}
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
+                              }`}
                             placeholder={f("go")}
                             id="start"
                             disabled={bloque && !estConnecte}
                           />
                           {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
-                          
+
                           {showSuggestionsStart && (
                             <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-60 overflow-y-auto">
                               {getCombinedSuggestions('start').backend.length > 0 && (
@@ -1106,7 +1042,7 @@ export default function LandingPageClient() {
                                   ))}
                                 </>
                               )}
-                              
+
                               {getCombinedSuggestions('start').local.length > 0 && (
                                 <>
                                   <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
@@ -1123,7 +1059,7 @@ export default function LandingPageClient() {
                                   ))}
                                 </>
                               )}
-                              
+
                               {getCombinedSuggestions('start').backend.length === 0 && getCombinedSuggestions('start').local.length === 0 && (
                                 <li className="dark:text-white px-4 py-2 text-gray-500">{suggestionsT('noSuggestions')}</li>
                               )}
@@ -1149,15 +1085,14 @@ export default function LandingPageClient() {
                               }
                             }}
                             onBlur={() => setTimeout(() => setShowSuggestionsEnd(false), 200)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${
-                              errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
-                            }`}
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
+                              }`}
                             placeholder={f("arrive")}
                             id="end"
                             disabled={bloque && !estConnecte}
                           />
                           {errors.end && <p className="text-red-600 text-sm mt-1">{errors.end}</p>}
-                          
+
                           {showSuggestionsEnd && (
                             <ul className="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 rounded-[7px] shadow-lg max-h-60 overflow-y-auto">
                               {getCombinedSuggestions('end').backend.length > 0 && (
@@ -1177,7 +1112,7 @@ export default function LandingPageClient() {
                                   ))}
                                 </>
                               )}
-                              
+
                               {getCombinedSuggestions('end').local.length > 0 && (
                                 <>
                                   <li className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
@@ -1194,7 +1129,7 @@ export default function LandingPageClient() {
                                   ))}
                                 </>
                               )}
-                              
+
                               {getCombinedSuggestions('end').backend.length === 0 && getCombinedSuggestions('end').local.length === 0 && (
                                 <li className="dark:text-white px-4 py-2 text-gray-500">{suggestionsT('noSuggestions')}</li>
                               )}
@@ -1209,9 +1144,8 @@ export default function LandingPageClient() {
                           <select
                             value={hour}
                             onChange={(e) => setHour(e.target.value)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
-                              errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
-                            }`}
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
+                              }`}
                             disabled={bloque && !estConnecte}
                           >
                             <option value="">{f("time")}</option>
@@ -1234,11 +1168,10 @@ export default function LandingPageClient() {
                               label: "Bouton Calculer",
                             })
                           }
-                          className={`text-white dark:bg-purple-700 dark:text-white dark:hover:bg-green-800 w-full h-12 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl flex items-center justify-center gap-2 ${
-                            bloque && !estConnecte 
-                              ? 'bg-gray-500 cursor-not-allowed' 
-                              : 'bg-purple-700 hover:bg-green-600'
-                          }`}
+                          className={`text-white dark:bg-purple-700 dark:text-white dark:hover:bg-green-800 w-full h-12 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl flex items-center justify-center gap-2 ${bloque && !estConnecte
+                            ? 'bg-gray-500 cursor-not-allowed'
+                            : 'bg-purple-700 hover:bg-green-600'
+                            }`}
                         >
                           {bloque && !estConnecte ? (
                             <span className="flex items-center gap-2">
@@ -1294,9 +1227,8 @@ export default function LandingPageClient() {
                           <select
                             value={jourSemaine}
                             onChange={(e) => setJourSemaine(e.target.value)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${
-                              errors.jourSemaine ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
-                            }`}
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${errors.jourSemaine ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
+                              }`}
                             disabled={bloque && !estConnecte}
                           >
                             <option value="">{calc('dayOfWeek')}</option>
@@ -1381,9 +1313,8 @@ export default function LandingPageClient() {
                           <select
                             value={etatRoute}
                             onChange={(e) => setEtatRoute(e.target.value)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white w-full h-12 px-3 py-2 rounded-[7px] border ${
-                              errors.etatRoute ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300'
-                            }`}
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white w-full h-12 px-3 py-2 rounded-[7px] border ${errors.etatRoute ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300'
+                              }`}
                             disabled={bloque && !estConnecte}
                           >
                             <option value="">{calc('select')}</option>
@@ -1437,11 +1368,10 @@ export default function LandingPageClient() {
                           <Button
                             type="submit"
                             disabled={bloque && !estConnecte}
-                            className={`w-1/2 h-12 flex items-center justify-center gap-2 ${
-                              bloque && !estConnecte
-                                ? 'bg-gray-500 cursor-not-allowed'
-                                : 'bg-purple-700 hover:bg-green-800 text-white'
-                            }`}
+                            className={`w-1/2 h-12 flex items-center justify-center gap-2 ${bloque && !estConnecte
+                              ? 'bg-gray-500 cursor-not-allowed'
+                              : 'bg-purple-700 hover:bg-green-800 text-white'
+                              }`}
                           >
                             {bloque && !estConnecte ? calc('blocked') : calc('next')}
                             <FaArrowRight />
@@ -1575,13 +1505,12 @@ export default function LandingPageClient() {
                           <Button
                             type="submit"
                             disabled={isLoading || (bloque && !estConnecte)}
-                            className={`w-1/2 h-12 flex items-center justify-center gap-2 ${
-                              bloque && !estConnecte
-                                ? 'bg-gray-500 cursor-not-allowed'
-                                : 'bg-purple-700 hover:bg-green-800 text-white'
-                            }`}
+                            className={`w-1/2 h-12 flex items-center justify-center gap-2 ${bloque && !estConnecte
+                              ? 'bg-gray-500 cursor-not-allowed'
+                              : 'bg-purple-700 hover:bg-green-800 text-white'
+                              }`}
                           >
-                            <FaCalculator /> 
+                            <FaCalculator />
                             {bloque && !estConnecte ? calc('blocked') : (isLoading ? calc('calculating') : calc('calculate'))}
                           </Button>
                         </div>
@@ -1590,7 +1519,7 @@ export default function LandingPageClient() {
                   </>
                 ) : showCustomDiv ? (
                   <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg relative">
-                    <button 
+                    <button
                       onClick={() => {
                         setShowCustomDiv(false);
                       }}
@@ -1610,16 +1539,14 @@ export default function LandingPageClient() {
                     </form>
 
                     {/* Carte avec le trajet */}
-                    <div className="rounded-2xl w-full h-96 relative z-10 mt-4">
-                      <div className="relative w-full h-full bg-white dark:bg-[#0D1B2A] rounded-2xl shadow-lg flex flex-col items-center justify-center">
-                        <MapNavigoo
-                          userLocation={userLocation}
-                          searchedPlace={searchedPlace}
-                          routes={routes}
-                          selectedRouteIndex={selectedRouteIndex}
-                          setSelectedRouteIndex={setSelectedRouteIndex}
-                        />
-                      </div>
+                    <div className="rounded-2xl w-full h-[400px] relative z-10 mt-4 overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
+                      <MapNavigoo
+                        userLocation={userLocation}
+                        searchedPlace={searchedPlace}
+                        routes={routes}
+                        selectedRouteIndex={selectedRouteIndex}
+                        setSelectedRouteIndex={setSelectedRouteIndex}
+                      />
                     </div>
 
                     {/* Résumé sous la carte */}
@@ -1726,7 +1653,7 @@ export default function LandingPageClient() {
                                     {compteur}/3
                                   </span>
                                   <div className="w-20 h-2 bg-purple-200 dark:bg-purple-800 rounded-full overflow-hidden">
-                                    <div 
+                                    <div
                                       className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
                                       style={{ width: `${(compteur / 3) * 100}%` }}
                                     />
@@ -1761,7 +1688,7 @@ export default function LandingPageClient() {
                           <FaArrowLeft />
                           {resultsT('newTrip')}
                         </Button>
-                        
+
                         <Button
                           onClick={() => {
                             const newCompteur = compteur + 1;
@@ -1773,9 +1700,8 @@ export default function LandingPageClient() {
                             setStep(1);
                           }}
                           disabled={bloque && !estConnecte}
-                          className={`bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full h-12 hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-2 ${
-                            bloque && !estConnecte ? 'opacity-50 cursor-not-allowed' : ''
-                          }`}
+                          className={`bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full h-12 hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-2 ${bloque && !estConnecte ? 'opacity-50 cursor-not-allowed' : ''
+                            }`}
                         >
                           <FaCalculator />
                           {t('recalculate')}
@@ -1791,15 +1717,15 @@ export default function LandingPageClient() {
           </div>
         </main>
       </div>
-      <Pricing/>
+      <Pricing />
       <Accsec />
-      <Download/>
+      <Download />
       <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-[#0D1B2A] transition-colors duration-500 mt-3 mb-20 p-4">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">QR Code Farcal</h1>
         <QRCode value={url} size={256} />
         <p className="text-4xl mt-4 text-gray-900 dark:text-white">{t('qrcode')}</p>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 }
