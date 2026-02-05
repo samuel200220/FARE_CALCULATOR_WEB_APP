@@ -80,51 +80,47 @@ export default function Carte({ userLocation, searchedPlace, routes, selectedRou
   // Extract start and end points for the selected route
   const routePoints = useMemo(() => {
     if (!routes || routes.length === 0 || !routes[selectedRouteIndex]) {
-      console.log('Map debug: No routes or selected route index invalid');
+      console.log('Map debug: No routes or selected route index invalid', { routesLength: routes?.length, selectedRouteIndex });
       return null;
     }
 
     const route = routes[selectedRouteIndex];
-    const firstStep = route.steps[0];
-    const lastStep = route.steps[route.steps.length - 1];
-
-    if (!firstStep || !lastStep) {
-      console.log('Map debug: First or last step missing');
+    if (!route.steps || route.steps.length === 0) {
+      console.log('Map debug: Route has no steps');
       return null;
     }
 
-    const parseFirstPoint = (wkt: string): [number, number] | null => {
-      const match = wkt.match(/LINESTRING\s*\(([^)]+)\)/);
-      if (match) {
-        const firstCoord = match[1].split(',')[0].trim().split(/\s+/);
-        if (firstCoord.length >= 2) {
-          return [parseFloat(firstCoord[0]), parseFloat(firstCoord[1])];
-        }
+    const firstStep = route.steps[0];
+    const lastStep = route.steps[route.steps.length - 1];
+
+    const parseWKTPoint = (wkt: string, position: 'first' | 'last'): [number, number] | null => {
+      if (!wkt) return null;
+      const match = wkt.match(/LINESTRING\s*\(([^)]+)\)/i);
+      if (!match) return null;
+
+      const coords = match[1].split(',').map(c => c.trim());
+      const targetCoord = position === 'first' ? coords[0] : coords[coords.length - 1];
+
+      if (!targetCoord) return null;
+
+      const parts = targetCoord.split(/\s+/);
+      if (parts.length >= 2) {
+        const lng = parseFloat(parts[0]);
+        const lat = parseFloat(parts[1]);
+        if (!isNaN(lng) && !isNaN(lat)) return [lng, lat];
       }
       return null;
     };
 
-    const parseLastPoint = (wkt: string): [number, number] | null => {
-      const match = wkt.match(/LINESTRING\s*\(([^)]+)\)/);
-      if (match) {
-        const coords = match[1].split(',');
-        const lastCoord = coords[coords.length - 1].trim().split(/\s+/);
-        if (lastCoord.length >= 2) {
-          return [parseFloat(lastCoord[0]), parseFloat(lastCoord[1])];
-        }
-      }
-      return null;
-    };
-
-    const start = parseFirstPoint(firstStep.geometry);
-    const end = parseLastPoint(lastStep.geometry);
+    const start = parseWKTPoint(firstStep.geometry, 'first');
+    const end = parseWKTPoint(lastStep.geometry, 'last');
 
     if (!start || !end) {
       console.log('Map debug: Parsing failed for start or end point', { start, end });
       return null;
     }
 
-    console.log('Map debug: Route points calculated', { start, end });
+    console.log('Map debug: Route points calculated successfully', { start, end });
 
     return {
       start: { lng: start[0], lat: start[1], name: route.startPlaceName || 'Départ' },
@@ -136,6 +132,29 @@ export default function Carte({ userLocation, searchedPlace, routes, selectedRou
   const handleMapClick = (e: MapMouseEvent) => {
     const { lng, lat } = e.lngLat;
     console.log('Map debug: Clicked at:', lat, lng);
+
+    if (!mapRef.current) return;
+
+    // Définir une petite zone autour du clic pour faciliter la sélection
+    const bbox: [[number, number], [number, number]] = [
+      [e.point.x - 5, e.point.y - 5],
+      [e.point.x + 5, e.point.y + 5]
+    ];
+
+    // Rechercher les routes sous le clic
+    const features = mapRef.current.queryRenderedFeatures(bbox, {
+      layers: ['route-layer-inactive', 'route-layer-active']
+    });
+
+    if (features.length > 0) {
+      const routeIndex = features[0].properties?.index;
+      if (typeof routeIndex === 'number' && routeIndex !== selectedRouteIndex) {
+        console.log('Map debug: Route selected via click:', routeIndex);
+        setSelectedRouteIndex(routeIndex);
+        return; // Éviter de fermer le popup si on a cliqué sur une route
+      }
+    }
+
     setPopupInfo(null); // Close popup on map click
   };
 
@@ -225,8 +244,12 @@ export default function Carte({ userLocation, searchedPlace, routes, selectedRou
               filter={['!', ['get', 'isSelected']]}
               paint={{
                 'line-color': '#4B5563', // gray-600
-                'line-width': 4,
+                'line-width': 6, // Un peu plus large pour faciliter le clic
                 'line-opacity': 0.4
+              }}
+              layout={{
+                'line-cap': 'round',
+                'line-join': 'round'
               }}
             />
             <Layer
@@ -235,8 +258,12 @@ export default function Carte({ userLocation, searchedPlace, routes, selectedRou
               filter={['get', 'isSelected']}
               paint={{
                 'line-color': '#10b981', // green-500
-                'line-width': 6,
+                'line-width': 8,
                 'line-opacity': 1.0
+              }}
+              layout={{
+                'line-cap': 'round',
+                'line-join': 'round'
               }}
             />
           </Source>
