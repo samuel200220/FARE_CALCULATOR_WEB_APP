@@ -8,12 +8,19 @@ import { Button } from '@/components/ui/button'
 import {
   FaRegClock, FaCalculator, FaBus, FaCar, FaCarSide,
   FaMoneyBillAlt, FaMapMarkerAlt, FaLocationArrow,
-  FaCloudRain, FaRoad, FaCalendarAlt, FaCarCrash,
-  FaSuitcase, FaHardHat, FaArrowRight, FaArrowLeft,
-  FaExclamationTriangle, FaRoute, FaDollarSign
+  FaCloudRain, FaRoad, FaCalendarAlt, FaCarCrash, FaSuitcase,
+  FaHardHat, FaArrowRight, FaArrowLeft, FaChartLine, FaArrowsAlt, FaInfoCircle, FaChevronDown,
+  FaSun, FaCloudSun, FaCloud, FaMoon, FaCloudMoon, FaExclamationTriangle, FaDollarSign, FaRoute
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import 'react-time-picker/dist/TimePicker.css';
 import { enregistrerCalcul } from '@/app/services/calculService';
 import dynamic from 'next/dynamic';
@@ -30,13 +37,24 @@ import QRCode from "react-qr-code";
 // Importer ONNX Runtime
 import * as ort from 'onnxruntime-web';
 
-const predefinedHours = [
-  "06:00", "07:00", "08:00", "09:00",
-  "10:00", "11:00", "12:00", "13:00",
-  "14:00", "15:00", "16:00", "17:00",
-  "18:00", "19:00", "20:00", "21:00",
-  "22:00"
-];
+const dayPeriodsMapping = {
+  morning: "08:00",
+  midday: "12:00",
+  afternoon: "16:00",
+  evening: "20:00",
+  night: "02:00"
+};
+
+const getPeriodIcon = (period: string) => {
+  switch (period) {
+    case 'morning': return <FaCloudSun className="text-orange-400" />;
+    case 'midday': return <FaSun className="text-yellow-400" />;
+    case 'afternoon': return <FaCloud className="text-blue-200" />;
+    case 'evening': return <FaCloudMoon className="text-purple-400" />;
+    case 'night': return <FaMoon className="text-gray-400" />;
+    default: return null;
+  }
+};
 
 const MapNavigoo = dynamic(() => import('../../components/carte').then((mod) => mod.default), {
   ssr: false,
@@ -1137,30 +1155,45 @@ export default function LandingPageClient() {
                           )}
                         </div>
 
-                        <div className="relative">
-                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaRegClock className="text-purple-600" />
+                        <div className="relative group z-10">
+                          <div className="absolute left-4 top-3.5 text-blue-500">
+                            <FaRegClock />
                           </div>
-                          <select
+                          <Select
                             value={hour}
-                            onChange={(e) => setHour(e.target.value)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${errors.hour ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
-                              }`}
+                            onValueChange={(value) => setHour(value)}
                             disabled={bloque && !estConnecte}
                           >
-                            <option value="">{f("time")}</option>
-                            {predefinedHours.map((h) => (
-                              <option key={h} value={h}>
-                                {h}
-                              </option>
-                            ))}
-                          </select>
-                          {errors.hour && <p className="text-red-600 text-sm mt-1">{errors.hour}</p>}
+                            <SelectTrigger
+                              className={`w-full pl-10 pr-10 h-12 rounded-[7px] bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] border ${errors.hour
+                                ? 'border-red-500 focus:ring-red-500'
+                                : 'border-gray-300 hover:border-purple-800 focus:border-purple-800'
+                                }`}
+                            >
+                              <SelectValue placeholder={f("time")} />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-[7px] shadow-xl p-1">
+                              {Object.entries(dayPeriodsMapping).map(([period, averageHour]) => (
+                                <SelectItem
+                                  key={period}
+                                  value={averageHour}
+                                  className="rounded-md px-4 py-3 cursor-pointer transition-colors focus:bg-purple-100 dark:focus:bg-purple-900 focus:text-purple-900 dark:focus:text-purple-100 text-[16px]"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="text-xl">
+                                      {getPeriodIcon(period)}
+                                    </div>
+                                    <span className="font-medium">{f(`dayPeriods.${period}`)}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
+                        {errors.hour && <p className="text-red-600 text-sm mt-1">{errors.hour}</p>}
 
                         <Button
                           type="submit"
-                          disabled={isLoading || (bloque && !estConnecte)}
                           onClick={() =>
                             event({
                               action: "click_calcul",
@@ -1715,8 +1748,8 @@ export default function LandingPageClient() {
               </div>
             </div>
           </div>
-        </main>
-      </div>
+        </main >
+      </div >
       <Pricing />
       <Accsec />
       <Download />

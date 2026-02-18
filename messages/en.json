@@ -52,77 +52,84 @@
       "code": "Verification code"
     }
   },
-  "agency":{
-  "travel_agency": "Need a travel agency?",
-  "need_ride": "Need a ride?",
-  "need_rental": "Need a rental?"
+  "agency": {
+    "travel_agency": "Need a travel agency?",
+    "need_ride": "Need a ride?",
+    "need_rental": "Need a rental?"
   },
   "form": {
-  "go": "Start",
-  "arrive": "End",
-  "time": "Select time",
-  "sugg":"No suggestion"
-},
-"pricing": {
-  "title": "Our Plans",
-  "description": "Choose the plan that fits your needs",
-  "plans": {
-    "basic": {
-      "title": "Basic",
-      "price": "1000 FCFA",
-      "description": "Essential features to get started.",
-      "features": [
-        "Unlimited fare calculations",
-        "Trip suggestions",
-        "Community support"
-      ],
-      "cta": "Get Started"
-    },
-    "pro": {
-      "title": "Pro",
-      "price": "2500 FCFA",
-      "description": "Perfect for frequent users.",
-      "features": [
-        "Real-time calculation",
-        "Personal history",
-        "Cost optimization"
-      ],
-      "cta": "Choose Pro"
-    },
-    "enterprise": {
-      "title": "Enterprise",
-      "price": "Custom",
-      "description": "Dedicated support and custom infrastructure.",
-      "features": [
-        "Advanced statistics",
-        "Team management",
-        "Exclusive features"
-      ],
-      "cta": "Contact Us"
+    "go": "Start",
+    "arrive": "End",
+    "time": "Select time",
+    "sugg": "No suggestion",
+    "dayPeriods": {
+      "morning": "Morning",
+      "midday": "Midday",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "night": "Night"
     }
-  }
-},
-"fareSections": {
-  "agencies": {
-    "subtitle": "Fare Calculator for Agencies",
-    "title": "Manage Your Bookings and Rates in Real Time",
-    "description": "Simplify your fleet management, offer flexible rates, and optimize your routes. Fare Calculator helps you digitize your operations to reach more customers and enhance passenger experience.",
-    "button": "Register Your Agency"
   },
-  "institutions": {
-    "subtitle": "Fare Calculator for Institutions",
-    "title": "Simplify Your Transport Management",
-    "description": "Manage your trips, optimize transport costs for your organization, and access advanced fare analytics. Fare Calculator provides a simple and fast solution to estimate and track your mobility expenses.",
-    "button": "Register Your Institution"
+  "pricing": {
+    "title": "Our Plans",
+    "description": "Choose the plan that fits your needs",
+    "plans": {
+      "basic": {
+        "title": "Basic",
+        "price": "1000 FCFA",
+        "description": "Essential features to get started.",
+        "features": [
+          "Unlimited fare calculations",
+          "Trip suggestions",
+          "Community support"
+        ],
+        "cta": "Get Started"
+      },
+      "pro": {
+        "title": "Pro",
+        "price": "2500 FCFA",
+        "description": "Perfect for frequent users.",
+        "features": [
+          "Real-time calculation",
+          "Personal history",
+          "Cost optimization"
+        ],
+        "cta": "Choose Pro"
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "price": "Custom",
+        "description": "Dedicated support and custom infrastructure.",
+        "features": [
+          "Advanced statistics",
+          "Team management",
+          "Exclusive features"
+        ],
+        "cta": "Contact Us"
+      }
+    }
   },
-  "drivers": {
-    "subtitle": "Fare Calculator for Drivers",
-    "title": "Drive and Earn at Your Own Pace",
-    "description": "Join our network of drivers and offer your trips freely. With Fare Calculator, you set your rates, manage your availability, and increase your income easily.",
-    "button": "Sign Up as a Driver"
-  }
-},
-"download": {
+  "fareSections": {
+    "agencies": {
+      "subtitle": "Fare Calculator for Agencies",
+      "title": "Manage Your Bookings and Rates in Real Time",
+      "description": "Simplify your fleet management, offer flexible rates, and optimize your routes. Fare Calculator helps you digitize your operations to reach more customers and enhance passenger experience.",
+      "button": "Register Your Agency"
+    },
+    "institutions": {
+      "subtitle": "Fare Calculator for Institutions",
+      "title": "Simplify Your Transport Management",
+      "description": "Manage your trips, optimize transport costs for your organization, and access advanced fare analytics. Fare Calculator provides a simple and fast solution to estimate and track your mobility expenses.",
+      "button": "Register Your Institution"
+    },
+    "drivers": {
+      "subtitle": "Fare Calculator for Drivers",
+      "title": "Drive and Earn at Your Own Pace",
+      "description": "Join our network of drivers and offer your trips freely. With Fare Calculator, you set your rates, manage your availability, and increase your income easily.",
+      "button": "Sign Up as a Driver"
+    }
+  },
+  "download": {
     "title": "Download Fare Calculator",
     "description": "Join thousands of users in Cameroon: passengers, drivers, and agencies. Simplify your trips, calculate your fares, and optimize your mobility with FareGo. Available on iOS and Android.",
     "app_store": "App Store",
@@ -157,23 +164,19 @@
     "originality": "Our Originality",
     "recruiting": "We Are Hiring",
     "contact": "Contact Information",
-
     "support": "Support",
     "marketplace": "Marketplace",
     "rentalAgency": "Rental Agency",
     "travelAgency": "Travel Agency",
     "carpooling": "Carpooling Service",
-
     "legal": "Legal Information",
     "terms": "Terms of Use",
     "privacy": "Privacy Policy",
     "personalInfo": "Your Personal Information",
     "cookies": "Cookies",
-
     "mobileApp": "Mobile App",
     "appStore": "App Store",
     "playStore": "Play Store",
-
     "followUs": "Follow Us",
     "rights": "© 2025 Fare Calculator. All rights reserved"
   },
@@ -240,7 +243,7 @@
   "Section5": {
     "title": "Available on Mobile"
   },
-  "Section7":{
+  "Section7": {
     "title": "What our customers say"
   },
   "StatsSection": {
@@ -335,8 +338,8 @@
       "emailExists": "An account already exists with this email address",
       "emailCheckFailed": "Error checking the email",
       "generic": "An error occurred",
-      "invalidEmail":"Invalid Email",
-      "invalidData":"Invalid Data",
+      "invalidEmail": "Invalid Email",
+      "invalidData": "Invalid Data",
       "serverError": "Server error, please try again later",
       "networkError": "Unable to connect to server"
     },
@@ -356,7 +359,7 @@
       "requiredEmail": "Email required",
       "notFound": "No account found with this email",
       "generic": "Error during login",
-      "invalidEmail":"Invalid Email",
+      "invalidEmail": "Invalid Email",
       "success": "Login successful"
     },
     "messages": {
@@ -391,7 +394,7 @@
       "emailExists": "An account already exists with this email",
       "emailCheckFailed": "Error while checking email",
       "passwordMismatch": "Passwords do not match",
-      "passwordTooShort":"Passwords too short",
+      "passwordTooShort": "Passwords too short",
       "generic": "An error occurred during registration"
     },
     "success": {
@@ -452,18 +455,15 @@
   "dashboard": {
     "title": "My Dashboard",
     "subtitle": "Manage your profile and view your trip history",
-
     "profile": {
       "memberSince": "Member since",
       "edit": "Edit"
     },
-
     "stats": {
       "totalTrips": "Total Trips",
       "avgPrice": "Average Estimated Price",
       "contributions": "Contributions"
     },
-
     "trips": {
       "title": "Trip History",
       "subtitle": "View your past trips and contribute actual prices paid",
@@ -476,17 +476,14 @@
       "notProvided": "Not provided",
       "contribute": "Contribute"
     },
-
     "loading": "Loading...",
     "error": "Error while loading data"
   },
   "history": {
     "title": "Calculation History",
-
     "loading": "Loading...",
     "empty": "No calculations recorded.",
     "unknownError": "An unknown error occurred",
-
     "labels": {
       "departure": "Departure",
       "arrival": "Arrival",
@@ -615,12 +612,7 @@
     "description": "You have performed {count} calculations out of 3 allowed. Sign up to continue.",
     "blockedMessage": "You have performed 3 calculations. Sign up to continue.",
     "calculationsMade": "Calculations made: {current}/3",
-    "calc":"Calculations made"
-  },
-  "suggestions": {
-    "recommendedPlaces": "Recommended places",
-    "localSuggestions": "Local suggestions",
-    "noSuggestions": "No suggestions"
+    "calc": "Calculations made"
   },
   "results": {
     "estimationTitle": "Price Estimation",
@@ -635,5 +627,4 @@
     "recalculate": "Recalculate",
     "calculationsCount": "Calculations made:"
   }
-
 }

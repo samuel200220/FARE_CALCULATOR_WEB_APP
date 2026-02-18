@@ -31,97 +31,104 @@
     "qrcode": "Scannez pour ouvrir l'application",
     "google": "Se connecter avec Google"
   },
-  "Verification":{
-    "success":{
+  "Verification": {
+    "success": {
       "codeResent": "Code renvoyé avec success",
       "verification": "Inscription réussie! Un code de vérification a été envoyé à votre email.",
       "verificationFailed": "Échec de la vérification"
     },
-    "errors":{
+    "errors": {
       "resendFailed": "Échec de l'envoi du code",
-      "invalidCode":"Le code doit contenir 6 chiffres"
+      "invalidCode": "Le code doit contenir 6 chiffres"
     },
-    "buttons":{
-      "verify":"Vérifier le code",
-      "resendCode":"Renvoyer le code",
-      "resendCountdown":"Compte a rebours"
+    "buttons": {
+      "verify": "Vérifier le code",
+      "resendCode": "Renvoyer le code",
+      "resendCountdown": "Compte a rebours"
     },
-    "title":"Double verification email",
-    "subtitle":"Nous avons envoyé un code de vérification à {email}",
-    "form":{
-      "code":"Code de vérification"
+    "title": "Double verification email",
+    "subtitle": "Nous avons envoyé un code de vérification à {email}",
+    "form": {
+      "code": "Code de vérification"
     }
   },
-  "agency":{
-  "travel_agency": "Besoin d'une agence de voyage ?",
-  "need_ride": "Besoin d'une course ?",
-  "need_rental": "Besoin d'une location ?"
+  "agency": {
+    "travel_agency": "Besoin d'une agence de voyage ?",
+    "need_ride": "Besoin d'une course ?",
+    "need_rental": "Besoin d'une location ?"
   },
-  "form":{
-    "go":"Départ",
-    "arrive":"Arrivée",
-    "time":"Sélectionnez l'heure",
-    "sugg":"Aucune suggestion"
+  "form": {
+    "go": "Départ",
+    "arrive": "Arrivée",
+    "time": "Sélectionnez l'heure",
+    "sugg": "Aucune suggestion",
+    "dayPeriods": {
+      "morning": "Matin",
+      "midday": "Midi",
+      "afternoon": "Après-midi",
+      "evening": "Soir",
+      "night": "Nuit"
+    }
   },
   "pricing": {
-  "title": "Nos Formules",
-  "description": "Choisissez le plan qui correspond à vos besoins",
-  "plans": {
-    "basic": {
-      "title": "Basique",
-      "price": "1000 FCFA",
-      "description": "Fonctionnalités essentielles pour commencer.",
-      "features": [
-        "Calcul tarif illimité",
-        "Suggestions de trajets",
-        "Support communautaire"
-      ],
-      "cta": "Commencer"
-    },
-    "pro": {
-      "title": "Pro",
-      "price": "2500 FCFA",
-      "description": "Parfait pour les utilisateurs fréquents.",
-      "features": [
-        "Calcul temps réel",
-        "Historique personnel",
-        "Optimisation des coûts"
-      ],
-      "cta": "Choisir Pro"
-    },
-    "enterprise": {
-      "title": "Entreprise",
-      "price": "Custom",
-      "description": "Support dédié et infrastructure personnalisée.",
-      "features": [
-        "Statistiques avancées",
-        "Gestion des équipes",
-        "Fonctionnalité exclusive"
-      ],
-      "cta": "Contactez-nous"
+    "title": "Nos Formules",
+    "description": "Choisissez le plan qui correspond à vos besoins",
+    "plans": {
+      "basic": {
+        "title": "Basique",
+        "price": "1000 FCFA",
+        "description": "Fonctionnalités essentielles pour commencer.",
+        "features": [
+          "Calcul tarif illimité",
+          "Suggestions de trajets",
+          "Support communautaire"
+        ],
+        "cta": "Commencer"
+      },
+      "pro": {
+        "title": "Pro",
+        "price": "2500 FCFA",
+        "description": "Parfait pour les utilisateurs fréquents.",
+        "features": [
+          "Calcul temps réel",
+          "Historique personnel",
+          "Optimisation des coûts"
+        ],
+        "cta": "Choisir Pro"
+      },
+      "enterprise": {
+        "title": "Entreprise",
+        "price": "Custom",
+        "description": "Support dédié et infrastructure personnalisée.",
+        "features": [
+          "Statistiques avancées",
+          "Gestion des équipes",
+          "Fonctionnalité exclusive"
+        ],
+        "cta": "Contactez-nous"
+      }
     }
-  }
-},
-"fareSections": {
-  "agencies": {
-    "subtitle": "Fare Calculator pour Agences",
-    "title": "Gérez vos Réservations et Tarifs en Temps Réel",
-    "description": "Simplifiez la gestion de votre flotte, proposez des tarifs flexibles et optimisez vos trajets. Fare Calculator vous aide à digitaliser vos opérations pour toucher plus de clients et améliorer l’expérience passager.",
-    "button": "Inscrire votre Agence"
   },
-  "institutions": {
-    "subtitle": "Fare Calculator pour Institutions",
-    "title": "Simplifiez la Gestion de vos Transports",
-    "description": "Gérez vos trajets, optimisez les coûts de transport pour votre organisation et accédez à des analyses tarifaires avancées. Fare Calculator propose une solution simple et rapide pour estimer et suivre vos dépenses de mobilité.",
-    "button": "Inscrire votre Institution"
+  "fareSections": {
+    "agencies": {
+      "subtitle": "Fare Calculator pour Agences",
+      "title": "Gérez vos Réservations et Tarifs en Temps Réel",
+      "description": "Simplifiez la gestion de votre flotte, proposez des tarifs flexibles et optimisez vos trajets. Fare Calculator vous aide à digitaliser vos opérations pour toucher plus de clients et améliorer l’expérience passager.",
+      "button": "Inscrire votre Agence"
+    },
+    "institutions": {
+      "subtitle": "Fare Calculator pour Institutions",
+      "title": "Simplifiez la Gestion de vos Transports",
+      "description": "Gérez vos trajets, optimisez les coûts de transport pour votre organisation et accédez à des analyses tarifaires avancées. Fare Calculator propose une solution simple et rapide pour estimer et suivre vos dépenses de mobilité.",
+      "button": "Inscrire votre Institution"
+    },
+    "drivers": {
+      "subtitle": "Fare Calculator pour Conducteurs",
+      "title": "Conduisez et Gagnez à Votre Rythme",
+      "description": "Rejoignez notre réseau de conducteurs et proposez vos trajets en toute liberté. Avec Fare Calculator, vous fixez vos tarifs, gérez vos disponibilités et augmentez vos revenus facilement.",
+      "button": "S’inscrire comme Conducteur"
+    }
   },
-  "drivers": {
-    "subtitle": "Fare Calculator pour Conducteurs",
-    "title": "Conduisez et Gagnez à Votre Rythme",
-    "description": "Rejoignez notre réseau de conducteurs et proposez vos trajets en toute liberté. Avec Fare Calculator, vous fixez vos tarifs, gérez vos disponibilités et augmentez vos revenus facilement.",
-    "button": "S’inscrire comme Conducteur"
-  }
-},
   "download": {
     "title": "Téléchargez Fare Calculator",
     "description": "Rejoignez des milliers d’utilisateurs au Cameroun : passagers, conducteurs et agences. Simplifiez vos trajets, calculez vos tarifs et optimisez votre mobilité avec FareGo. Disponible sur iOS et Android.",
@@ -157,23 +164,19 @@
     "originality": "Notre originalité",
     "recruiting": "Nous Recrutons",
     "contact": "Informations de contact",
-
     "support": "Support",
     "marketplace": "Place de marché",
     "rentalAgency": "Agence de location",
     "travelAgency": "Agence de voyage",
     "carpooling": "Service de covoiturage",
-
     "legal": "Informations légales",
     "terms": "Conditions générales d'utilisation",
     "privacy": "Politique De Confidentialité",
     "personalInfo": "Vos Informations Personnelles",
     "cookies": "Cookies",
-
     "mobileApp": "Application Mobile",
     "appStore": "App Store",
     "playStore": "Play Store",
-
     "followUs": "Suivez nous",
     "rights": "© 2025 Fare Calculator. Tous droits conservés"
   },
@@ -240,7 +243,7 @@
   "Section5": {
     "title": "Disponible Sur Mobile"
   },
-  "Section7":{
+  "Section7": {
     "title": "Ce que disent nos clients"
   },
   "StatsSection": {
@@ -336,9 +339,9 @@
       "emailCheckFailed": "Erreur lors de la vérification de l'email",
       "generic": "Une erreur est survenue",
       "invalidEmail": "Adresse email invalide",
-      "invalidData":"Données invalides",
+      "invalidData": "Données invalides",
       "serverError": "Erreur serveur, veuillez réessayer plus tard",
-      "networkError":"Impossible de se connecter au serveur"
+      "networkError": "Impossible de se connecter au serveur"
     },
     "success": {
       "signup": "Inscription réussie"
@@ -391,7 +394,7 @@
       "emailExists": "Un compte existe déjà avec cette adresse email",
       "emailCheckFailed": "Erreur lors de la vérification de l'email",
       "passwordMismatch": "Les mots de passe ne correspondent pas",
-      "passwordTooShort":"Mot de passe trop court",
+      "passwordTooShort": "Mot de passe trop court",
       "generic": "Une erreur est survenue lors de l'inscription"
     },
     "success": {
@@ -452,18 +455,15 @@
   "dashboard": {
     "title": "Mon Tableau de Bord",
     "subtitle": "Gérez votre profil et consultez l'historique de vos trajets",
-
     "profile": {
       "memberSince": "Membre depuis",
       "edit": "Modifier"
     },
-
     "stats": {
       "totalTrips": "Total Trajets",
       "avgPrice": "Prix Moyen Estimé",
       "contributions": "Contributions"
     },
-
     "trips": {
       "title": "Historique des Trajets",
       "subtitle": "Consultez vos trajets passés et contribuez en indiquant les prix réels payés",
@@ -476,17 +476,14 @@
       "notProvided": "Non renseigné",
       "contribute": "Contribuer"
     },
-
     "loading": "Chargement...",
     "error": "Erreur lors du chargement des données"
   },
   "history": {
     "title": "Historique des Calculs",
-
     "loading": "Chargement en cours...",
     "empty": "Aucun calcul enregistré.",
     "unknownError": "Une erreur inconnue est survenue",
-
     "labels": {
       "departure": "Départ",
       "arrival": "Arrivée",
@@ -615,12 +612,7 @@
     "description": "Vous avez effectué {count} calculs sur 3 autorisés. Inscrivez-vous pour continuer.",
     "blockedMessage": "Vous avez effectué 3 calculs. Inscrivez-vous pour continuer.",
     "calculationsMade": "Calculs effectués: {current}/3",
-    "calc":"Calculs effectués"
-  },
-  "suggestions": {
-    "recommendedPlaces": "Lieux recommandés",
-    "localSuggestions": "Suggestions locales",
-    "noSuggestions": "Aucune suggestion"
+    "calc": "Calculs effectués"
   },
   "results": {
     "estimationTitle": "Estimation du prix",

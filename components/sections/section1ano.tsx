@@ -4,13 +4,20 @@ import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import {
-  FaRegClock, FaCalculator, FaCar, FaBus, FaCarSide,
-  FaMoneyBillAlt, FaMapMarkerAlt, FaLocationArrow,
-  FaCloudRain, FaRoad, FaCalendarAlt, FaCarCrash,
-  FaSuitcase, FaHardHat, FaArrowRight, FaArrowLeft,
-  FaChartLine, FaArrowsAlt, FaInfoCircle, FaExclamationTriangle
+  FaBus, FaCar, FaCarSide, FaSuitcase, FaHardHat, FaArrowRight, FaArrowLeft,
+  FaChartLine, FaArrowsAlt, FaInfoCircle, FaExclamationTriangle,
+  FaSun, FaCloudSun, FaCloud, FaMoon, FaCloudMoon,
+  FaRegClock, FaCalculator, FaMoneyBillAlt, FaMapMarkerAlt, FaLocationArrow,
+  FaCloudRain, FaRoad, FaCalendarAlt, FaCarCrash, FaChevronDown
 } from 'react-icons/fa';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import toast from 'react-hot-toast';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -24,13 +31,24 @@ import * as ort from 'onnxruntime-web';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const predefinedHours = [
-  "06:00", "07:00", "08:00", "09:00",
-  "10:00", "11:00", "12:00", "13:00",
-  "14:00", "15:00", "16:00", "17:00",
-  "18:00", "19:00", "20:00", "21:00",
-  "22:00"
-];
+const dayPeriodsMapping = {
+  morning: "08:00",
+  midday: "12:00",
+  afternoon: "16:00",
+  evening: "20:00",
+  night: "02:00"
+};
+
+const getPeriodIcon = (period: string) => {
+  switch (period) {
+    case 'morning': return <FaCloudSun className="text-orange-400" />;
+    case 'midday': return <FaSun className="text-yellow-400" />;
+    case 'afternoon': return <FaCloud className="text-blue-200" />;
+    case 'evening': return <FaCloudMoon className="text-purple-400" />;
+    case 'night': return <FaMoon className="text-gray-400" />;
+    default: return null;
+  }
+};
 
 const MapNavigoo = dynamic(() => import('../../components/carte').then((mod) => mod.default), {
   ssr: false,
@@ -1554,22 +1572,35 @@ const Section1ano = ({ }) => {
                 <div className="absolute left-4 top-3.5 text-blue-500">
                   <FaRegClock />
                 </div>
-                <select
+                <Select
                   value={hour}
-                  onChange={(e) => setHour(e.target.value)}
-                  className={`w-full pl-12 h-12 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border-2 transition-all appearance-none outline-none dark:text-white ${errors.hour
-                    ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
-                    : 'border-transparent hover:border-blue-500/50 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
-                    }`}
-                  disabled={bloque}
+                  onValueChange={(value) => setHour(value)}
                 >
-                  <option value="">{f("time")}</option>
-                  {predefinedHours.map((h) => (
-                    <option key={h} value={h}>
-                      {h}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger
+                    className={`w-full pl-10 pr-10 h-12 rounded-[7px] bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] border ${errors.hour
+                      ? 'border-red-500 focus:ring-red-500'
+                      : 'border-gray-300 hover:border-purple-800 focus:border-purple-800'
+                      }`}
+                  >
+                    <SelectValue placeholder={f("time")} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-[7px] shadow-xl p-1">
+                    {Object.entries(dayPeriodsMapping).map(([period, averageHour]) => (
+                      <SelectItem
+                        key={period}
+                        value={averageHour}
+                        className="rounded-md px-4 py-3 cursor-pointer transition-colors focus:bg-purple-100 dark:focus:bg-purple-900 focus:text-purple-900 dark:focus:text-purple-100 text-[16px]"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="text-xl">
+                            {getPeriodIcon(period)}
+                          </div>
+                          <span className="font-medium">{f(`dayPeriods.${period}`)}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {errors.hour && <p className="text-red-600 text-sm mt-1 ml-1">{errors.hour}</p>}
               </div>
 

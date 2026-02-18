@@ -23,13 +23,13 @@
     "calculateFare": "Fahrpreis berechnen",
     "calculating": "Berechnung läuft...",
     "estimationTitle": "Unsere Schätzung",
-  "distance": "Entfernung",
-  "estimatedCost": "Geschätzte Kosten",
-  "officialFare": "Offizieller Tarif",
-  "viewRoute": "Route anzeigen",
-  "recalculate": "Neu berechnen",
-  "qrcode": "Scannen Sie, um die Anwendung zu öffnen",
-  "google": "Mit Google anmelden"
+    "distance": "Entfernung",
+    "estimatedCost": "Geschätzte Kosten",
+    "officialFare": "Offizieller Tarif",
+    "viewRoute": "Route anzeigen",
+    "recalculate": "Neu berechnen",
+    "qrcode": "Scannen Sie, um die Anwendung zu öffnen",
+    "google": "Mit Google anmelden"
   },
   "Verification": {
     "success": {
@@ -52,77 +52,84 @@
       "code": "Verifizierungscode"
     }
   },
-  "agency":{
-  "travel_agency": "Brauchen Sie ein Reisebüro?",
-  "need_ride": "Brauchen Sie eine Fahrt?",
-  "need_rental": "Brauchen Sie eine Vermietung?"
+  "agency": {
+    "travel_agency": "Brauchen Sie ein Reisebüro?",
+    "need_ride": "Brauchen Sie eine Fahrt?",
+    "need_rental": "Brauchen Sie eine Vermietung?"
   },
   "form": {
-  "go": "Abfahrt",
-  "arrive": "Ankunft",
-  "time": "Uhrzeit auswählen",
-  "sugg":"Kein Vorschlag"
-},
-"pricing": {
-  "title": "Unsere Pläne",
-  "description": "Wählen Sie den Plan, der zu Ihren Bedürfnissen passt",
-  "plans": {
-    "basic": {
-      "title": "Basis",
-      "price": "1000 FCFA",
-      "description": "Wesentliche Funktionen zum Starten.",
-      "features": [
-        "Unbegrenzte Fahrpreisberechnung",
-        "Fahrvorschläge",
-        "Community-Support"
-      ],
-      "cta": "Loslegen"
-    },
-    "pro": {
-      "title": "Pro",
-      "price": "2500 FCFA",
-      "description": "Perfekt für häufige Benutzer.",
-      "features": [
-        "Echtzeitberechnung",
-        "Persönliche Historie",
-        "Kostenoptimierung"
-      ],
-      "cta": "Pro wählen"
-    },
-    "enterprise": {
-      "title": "Unternehmen",
-      "price": "Custom",
-      "description": "Dedizierter Support und maßgeschneiderte Infrastruktur.",
-      "features": [
-        "Erweiterte Statistiken",
-        "Teamverwaltung",
-        "Exklusive Funktionen"
-      ],
-      "cta": "Kontaktieren Sie uns"
+    "go": "Abfahrt",
+    "arrive": "Ankunft",
+    "time": "Uhrzeit auswählen",
+    "sugg": "Kein Vorschlag",
+    "dayPeriods": {
+      "morning": "Morgen",
+      "midday": "Mittag",
+      "afternoon": "Nachmittag",
+      "evening": "Abend",
+      "night": "Nacht"
     }
-  }
-},
-"fareSections": {
-  "agencies": {
-    "subtitle": "Fare Calculator für Agenturen",
-    "title": "Verwalten Sie Ihre Buchungen und Tarife in Echtzeit",
-    "description": "Vereinfachen Sie Ihr Flottenmanagement, bieten Sie flexible Preise an und optimieren Sie Ihre Routen. Fare Calculator hilft Ihnen, Ihre Abläufe zu digitalisieren, um mehr Kunden zu erreichen und das Passagiererlebnis zu verbessern.",
-    "button": "Ihre Agentur registrieren"
   },
-  "institutions": {
-    "subtitle": "Fare Calculator für Institutionen",
-    "title": "Vereinfachen Sie Ihr Transportmanagement",
-    "description": "Verwalten Sie Ihre Fahrten, optimieren Sie die Transportkosten für Ihre Organisation und greifen Sie auf erweiterte Tarifanalysen zu. Fare Calculator bietet eine einfache und schnelle Lösung zur Schätzung und Verfolgung Ihrer Mobilitätsausgaben.",
-    "button": "Ihre Institution registrieren"
+  "pricing": {
+    "title": "Unsere Pläne",
+    "description": "Wählen Sie den Plan, der zu Ihren Bedürfnissen passt",
+    "plans": {
+      "basic": {
+        "title": "Basis",
+        "price": "1000 FCFA",
+        "description": "Wesentliche Funktionen zum Starten.",
+        "features": [
+          "Unbegrenzte Fahrpreisberechnung",
+          "Fahrvorschläge",
+          "Community-Support"
+        ],
+        "cta": "Loslegen"
+      },
+      "pro": {
+        "title": "Pro",
+        "price": "2500 FCFA",
+        "description": "Perfekt für häufige Benutzer.",
+        "features": [
+          "Echtzeitberechnung",
+          "Persönliche Historie",
+          "Kostenoptimierung"
+        ],
+        "cta": "Pro wählen"
+      },
+      "enterprise": {
+        "title": "Unternehmen",
+        "price": "Custom",
+        "description": "Dedizierter Support und maßgeschneiderte Infrastruktur.",
+        "features": [
+          "Erweiterte Statistiken",
+          "Teamverwaltung",
+          "Exklusive Funktionen"
+        ],
+        "cta": "Kontaktieren Sie uns"
+      }
+    }
   },
-  "drivers": {
-    "subtitle": "Fare Calculator für Fahrer",
-    "title": "Fahren und verdienen Sie in Ihrem eigenen Tempo",
-    "description": "Treten Sie unserem Netzwerk von Fahrern bei und bieten Sie Ihre Fahrten frei an. Mit Fare Calculator legen Sie Ihre Preise fest, verwalten Ihre Verfügbarkeit und steigern Ihr Einkommen ganz einfach.",
-    "button": "Als Fahrer registrieren"
-  }
-},
-"download": {
+  "fareSections": {
+    "agencies": {
+      "subtitle": "Fare Calculator für Agenturen",
+      "title": "Verwalten Sie Ihre Buchungen und Tarife in Echtzeit",
+      "description": "Vereinfachen Sie Ihr Flottenmanagement, bieten Sie flexible Preise an und optimieren Sie Ihre Routen. Fare Calculator hilft Ihnen, Ihre Abläufe zu digitalisieren, um mehr Kunden zu erreichen und das Passagiererlebnis zu verbessern.",
+      "button": "Ihre Agentur registrieren"
+    },
+    "institutions": {
+      "subtitle": "Fare Calculator für Institutionen",
+      "title": "Vereinfachen Sie Ihr Transportmanagement",
+      "description": "Verwalten Sie Ihre Fahrten, optimieren Sie die Transportkosten für Ihre Organisation und greifen Sie auf erweiterte Tarifanalysen zu. Fare Calculator bietet eine einfache und schnelle Lösung zur Schätzung und Verfolgung Ihrer Mobilitätsausgaben.",
+      "button": "Ihre Institution registrieren"
+    },
+    "drivers": {
+      "subtitle": "Fare Calculator für Fahrer",
+      "title": "Fahren und verdienen Sie in Ihrem eigenen Tempo",
+      "description": "Treten Sie unserem Netzwerk von Fahrern bei und bieten Sie Ihre Fahrten frei an. Mit Fare Calculator legen Sie Ihre Preise fest, verwalten Ihre Verfügbarkeit und steigern Ihr Einkommen ganz einfach.",
+      "button": "Als Fahrer registrieren"
+    }
+  },
+  "download": {
     "title": "Laden Sie den Fare Calculator herunter",
     "description": "Schließen Sie sich Tausenden von Nutzern in Kamerun an: Fahrgäste, Fahrer und Agenturen. Vereinfachen Sie Ihre Fahrten, berechnen Sie Ihre Tarife und optimieren Sie Ihre Mobilität mit FareGo. Verfügbar für iOS und Android.",
     "app_store": "App Store",
@@ -157,23 +164,19 @@
     "originality": "Unsere Originalität",
     "recruiting": "Wir Stellen Ein",
     "contact": "Kontaktinformationen",
-
     "support": "Support",
     "marketplace": "Marktplatz",
     "rentalAgency": "Vermietungsagentur",
     "travelAgency": "Reisebüro",
     "carpooling": "Mitfahrdienst",
-
     "legal": "Rechtliche Hinweise",
     "terms": "Nutzungsbedingungen",
     "privacy": "Datenschutzrichtlinie",
     "personalInfo": "Ihre Persönlichen Daten",
     "cookies": "Cookies",
-
     "mobileApp": "Mobile App",
     "appStore": "App Store",
     "playStore": "Play Store",
-
     "followUs": "Folgen Sie uns",
     "rights": "© 2025 Fare Calculator. Alle Rechte vorbehalten"
   },
@@ -199,13 +202,13 @@
     "theme": "Thema"
   },
   "titreano": {
-  "mainTitleLine1": "Berechnen Sie Ihre Transporttarife in",
-  "mainTitleLine2": "Echtzeit",
-  "description": "Professionelle Lösung, um sofortige und genaue Angebote zu erhalten",
-  "signup": "Registrieren",
-  "login": "Anmelden"
-},
-"section2": {
+    "mainTitleLine1": "Berechnen Sie Ihre Transporttarife in",
+    "mainTitleLine2": "Echtzeit",
+    "description": "Professionelle Lösung, um sofortige und genaue Angebote zu erhalten",
+    "signup": "Registrieren",
+    "login": "Anmelden"
+  },
+  "section2": {
     "title": "Verbundene Dienstleistungen",
     "services": {
       "taxi": {
@@ -240,7 +243,7 @@
   "Section5": {
     "title": "Verfügbar auf Mobilgeräten"
   },
-  "Section7":{
+  "Section7": {
     "title": "Was unsere Kunden sagen"
   },
   "StatsSection": {
@@ -335,8 +338,8 @@
       "emailExists": "Es existiert bereits ein Konto mit dieser E-Mail-Adresse",
       "emailCheckFailed": "Fehler bei der Überprüfung der E-Mail",
       "generic": "Ein Fehler ist aufgetreten",
-      "invalidEmail":"Invalid E-Mail",
-      "invalidData":"Invalid Data",
+      "invalidEmail": "Invalid E-Mail",
+      "invalidData": "Invalid Data",
       "serverError": "Server error, please try again later",
       "networkError": "Unable to connect to server"
     },
@@ -356,7 +359,7 @@
       "requiredEmail": "E-Mail erforderlich",
       "notFound": "Kein Konto mit dieser E-Mail gefunden",
       "generic": "Fehler beim Anmelden",
-      "invalidEmail":"Invalid Email",
+      "invalidEmail": "Invalid Email",
       "success": "Anmeldung erfolgreich"
     },
     "messages": {
@@ -391,7 +394,7 @@
       "emailExists": "Ein Konto mit dieser E-Mail existiert bereits",
       "emailCheckFailed": "Fehler beim Überprüfen der E-Mail",
       "passwordMismatch": "Passwörter stimmen nicht überein",
-      "passwordTooShort":"Passwords too short",
+      "passwordTooShort": "Passwords too short",
       "generic": "Fehler bei der Registrierung"
     },
     "success": {
@@ -452,18 +455,15 @@
   "dashboard": {
     "title": "Mein Dashboard",
     "subtitle": "Verwalten Sie Ihr Profil und sehen Sie Ihre Fahrtenhistorie",
-
     "profile": {
       "memberSince": "Mitglied seit",
       "edit": "Bearbeiten"
     },
-
     "stats": {
       "totalTrips": "Gesamtfahrten",
       "avgPrice": "Durchschnittlicher Preis",
       "contributions": "Beiträge"
     },
-
     "trips": {
       "title": "Fahrtenhistorie",
       "subtitle": "Sehen Sie Ihre vergangenen Fahrten und tragen Sie die tatsächlichen Preise ein",
@@ -476,17 +476,14 @@
       "notProvided": "Nicht angegeben",
       "contribute": "Beitragen"
     },
-
     "loading": "Lädt...",
     "error": "Fehler beim Laden der Daten"
   },
   "history": {
     "title": "Berechnungsverlauf",
-
     "loading": "Wird geladen...",
     "empty": "Keine Berechnungen vorhanden.",
     "unknownError": "Ein unbekannter Fehler ist aufgetreten",
-
     "labels": {
       "departure": "Abfahrt",
       "arrival": "Ankunft",
@@ -615,12 +612,7 @@
     "description": "Sie haben {count} von 3 erlaubten Berechnungen durchgeführt. Melden Sie sich an, um fortzufahren.",
     "blockedMessage": "Sie haben 3 Berechnungen durchgeführt. Melden Sie sich an, um fortzufahren.",
     "calculationsMade": "Berechnungen durchgeführt: {current}/3",
-    "calc":"Berechnungen durchgeführt"
-  },
-  "suggestions": {
-    "recommendedPlaces": "Empfohlene Orte",
-    "localSuggestions": "Lokale Vorschläge",
-    "noSuggestions": "Keine Vorschläge"
+    "calc": "Berechnungen durchgeführt"
   },
   "results": {
     "estimationTitle": "Preisschätzung",
@@ -635,5 +627,4 @@
     "recalculate": "Neu berechnen",
     "calculationsCount": "Berechnungen durchgeführt:"
   }
-
 }
