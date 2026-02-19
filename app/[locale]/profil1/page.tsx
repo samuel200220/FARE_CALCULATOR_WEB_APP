@@ -40,7 +40,7 @@ export default function UserDashboard() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editPrice, setEditPrice] = useState<string>('');
 
@@ -65,7 +65,7 @@ export default function UserDashboard() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // 1. Récupérer les données du profil utilisateur
         if (user) {
           try {
@@ -95,7 +95,7 @@ export default function UserDashboard() {
         const historiqueData = await getHistorique();
         const transformedTrips = historiqueData.map(transformToTrip);
         setTrips(transformedTrips);
-        
+
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Erreur lors du chargement des données');
         console.error('Erreur:', err);
@@ -115,9 +115,9 @@ export default function UserDashboard() {
   const handleSave = async (id: string) => {
     // Ici, vous pouvez ajouter un appel API pour sauvegarder le prix réel
     // Exemple: await updateTripPrice(id, parseFloat(editPrice))
-    
-    setTrips(trips.map(trip => 
-      trip.id === id 
+
+    setTrips(trips.map(trip =>
+      trip.id === id
         ? { ...trip, actualPrice: parseFloat(editPrice) || undefined }
         : trip
     ));
@@ -134,7 +134,7 @@ export default function UserDashboard() {
     return (
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">{t('loading')}</p>
         </div>
       </div>
@@ -168,7 +168,7 @@ export default function UserDashboard() {
         <div className="mb-8">
           <div className='flex gap-2'>
             <Sidebar2 />
-            <h1 className="text-3xl font-bold text-violet-800 dark:text-violet-400 mb-2">
+            <h1 className="text-3xl font-bold text-primary mb-2">
               {t('title')}
             </h1>
           </div>
@@ -178,10 +178,10 @@ export default function UserDashboard() {
         </div>
 
         {/* User Profile Section */}
-        <div className="bg-gradient-to-r from-violet-50 to-blue-50 dark:from-violet-950 dark:to-blue-950 rounded-lg p-6 mb-8 border border-violet-200 dark:border-violet-800">
+        <div className="bg-accent/40 rounded-lg p-6 mb-8 border border-border">
           <div className="flex items-start justify-between">
             <div className="flex items-start space-x-6">
-              <div className="w-20 h-20 rounded-full bg-violet-600 dark:bg-violet-900 flex items-center justify-center text-white text-2xl font-bold">
+              <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
                 {userProfile.name.split(' ').map(n => n[0]).join('')}
               </div>
               <div className="space-y-3">
@@ -195,21 +195,13 @@ export default function UserDashboard() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center space-x-2">
-                    <Mail className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">{userProfile.email}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Phone className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">{userProfile.phone}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <MapPinned className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                    <MapPinned className="w-4 h-4 text-primary" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">{userProfile.location}</span>
                   </div>
                 </div>
               </div>
             </div>
-            <button className="px-4 py-2 bg-white dark:bg-gray-800 border border-violet-300 dark:border-violet-700 text-violet-700 dark:text-violet-400 rounded-lg hover:bg-violet-50 dark:hover:bg-violet-950 transition-colors flex items-center space-x-2">
+            <button className="px-4 py-2 bg-background border border-border text-foreground rounded-lg hover:bg-accent transition-colors flex items-center space-x-2">
               <Edit2 className="w-4 h-4" />
               <span>{t('profile.edit')}</span>
             </button>
@@ -218,39 +210,39 @@ export default function UserDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-violet-50 dark:bg-violet-950 rounded-lg p-6 border border-violet-200 dark:border-violet-800">
+          <div className="bg-accent/40 rounded-lg p-6 border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-violet-600 dark:text-violet-400 mb-1">{t('stats.totalTrips')}</p>
-                <p className="text-3xl font-bold text-violet-800 dark:text-violet-300">{trips.length}</p>
+                <p className="text-sm text-muted-foreground mb-1">{t('stats.totalTrips')}</p>
+                <p className="text-3xl font-bold text-primary">{trips.length}</p>
               </div>
-              <MapPin className="w-12 h-12 text-violet-600 dark:text-violet-400" />
+              <MapPin className="w-12 h-12 text-primary" />
             </div>
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+          <div className="bg-secondary rounded-lg p-6 border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600 dark:text-blue-400 mb-1">{t('stats.avgPrice')}</p>
-                <p className="text-3xl font-bold text-blue-800 dark:text-blue-300">
-                  {trips.length > 0 
-                    ? Math.round(trips.reduce((sum, t) => sum + t.estimatedPrice, 0) / trips.length) 
+                <p className="text-sm text-secondary-foreground/60 mb-1">{t('stats.avgPrice')}</p>
+                <p className="text-3xl font-bold text-secondary-foreground">
+                  {trips.length > 0
+                    ? Math.round(trips.reduce((sum, t) => sum + t.estimatedPrice, 0) / trips.length)
                     : 0} FCFA
                 </p>
               </div>
-              <DollarSign className="w-12 h-12 text-blue-600 dark:text-blue-400" />
+              <DollarSign className="w-12 h-12 text-primary" />
             </div>
           </div>
 
-          <div className="bg-violet-50 dark:bg-violet-950 rounded-lg p-6 border border-violet-200 dark:border-violet-800">
+          <div className="bg-accent/40 rounded-lg p-6 border border-border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-violet-600 dark:text-violet-400 mb-1">{t('stats.contributions')}</p>
-                <p className="text-3xl font-bold text-violet-800 dark:text-violet-300">
+                <p className="text-sm text-muted-foreground mb-1">{t('stats.contributions')}</p>
+                <p className="text-3xl font-bold text-primary">
                   {trips.filter(t => t.actualPrice).length}
                 </p>
               </div>
-              <Edit2 className="w-12 h-12 text-violet-600 dark:text-violet-400" />
+              <Edit2 className="w-12 h-12 text-primary" />
             </div>
           </div>
         </div>
@@ -281,7 +273,7 @@ export default function UserDashboard() {
                   {/* Left Column */}
                   <div className="space-y-4">
                     <div className="flex items-start space-x-3">
-                      <MapPin className="w-5 h-5 text-violet-600 dark:text-violet-400 mt-1" />
+                      <MapPin className="w-5 h-5 text-primary mt-1" />
                       <div className="flex-1">
                         <p className="text-sm text-gray-500 dark:text-gray-400">{t('trips.departure')}</p>
                         <p className="font-semibold text-gray-900 dark:text-white">{trip.departureLocation}</p>
@@ -325,8 +317,7 @@ export default function UserDashboard() {
                           </span>
                         )}
                         {trip.hasLuggage && (
-                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300 flex items-center space-x-1">
-                            <Briefcase className="w-3 h-3" />
+                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary flex items-center space-x-1">
                             <span>{t('labels.luggage')}</span>
                           </span>
                         )}
@@ -349,7 +340,7 @@ export default function UserDashboard() {
                       <div className="space-y-2">
                         <div>
                           <p className="text-xs text-gray-500 dark:text-gray-400">{t('trips.estimatedPrice')}</p>
-                          <p className="text-lg font-bold text-violet-700 dark:text-violet-400">
+                          <p className="text-lg font-bold text-primary">
                             {trip.estimatedPrice.toLocaleString()} FCFA
                           </p>
                         </div>
@@ -380,8 +371,8 @@ export default function UserDashboard() {
                             <p className="text-xs text-gray-500 dark:text-gray-400">{t('trips.actualPrice')}</p>
                             <p className="text-lg font-bold text-blue-700 dark:text-blue-400">
                               {trip.actualPrice
-    ? `${trip.actualPrice.toLocaleString()} FCFA`
-    : t('trips.notProvided')}
+                                ? `${trip.actualPrice.toLocaleString()} FCFA`
+                                : t('trips.notProvided')}
                             </p>
                           </div>
                         )}
@@ -389,7 +380,7 @@ export default function UserDashboard() {
                       {editingId !== trip.id && (
                         <button
                           onClick={() => handleEdit(trip)}
-                          className="px-4 py-2 bg-violet-600 dark:bg-violet-900 text-white rounded-lg hover:bg-violet-700 dark:hover:bg-violet-800 transition-colors flex items-center space-x-2"
+                          className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center space-x-2"
                         >
                           <Edit2 className="w-4 h-4" />
                           <span className="text-sm">{t('trips.contribute')}</span>

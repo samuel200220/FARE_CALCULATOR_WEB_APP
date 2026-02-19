@@ -13,12 +13,11 @@ const PROTECTED_ROUTES = [
     '/statistiques',
     '/verification',
     '/versionpro',
-    '/settings',
-    '/aide1'
+    '/settings'
 ];
 
 export default function ClientGuard({ children }: { children: React.ReactNode }) {
-    const { user, loading } = useAuth();
+    const { user, entreprise, loading } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -32,7 +31,7 @@ export default function ClientGuard({ children }: { children: React.ReactNode })
                 normalizedPath === route || normalizedPath.startsWith(route + '/')
             );
 
-            if (isProtectedRoute && !user) {
+            if (isProtectedRoute && !user && !entreprise) {
                 // Rediriger vers la page de connexion si non authentifié
                 // On garde le locale si présent
                 const localeMatch = pathname.match(/^\/([a-z]{2})(\/|$)/);
@@ -40,7 +39,7 @@ export default function ClientGuard({ children }: { children: React.ReactNode })
                 router.push(`/${locale}/connexion1`);
             }
         }
-    }, [user, loading, pathname, router]);
+    }, [user, entreprise, loading, pathname, router]);
 
     // Optionnel : Afficher un loader pendant la vérification si on est sur une route protégée
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/');

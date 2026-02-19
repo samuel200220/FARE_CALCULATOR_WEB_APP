@@ -75,7 +75,7 @@
     "description": "Choisissez le plan qui correspond à vos besoins",
     "plans": {
       "basic": {
-        "title": "Basique",
+        "title": "Commencer Gratuitement",
         "price": "1000 FCFA",
         "description": "Fonctionnalités essentielles pour commencer.",
         "features": [
@@ -86,7 +86,7 @@
         "cta": "Commencer"
       },
       "pro": {
-        "title": "Pro",
+        "title": "Standard",
         "price": "2500 FCFA",
         "description": "Parfait pour les utilisateurs fréquents.",
         "features": [
@@ -94,10 +94,10 @@
           "Historique personnel",
           "Optimisation des coûts"
         ],
-        "cta": "Choisir Pro"
+        "cta": "Choisir Standard"
       },
       "enterprise": {
-        "title": "Entreprise",
+        "title": "Pro",
         "price": "Custom",
         "description": "Support dédié et infrastructure personnalisée.",
         "features": [
@@ -623,6 +623,7 @@
     "range": "Fourchette",
     "officialFare": "Tarif officiel",
     "viewRoute": "Visualiser le trajet",
+    "reliability": "Fiabilité",
     "newTrip": "Nouveau trajet",
     "recalculate": "Refaire un calcul",
     "calculationsCount": "Calculs effectués:"

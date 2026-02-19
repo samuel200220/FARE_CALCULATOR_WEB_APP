@@ -42,23 +42,23 @@ import { useRouter } from 'next/navigation';
 
 // Couleurs pour les graphiques
 const CHART_COLORS = {
-  primary: '#3b82f6', // blue-500
-  secondary: '#10b981', // emerald-500
-  accent: '#8b5cf6', // violet-500
-  danger: '#ef4444', // red-500
-  warning: '#f59e0b', // amber-500
-  info: '#06b6d4', // cyan-500
-  success: '#10b981', // emerald-500
+  primary: 'hsl(var(--primary))',
+  secondary: 'hsl(var(--accent))',
+  accent: 'hsl(var(--primary) / 0.7)',
+  danger: '#ef4444',
+  warning: '#f59e0b',
+  info: '#3b82f6',
+  success: '#10b981',
 };
 
 const PIE_CHART_COLORS = [
-  '#3b82f6', // blue-500
-  '#10b981', // emerald-500
-  '#8b5cf6', // violet-500
-  '#f59e0b', // amber-500
-  '#ef4444', // red-500
-  '#06b6d4', // cyan-500
-  '#ec4899', // pink-500
+  'hsl(var(--primary))',
+  'hsl(var(--accent))',
+  'hsl(var(--primary) / 0.8)',
+  'hsl(var(--primary) / 0.6)',
+  '#f59e0b',
+  '#ef4444',
+  '#3b82f6',
 ];
 
 export default function ContributionDashboard() {
@@ -83,16 +83,16 @@ export default function ContributionDashboard() {
       setLoading(true);
       setError(null);
       const contributions = await fetchContributions();
-      
+
       // Trier par date décroissante
-      const sortedData = contributions.sort((a, b) => 
+      const sortedData = contributions.sort((a, b) =>
         new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
-      
+
       setData(sortedData);
     } catch (err: any) {
       console.error('Erreur lors du chargement des données:', err);
-      
+
       if (err.response?.status === 401) {
         setError('Votre session a expiré. Veuillez vous reconnecter.');
         router.push('/connexion1');
@@ -108,7 +108,7 @@ export default function ContributionDashboard() {
   const filterDataByDateRange = (data: Contribution[], range: '7days' | '30days' | 'all') => {
     const now = new Date();
     const cutoffDate = new Date();
-    
+
     switch (range) {
       case '7days':
         cutoffDate.setDate(now.getDate() - 7);
@@ -119,7 +119,7 @@ export default function ContributionDashboard() {
       case 'all':
         return data;
     }
-    
+
     return data.filter(item => new Date(item.timestamp) >= cutoffDate);
   };
 
@@ -137,7 +137,7 @@ export default function ContributionDashboard() {
         bagages: item.bagages ? 'Oui' : 'Non',
         routes_larges: item.routes_larges ? 'Oui' : 'Non',
       }));
-      
+
       exportToCSV(exportData, `contributions_${new Date().toISOString().split('T')[0]}.csv`);
     } catch (error) {
       console.error('Erreur lors de l\'export:', error);
@@ -150,7 +150,7 @@ export default function ContributionDashboard() {
   const handleSaveContribution = async (formData: any) => {
     try {
       setIsSubmitting(true);
-      
+
       // Préparer les données pour l'envoi
       const contributionData = {
         depart_osm: formData.depart_osm,
@@ -167,21 +167,21 @@ export default function ContributionDashboard() {
         bagages: Boolean(formData.bagages),
         routes_larges: Boolean(formData.routes_larges),
       };
-      
+
       if (edit) {
         await updateContribution(edit.id, contributionData);
       } else {
         await createContribution(contributionData);
       }
-      
+
       await loadData();
       setModal(false);
       setEdit(null);
     } catch (err: any) {
       console.error('Erreur lors de la sauvegarde:', err);
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
-                          'Erreur lors de la sauvegarde';
+      const errorMessage = err.response?.data?.message ||
+        err.response?.data?.error ||
+        'Erreur lors de la sauvegarde';
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -193,15 +193,15 @@ export default function ContributionDashboard() {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette contribution ?')) {
       return;
     }
-    
+
     try {
       await deleteContribution(id);
       await loadData();
     } catch (err: any) {
       console.error('Erreur lors de la suppression:', err);
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
-                          'Erreur lors de la suppression';
+      const errorMessage = err.response?.data?.message ||
+        err.response?.data?.error ||
+        'Erreur lors de la suppression';
       alert(errorMessage);
     }
   };
@@ -223,23 +223,23 @@ export default function ContributionDashboard() {
   const dailyChartData = useMemo(() => {
     const filteredData = filterDataByDateRange(data, dateRange);
     const dailyMap = new Map<string, { count: number; totalPrice: number; avgPrice: number }>();
-    
+
     filteredData.forEach(item => {
-      const date = new Date(item.timestamp).toLocaleDateString('fr-FR', { 
-        day: '2-digit', 
-        month: 'short' 
+      const date = new Date(item.timestamp).toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: 'short'
       });
-      
+
       if (!dailyMap.has(date)) {
         dailyMap.set(date, { count: 0, totalPrice: 0, avgPrice: 0 });
       }
-      
+
       const dayData = dailyMap.get(date)!;
       dayData.count += 1;
       dayData.totalPrice += item.prix_paye;
       dayData.avgPrice = Math.round(dayData.totalPrice / dayData.count);
     });
-    
+
     return Array.from(dailyMap.entries())
       .map(([date, { count, avgPrice }]) => ({
         date,
@@ -278,19 +278,19 @@ export default function ContributionDashboard() {
     const filteredData = filterDataByDateRange(data, dateRange);
     const dayMap = new Map<string, number>();
     const daysOrder = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-    
+
     filteredData.forEach(item => {
       const day = item.jour_semaine;
       dayMap.set(day, (dayMap.get(day) || 0) + 1);
     });
-    
+
     // S'assurer que tous les jours sont présents
     daysOrder.forEach(day => {
       if (!dayMap.has(day)) {
         dayMap.set(day, 0);
       }
     });
-    
+
     return Array.from(dayMap.entries())
       .map(([name, value]) => ({ name, contributions: value }))
       .sort((a, b) => daysOrder.indexOf(a.name) - daysOrder.indexOf(b.name));
@@ -306,16 +306,16 @@ export default function ContributionDashboard() {
       { range: '601-800', min: 601, max: 800 },
       { range: '801+', min: 801, max: Infinity },
     ];
-    
+
     return priceRanges.map(range => {
-      const count = filteredData.filter(item => 
+      const count = filteredData.filter(item =>
         item.prix_paye >= range.min && item.prix_paye <= range.max
       ).length;
-      
+
       return {
         range: range.range,
         count,
-        percentage: filteredData.length > 0 ? 
+        percentage: filteredData.length > 0 ?
           Math.round((count / filteredData.length) * 100) : 0,
       };
     });
@@ -324,7 +324,7 @@ export default function ContributionDashboard() {
   // Données pour le radar chart (conditions multiples)
   const conditionsRadarData = useMemo(() => {
     const filteredData = filterDataByDateRange(data, dateRange);
-    
+
     return [
       {
         condition: 'Pluie',
@@ -388,7 +388,7 @@ export default function ContributionDashboard() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] flex items-center justify-center">
         <div className="text-center">
-          <FaSpinner className="animate-spin text-4xl text-blue-600 mx-auto mb-4" />
+          <FaSpinner className="animate-spin text-4xl text-primary mx-auto mb-4" />
           <p className="text-gray-600 dark:text-gray-300">Chargement des données...</p>
         </div>
       </div>
@@ -428,18 +428,18 @@ export default function ContributionDashboard() {
             <FaArrowLeft />
             <span className="hidden md:inline">Retour</span>
           </button>
-          
+
           <div>
-            <h1 className="text-2xl md:text-4xl font-bold text-blue-900 dark:text-white mb-2">
+            <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-2">
               Dashboard de Contribution
             </h1>
             <p className="text-gray-600 dark:text-gray-300">Suivez et gérez vos données pour le modèle ML</p>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <div className="flex items-center gap-2 bg-white dark:bg-gray-800 rounded-xl px-3 py-2">
-              <FaFilter className="text-blue-600" />
-              <select 
+              <FaFilter className="text-primary" />
+              <select
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value as '7days' | '30days' | 'all')}
                 className="bg-transparent text-sm text-gray-700 dark:text-gray-300 outline-none"
@@ -449,7 +449,7 @@ export default function ContributionDashboard() {
                 <option value="all">Toutes les données</option>
               </select>
             </div>
-            
+
             <button
               onClick={handleExportCSV}
               disabled={isExporting || data.length === 0}
@@ -458,10 +458,10 @@ export default function ContributionDashboard() {
               {isExporting ? <FaSpinner className="animate-spin" /> : <FaDownload />}
               {isExporting ? 'Export...' : 'Exporter CSV'}
             </button>
-            
+
             <button
               onClick={() => { setEdit(null); setModal(true); }}
-              className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-4 py-3 rounded-xl font-medium transition-all duration-300"
+              className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-3 rounded-xl font-medium transition-all duration-300 shadow-lg shadow-primary/20"
             >
               <FaPlus />
               Nouvelle Contribution
@@ -473,12 +473,12 @@ export default function ContributionDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl">
-                <FaChartLine className="text-2xl text-blue-600 dark:text-blue-400" />
+              <div className="p-3 bg-primary/10 rounded-xl">
+                <FaChartLine className="text-2xl text-primary" />
               </div>
               <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Total Contributions</div>
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <div className="text-sm text-muted-foreground">Total Contributions</div>
+                <div className="text-2xl font-bold text-primary">
                   {stats.total}
                 </div>
               </div>
@@ -515,12 +515,12 @@ export default function ContributionDashboard() {
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-xl">
-                <FaMoneyBillAlt className="text-2xl text-purple-600 dark:text-purple-400" />
+              <div className="p-3 bg-primary/10 rounded-xl">
+                <FaMoneyBillAlt className="text-2xl text-primary" />
               </div>
               <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Prix Total</div>
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                <div className="text-sm text-muted-foreground">Prix Total</div>
+                <div className="text-2xl font-bold text-primary">
                   {stats.totalPrice} FCFA
                 </div>
               </div>
@@ -529,12 +529,12 @@ export default function ContributionDashboard() {
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-xl">
-                <FaChartBar className="text-2xl text-emerald-600 dark:text-emerald-400" />
+              <div className="p-3 bg-primary/10 rounded-xl">
+                <FaChartBar className="text-2xl text-primary" />
               </div>
               <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Prix Moyen</div>
-                <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                <div className="text-sm text-muted-foreground">Prix Moyen</div>
+                <div className="text-2xl font-bold text-primary">
                   {stats.avgPrice} FCFA
                 </div>
               </div>
@@ -551,11 +551,10 @@ export default function ContributionDashboard() {
                 <button
                   key={key}
                   onClick={() => setSelectedChart(key as any)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 ${
-                    selectedChart === key
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 ${selectedChart === key
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-card text-card-foreground hover:bg-accent'
+                    }`}
                 >
                   <Icon />
                   <span className="text-sm font-medium">{config.title}</span>
@@ -570,8 +569,8 @@ export default function ContributionDashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
               <div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white flex items-center gap-2">
-                  {React.createElement(chartConfigs[selectedChart].icon, { className: "text-blue-600" })}
+                <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                  {React.createElement(chartConfigs[selectedChart].icon, { className: "text-primary" })}
                   {chartConfigs[selectedChart].title}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -579,9 +578,9 @@ export default function ContributionDashboard() {
                 </p>
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {dateRange === '7days' ? '7 derniers jours' : 
-                 dateRange === '30days' ? '30 derniers jours' : 
-                 'Toutes les données'}
+                {dateRange === '7days' ? '7 derniers jours' :
+                  dateRange === '30days' ? '30 derniers jours' :
+                    'Toutes les données'}
               </div>
             </div>
 
@@ -594,17 +593,17 @@ export default function ContributionDashboard() {
                     margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.1} />
-                    <XAxis 
-                      dataKey="date" 
+                    <XAxis
+                      dataKey="date"
                       stroke="#9CA3AF"
                       fontSize={12}
                     />
-                    <YAxis 
+                    <YAxis
                       stroke="#9CA3AF"
                       fontSize={12}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
+                    <Tooltip
+                      contentStyle={{
                         backgroundColor: 'white',
                         borderColor: '#D1D5DB',
                         borderRadius: '0.5rem',
@@ -613,15 +612,15 @@ export default function ContributionDashboard() {
                       formatter={(value: any) => [value, value.toString().includes('prix') ? 'FCFA' : 'contributions']}
                     />
                     <Legend />
-                    <Bar 
-                      dataKey="contributions" 
-                      name="Contributions" 
+                    <Bar
+                      dataKey="contributions"
+                      name="Contributions"
                       fill={CHART_COLORS.primary}
                       radius={[4, 4, 0, 0]}
                     />
-                    <Bar 
-                      dataKey="prixMoyen" 
-                      name="Prix moyen (FCFA)" 
+                    <Bar
+                      dataKey="prixMoyen"
+                      name="Prix moyen (FCFA)"
                       fill={CHART_COLORS.secondary}
                       radius={[4, 4, 0, 0]}
                     />
@@ -652,9 +651,9 @@ export default function ContributionDashboard() {
                             <Cell key={`cell-${index}`} fill={PIE_CHART_COLORS[index % PIE_CHART_COLORS.length]} />
                           ))}
                         </Pie>
-                        <Tooltip 
+                        <Tooltip
                           formatter={(value: any) => [value, 'contributions']}
-                          contentStyle={{ 
+                          contentStyle={{
                             backgroundColor: 'white',
                             borderColor: '#D1D5DB',
                             borderRadius: '0.5rem',
@@ -665,7 +664,7 @@ export default function ContributionDashboard() {
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                  
+
                   <div className="h-full">
                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
                       Prix moyen par jour de la semaine
@@ -676,28 +675,28 @@ export default function ContributionDashboard() {
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.1} />
-                        <XAxis 
-                          dataKey="name" 
+                        <XAxis
+                          dataKey="name"
                           stroke="#9CA3AF"
                           fontSize={12}
                         />
-                        <YAxis 
+                        <YAxis
                           stroke="#9CA3AF"
                           fontSize={12}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
+                        <Tooltip
+                          contentStyle={{
                             backgroundColor: 'white',
                             borderColor: '#D1D5DB',
                             borderRadius: '0.5rem',
                             color: '#111827',
                           }}
                         />
-                        <Area 
-                          type="monotone" 
-                          dataKey="contributions" 
+                        <Area
+                          type="monotone"
+                          dataKey="contributions"
                           name="Contributions"
-                          stroke={CHART_COLORS.accent} 
+                          stroke={CHART_COLORS.accent}
                           fill={CHART_COLORS.accent}
                           fillOpacity={0.3}
                         />
@@ -730,8 +729,8 @@ export default function ContributionDashboard() {
                             <Cell key={`cell-${index}`} fill={PIE_CHART_COLORS[index % PIE_CHART_COLORS.length]} />
                           ))}
                         </Pie>
-                        <Tooltip 
-                          contentStyle={{ 
+                        <Tooltip
+                          contentStyle={{
                             backgroundColor: 'white',
                             borderColor: '#D1D5DB',
                             borderRadius: '0.5rem',
@@ -742,25 +741,25 @@ export default function ContributionDashboard() {
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
-                  
+
                   <div className="h-full">
                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
                       Fréquence des conditions
                     </h4>
                     <ResponsiveContainer width="100%" height="90%">
-                      <RadarChart 
-                        cx="50%" 
-                        cy="50%" 
-                        outerRadius="80%" 
+                      <RadarChart
+                        cx="50%"
+                        cy="50%"
+                        outerRadius="80%"
                         data={conditionsRadarData}
                       >
                         <PolarGrid stroke="#374151" strokeOpacity={0.2} />
-                        <PolarAngleAxis 
-                          dataKey="condition" 
+                        <PolarAngleAxis
+                          dataKey="condition"
                           stroke="#9CA3AF"
                           fontSize={12}
                         />
-                        <PolarRadiusAxis 
+                        <PolarRadiusAxis
                           stroke="#9CA3AF"
                           fontSize={10}
                         />
@@ -771,8 +770,8 @@ export default function ContributionDashboard() {
                           fill={CHART_COLORS.primary}
                           fillOpacity={0.6}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
+                        <Tooltip
+                          contentStyle={{
                             backgroundColor: 'white',
                             borderColor: '#D1D5DB',
                             borderRadius: '0.5rem',
@@ -797,17 +796,17 @@ export default function ContributionDashboard() {
                       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.1} />
-                      <XAxis 
-                        dataKey="name" 
+                      <XAxis
+                        dataKey="name"
                         stroke="#9CA3AF"
                         fontSize={12}
                       />
-                      <YAxis 
+                      <YAxis
                         stroke="#9CA3AF"
                         fontSize={12}
                       />
-                      <Tooltip 
-                        contentStyle={{ 
+                      <Tooltip
+                        contentStyle={{
                           backgroundColor: 'white',
                           borderColor: '#D1D5DB',
                           borderRadius: '0.5rem',
@@ -870,16 +869,16 @@ export default function ContributionDashboard() {
                 margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.1} />
-                <XAxis 
-                  type="number" 
-                  dataKey="distance_km" 
+                <XAxis
+                  type="number"
+                  dataKey="distance_km"
                   name="Distance"
                   stroke="#9CA3AF"
                   fontSize={10}
                 />
-                <YAxis 
-                  type="number" 
-                  dataKey="prix_paye" 
+                <YAxis
+                  type="number"
+                  dataKey="prix_paye"
                   name="Prix"
                   stroke="#9CA3AF"
                   fontSize={10}
@@ -937,12 +936,12 @@ export default function ContributionDashboard() {
                 Historique des Contributions
               </h3>
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                {data.length} entrées au total • {dateRange === '7days' ? '7 derniers jours' : 
-                dateRange === '30days' ? '30 derniers jours' : 'Toutes les données'}
+                {data.length} entrées au total • {dateRange === '7days' ? '7 derniers jours' :
+                  dateRange === '30days' ? '30 derniers jours' : 'Toutes les données'}
               </div>
             </div>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 dark:bg-gray-700">
@@ -969,16 +968,16 @@ export default function ContributionDashboard() {
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filterDataByDateRange(data, dateRange).map(c => (
-                  <tr 
-                    key={c.id} 
+                  <tr
+                    key={c.id}
                     className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150"
                   >
                     <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-300">
-                      {new Date(c.timestamp).toLocaleDateString('fr-FR', { 
-                        day: '2-digit', 
+                      {new Date(c.timestamp).toLocaleDateString('fr-FR', {
+                        day: '2-digit',
                         month: 'short',
-                        hour: '2-digit', 
-                        minute: '2-digit' 
+                        hour: '2-digit',
+                        minute: '2-digit'
                       })}
                     </td>
                     <td className="px-6 py-4 text-sm">
@@ -991,8 +990,8 @@ export default function ContributionDashboard() {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-300">
                       {typeof c.distance_km === 'number'
-  ? `${c.distance_km.toFixed(1)} km`
-  : '—'}
+                        ? `${c.distance_km.toFixed(1)} km`
+                        : '—'}
 
                     </td>
                     <td className="px-6 py-4 text-sm">
@@ -1002,11 +1001,11 @@ export default function ContributionDashboard() {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex flex-wrap gap-1">
-                        <span 
-                          className={`px-2 py-1 rounded text-xs ${c.etat_route === 'excellent' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 
-                            c.etat_route === 'bon' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' : 
-                            c.etat_route === 'moyen' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' : 
-                            'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'}`}
+                        <span
+                          className={`px-2 py-1 rounded text-xs ${c.etat_route === 'excellent' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+                            c.etat_route === 'bon' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' :
+                              c.etat_route === 'moyen' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+                                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'}`}
                         >
                           {c.etat_route}
                         </span>
@@ -1017,14 +1016,14 @@ export default function ContributionDashboard() {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex gap-2">
-                        <button 
+                        <button
                           onClick={() => { setEdit(c); setModal(true); }}
                           className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-lg transition-colors duration-200 text-blue-600 dark:text-blue-400"
                           title="Modifier"
                         >
                           <FaEdit />
                         </button>
-                        <button 
+                        <button
                           onClick={() => handleDeleteContribution(c.id)}
                           className="p-2 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-colors duration-200 text-red-600 dark:text-red-400"
                           title="Supprimer"
@@ -1042,9 +1041,9 @@ export default function ContributionDashboard() {
 
         {/* Modal */}
         {modal && (
-          <Modal 
-            contribution={edit} 
-            onClose={() => setModal(false)} 
+          <Modal
+            contribution={edit}
+            onClose={() => setModal(false)}
             onSave={handleSaveContribution}
             isSubmitting={isSubmitting}
           />
@@ -1086,18 +1085,18 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
               return cleanName.split(',').map(part => part.trim());
             })
             .flat()
-            .filter(name => 
-              name && 
-              name.length > 0 && 
-              name !== 'undefined' && 
+            .filter(name =>
+              name &&
+              name.length > 0 &&
+              name !== 'undefined' &&
               name !== 'null' &&
               !name.includes('Response body') &&
               !name.includes('Server response') &&
               !name.includes('Code Details')
             );
-          
+
           const uniqueNames = [...new Set(names)].sort((a, b) => a.localeCompare(b));
-          
+
           if (uniqueNames.length > 0) {
             setPlaceNames(uniqueNames);
           } else {
@@ -1144,19 +1143,19 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
         ]);
       }
     };
-    
+
     loadPlaceNames();
   }, []);
 
   // Gestionnaire pour le champ départ
   const handleDepartChange = (value: string) => {
     setForm({ ...form, depart_osm: value });
-    
+
     if (value.trim() !== "") {
       const filtered = placeNames.filter(name =>
         name.toLowerCase().includes(value.toLowerCase())
       ).slice(0, 10); // Augmenter à 10 suggestions
-      
+
       setFilteredSuggestionsDepart(filtered);
       setShowSuggestionsDepart(filtered.length > 0);
     } else {
@@ -1168,12 +1167,12 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
   // Gestionnaire pour le champ destination
   const handleDestinationChange = (value: string) => {
     setForm({ ...form, destination_osm: value });
-    
+
     if (value.trim() !== "") {
       const filtered = placeNames.filter(name =>
         name.toLowerCase().includes(value.toLowerCase())
       ).slice(0, 10); // Augmenter à 10 suggestions
-      
+
       setFilteredSuggestionsDestination(filtered);
       setShowSuggestionsDestination(filtered.length > 0);
     } else {
@@ -1217,7 +1216,7 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
     }
   }, [step]);
 
-  const renderBooleanIcon = (value: boolean) => 
+  const renderBooleanIcon = (value: boolean) =>
     value ? <FaCheck className="text-green-600 dark:text-green-400" /> : <FaTimes className="text-red-600 dark:text-red-400" />;
 
   return (
@@ -1228,7 +1227,7 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
             {contribution ? '✏️ Modifier Contribution' : '➕ Nouvelle Contribution'}
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="text-2xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 w-10 h-10 rounded-full transition-colors"
           >
@@ -1239,9 +1238,9 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
         {/* Progress */}
         <div className="p-6">
           <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all duration-300"
-              style={{ width: `${(step / 4) * 100}%` }} 
+              style={{ width: `${(step / 4) * 100}%` }}
             />
           </div>
           <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
@@ -1264,9 +1263,9 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                     Départ
                   </label>
                   <div className="relative">
-                    <input 
-                      type="text" 
-                      value={form.depart_osm} 
+                    <input
+                      type="text"
+                      value={form.depart_osm}
                       onChange={e => handleDepartChange(e.target.value)}
                       placeholder="Ex: Mvan, Yaoundé, Douala..."
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
@@ -1299,9 +1298,9 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                     Arrivée
                   </label>
                   <div className="relative">
-                    <input 
-                      type="text" 
-                      value={form.destination_osm} 
+                    <input
+                      type="text"
+                      value={form.destination_osm}
                       onChange={e => handleDestinationChange(e.target.value)}
                       placeholder="Ex: Melen 8, Douala, Garoua..."
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
@@ -1333,10 +1332,10 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Distance (km)
                   </label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     step="0.1"
-                    value={form.distance_km || ''} 
+                    value={form.distance_km || ''}
                     onChange={e => update('distance_km', e.target.value)}
                     placeholder="10.2"
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
@@ -1348,9 +1347,9 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Prix (FCFA)
                   </label>
-                  <input 
-                    type="number" 
-                    value={form.prix_paye || ''} 
+                  <input
+                    type="number"
+                    value={form.prix_paye || ''}
                     onChange={e => update('prix_paye', e.target.value)}
                     placeholder="2500"
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
@@ -1371,8 +1370,8 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     État de la route
                   </label>
-                  <select 
-                    value={form.etat_route} 
+                  <select
+                    value={form.etat_route}
                     onChange={e => update('etat_route', e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                   >
@@ -1383,20 +1382,20 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                     ))}
                   </select>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     { l: '🌧️ Il pleuvait', k: 'pluie' },
                     { l: '🚧 Travaux sur la route', k: 'routes_travaux' },
                     { l: '⚠️ Accident ou embouteillage', k: 'accident' }
                   ].map(f => (
-                    <label 
-                      key={f.k} 
+                    <label
+                      key={f.k}
                       className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                     >
-                      <input 
-                        type="checkbox" 
-                        checked={form[f.k]} 
+                      <input
+                        type="checkbox"
+                        checked={form[f.k]}
                         onChange={e => update(f.k, e.target.checked)}
                         className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
                       />
@@ -1420,20 +1419,20 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Heure
                     </label>
-                    <input 
-                      type="time" 
-                      value={form.heure} 
+                    <input
+                      type="time"
+                      value={form.heure}
                       onChange={e => update('heure', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Jour de la semaine
                     </label>
-                    <select 
-                      value={form.jour_semaine} 
+                    <select
+                      value={form.jour_semaine}
                       onChange={e => update('jour_semaine', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
                     >
@@ -1444,20 +1443,20 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                     </select>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[
                     { l: 'Jour férié', k: 'jour_ferie' },
                     { l: 'Avec bagages', k: 'bagages' },
                     { l: 'Routes larges', k: 'routes_larges' }
                   ].map(f => (
-                    <label 
-                      key={f.k} 
+                    <label
+                      key={f.k}
                       className="flex items-center justify-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                     >
-                      <input 
-                        type="checkbox" 
-                        checked={form[f.k]} 
+                      <input
+                        type="checkbox"
+                        checked={form[f.k]}
                         onChange={e => update(f.k, e.target.checked)}
                         className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
                       />
@@ -1502,7 +1501,7 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
                   <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Conditions</div>
                   <div className="flex flex-wrap gap-2">
@@ -1520,7 +1519,7 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                   <div>Horaires : {form.jour_semaine} à {form.heure}</div>
                   <div className="mt-1">
@@ -1536,7 +1535,7 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
         {/* Navigation */}
         <div className="flex justify-between gap-4 p-6 border-t border-gray-200 dark:border-gray-700">
           {step > 1 && (
-            <button 
+            <button
               onClick={() => setStep(step - 1)}
               className="flex items-center gap-2 px-6 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 rounded-xl font-medium hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors"
             >
@@ -1544,9 +1543,9 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
               Précédent
             </button>
           )}
-          
+
           {step < 4 ? (
-            <button 
+            <button
               onClick={() => setStep(step + 1)}
               className="ml-auto flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-xl font-medium transition-colors"
             >
@@ -1554,7 +1553,7 @@ function Modal({ contribution, onClose, onSave, isSubmitting }: any) {
               <FaArrowRight />
             </button>
           ) : (
-            <button 
+            <button
               onClick={() => onSave(form)}
               disabled={isSubmitting}
               className="ml-auto flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white rounded-xl font-medium transition-colors disabled:opacity-50"

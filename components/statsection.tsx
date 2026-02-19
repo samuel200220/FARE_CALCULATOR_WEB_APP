@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useTranslations } from 'next-intl';
+import { motion } from 'framer-motion';
 
 type Stat = {
   labelKey: string;
@@ -52,27 +53,37 @@ export default function StatsSection() {
   }, [inView]);
 
   return (
-    <section ref={ref} className="py-20 px-4 relative">
-      {/* Background Strip */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-40 bg-blue-600/5 dark:bg-white/5 -skew-y-2 -z-10" />
+    <section ref={ref} className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
+      {/* Background Glows */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-      <h2 className="text-3xl font-bold text-center text-blue-900 dark:text-white mb-16">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        className="text-4xl md:text-5xl font-extrabold text-center text-slate-900 dark:text-white mb-20"
+      >
         {t('title')}
-      </h2>
+      </motion.h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto relative z-10">
         {stats.map((stat, index) => (
-          <div
+          <motion.div
             key={index}
-            className="group p-8 rounded-3xl bg-white dark:bg-gray-800 shadow-xl border-b-4 border-blue-500 hover:-translate-y-2 transition-transform duration-300 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: index * 0.15 + 0.2 }}
+            className="group relative p-10 rounded-[2.5rem] bg-white/80 dark:bg-slate-900/40 backdrop-blur-xl shadow-2xl border border-white/20 dark:border-white/10 hover:border-primary/30 transition-all duration-500 hover:-translate-y-3 text-center"
           >
-            <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 mb-4 font-mono">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+            <div className="relative text-5xl md:text-6xl font-black text-primary dark:text-blue-400 mb-6 tracking-tighter">
               {counts[index]}{stat.suffix}
             </div>
-            <p className="text-gray-600 dark:text-gray-300 font-medium text-lg uppercase tracking-wide">
+            <p className="text-slate-600 dark:text-slate-300 font-bold text-lg uppercase tracking-[0.1em] relative">
               {t(stat.labelKey)}
             </p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

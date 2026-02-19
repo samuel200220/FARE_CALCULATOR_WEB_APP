@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Crown, Sparkles } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 
 // Créer un composant séparé pour la logique qui utilise useSearchParams
@@ -84,97 +84,46 @@ function RouteLoadingContent() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-white/80 to-violet-50/80 dark:from-gray-900/80 dark:via-gray-800/80 dark:to-gray-900/80 backdrop-blur-md"
+        className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/10 to-amber-50/30 dark:from-slate-950/50 dark:via-slate-900/50 dark:to-slate-950/50 backdrop-blur-sm"
       />
 
       {/* Contenu au centre */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
-        {/* Cercle de progression principal */}
-        <div className="relative mb-8">
-          <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
-            {/* Cercle de fond */}
-            <circle
-              cx="50"
-              cy="50"
-              r={radius}
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="transparent"
-              className="text-gray-200 dark:text-gray-700"
-            />
-
-            {/* Cercle de progression avec dégradé */}
-            <circle
-              cx="50"
-              cy="50"
-              r={radius}
-              stroke="url(#gradient)"
-              strokeWidth="8"
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-              className="transition-all duration-300 ease-out"
-            />
-          </svg>
-
-          {/* Icône au centre */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            >
-              {/* <Crown className="w-12 h-12 text-yellow-500" /> */}
-              <Image
-                src="/logo_farcal.png"
-                alt="Logo Farcal"
-                width={110}
-                height={110}
-                style={{ height: 'auto' }}
-                priority
-              />
-            </motion.div>
+        {/* Standard Spinner */}
+        <div className="relative mb-12 flex items-center justify-center">
+          <div className="p-4 rounded-full bg-white/10 backdrop-blur-md shadow-lg ring-1 ring-white/20">
+            <Loader2 className="w-16 h-16 text-primary animate-spin" />
           </div>
-
-          {/* Définition du dégradé */}
-          <svg width="0" height="0" className="absolute">
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="50%" stopColor="#8b5cf6" />
-                <stop offset="100%" stopColor="#ec4899" />
-              </linearGradient>
-            </defs>
-          </svg>
         </div>
 
         {/* Texte avec animation */}
-        <div className="text-center space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
-            Chargement en cours
-          </h3>
+        <div className="text-center space-y-6">
 
-          {/* Pourcentage */}
-          <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent">
-            {progress}%
+
+          {/* Points animés (Style minimaliste) */}
+          <div className="flex justify-center gap-1.5">
+            {[0, 1, 2].map((i) => (
+              <motion.div
+                key={i}
+                animate={{
+                  scale: [1, 1.5, 1],
+                  opacity: [0.3, 1, 0.3]
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  delay: i * 0.15
+                }}
+                className="w-1.5 h-1.5 bg-blue-600 rounded-full"
+              />
+            ))}
           </div>
 
-          {/* Points animés */}
-          <div className="flex justify-center space-x-1">
-            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-          </div>
-
-          {/* Message subtil */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 max-w-xs">
-            La patience est une vertu de l'esprit...
-          </p>
         </div>
 
-        {/* Cercle externe animé */}
-        <div className="absolute">
-          <div className="w-48 h-48 border-4 border-blue-200/30 dark:border-blue-500/20 rounded-full animate-ping" />
+        {/* Cercles de fond décoratifs */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10">
+          <div className="w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-600/5 rounded-full blur-[100px] animate-pulse" />
         </div>
       </div>
     </div>

@@ -3,41 +3,56 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import Image from "next/image";
+import { motion } from 'framer-motion';
 
 const Section5 = () => {
   const t = useTranslations('Section5');
 
   return (
-    <section id="mobile" className="py-24 px-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-blue-50/50 dark:bg-blue-900/10 skew-y-3 transform origin-top-left -z-10" />
+    <section id="mobile" className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-blue-900 dark:text-white mb-12">
+      <div className="max-w-7xl mx-auto flex flex-col items-center relative z-10">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-6xl font-extrabold text-center text-slate-900 dark:text-white mb-16"
+        >
           {t('title')}
-        </h2>
+        </motion.h2>
 
-        <div className="relative w-full max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative w-full max-w-5xl mx-auto"
+        >
           {/* Glass Container for Image */}
           <div className="
-                relative rounded-3xl p-4 sm:p-8
-                bg-white/30 dark:bg-white/5 backdrop-blur-2xl border border-white/20 dark:border-white/10
-                shadow-2xl
+                relative rounded-[3rem] p-6 lg:p-12
+                bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl border border-slate-200 dark:border-white/10
+                shadow-2xl overflow-hidden
             ">
-            <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+
+            <div className="relative aspect-[16/9] w-full rounded-[2rem] overflow-hidden shadow-2xl">
               <Image
                 src="/mobile_img1.png"
-                alt="mobile app"
+                alt="mobile app preview"
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 1280px) 100vw, 1280px"
+                className="object-cover hover:scale-[1.02] transition-transform duration-700"
               />
             </div>
           </div>
 
-          {/* Decoration Circles */}
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 animate-pulse" />
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-violet-500 rounded-full blur-3xl opacity-20 animate-pulse delay-700" />
-        </div>
+          {/* Decoration Elements */}
+          <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary rounded-full blur-[100px] opacity-20 animate-pulse" />
+          <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-blue-400 rounded-full blur-[100px] opacity-20 animate-pulse delay-700" />
+        </motion.div>
       </div>
     </section>
   );

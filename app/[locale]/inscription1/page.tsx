@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { utilisateurService } from '@/app/services/api';
 import { useAuth } from '@/context/AuthContext';
 import Googleconnexion from '@/components/googleconnexion';
+import Header from '@/components/navbar/header';
+import { motion } from 'framer-motion';
 
 interface FormData {
   nom: string;
@@ -41,32 +43,20 @@ export default function Page() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-
     try {
-      // Appel de l'API pour l'inscription
       const response = await utilisateurService.register({
         nom: data.nom,
         email: data.email,
       });
-
-      // Stocker le token
       localStorage.setItem('token', response.token);
-
-      // Mettre l'utilisateur dans le contexte Auth
       setUser(response.user);
-
-      // Stockage optionnel pour compatibilité
       localStorage.setItem('utilisateur', JSON.stringify(response.user));
       localStorage.setItem('idUtilisateur', response.user.id);
-
       toast.success(a('success.verification'));
-
-      // Redirection vers l'accueil
       router.push('/accueil');
     } catch (error) {
       console.error('Erreur lors de l\'inscription:', error);
       const axiosError = error as AxiosError;
-
       if (axiosError.response) {
         switch (axiosError.response.status) {
           case 409:
@@ -87,107 +77,164 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen flex lg:p-20 p-4 rounded-3xl shadow-lg">
-      {/* Left Section */}
-      <div className="hidden lg:flex w-1/2 bg-blue-700 dark:bg-[#0D1B2A] rounded-l-3xl text-white p-16 flex-col justify-center">
-        <h1 className="text-4xl font-bold mb-4">{t('left.title')}</h1>
-        <p className="text-lg leading-relaxed">{t('left.subtitle')}</p>
+    <main className="min-h-screen relative overflow-hidden bg-slate-50 dark:bg-slate-950 flex flex-col">
+      <Header />
+
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+        <div className="absolute top-[-5%] right-[-5%] w-[45%] h-[45%] bg-primary/10 blur-[130px] rounded-full animate-pulse"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '3s' }}></div>
       </div>
 
-      {/* Right Section */}
-      <div className="lg:w-1/2 w-full lg:p-16 p-0 bg-white dark:bg-gray-400 flex flex-col rounded-3xl lg:rounded-l-none lg:rounded-r-3xl justify-center">
-        <div className="flex justify-center gap-3 lg:justify-end sm:justify-end md:justify-end lg:mb-6 sm:mb-6 md:mb-6 mb-2 mt-2 lg:mt-0 sm:mt-0 md:mt-0">
-          <Link href="/inscriptionpro">
-            <button className="border border-blue-900 text-blue-900 px-4 py-1 dark:text-white rounded-full hover:bg-blue-900 dark:bg-[#0D1B2A] hover:text-white transition">
-              {t('buttons.proVersion')}
-            </button>
-          </Link>
-        </div>
-
-        <h2 className="text-2xl text-center lg:text-start font-bold mb-6">{t('title')}</h2>
-        <p className="mb-6 text-center text-gray-600">{t('subtitle')}</p>
-
-        <Box
-          component="form"
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{
-            fontFamily: 'Poppins, sans-serif',
-            width: { lg: '100%' },
-            ml: 0,
-            maxWidth: { xs: 300, sm: 300, md: 400, lg: 400 },
-            mx: { xs: 'auto', sm: 0 },
-          }}
+      <div className="flex-grow flex items-center justify-center p-4 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="w-full max-w-6xl grid lg:grid-cols-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl rounded-[3rem] border border-white/20 shadow-2xl overflow-hidden"
         >
-          <Stack spacing={3} sx={{ fontFamily: 'Poppins, sans-serif' }}>
-            {/* Nom */}
-            <TextField
-              label={t('form.username')}
-              fullWidth
-              {...register('nom', { required: t('errors.required') })}
-              error={!!errors.nom}
-              helperText={errors.nom?.message}
-              disabled={isSubmitting}
-            />
-
-            {/* Email */}
-            <TextField
-              type="email"
-              label={t('form.email')}
-              placeholder="you@example.com"
-              variant="outlined"
-              fullWidth
-              {...register('email', { 
-                required: t('errors.required'),
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: t('errors.invalidEmail')
-                }
-              })}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              disabled={isSubmitting}
-            />
-
-            {/* Submit */}
-            <Button
-              variant="contained"
-              fullWidth
-              type="submit"
-              disabled={isSubmitting}
-              sx={{
-                fontFamily: 'Poppins, sans-serif',
-                bgcolor: theme.palette.mode === 'light' ? '#1D4ED8' : '#0D1B2A',
-                color: '#FFFFFF',
-                '&:hover': {
-                  bgcolor: theme.palette.mode === 'light' ? '#1E40AF' : '#1B263B',
-                },
-                '&:disabled': {
-                  bgcolor: theme.palette.mode === 'light' ? '#93C5FD' : '#415A77',
-                },
-              }}
+          {/* Left Visual Section */}
+          <div className="hidden lg:flex flex-col justify-center p-20 bg-gradient-to-br from-blue-600 to-indigo-800 text-white relative">
+            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_2px_2px,white_1px,transparent_0)] bg-[size:24px_24px]"></div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
             >
-              {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : t('buttons.signup')}
-            </Button>
+              <h1 className="text-5xl font-black mb-8 leading-[1.15]">
+                {t('left.title')}
+              </h1>
+              <p className="text-xl leading-relaxed font-medium opacity-90 max-w-md">
+                {t('left.subtitle')}
+              </p>
 
-            {/* Lien vers connexion */}
-            <Typography
-              variant="body2"
-              align="center"
-              sx={{ fontFamily: 'Poppins, sans-serif', marginBottom: '5px' }}
-            >
-              {t('alreadyRegistered')}{' '}
-              <Link href="/connexion1" style={{ color: '#1e3a8a' }}>
-                {t('buttons.login')}
+              <div className="mt-16 grid grid-cols-2 gap-6">
+                <div className="p-6 rounded-3xl bg-white/10 backdrop-blur-md border border-white/10">
+                  <p className="text-3xl font-black mb-1">10k+</p>
+                  <p className="text-sm opacity-60">Active Users</p>
+                </div>
+                <div className="p-6 rounded-3xl bg-white/10 backdrop-blur-md border border-white/10">
+                  <p className="text-3xl font-black mb-1">99%</p>
+                  <p className="text-sm opacity-60">Accuracy</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Form Section */}
+          <div className="p-10 md:p-20 flex flex-col justify-center relative">
+            <div className="flex justify-end mb-10">
+              <Link href="/inscriptionpro">
+                <button className="text-[10px] font-black uppercase tracking-[0.2em] px-8 py-3 rounded-full bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 text-slate-900 border border-amber-500/20 hover:from-amber-500 hover:to-amber-700 transition-all duration-500 hover:scale-105 active:scale-95 shadow-lg shadow-amber-500/20">
+                  {t('buttons.proVersion')}
+                </button>
               </Link>
-            </Typography>
+            </div>
 
-            {/* Google connexion */}
-            <Googleconnexion />
-          </Stack>
-        </Box>
+            <div className="mb-12">
+              <h2 className="text-4xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter">
+                {t('title')}
+              </h2>
+              <p className="text-slate-500 dark:text-slate-400 font-medium text-lg">
+                {t('subtitle')}
+              </p>
+            </div>
+
+            <Box
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
+              noValidate
+              autoComplete="off"
+            >
+              <Stack spacing={4}>
+                <TextField
+                  label={t('form.username')}
+                  fullWidth
+                  {...register('nom', { required: t('errors.required') })}
+                  error={!!errors.nom}
+                  helperText={errors.nom?.message}
+                  disabled={isSubmitting}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '1.25rem',
+                      '& fieldset': { borderColor: 'rgba(var(--primary), 0.1)' },
+                      '&:hover fieldset': { borderColor: 'var(--primary)' },
+                    }
+                  }}
+                />
+
+                <TextField
+                  type="email"
+                  label={t('form.email')}
+                  placeholder="you@example.com"
+                  variant="outlined"
+                  fullWidth
+                  {...register('email', {
+                    required: t('errors.required'),
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: t('errors.invalidEmail')
+                    }
+                  })}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                  disabled={isSubmitting}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '1.25rem',
+                      '& fieldset': { borderColor: 'rgba(var(--primary), 0.1)' },
+                      '&:hover fieldset': { borderColor: 'var(--primary)' },
+                    }
+                  }}
+                />
+
+                <Button
+                  variant="contained"
+                  fullWidth
+                  type="submit"
+                  disabled={isSubmitting}
+                  sx={{
+                    py: 2.2,
+                    borderRadius: '1.25rem',
+                    fontFamily: 'inherit',
+                    fontWeight: 900,
+                    textTransform: 'none',
+                    fontSize: '1.1rem',
+                    boxShadow: '0 12px 24px -6px rgba(29, 78, 216, 0.4)',
+                    bgcolor: 'primary.main',
+                    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                    '&:hover': {
+                      bgcolor: 'primary.dark',
+                      boxShadow: '0 18px 30px -6px rgba(29, 78, 216, 0.5)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  {isSubmitting ? <CircularProgress size={24} sx={{ color: 'white' }} /> : t('buttons.signup')}
+                </Button>
+
+                <div className="relative py-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t-2 border-slate-100 dark:border-slate-800"></div>
+                  </div>
+                  <div className="relative flex justify-center">
+                    <span className="bg-transparent px-4 text-slate-400 font-black uppercase tracking-[0.3em] text-[9px]">Social Join</span>
+                  </div>
+                </div>
+
+                <Googleconnexion />
+
+                <Typography variant="body2" align="center" className="text-slate-500 font-medium pt-4">
+                  {t('alreadyRegistered')}{' '}
+                  <Link href="/connexion1" className="text-primary font-black hover:underline underline-offset-4 decoration-2">
+                    {t('buttons.login')}
+                  </Link>
+                </Typography>
+              </Stack>
+            </Box>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </main>
   );
 }

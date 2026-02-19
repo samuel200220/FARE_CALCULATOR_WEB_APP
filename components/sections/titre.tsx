@@ -24,7 +24,7 @@ const Titre = () => {
           <span className='block text-gray-900 dark:text-white mb-2'>
             {t('mainTitleLine1')}
           </span>
-          <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400'>
+          <span className='text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 dark:from-primary dark:to-blue-300'>
             {t('mainTitleLine2')}
           </span>
         </h1>

@@ -13,8 +13,8 @@ const Footer = () => {
   return (
     <footer className="bg-gray-950 text-white pt-20 pb-10 relative overflow-hidden border-t border-white/10">
       {/* Subtle Glows */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
@@ -23,7 +23,7 @@ const Footer = () => {
             <h3 className="font-bold text-lg text-white mb-4">{t("company")}</h3>
             <ul className="space-y-3 text-sm text-gray-400">
               {["vision", "mission", "goals", "originality", "recruiting", "contact"].map((item) => (
-                <li key={item}><a href="#" className="hover:text-blue-400 transition-colors">{t(item)}</a></li>
+                <li key={item}><a href="#" className="hover:text-primary transition-colors">{t(item)}</a></li>
               ))}
             </ul>
           </div>
@@ -33,7 +33,7 @@ const Footer = () => {
             <h3 className="font-bold text-lg text-white mb-4">{t("support")}</h3>
             <ul className="space-y-3 text-sm text-gray-400">
               {["marketplace", "rentalAgency", "travelAgency", "carpooling"].map((item) => (
-                <li key={item}><a href="#" className="hover:text-blue-400 transition-colors">{t(item)}</a></li>
+                <li key={item}><a href="#" className="hover:text-primary transition-colors">{t(item)}</a></li>
               ))}
             </ul>
           </div>
@@ -43,7 +43,7 @@ const Footer = () => {
             <h3 className="font-bold text-lg text-white mb-4">{t("legal")}</h3>
             <ul className="space-y-3 text-sm text-gray-400">
               {["terms", "privacy", "personalInfo", "cookies"].map((item) => (
-                <li key={item}><a href="#" className="hover:text-blue-400 transition-colors">{t(item)}</a></li>
+                <li key={item}><a href="#" className="hover:text-primary transition-colors">{t(item)}</a></li>
               ))}
             </ul>
           </div>
@@ -74,14 +74,14 @@ const Footer = () => {
             <h3 className="font-bold text-lg text-white mb-4">{t("followUs")}</h3>
             <div className="flex gap-4">
               {[FaTwitter, FaFacebookF, FaInstagram, FaLinkedinIn].map((Icon, i) => (
-                <a key={i} href="#" className="p-3 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition-all">
+                <a key={i} href="#" className="p-3 bg-white/5 rounded-full hover:bg-primary hover:text-white transition-all">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
             <div className="space-y-3 text-sm text-gray-400 mt-6 pt-6 border-t border-white/5">
-              <div className="flex items-center gap-3"><FaPhone className="text-blue-500" /> +33 1 23 45 67 89</div>
-              <div className="flex items-center gap-3"><FaEnvelope className="text-violet-500" /> contact@farcal.com</div>
+              <div className="flex items-center gap-3"><FaPhone className="text-primary" /> +33 1 23 45 67 89</div>
+              <div className="flex items-center gap-3"><FaEnvelope className="text-primary" /> contact@farcal.com</div>
             </div>
           </div>
         </div>
@@ -94,7 +94,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+    </footer >
   );
 };
 

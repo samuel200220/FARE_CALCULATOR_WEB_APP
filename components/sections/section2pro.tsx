@@ -3,25 +3,26 @@
 import { Car, PackageSearch } from 'lucide-react';
 import { FaPlaneDeparture } from 'react-icons/fa';
 import { useTranslations } from 'next-intl';
+import { motion } from 'framer-motion';
 
 const Section2Pro = () => {
   const t = useTranslations('section2');
 
   const services = [
     {
-      icon: <Car className="w-10 h-10 text-blue-600 mb-3" />,
+      icon: <Car className="w-10 h-10 text-primary mb-4" />,
       title: t('services.taxi.title'),
       description: t('services.taxi.description'),
       link: '#',
     },
     {
-      icon: <FaPlaneDeparture className="w-10 h-10 text-green-600 mb-3" />,
+      icon: <FaPlaneDeparture className="w-10 h-10 text-primary mb-4" />,
       title: t('services.trip.title'),
       description: t('services.trip.description'),
       link: 'https://lets-go-liart-phi.vercel.app/',
     },
     {
-      icon: <PackageSearch className="w-10 h-10 text-pink-600 mb-3" />,
+      icon: <PackageSearch className="w-10 h-10 text-primary mb-4" />,
       title: t('services.delivery.title'),
       description: t('services.delivery.description'),
       link: '#',
@@ -29,54 +30,52 @@ const Section2Pro = () => {
   ];
 
   return (
-    <section
-      id="services"
-      className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0D1B2A] dark:to-[#1B263B] pt-10 pb-20 mt-20 px-4 sm:px-6 lg:px-8"
-    >
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center text-blue-900 dark:text-white mb-12">
-        {t('title')}
-      </h2>
+    <section id="services" className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-background transition-colors duration-500">
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-4xl md:text-5xl font-extrabold text-center text-foreground mb-20 relative z-10"
+      >
+        {t('title')}
+      </motion.h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto relative z-10">
         {services.map((service, index) => {
-          const isExternal = service.link.startsWith('http');
-          if (isExternal) {
-            return (
-              <a
-                href={service.link}
-                key={index}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
-              >
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
-                  <div className="flex flex-col items-center text-center">
-                    {service.icon}
-                    <h3 className="text-xl font-semibold text-blue-900 dark:text-white mb-2">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm">
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
-              </a>
-            );
-          }
           return (
-            <a href={service.link} key={index} className="block">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
+            <motion.a
+              href={service.link}
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              target={service.link.startsWith('http') ? "_blank" : "_self"}
+              rel="noopener noreferrer"
+              className="block group"
+            >
+              <div className="
+                   h-full p-10 rounded-[3rem] transition-all duration-500
+                   bg-card/60 backdrop-blur-xl border border-border
+                   hover:border-primary/30 hover:translate-y-[-8px] hover:shadow-2xl shadow-xl
+                ">
                 <div className="flex flex-col items-center text-center">
-                  {service.icon}
-                  <h3 className="text-xl font-semibold text-blue-900 dark:text-white mb-2">
+                  <div className="p-6 bg-primary/5 dark:bg-primary/10 rounded-3xl mb-8 group-hover:scale-110 group-hover:bg-primary/10 transition-all duration-500">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-2xl font-black text-foreground mb-4 tracking-tight">
                     {service.title}
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300 text-sm">
+                  <p className="text-muted-foreground leading-relaxed text-lg">
                     {service.description}
                   </p>
                 </div>
               </div>
-            </a>
+            </motion.a>
           );
         })}
       </div>

@@ -139,7 +139,7 @@ const Draggable: React.FC<DraggableProps> = ({
         top: position.y,
         cursor: isDragging ? 'grabbing' : 'grab',
         userSelect: 'none',
-        zIndex: 50
+        zIndex: 100
       }}
       onMouseDown={handleMouseDown}
     >
@@ -1124,34 +1124,37 @@ const Section1pro = ({ }) => {
   };
 
   const renderStepIndicator = () => (
-    <div className="flex justify-center mb-6">
-      <div className="flex items-center space-x-2">
+    <div className="flex justify-center mb-10">
+      <div className="flex items-center space-x-3">
         {[1, 2, 3].map((stepNum) => (
           <React.Fragment key={stepNum}>
             <motion.div
               initial={{ scale: 0.8 }}
-              animate={{ scale: step === stepNum ? 1.1 : 1 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${step === stepNum
-                ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-500'
+              animate={{
+                scale: step === stepNum ? 1.15 : 1,
+                backgroundColor: step === stepNum ? '#3b82f6' : 'transparent'
+              }}
+              className={`relative w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 border-2 ${step === stepNum
+                ? 'border-primary text-white shadow-xl shadow-primary/20'
+                : step > stepNum
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-slate-200 dark:border-slate-800 text-slate-400'
                 }`}
             >
-              {stepNum}
+              <span className="text-lg font-bold">{stepNum}</span>
               {step === stepNum && (
                 <motion.div
-                  layoutId="stepIndicator"
-                  className="absolute inset-0 rounded-full border-2 border-blue-400"
+                  layoutId="stepIndicatorGlowPro"
+                  className="absolute inset-0 rounded-full bg-primary/20 blur-md -z-10"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
                 />
               )}
             </motion.div>
             {stepNum < 3 && (
-              <div className={`w-8 h-1 transition-all duration-500 ${step > stepNum
-                ? 'bg-gradient-to-r from-blue-600 to-blue-400'
-                : 'bg-gray-200 dark:bg-gray-700'
+              <div className={`w-12 h-1 rounded-full transition-all duration-700 ${step > stepNum
+                ? 'bg-gradient-to-r from-primary to-blue-400'
+                : 'bg-slate-200 dark:bg-slate-800'
                 }`} />
             )}
           </React.Fragment>
@@ -1175,114 +1178,90 @@ const Section1pro = ({ }) => {
   // Composant pour afficher les résultats de manière élégante
   const ResultCard = ({ predictionResult }: { predictionResult: PredictionResult }) => (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+      transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+      className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl rounded-[3rem] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden max-w-2xl mx-auto"
     >
       {/* En-tête avec titre */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <FaMoneyBillAlt className="text-white text-xl" />
-            <h3 className="text-xl font-bold text-white">{result('title')}</h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <FaInfoCircle className="text-blue-200 text-sm" />
-            <span className="text-blue-100 text-sm font-medium">{result('predictionAI')}</span>
-          </div>
+      <div className="bg-gradient-to-r from-primary to-blue-500 px-10 py-8 text-center">
+        <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-black uppercase tracking-widest mb-4">
+          <FaInfoCircle className="animate-pulse" />
+          <span>{result('predictionAI')}</span>
         </div>
+        <h3 className="text-3xl font-black text-white tracking-tight">{result('title')}</h3>
       </div>
 
       {/* Corps de la carte */}
-      <div className="p-6">
+      <div className="p-10">
         {/* Prix principal */}
-        <div className="text-center mb-6">
-          <div className="text-5xl font-bold text-emerald-600 dark:text-emerald-400">
-            {predictionResult.prix_estime_fcfa} FCFA
+        <div className="text-center mb-10 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] py-8 border border-slate-100 dark:border-slate-800">
+          <div className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter mb-2">
+            {predictionResult.prix_estime_fcfa} <span className="text-2xl text-primary font-bold">FCFA</span>
           </div>
-          <div className="text-gray-600 dark:text-gray-300 mt-2">
-            {result('estimatedRange')}: <span className="font-semibold">{predictionResult.prix_estime_range}</span>
-          </div>
+          <p className="text-slate-500 dark:text-slate-400 font-bold">
+            {result('estimatedRange')}: <span className="text-primary">{predictionResult.prix_estime_range}</span>
+          </p>
         </div>
 
         {/* Détails du trajet */}
-        <div className="space-y-4 mb-6">
-          <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <FaMapMarkerAlt className="text-blue-600 dark:text-blue-400" />
-            <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">{result('departure')}</div>
-              <div className="font-medium dark:text-white">{start}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+          <div className="flex items-start gap-4 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+              <FaMapMarkerAlt className="text-primary" />
+            </div>
+            <div>
+              <div className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">{result('departure')}</div>
+              <div className="font-bold text-slate-900 dark:text-white leading-tight">{start}</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <FaLocationArrow className="text-blue-600 dark:text-blue-400" />
-            <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">{result('arrival')}</div>
-              <div className="font-medium dark:text-white">{end}</div>
+          <div className="flex items-start gap-4 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0">
+              <FaLocationArrow className="text-blue-500" />
+            </div>
+            <div>
+              <div className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">{result('arrival')}</div>
+              <div className="font-bold text-slate-900 dark:text-white leading-tight">{end}</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <FaRegClock className="text-blue-600 dark:text-blue-400" />
-            <div className="flex-1">
-              <div className="text-sm text-gray-500 dark:text-gray-400">{result('time')}</div>
-              <div className="font-medium dark:text-white">{hour}</div>
+          <div className="flex items-center gap-4 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="w-10 h-10 bg-violet-500/10 rounded-xl flex items-center justify-center shrink-0">
+              <FaRegClock className="text-violet-500" />
             </div>
-          </div>
-        </div>
-
-        {/* Métriques distance/durée */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-4 rounded-xl">
-            <div className="flex items-center gap-2 mb-2">
-              <MdOutlineDirectionsWalk className="text-blue-600 dark:text-blue-400" />
-              <div className="text-sm text-gray-600 dark:text-gray-300">{result('distance')}</div>
-            </div>
-            <div className="text-2xl font-bold text-gray-800 dark:text-white">
-              {routes[0]?.distance ? `${(routes[0].distance / 1000).toFixed(1)} km` : 'N/A'}
+            <div>
+              <div className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">{result('time')}</div>
+              <div className="font-bold text-slate-900 dark:text-white leading-tight">{hour}</div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-4 rounded-xl">
-            <div className="flex items-center gap-2 mb-2">
-              <FaRegClock className="text-blue-600 dark:text-blue-400" />
-              <div className="text-sm text-gray-600 dark:text-gray-300">{result('duration')}</div>
+          <div className="flex items-center gap-4 p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center shrink-0">
+              <MdOutlineDirectionsWalk className="text-emerald-500" />
             </div>
-            <div className="text-2xl font-bold text-gray-800 dark:text-white">
-              {routes[0]?.duration ? `${(routes[0].duration / 60).toFixed(0)} min` : 'N/A'}
-            </div>
-          </div>
-        </div>
-
-        {/* Informations supplémentaires */}
-        <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 mb-6">
-          <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">{result('predictionDetails')}</div>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">{result('source')}:</span>
-              <span className="font-medium dark:text-white">{predictionResult.message}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">{result('trip')}:</span>
-              <span className="font-medium dark:text-white">{predictionResult.lieux_comms}</span>
+            <div>
+              <div className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-1">{result('distance')}</div>
+              <div className="font-bold text-slate-900 dark:text-white leading-tight">
+                {routes[0]?.distance ? `${(routes[0].distance / 1000).toFixed(1)} km` : 'N/A'}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Bouton Nouveau calcul */}
-        <div className="flex gap-3 pt-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <Button
             type="button"
-            onClick={() => setStep(2)}
-            className="flex-1 h-12 bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-700 hover:to-violet-600 text-white"
+            onClick={() => setStep(3)}
+            variant="outline"
+            className="flex-1 h-16 rounded-2xl border-2 border-slate-200 dark:border-slate-800 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           >
-            <FaArrowLeft /> {steps('step3.back')}
+            <FaArrowLeft className="mr-2" /> {steps('step3.back')}
           </Button>
           <Button
             onClick={resetForm}
-            className="flex-1 h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white font-medium rounded-xl shadow-lg"
+            className="flex-2 h-16 bg-primary hover:bg-primary/90 text-white font-bold rounded-2xl shadow-xl shadow-primary/20 transition-all px-10"
           >
             {result('newCalculation')}
           </Button>
@@ -1292,33 +1271,38 @@ const Section1pro = ({ }) => {
   );
 
   return (
-    <section className="w-full min-h-[900px] flex justify-center items-start pt-10 px-4 bg-transparent mb-10">
+    <section className="w-full min-h-[900px] flex justify-center items-start pt-20 pb-20 px-4 bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+
       {/* Main Container */}
       <div className={`
-        relative w-full max-w-7xl 
-        bg-white/80 dark:bg-[#0D1B2A]/90 backdrop-blur-xl 
-        rounded-[2.5rem] shadow-2xl border border-white/20 dark:border-white/5
-        transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]
-        ${step === 1 ? 'max-w-xl h-auto p-8 lg:p-12 mt-20' : 'h-full p-6'}
+        relative w-full 
+        bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl 
+        rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-white/20 dark:border-white/10
+        transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] overflow-hidden
+        ${step === 1 ? 'max-w-xl p-8 lg:p-14 mt-10' : 'max-w-7xl p-8'}
       `}>
 
         {/* Header inside Card */}
-        <div className="flex justify-between items-center mb-8">
-          <h3 className="text-3xl lg:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-12 gap-6">
+          <h3 className="text-3xl lg:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-400">
             {t('fareCalculator')}
           </h3>
 
           {/* Bouton vers la page de contribution */}
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => router.push('/contribution')}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 dark:from-blue-700 dark:to-blue-900 dark:hover:from-blue-800 dark:hover:to-blue-950 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl animate-pulse-slow border border-blue-400/30"
+            className="flex items-center gap-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 shadow-lg border border-slate-200 dark:border-slate-700 hover:border-primary/50 group"
             title="Accéder au dashboard de contribution"
           >
-            <FaChartLine className="text-base animate-bounce-slow" />
-            <span className="hidden sm:inline text-sm font-bold">
+            <FaChartLine className="text-primary group-hover:scale-110 transition-transform" />
+            <span>
               {loadingT('contributeData')}
             </span>
-          </button>
+          </motion.button>
         </div>
 
         {modelLoading && (
@@ -1357,9 +1341,9 @@ const Section1pro = ({ }) => {
                 <Input
                   value={start}
                   onChange={handleStartChange}
-                  className={`pl-12 h-12 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border-2 transition-all ${errors.start
+                  className={`pl-12 h-14 rounded-2xl bg-white dark:bg-slate-800 border-2 transition-all ${errors.start
                     ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
-                    : 'border-transparent hover:border-blue-500/50 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
+                    : 'border-slate-200 dark:border-slate-700 hover:border-primary/50 focus:border-primary focus:ring-4 focus:ring-primary/10'
                     }`}
                   placeholder={f("go")}
                   id="start"
@@ -1418,9 +1402,9 @@ const Section1pro = ({ }) => {
                 <Input
                   value={end}
                   onChange={handleEndChange}
-                  className={`pl-12 h-12 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border-2 transition-all ${errors.end
+                  className={`pl-12 h-14 rounded-2xl bg-white dark:bg-slate-800 border-2 transition-all ${errors.end
                     ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
-                    : 'border-transparent hover:border-blue-500/50 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10'
+                    : 'border-slate-200 dark:border-slate-700 hover:border-primary/50 focus:border-primary focus:ring-4 focus:ring-primary/10'
                     }`}
                   placeholder={f("arrive")}
                   id="end"
@@ -1481,25 +1465,25 @@ const Section1pro = ({ }) => {
                   onValueChange={(value) => setHour(value)}
                 >
                   <SelectTrigger
-                    className={`w-full pl-10 pr-10 h-12 rounded-[7px] bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] border ${errors.hour
-                      ? 'border-red-500 focus:ring-red-500'
-                      : 'border-gray-300 hover:border-purple-800 focus:border-purple-800'
+                    className={`w-full pl-10 pr-10 h-14 rounded-2xl bg-white dark:bg-slate-800 dark:text-white text-lg border-2 transition-all ${errors.hour
+                      ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-primary/50 focus:border-primary focus:ring-4 focus:ring-primary/10'
                       }`}
                   >
                     <SelectValue placeholder={f("time")} />
                   </SelectTrigger>
-                  <SelectContent className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded-[7px] shadow-xl p-1">
+                  <SelectContent className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-2">
                     {Object.entries(dayPeriodsMapping).map(([period, averageHour]) => (
                       <SelectItem
                         key={period}
                         value={averageHour}
-                        className="rounded-md px-4 py-3 cursor-pointer transition-colors focus:bg-purple-100 dark:focus:bg-purple-900 focus:text-purple-900 dark:focus:text-purple-100 text-[16px]"
+                        className="rounded-xl px-4 py-3 cursor-pointer transition-colors focus:bg-primary/10 focus:text-primary dark:focus:text-primary text-base mb-1 last:mb-0"
                       >
                         <div className="flex items-center gap-3">
                           <div className="text-xl">
                             {getPeriodIcon(period)}
                           </div>
-                          <span className="font-medium">{f(`dayPeriods.${period}`)}</span>
+                          <span className="font-semibold">{f(`dayPeriods.${period}`)}</span>
                         </div>
                       </SelectItem>
                     ))}
@@ -1508,52 +1492,72 @@ const Section1pro = ({ }) => {
                 {errors.hour && <p className="text-red-600 text-sm mt-1 ml-1">{errors.hour}</p>}
               </div>
 
-              <Button
-                type="submit"
-                disabled={isLoading}
-                onClick={() =>
-                  event({
-                    action: "click_calcul",
-                    category: "interaction",
-                    label: "Bouton Calculer",
-                  })
-                }
-                className="w-full h-14 rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-lg font-medium shadow-xl shadow-blue-500/20 transform hover:-translate-y-1 transition-all"
+              <motion.div
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
               >
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="animate-spin">⟳</span>
-                    {t('calculating')}
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    {steps('step1.next')} <FaArrowRight />
-                  </span>
-                )}
-              </Button>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  onClick={() =>
+                    event({
+                      action: "click_calcul",
+                      category: "interaction",
+                      label: "Bouton Calculer",
+                    })
+                  }
+                  className="w-full h-16 rounded-2xl bg-gradient-to-r from-primary to-blue-500 hover:from-primary/90 hover:to-blue-600 text-xl font-bold text-white shadow-xl shadow-primary/20 transition-all"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center gap-3">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      {t('calculating')}
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-3">
+                      {steps('step1.next')} <FaArrowRight />
+                    </span>
+                  )}
+                </Button>
+              </motion.div>
 
               {/* Cartes de services (toujours visibles en step 1) */}
               {showCards && (
-                <div className="w-full flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                  <Link href={'https://rideandgo.vercel.app/'} target="_blank" rel="noopener noreferrer">
-                    <div className="flex flex-col items-center justify-center p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer w-48">
-                      <FaCar className="text-orange-500 text-4xl mb-3" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_ride')}</p>
-                    </div>
+                <div className="w-full flex flex-wrap justify-center gap-4 mt-12 pt-10 border-t border-slate-100 dark:border-slate-800">
+                  <Link href={'https://rideandgo.vercel.app/'} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[140px]">
+                    <motion.div
+                      whileHover={{ y: -5 }}
+                      className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:border-primary/20 transition-all cursor-pointer h-full"
+                    >
+                      <div className="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-4">
+                        <FaCar className="text-orange-500 text-2xl" />
+                      </div>
+                      <p className="text-center text-slate-900 dark:text-white text-xs font-bold leading-tight">{a('need_ride')}</p>
+                    </motion.div>
                   </Link>
 
-                  <Link href={'https://lets-go-liart-phi.vercel.app/'} target="_blank" rel="noopener noreferrer">
-                    <div className="flex flex-col items-center justify-center p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer w-48">
-                      <FaBus className="text-orange-500 text-4xl mb-3" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('travel_agency')}</p>
-                    </div>
+                  <Link href={'https://lets-go-liart-phi.vercel.app/'} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[140px]">
+                    <motion.div
+                      whileHover={{ y: -5 }}
+                      className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:border-primary/20 transition-all cursor-pointer h-full"
+                    >
+                      <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-4">
+                        <FaBus className="text-blue-500 text-2xl" />
+                      </div>
+                      <p className="text-center text-slate-900 dark:text-white text-xs font-bold leading-tight">{a('travel_agency')}</p>
+                    </motion.div>
                   </Link>
 
-                  <Link href={'https://easy-rental-git-review-admin-reseaus-projects.vercel.app/'} target="_blank" rel="noopener noreferrer">
-                    <div className="flex flex-col items-center justify-center p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer w-48">
-                      <FaCarSide className="text-orange-500 text-4xl mb-3" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_rental')}</p>
-                    </div>
+                  <Link href={'https://easy-rental-git-review-admin-reseaus-projects.vercel.app/'} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-[140px]">
+                    <motion.div
+                      whileHover={{ y: -5 }}
+                      className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 hover:border-primary/20 transition-all cursor-pointer h-full"
+                    >
+                      <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-4">
+                        <FaCarSide className="text-emerald-500 text-2xl" />
+                      </div>
+                      <p className="text-center text-slate-900 dark:text-white text-xs font-bold leading-tight">{a('need_rental')}</p>
+                    </motion.div>
                   </Link>
                 </div>
               )}
@@ -1586,25 +1590,25 @@ const Section1pro = ({ }) => {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 mb-4 border border-blue-100 dark:border-blue-800/30"
+                      className="bg-primary/5 dark:bg-primary/10 rounded-[2rem] p-6 mb-6 border border-primary/10 backdrop-blur-md"
                     >
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="text-center p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                          <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-1">
-                            <MdOutlineDirectionsWalk />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center p-4 bg-white/80 dark:bg-slate-800/80 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                          <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest">
+                            <MdOutlineDirectionsWalk className="text-primary" />
                             {result('distance')}
                           </div>
-                          <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
-                            {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
+                          <div className="font-black text-2xl text-slate-900 dark:text-white">
+                            {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} <span className="text-sm font-bold text-primary">km</span>
                           </div>
                         </div>
-                        <div className="text-center p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                          <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-1">
-                            <FaRegClock />
+                        <div className="text-center p-4 bg-white/80 dark:bg-slate-800/80 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                          <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-widest">
+                            <FaRegClock className="text-primary" />
                             {result('duration')}
                           </div>
-                          <div className="font-bold text-lg text-blue-600 dark:text-blue-400">
-                            {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
+                          <div className="font-black text-2xl text-slate-900 dark:text-white">
+                            {(routes[selectedRouteIndex].duration / 60).toFixed(0)} <span className="text-sm font-bold text-primary">min</span>
                           </div>
                         </div>
                       </div>
@@ -1613,15 +1617,15 @@ const Section1pro = ({ }) => {
 
                   {/* Jour de la semaine */}
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FaCalendarAlt className="text-blue-600 text-lg" />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <FaCalendarAlt className="text-primary text-lg" />
                     </div>
                     <select
                       value={jourSemaine}
                       onChange={(e) => setJourSemaine(e.target.value)}
-                      className={`w-full pl-10 h-12 rounded-xl bg-white dark:bg-gray-800 border-2 transition-all dark:text-white ${errors.jourSemaine
+                      className={`w-full pl-12 h-14 rounded-2xl bg-white dark:bg-slate-800 border-2 transition-all dark:text-white font-semibold appearance-none cursor-pointer ${errors.jourSemaine
                         ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
-                        : 'border-gray-300 hover:border-blue-500/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+                        : 'border-slate-200 dark:border-slate-700 hover:border-primary/50 focus:border-primary focus:ring-4 focus:ring-primary/10'
                         }`}
                     >
                       <option value="">{steps('step2.dayOfWeek')}</option>
@@ -1633,48 +1637,23 @@ const Section1pro = ({ }) => {
                       <option value="6">{steps('step2.days.saturday')}</option>
                       <option value="7">{steps('step2.days.sunday')}</option>
                     </select>
-                    {errors.jourSemaine && <p className="text-red-600 text-sm mt-1 ml-1">{errors.jourSemaine}</p>}
-                  </div>
-
-                  {/* Toggles pour Étape 2 */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <ToggleButton
-                      label={steps('step2.publicHoliday')}
-                      icon={<FaCalendarAlt />}
-                      value={jourFerie}
-                      setValue={setJourFerie}
-                      activeValue="1"
-                      inactiveValue="0"
-                    />
-                    <ToggleButton
-                      label={steps('step2.rain')}
-                      icon={<FaCloudRain />}
-                      value={pluie}
-                      setValue={setPluie}
-                      activeValue="1"
-                      inactiveValue="0"
-                    />
-                    <ToggleButton
-                      label={steps('step2.accident')}
-                      icon={<FaCarCrash />}
-                      value={accident}
-                      setValue={setAccident}
-                      activeValue="1"
-                      inactiveValue="0"
-                    />
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400">
+                      <FaChevronDown className="text-sm" />
+                    </div>
+                    {errors.jourSemaine && <p className="text-red-600 text-sm mt-1 ml-1 font-medium">{errors.jourSemaine}</p>}
                   </div>
 
                   {/* État de la route */}
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FaRoad className="text-blue-600 text-lg" />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <FaRoad className="text-primary text-lg" />
                     </div>
                     <select
                       value={etatRoute}
                       onChange={(e) => setEtatRoute(e.target.value)}
-                      className={`w-full pl-10 h-12 rounded-xl bg-white dark:bg-gray-800 border-2 transition-all dark:text-white ${errors.etatRoute
+                      className={`w-full pl-12 h-14 rounded-2xl bg-white dark:bg-slate-800 border-2 transition-all dark:text-white font-semibold appearance-none cursor-pointer ${errors.etatRoute
                         ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
-                        : 'border-gray-300 hover:border-blue-500/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+                        : 'border-slate-200 dark:border-slate-700 hover:border-primary/50 focus:border-primary focus:ring-4 focus:ring-primary/10'
                         }`}
                     >
                       <option value="">{steps('step2.roadCondition')}</option>
@@ -1682,7 +1661,10 @@ const Section1pro = ({ }) => {
                       <option value="moyenne">{steps('step2.roadConditions.average')}</option>
                       <option value="mauvaise">{steps('step2.roadConditions.bad')}</option>
                     </select>
-                    {errors.etatRoute && <p className="text-red-600 text-sm mt-1 ml-1">{errors.etatRoute}</p>}
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400">
+                      <FaChevronDown className="text-sm" />
+                    </div>
+                    {errors.etatRoute && <p className="text-red-600 text-sm mt-1 ml-1 font-medium">{errors.etatRoute}</p>}
                   </div>
 
                   <div className="flex gap-3 pt-4">

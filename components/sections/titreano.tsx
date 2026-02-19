@@ -24,7 +24,7 @@ const Titreano = () => {
           <span className='block text-gray-900 dark:text-white mb-2'>
             {t('mainTitleLine1')}
           </span>
-          <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400'>
+          <span className='text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 dark:from-primary dark:to-blue-300'>
             {t('mainTitleLine2')}
           </span>
         </h1>
@@ -40,12 +40,12 @@ const Titreano = () => {
           className="flex flex-wrap justify-center gap-4 pt-4"
         >
           <Link href={"/inscription1"}>
-            <Button className='h-12 px-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium shadow-lg shadow-blue-500/25 transition-all hover:-translate-y-1'>
+            <Button className='h-14 px-10 rounded-2xl bg-primary hover:bg-primary/90 text-white text-lg font-bold shadow-xl shadow-primary/20 transition-all hover:-translate-y-1'>
               {t('signup')}
             </Button>
           </Link>
           <Link href={"/connexion1"}>
-            <Button variant="outline" className='h-12 px-8 rounded-full border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-white/5 text-lg font-medium text-gray-700 dark:text-gray-200 transition-all hover:-translate-y-1'>
+            <Button variant="outline" className='h-14 px-10 rounded-2xl border-2 border-primary/20 text-primary dark:text-blue-300 hover:bg-primary/10 text-lg font-bold transition-all hover:-translate-y-1'>
               {t('login')}
             </Button>
           </Link>

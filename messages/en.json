@@ -75,7 +75,7 @@
     "description": "Choose the plan that fits your needs",
     "plans": {
       "basic": {
-        "title": "Basic",
+        "title": "Start Free",
         "price": "1000 FCFA",
         "description": "Essential features to get started.",
         "features": [
@@ -86,7 +86,7 @@
         "cta": "Get Started"
       },
       "pro": {
-        "title": "Pro",
+        "title": "Standard",
         "price": "2500 FCFA",
         "description": "Perfect for frequent users.",
         "features": [
@@ -94,10 +94,10 @@
           "Personal history",
           "Cost optimization"
         ],
-        "cta": "Choose Pro"
+        "cta": "Choose Standard"
       },
       "enterprise": {
-        "title": "Enterprise",
+        "title": "Pro",
         "price": "Custom",
         "description": "Dedicated support and custom infrastructure.",
         "features": [
@@ -623,6 +623,7 @@
     "range": "Range",
     "officialFare": "Official fare",
     "viewRoute": "View route",
+    "reliability": "Reliability",
     "newTrip": "New trip",
     "recalculate": "Recalculate",
     "calculationsCount": "Calculations made:"

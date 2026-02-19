@@ -151,7 +151,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans bg-gradient-to-br from-[#F0F2F5] to-[#F0F2F5] dark:from-[#0D1B2A] dark:to-[#1B263B] text-gray-800 dark:text-gray-200 antialiased min-h-screen transition-colors duration-300">
+      <body className="font-sans antialiased min-h-screen transition-colors duration-300">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -174,40 +174,26 @@ export default function RootLayout({
             toastOptions={{
               duration: 4000,
               style: {
-                background: '#ffffff',
-                color: '#111827',
-                borderRadius: '0.75rem',
-                border: '1px solid #e5e7eb',
+                background: 'var(--card)',
+                color: 'var(--card-foreground)',
+                borderRadius: '1rem',
+                border: '1px solid var(--border)',
                 padding: '16px',
                 fontSize: '14px',
-                fontWeight: '500',
+                fontWeight: '600',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
               },
               success: {
                 style: {
-                  background: '#10b981',
+                  background: 'oklch(0.6 0.2 150)',
                   color: '#ffffff',
                   border: 'none',
-                },
-                iconTheme: {
-                  primary: '#ffffff',
-                  secondary: '#10b981',
                 },
               },
               error: {
                 style: {
-                  background: '#ef4444',
-                  color: '#ffffff',
-                  border: 'none',
-                },
-                iconTheme: {
-                  primary: '#ffffff',
-                  secondary: '#ef4444',
-                },
-              },
-              loading: {
-                style: {
-                  background: '#3b82f6',
-                  color: '#ffffff',
+                  background: 'var(--destructive)',
+                  color: 'var(--destructive-foreground)',
                   border: 'none',
                 },
               },

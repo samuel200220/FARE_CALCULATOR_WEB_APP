@@ -1,8 +1,7 @@
 'use client';
 
-import React from "react";
-import { Crown } from "lucide-react";
-import { FaGlobe } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { Crown, Globe, LogOut } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -12,13 +11,22 @@ import { useTranslations } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { useEntreprise } from '@/hooks/useEntreprise';
 
+import { useAuth } from "@/context/AuthContext";
+
 const Headerpro = () => {
   const t = useTranslations("headerPro");
   const router = useRouter();
   const pathname = usePathname();
   const { entreprise } = useEntreprise();
+  const { logout } = useAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  // ✅ Calcul des initiales sûr
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const initials = getInitials(entreprise?.nom);
 
   const changeLocale = (locale: string) => {
@@ -29,56 +37,68 @@ const Headerpro = () => {
   };
 
   return (
-    <header className="sticky top-0 z-[100] h-16 md:h-20 flex items-center justify-between px-4 lg:px-6 bg-gradient-to-r from-blue-700 to-violet-700 dark:from-[#0D1B2A] dark:to-gray-900 w-full shadow-lg">
-      
-      <div className="flex items-center gap-4">
-        <SidebarToggle />
-        <Link href="/" className="font-bold text-white items-center text-xl md:text-2xl lg:text-3xl flex gap-2 hover:opacity-90 transition-opacity">
-          <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-2">
-              {t("title")}
-              <Crown className="w-5 h-5 md:w-6 md:h-6 text-yellow-300 animate-pulse" />
-            </div>
-            <div className="sm:hidden flex items-center gap-2">
-              <Crown className="w-6 h-6 text-yellow-300" />
-            </div>
-          </div>
-        </Link>
-      </div>
+    <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${isScrolled
+      ? "h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 shadow-lg"
+      : "h-20 bg-white dark:bg-slate-950 border-b border-transparent"
+      }`}>
+      <div className="container mx-auto h-full flex items-center justify-between px-4 lg:px-8">
 
-      <div className="flex items-center gap-2 md:gap-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="bg-white/10 hover:bg-white/20 text-white border border-white/20">
-              <FaGlobe className="mr-1 md:mr-2 w-4 h-4" />
-              <span className="hidden sm:inline">{t("language_switch")}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-[140px]">
-            <DropdownMenuItem onClick={() => changeLocale("fr")}>🇫🇷 {t("french")}</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLocale("en")}>🇬🇧 {t("english")}</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLocale("de")}>🇩🇪 {t("german")}</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/20">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-yellow-300 to-orange-400 text-black font-bold text-xs">
-            {initials}
-          </div>
-          <span className="text-sm text-white font-medium truncate max-w-[120px]">
-            {entreprise?.nom ?? 'Entreprise'}
-          </span>
+        {/* Left: Logo & Sidebar */}
+        <div className="flex items-center gap-4">
+          <SidebarToggle />
+          <Link href="/" className="group flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
+              <Crown className="w-6 h-6 text-white" />
+            </div>
+            <span className="hidden sm:block font-black text-2xl tracking-tight text-slate-900 dark:text-white">
+              Farcal<span className="text-primary text-xl tracking-widest ml-1 font-black uppercase">Pro</span>
+            </span>
+          </Link>
         </div>
 
-        <Link href="/connexionpro">
-          <Button variant="ghost" size="sm" className="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-yellow-300/50 transition-all">
-            <span className="hidden sm:inline">{t("logout")}</span>
-            <span className="sm:hidden">🚪</span>
-          </Button>
-        </Link>
+        {/* Right: Actions */}
+        <div className="flex items-center gap-3 md:gap-4">
 
-        <div className="md:hidden">
+          {/* Language Switch */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-10 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-transparent transition-all"
+              >
+                <Globe className="w-4 h-4 mr-2 text-primary" />
+                <span className="hidden sm:inline font-bold">{t("language_switch")}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[160px] p-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-slate-200 dark:border-white/10 shadow-2xl">
+              <DropdownMenuItem onClick={() => changeLocale("fr")} className="p-3 rounded-xl cursor-pointer hover:bg-primary/10 font-bold">🇫🇷 {t("french")}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeLocale("en")} className="p-3 rounded-xl cursor-pointer hover:bg-primary/10 font-bold">🇬🇧 {t("english")}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => changeLocale("de")} className="p-3 rounded-xl cursor-pointer hover:bg-primary/10 font-bold">🇩🇪 {t("german")}</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <ModeToggle />
+
+          {/* Entreprise Profile (Desktop) */}
+          <div className="hidden md:flex items-center gap-3 px-3 py-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/5">
+            <div className="h-8 w-8 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary to-blue-500 text-white font-black text-xs shadow-md">
+              {initials}
+            </div>
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-200 truncate max-w-[120px]">
+              {entreprise?.nom ?? 'Entreprise'}
+            </span>
+          </div>
+
+          {/* Logout */}
+          <Button
+            variant="ghost"
+            onClick={logout}
+            className="h-10 px-4 rounded-xl text-slate-600 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all font-bold group"
+          >
+            <LogOut className="w-5 h-5 md:mr-2 group-hover:translate-x-1 transition-transform" />
+            <span className="hidden md:inline">{t("logout")}</span>
+          </Button>
         </div>
       </div>
     </header>

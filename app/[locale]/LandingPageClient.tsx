@@ -12,6 +12,7 @@ import {
   FaHardHat, FaArrowRight, FaArrowLeft, FaChartLine, FaArrowsAlt, FaInfoCircle, FaChevronDown,
   FaSun, FaCloudSun, FaCloud, FaMoon, FaCloudMoon, FaExclamationTriangle, FaDollarSign, FaRoute
 } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { MdOutlineDirectionsWalk } from 'react-icons/md';
 import {
@@ -50,7 +51,7 @@ const getPeriodIcon = (period: string) => {
     case 'morning': return <FaCloudSun className="text-orange-400" />;
     case 'midday': return <FaSun className="text-yellow-400" />;
     case 'afternoon': return <FaCloud className="text-blue-200" />;
-    case 'evening': return <FaCloudMoon className="text-purple-400" />;
+    case 'evening': return <FaCloudMoon className="text-primary/60" />;
     case 'night': return <FaMoon className="text-gray-400" />;
     default: return null;
   }
@@ -108,6 +109,7 @@ export default function LandingPageClient() {
   const [modelLoading, setModelLoading] = useState(false);
 
   const [showCustomDiv, setShowCustomDiv] = useState(false);
+  const reliability = 95;
 
   interface PredictionResult {
     prix_estime_fcfa: number;
@@ -702,9 +704,9 @@ export default function LandingPageClient() {
       // }
 
       // Calcul de la fourchette de prix
-      const prixArrondi = Math.round(prixEstime);
-      const prixMin = Math.round(prixArrondi * 0.85);
-      const prixMax = Math.round(prixArrondi * 1.15);
+      const prixArrondi = Math.round(prixEstime / 50) * 50;
+      const prixMin = Math.round((prixArrondi * 0.85) / 50) * 50;
+      const prixMax = Math.round((prixArrondi * 1.15) / 50) * 50;
 
       const result = {
         prix_estime_fcfa: prixArrondi,
@@ -770,9 +772,9 @@ export default function LandingPageClient() {
         bagages: bagages
       });
 
-      const prixArrondi = Math.round(prixEstime);
-      const prixMin = Math.round(prixArrondi * 0.85);
-      const prixMax = Math.round(prixArrondi * 1.15);
+      const prixArrondi = Math.round(prixEstime / 50) * 50;
+      const prixMin = Math.round((prixArrondi * 0.85) / 50) * 50;
+      const prixMax = Math.round((prixArrondi * 1.15) / 50) * 50;
 
       const simulatedResult = {
         prix_estime_fcfa: prixArrondi,
@@ -819,12 +821,12 @@ export default function LandingPageClient() {
     const facteurBagages = bagages === 'oui' ? 1.1 : 1;
 
     return Math.round(
-      (tarifBase + (distance * tarifParKm)) *
-      facteurHeure *
-      facteurPluie *
-      facteurRoute *
-      facteurBagages
-    );
+      ((tarifBase + (distance * tarifParKm)) *
+        facteurHeure *
+        facteurPluie *
+        facteurRoute *
+        facteurBagages) / 50
+    ) * 50;
   };
 
   const resetForm = () => {
@@ -860,11 +862,11 @@ export default function LandingPageClient() {
       <div className="flex items-center space-x-2">
         {[1, 2, 3].map((stepNum) => (
           <React.Fragment key={stepNum}>
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === stepNum ? 'bg-purple-600 text-white' : 'bg-gray-300 dark:bg-gray-700 text-gray-500'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === stepNum ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
               {stepNum}
             </div>
             {stepNum < 3 && (
-              <div className={`w-12 h-1 ${step > stepNum ? 'bg-purple-600' : 'bg-gray-300 dark:bg-gray-700'}`} />
+              <div className={`w-12 h-1 ${step > stepNum ? 'bg-primary' : 'bg-muted'}`} />
             )}
           </React.Fragment>
         ))}
@@ -887,8 +889,7 @@ export default function LandingPageClient() {
   return (
     <>
       <Headeracc />
-
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      <div className="min-h-screen bg-transparent transition-colors duration-500">
 
         {/* Hero Section */}
         <main className="relative min-h-screen flex items-center">
@@ -907,62 +908,69 @@ export default function LandingPageClient() {
           <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left Column - Content */}
-              <div className="text-white">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="text-white"
+              >
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight mb-8 tracking-tight">
                   {t('heroTitle')}
                 </h1>
-                <p className="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed">
+                <p className="text-xl md:text-2xl mb-10 text-white/90 leading-relaxed font-light">
                   {t('heroDescription')}
                 </p>
 
-                {/* App Download Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-12">
                   <Link href={'/accueilano'}>
-                    <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                    <button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-800 dark:hover:bg-blue-900 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 hover:-translate-y-1 flex items-center justify-center">
                       {t('startFree')}
                     </button>
                   </Link>
                   <Link href={'/inscription1'}>
-                    <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                    <button className="bg-slate-950 hover:bg-black text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg shadow-slate-900/40 hover:-translate-y-1 flex items-center justify-center border border-slate-800">
                       {t('standardVersion')}
                     </button>
                   </Link>
                   <Link href={'/inscriptionpro'}>
-                    <button className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center justify-center">
+                    <button className="bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-slate-900 px-8 py-4 rounded-xl font-bold transition-all shadow-lg shadow-amber-500/30 hover:-translate-y-1 flex items-center justify-center">
                       {t('proVersion')}
                     </button>
                   </Link>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 mb-2">
                   <a href="https://lets-go-liart-phi.vercel.app/" target="_blank" rel="noopener noreferrer">
-                    <div className="ml-18 lg:ml-0 sm:ml-0 w-[200px] lg:w-[180px] sm:w-[180px] flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer">
-                      <FaBus className="text-orange-500 text-3xl mb-2" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">
+                    <div className="ml-18 lg:ml-0 sm:ml-0 w-[200px] lg:w-[180px] sm:w-[180px] flex flex-col items-center justify-center p-4 bg-card/60 backdrop-blur-md border border-border rounded-xl shadow-md hover:scale-105 transition-transform cursor-pointer">
+                      <FaBus className="text-primary text-3xl mb-2" />
+                      <p className="text-center text-foreground text-sm font-medium">
                         {a('travel_agency')}
                       </p>
                     </div>
                   </a>
 
                   <a href="https://rideandgo.vercel.app/" target="_blank" rel="noopener noreferrer">
-                    <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
-                      <FaCar className="text-orange-500 text-3xl mb-2" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_ride')}</p>
+                    <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-card/60 backdrop-blur-md border border-border rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                      <FaCar className="text-primary text-3xl mb-2" />
+                      <p className="text-center text-foreground text-sm font-medium">{a('need_ride')}</p>
                     </div>
                   </a>
 
                   <a href="https://easy-rental-git-review-admin-reseaus-projects.vercel.app/" target="_blank" rel="noopener noreferrer">
-                    <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-gray-100 to-gray-300 dark:from-[#1B263B] dark:to-[#0D1B2A] rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
-                      <FaCarSide className="text-orange-500 text-3xl mb-2" />
-                      <p className="text-center text-gray-800 dark:text-white text-sm font-medium">{a('need_rental')}</p>
+                    <div className="ml-20 lg:ml-0 sm:ml-0 flex flex-col items-center justify-center p-4 bg-card/60 backdrop-blur-md border border-border rounded-xl shadow-md w-[180px] hover:scale-105 transition-transform cursor-pointer">
+                      <FaCarSide className="text-primary text-3xl mb-2" />
+                      <p className="text-center text-foreground text-sm font-medium">{a('need_rental')}</p>
                     </div>
                   </a>
                 </div>
+              </motion.div>
 
-              </div>
-
-              {/* Right Column - Calculator */}
-              <div className="bg-white dark:bg-[#0D1B2A] rounded-3xl shadow-lg mt-2 mb-2 p-8 w-full max-w-lg mx-auto">
-                <h3 className="dark:text-white text-2xl sm:text-4xl font-bold mb-6 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl rounded-3xl shadow-2xl mt-2 mb-2 p-8 w-full max-w-lg mx-auto border border-white/20 dark:border-white/10"
+              >
+                <h3 className="dark:text-white text-2xl sm:text-4xl font-bold mb-6 text-center text-slate-900">
                   {t('fareCalculator')}
                 </h3>
 
@@ -974,7 +982,7 @@ export default function LandingPageClient() {
 
                 {/* Avertissement de limite de calculs */}
                 {bloque && !estConnecte && (
-                  <div className="mb-4 p-4 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-2xl shadow-lg">
+                  <div className="mb-4 p-4 bg-destructive text-destructive-foreground rounded-2xl shadow-lg">
                     <div className="flex items-center gap-3">
                       <FaExclamationTriangle className="text-xl" />
                       <div>
@@ -990,13 +998,13 @@ export default function LandingPageClient() {
                 {/* Indicateur de calculs restants */}
                 {!estConnecte && compteur > 0 && !bloque && (
                   <div className="mb-4 text-center">
-                    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30 px-4 py-2 rounded-full">
-                      <span className="text-sm text-purple-700 dark:text-purple-300">
+                    <div className="inline-flex items-center gap-2 bg-accent px-4 py-2 rounded-full">
+                      <span className="text-sm text-accent-foreground">
                         {limitsT('calculationsMade', { current: compteur })}
                       </span>
-                      <div className="w-24 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-purple-500 to-green-500 transition-all duration-500"
+                          className="h-full bg-primary transition-all duration-500"
                           style={{ width: `${(compteur / 3) * 100}%` }}
                         />
                       </div>
@@ -1010,7 +1018,7 @@ export default function LandingPageClient() {
                   <>
                     {step === 1 ? (
                       <form onSubmit={handleStep1Submit} className="space-y-5">
-                        <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
+                        <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
                           <FaMapMarkerAlt />
                           {calc('tripInformation')}
                         </h4>
@@ -1018,7 +1026,7 @@ export default function LandingPageClient() {
                         {/* Champ Départ */}
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaMapMarkerAlt className="text-purple-600 text-lg" />
+                            <FaMapMarkerAlt className="text-primary text-lg" />
                           </div>
                           <Input
                             value={start}
@@ -1033,7 +1041,7 @@ export default function LandingPageClient() {
                               }
                             }}
                             onBlur={() => setTimeout(() => setShowSuggestionsStart(false), 200)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-primary'
                               }`}
                             placeholder={f("go")}
                             id="start"
@@ -1052,9 +1060,9 @@ export default function LandingPageClient() {
                                     <li
                                       key={place.id}
                                       onClick={() => handlePlaceSelect(place, 'depart')}
-                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer flex items-center gap-2"
+                                      className="dark:text-white px-4 py-2 hover:bg-accent cursor-pointer flex items-center gap-2"
                                     >
-                                      <FaMapMarkerAlt className="text-purple-500 text-sm" />
+                                      <FaMapMarkerAlt className="text-primary text-sm" />
                                       <span>{place.name}</span>
                                     </li>
                                   ))}
@@ -1070,7 +1078,7 @@ export default function LandingPageClient() {
                                     <li
                                       key={`local-${index}`}
                                       onClick={() => handleSelectStart(name)}
-                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer"
+                                      className="dark:text-white px-4 py-2 hover:bg-accent cursor-pointer"
                                     >
                                       {name}
                                     </li>
@@ -1088,7 +1096,7 @@ export default function LandingPageClient() {
                         {/* Champ Destination */}
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaLocationArrow className="text-purple-600 text-lg" />
+                            <FaLocationArrow className="text-primary text-lg" />
                           </div>
                           <Input
                             value={end}
@@ -1103,7 +1111,7 @@ export default function LandingPageClient() {
                               }
                             }}
                             onBlur={() => setTimeout(() => setShowSuggestionsEnd(false), 200)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${errors.end ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-primary'
                               }`}
                             placeholder={f("arrive")}
                             id="end"
@@ -1122,9 +1130,9 @@ export default function LandingPageClient() {
                                     <li
                                       key={place.id}
                                       onClick={() => handlePlaceSelect(place, 'destination')}
-                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer flex items-center gap-2"
+                                      className="dark:text-white px-4 py-2 hover:bg-accent cursor-pointer flex items-center gap-2"
                                     >
-                                      <FaLocationArrow className="text-purple-500 text-sm" />
+                                      <FaLocationArrow className="text-primary text-sm" />
                                       <span>{place.name}</span>
                                     </li>
                                   ))}
@@ -1140,7 +1148,7 @@ export default function LandingPageClient() {
                                     <li
                                       key={`local-${index}`}
                                       onClick={() => handleSelectEnd(name)}
-                                      className="dark:text-white px-4 py-2 hover:bg-purple-100 dark:hover:bg-purple-900 cursor-pointer"
+                                      className="dark:text-white px-4 py-2 hover:bg-accent cursor-pointer"
                                     >
                                       {name}
                                     </li>
@@ -1167,7 +1175,7 @@ export default function LandingPageClient() {
                             <SelectTrigger
                               className={`w-full pl-10 pr-10 h-12 rounded-[7px] bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] border ${errors.hour
                                 ? 'border-red-500 focus:ring-red-500'
-                                : 'border-gray-300 hover:border-purple-800 focus:border-purple-800'
+                                : 'border-gray-300 hover:border-primary focus:border-primary-foreground'
                                 }`}
                             >
                               <SelectValue placeholder={f("time")} />
@@ -1177,7 +1185,7 @@ export default function LandingPageClient() {
                                 <SelectItem
                                   key={period}
                                   value={averageHour}
-                                  className="rounded-md px-4 py-3 cursor-pointer transition-colors focus:bg-purple-100 dark:focus:bg-purple-900 focus:text-purple-900 dark:focus:text-purple-100 text-[16px]"
+                                  className="rounded-md px-4 py-3 cursor-pointer transition-colors focus:bg-accent focus:text-accent-foreground text-[16px]"
                                 >
                                   <div className="flex items-center gap-3">
                                     <div className="text-xl">
@@ -1201,9 +1209,9 @@ export default function LandingPageClient() {
                               label: "Bouton Calculer",
                             })
                           }
-                          className={`text-white dark:bg-purple-700 dark:text-white dark:hover:bg-green-800 w-full h-12 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl flex items-center justify-center gap-2 ${bloque && !estConnecte
-                            ? 'bg-gray-500 cursor-not-allowed'
-                            : 'bg-purple-700 hover:bg-green-600'
+                          className={`text-white dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 w-full h-12 shadow-lg transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-2xl flex items-center justify-center gap-2 ${bloque && !estConnecte
+                            ? 'bg-muted cursor-not-allowed'
+                            : 'bg-primary hover:bg-primary/90'
                             }`}
                         >
                           {bloque && !estConnecte ? (
@@ -1223,20 +1231,20 @@ export default function LandingPageClient() {
                       </form>
                     ) : step === 2 ? (
                       <form onSubmit={handleStep2Submit} className="space-y-4">
-                        <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
+                        <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
                           <FaCalendarAlt />
                           {calc('tripConditions')}
                         </h4>
 
                         {routes.length > 0 && routes[selectedRouteIndex] && (
-                          <div className="bg-purple-50 dark:bg-gray-800 rounded-lg p-3 mb-4">
+                          <div className="bg-accent/40 dark:bg-accent/10 rounded-lg p-3 mb-4">
                             <div className="grid grid-cols-2 gap-2">
                               <div className="text-center p-2 bg-white dark:bg-gray-700 rounded">
                                 <div className="flex items-center justify-center gap-1 text-sm text-gray-600 dark:text-gray-300">
                                   <MdOutlineDirectionsWalk />
                                   {resultsT('distance')}
                                 </div>
-                                <div className="font-bold text-lg text-purple-600 dark:text-purple-400">
+                                <div className="font-bold text-lg text-primary">
                                   {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
                                 </div>
                               </div>
@@ -1245,7 +1253,7 @@ export default function LandingPageClient() {
                                   <FaRegClock />
                                   {resultsT('duration')}
                                 </div>
-                                <div className="font-bold text-lg text-purple-600 dark:text-purple-400">
+                                <div className="font-bold text-lg text-primary">
                                   {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
                                 </div>
                               </div>
@@ -1255,12 +1263,12 @@ export default function LandingPageClient() {
 
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FaCalendarAlt className="text-purple-600" />
+                            <FaCalendarAlt className="text-primary" />
                           </div>
                           <select
                             value={jourSemaine}
                             onChange={(e) => setJourSemaine(e.target.value)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${errors.jourSemaine ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-purple-800'
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border appearance-none ${errors.jourSemaine ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-primary'
                               }`}
                             disabled={bloque && !estConnecte}
                           >
@@ -1278,7 +1286,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaCalendarAlt className="text-purple-600" />
+                            <FaCalendarAlt className="text-primary" />
                             {calc('publicHoliday')}
                           </label>
                           <div className="flex gap-4">
@@ -1288,7 +1296,7 @@ export default function LandingPageClient() {
                                 value="0"
                                 checked={jourFerie === '0'}
                                 onChange={(e) => setJourFerie(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('no')}</span>
@@ -1299,7 +1307,7 @@ export default function LandingPageClient() {
                                 value="1"
                                 checked={jourFerie === '1'}
                                 onChange={(e) => setJourFerie(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('yes')}</span>
@@ -1308,8 +1316,8 @@ export default function LandingPageClient() {
                         </div>
 
                         <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaCloudRain className="text-purple-600" />
+                          <label className="flex items-center gap-2 text-foreground/80">
+                            <FaCloudRain className="text-primary" />
                             {calc('rain')}
                           </label>
                           <div className="flex gap-4">
@@ -1319,7 +1327,7 @@ export default function LandingPageClient() {
                                 value="0"
                                 checked={pluie === '0'}
                                 onChange={(e) => setPluie(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('no')}</span>
@@ -1330,7 +1338,7 @@ export default function LandingPageClient() {
                                 value="1"
                                 checked={pluie === '1'}
                                 onChange={(e) => setPluie(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('yes')}</span>
@@ -1340,7 +1348,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaRoad className="text-purple-600" />
+                            <FaRoad className="text-primary" />
                             {calc('roadCondition')}
                           </label>
                           <select
@@ -1360,7 +1368,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaCarCrash className="text-purple-600" />
+                            <FaCarCrash className="text-primary" />
                             {calc('accident')}
                           </label>
                           <div className="flex gap-4">
@@ -1370,7 +1378,7 @@ export default function LandingPageClient() {
                                 value="0"
                                 checked={accident === '0'}
                                 onChange={(e) => setAccident(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('no')}</span>
@@ -1381,7 +1389,7 @@ export default function LandingPageClient() {
                                 value="1"
                                 checked={accident === '1'}
                                 onChange={(e) => setAccident(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('yes')}</span>
@@ -1393,7 +1401,7 @@ export default function LandingPageClient() {
                           <Button
                             type="button"
                             onClick={() => setStep(1)}
-                            className="bg-purple-500 hover:bg-purple-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 w-1/2 h-12 flex items-center justify-center gap-2"
                           >
                             <FaArrowLeft />
                             {calc('back')}
@@ -1402,8 +1410,8 @@ export default function LandingPageClient() {
                             type="submit"
                             disabled={bloque && !estConnecte}
                             className={`w-1/2 h-12 flex items-center justify-center gap-2 ${bloque && !estConnecte
-                              ? 'bg-gray-500 cursor-not-allowed'
-                              : 'bg-purple-700 hover:bg-green-800 text-white'
+                              ? 'bg-muted cursor-not-allowed text-muted-foreground'
+                              : 'bg-primary hover:bg-primary/90 text-primary-foreground'
                               }`}
                           >
                             {bloque && !estConnecte ? calc('blocked') : calc('next')}
@@ -1413,14 +1421,14 @@ export default function LandingPageClient() {
                       </form>
                     ) : (
                       <form onSubmit={handleStep3Submit} className="space-y-4">
-                        <h4 className="text-lg font-semibold text-purple-700 dark:text-purple-300 mb-4 flex items-center gap-2">
+                        <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
                           <FaSuitcase />
                           {calc('additionalConditions')}
                         </h4>
 
                         <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaSuitcase className="text-purple-600" />
+                          <label className="flex items-center gap-2 text-foreground/80">
+                            <FaSuitcase className="text-primary" />
                             {calc('luggage')}
                           </label>
                           <div className="flex gap-4">
@@ -1430,7 +1438,7 @@ export default function LandingPageClient() {
                                 value="non"
                                 checked={bagages === 'non'}
                                 onChange={(e) => setBagages(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('no')}</span>
@@ -1441,7 +1449,7 @@ export default function LandingPageClient() {
                                 value="oui"
                                 checked={bagages === 'oui'}
                                 onChange={(e) => setBagages(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('yes')}</span>
@@ -1451,7 +1459,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaRoad className="text-purple-600" />
+                            <FaRoad className="text-primary" />
                             {calc('wideRoads')}
                           </label>
                           <div className="flex gap-4">
@@ -1461,7 +1469,7 @@ export default function LandingPageClient() {
                                 value="oui"
                                 checked={routesLarges === 'oui'}
                                 onChange={(e) => setRoutesLarges(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('yes')}</span>
@@ -1472,7 +1480,7 @@ export default function LandingPageClient() {
                                 value="non"
                                 checked={routesLarges === 'non'}
                                 onChange={(e) => setRoutesLarges(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('no')}</span>
@@ -1482,7 +1490,7 @@ export default function LandingPageClient() {
 
                         <div className="space-y-2">
                           <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                            <FaHardHat className="text-purple-600" />
+                            <FaHardHat className="text-primary" />
                             {calc('roadWorks')}
                           </label>
                           <div className="flex gap-4">
@@ -1492,7 +1500,7 @@ export default function LandingPageClient() {
                                 value="non"
                                 checked={routesTravaux === 'non'}
                                 onChange={(e) => setRoutesTravaux(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('no')}</span>
@@ -1503,7 +1511,7 @@ export default function LandingPageClient() {
                                 value="oui"
                                 checked={routesTravaux === 'oui'}
                                 onChange={(e) => setRoutesTravaux(e.target.value)}
-                                className="text-purple-600"
+                                className="accent-primary"
                                 disabled={bloque && !estConnecte}
                               />
                               <span className="dark:text-white">{calc('yes')}</span>
@@ -1530,7 +1538,7 @@ export default function LandingPageClient() {
                           <Button
                             type="button"
                             onClick={() => setStep(2)}
-                            className="bg-purple-500 hover:bg-purple-700 text-white w-1/2 h-12 flex items-center justify-center gap-2"
+                            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 w-1/2 h-12 flex items-center justify-center gap-2"
                           >
                             <FaArrowLeft />
                             {calc('back')}
@@ -1539,8 +1547,8 @@ export default function LandingPageClient() {
                             type="submit"
                             disabled={isLoading || (bloque && !estConnecte)}
                             className={`w-1/2 h-12 flex items-center justify-center gap-2 ${bloque && !estConnecte
-                              ? 'bg-gray-500 cursor-not-allowed'
-                              : 'bg-purple-700 hover:bg-green-800 text-white'
+                              ? 'bg-muted cursor-not-allowed'
+                              : 'bg-primary hover:bg-primary/90 text-primary-foreground'
                               }`}
                           >
                             <FaCalculator />
@@ -1565,7 +1573,7 @@ export default function LandingPageClient() {
                     <form onSubmit={(e) => { e.preventDefault(); resetForm(); }} className="space-y-4 mb-4 mt-2">
                       <Button
                         type="submit"
-                        className="bg-purple-600 hover:bg-purple-700 text-white w-full h-12"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground w-full h-12 shadow-lg"
                       >
                         {resultsT('newTrip')}
                       </Button>
@@ -1584,17 +1592,17 @@ export default function LandingPageClient() {
 
                     {/* Résumé sous la carte */}
                     {predictionResult && routes.length > 0 && (
-                      <div className="bg-purple-50 dark:bg-gray-700 rounded-lg p-3 space-y-2 mt-4">
+                      <div className="bg-accent/40 rounded-lg p-3 space-y-2 mt-4">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="text-center p-2 bg-white dark:bg-gray-600 rounded">
                             <div className="text-xs text-gray-500 dark:text-gray-300">{resultsT('distance')}</div>
-                            <div className="font-bold text-purple-600 dark:text-purple-400">
+                            <div className="font-bold text-primary">
                               {(routes[selectedRouteIndex].distance / 1000).toFixed(2)} km
                             </div>
                           </div>
                           <div className="text-center p-2 bg-white dark:bg-gray-600 rounded">
                             <div className="text-xs text-gray-500 dark:text-gray-300">{resultsT('duration')}</div>
-                            <div className="font-bold text-purple-600 dark:text-purple-400">
+                            <div className="font-bold text-primary">
                               {(routes[selectedRouteIndex].duration / 60).toFixed(0)} min
                             </div>
                           </div>
@@ -1613,13 +1621,13 @@ export default function LandingPageClient() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-800">
+                    <div className="bg-card/60 backdrop-blur-md rounded-2xl p-6 border border-border">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full">
-                          <FaMoneyBillAlt className="text-purple-600 dark:text-purple-300 text-2xl" />
+                        <div className="bg-primary/10 p-3 rounded-full">
+                          <FaMoneyBillAlt className="text-primary text-2xl" />
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold text-purple-900 dark:text-white">
+                          <h3 className="text-xl font-bold text-foreground">
                             {resultsT('estimationTitle')}
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -1632,7 +1640,7 @@ export default function LandingPageClient() {
                         <div className="grid grid-cols-2 gap-4 mb-6">
                           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
                             <div className="flex items-center gap-2 mb-2">
-                              <MdOutlineDirectionsWalk className="text-purple-600 dark:text-purple-400" />
+                              <FaRegClock className="text-primary" />
                               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{resultsT('distance')}</span>
                             </div>
                             <p className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -1641,7 +1649,7 @@ export default function LandingPageClient() {
                           </div>
                           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
                             <div className="flex items-center gap-2 mb-2">
-                              <FaRegClock className="text-purple-600 dark:text-purple-400" />
+                              <FaRegClock className="text-primary" />
                               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{resultsT('duration')}</span>
                             </div>
                             <p className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -1676,21 +1684,19 @@ export default function LandingPageClient() {
 
                           {/* Afficher le compteur de calculs */}
                           {!estConnecte && (
-                            <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 rounded-xl border border-purple-200 dark:border-purple-800">
-                              <div className="flex items-center justify-between">
-                                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
-                                  {resultsT('calculationsCount')}
+                            <div className="bg-accent/40 p-4 rounded-xl border border-border">
+                              <span className="text-sm font-medium text-muted-foreground">
+                                {resultsT('reliability')}
+                              </span>
+                              <div className="flex items-center gap-3 mt-1">
+                                <span className="text-lg font-bold">
+                                  {reliability}%
                                 </span>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-lg font-bold text-purple-900 dark:text-purple-100">
-                                    {compteur}/3
-                                  </span>
-                                  <div className="w-20 h-2 bg-purple-200 dark:bg-purple-800 rounded-full overflow-hidden">
-                                    <div
-                                      className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
-                                      style={{ width: `${(compteur / 3) * 100}%` }}
-                                    />
-                                  </div>
+                                <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full bg-primary transition-all duration-500"
+                                    style={{ width: `${(compteur / 3) * 100}%` }}
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -1745,15 +1751,15 @@ export default function LandingPageClient() {
                 )}
 
                 {error && <p className="text-red-500 text-center mt-2 text-sm">{error}</p>}
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </div >
         </main >
       </div >
       <Pricing />
       <Accsec />
       <Download />
-      <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-[#0D1B2A] transition-colors duration-500 mt-3 mb-20 p-4">
+      <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-transparent transition-colors duration-500 mt-3 mb-20 p-4">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">QR Code Farcal</h1>
         <QRCode value={url} size={256} />
         <p className="text-4xl mt-4 text-gray-900 dark:text-white">{t('qrcode')}</p>
