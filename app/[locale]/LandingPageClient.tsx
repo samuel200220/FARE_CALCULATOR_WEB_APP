@@ -89,6 +89,7 @@ export default function LandingPageClient() {
   const [compteur, setCompteur] = useState(0);
   const [bloque, setBloque] = useState(false);
   const [estConnecte, setEstConnecte] = useState(false);
+  const [isGeolocating, setIsGeolocating] = useState(false);
 
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
@@ -455,6 +456,80 @@ export default function LandingPageClient() {
     setEnd(name);
     setShowSuggestionsEnd(false);
     setSelectedDestinationPlace(null);
+  };
+
+  // Géolocalisation : utiliser la position actuelle comme point de départ
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error(f('locationError'), { position: 'bottom-right' });
+      return;
+    }
+
+    setIsGeolocating(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        try {
+          // Utiliser l'endpoint du backend pour trouver le lieu le plus proche
+          const backendUrl = 'https://map-backend-reactif.onrender.com';
+          const response = await fetch(
+            `${backendUrl}/api/places/closest?lat=${latitude}&lng=${longitude}`
+          );
+
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération du lieu le plus proche');
+          }
+
+          const result = await response.json();
+
+          if (result && result.success && result.data) {
+            const closestPlace = result.data;
+            // Mettre à jour le départ avec le nom du lieu trouvé
+            setStart(closestPlace.name);
+            setSelectedDepartPlace({
+              id: closestPlace.id,
+              name: closestPlace.name,
+              coordinates: closestPlace.coordinates
+            });
+            setUserLocation({
+              latitude: closestPlace.coordinates.lat,
+              longitude: closestPlace.coordinates.lng
+            });
+            setDepartSearchResults([]);
+            setShowSuggestionsStart(false);
+
+            toast.success(f('locationSuccess'), { icon: '📍', position: 'bottom-right' });
+          } else {
+            throw new Error('Aucun lieu trouvé à proximité');
+          }
+        } catch (err) {
+          console.error('Erreur géolocalisation backend:', err);
+          // Fallback: utiliser les coordonnées brutes si le backend échoue
+          const coordName = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+          setStart(coordName);
+          setSelectedDepartPlace({
+            id: -1,
+            name: coordName,
+            coordinates: { lat: latitude, lng: longitude }
+          });
+          setUserLocation({ latitude, longitude });
+          toast.success(f('locationSuccess'), { icon: '📍', position: 'bottom-right' });
+        } finally {
+          setIsGeolocating(false);
+        }
+      },
+      (error) => {
+        setIsGeolocating(false);
+        if (error.code === error.PERMISSION_DENIED) {
+          toast.error(f('locationDenied'), { position: 'bottom-right' });
+        } else {
+          toast.error(f('locationError'), { position: 'bottom-right' });
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
   };
 
   // Calcul de l'itinéraire avec le backend
@@ -1041,12 +1116,32 @@ export default function LandingPageClient() {
                               }
                             }}
                             onBlur={() => setTimeout(() => setShowSuggestionsStart(false), 200)}
-                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-4 py-2 rounded-[7px] border ${errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-primary'
+                            className={`bg-gray-200 dark:bg-gray-800 dark:text-white text-[16px] w-full h-12 pl-10 pr-32 py-2 rounded-[7px] border ${errors.start ? 'border-red-500 ring-red-500 focus:border-red-500' : 'border-gray-300 hover:border-primary'
                               }`}
                             placeholder={f("go")}
                             id="start"
                             disabled={bloque && !estConnecte}
                           />
+                          {/* Bouton géolocalisation */}
+                          <button
+                            type="button"
+                            onClick={handleUseMyLocation}
+                            disabled={isGeolocating || (bloque && !estConnecte)}
+                            title={f('useMyLocation')}
+                            className="absolute right-2 top-1.5 flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary/10 hover:bg-primary/20 text-primary text-[11px] font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-primary/20"
+                          >
+                            {isGeolocating ? (
+                              <>
+                                <div className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                                <span>{f('locating')}</span>
+                              </>
+                            ) : (
+                              <>
+                                <FaLocationArrow className="text-[11px]" />
+                                <span>{f('useMyLocation')}</span>
+                              </>
+                            )}
+                          </button>
                           {errors.start && <p className="text-red-600 text-sm mt-1">{errors.start}</p>}
 
                           {showSuggestionsStart && (

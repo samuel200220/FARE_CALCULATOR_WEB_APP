@@ -62,6 +62,11 @@
     "arrive": "End",
     "time": "Select time",
     "sugg": "No suggestion",
+    "useMyLocation": "My location",
+    "locating": "Locating...",
+    "locationSuccess": "Location detected!",
+    "locationError": "Unable to get your location",
+    "locationDenied": "Location access denied",
     "dayPeriods": {
       "morning": "Morning",
       "midday": "Midday",

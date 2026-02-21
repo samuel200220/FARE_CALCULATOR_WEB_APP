@@ -62,6 +62,11 @@
     "arrive": "Arrivée",
     "time": "Sélectionnez l'heure",
     "sugg": "Aucune suggestion",
+    "useMyLocation": "Ma position",
+    "locating": "Localisation...",
+    "locationSuccess": "Position détectée !",
+    "locationError": "Impossible d'obtenir votre position",
+    "locationDenied": "Accès à la localisation refusé",
     "dayPeriods": {
       "morning": "Matin",
       "midday": "Midi",

@@ -183,6 +183,7 @@ const Section1 = ({ }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [estConnecte, setEstConnecte] = useState(false);
   const [showCards, setShowCards] = useState(true);
+  const [isGeolocating, setIsGeolocating] = useState(false);
 
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
@@ -715,6 +716,79 @@ const Section1 = ({ }) => {
     setEnd(name);
     setShowSuggestionsEnd(false);
     setSelectedDestinationPlace(null);
+  };
+
+  // Géolocalisation : utiliser la position actuelle comme point de départ
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error(f('locationError'));
+      return;
+    }
+
+    setIsGeolocating(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        try {
+          // Utiliser l'endpoint du backend pour trouver le lieu le plus proche
+          const response = await fetch(
+            `${backendUrl}/api/places/closest?lat=${latitude}&lng=${longitude}`
+          );
+
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération du lieu le plus proche');
+          }
+
+          const result = await response.json();
+
+          if (result && result.success && result.data) {
+            const closestPlace = result.data;
+            // Mettre à jour le départ avec le nom du lieu trouvé
+            setStart(closestPlace.name);
+            setSelectedDepartPlace({
+              id: closestPlace.id,
+              name: closestPlace.name,
+              coordinates: closestPlace.coordinates
+            });
+            setUserLocation({
+              latitude: closestPlace.coordinates.lat,
+              longitude: closestPlace.coordinates.lng
+            });
+            setDepartSearchResults([]);
+            setShowSuggestionsStart(false);
+
+            toast.success(f('locationSuccess'), { icon: '📍' });
+          } else {
+            throw new Error('Aucun lieu trouvé à proximité');
+          }
+        } catch (err) {
+          console.error('Erreur géolocalisation via backend:', err);
+          // Fallback: utiliser les coordonnées brutes si le backend échoue
+          const coordName = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+          setStart(coordName);
+          setSelectedDepartPlace({
+            id: -1,
+            name: coordName,
+            coordinates: { lat: latitude, lng: longitude }
+          });
+          setUserLocation({ latitude, longitude });
+          toast.success(f('locationSuccess'), { icon: '📍' });
+        } finally {
+          setIsGeolocating(false);
+        }
+      },
+      (error) => {
+        setIsGeolocating(false);
+        if (error.code === error.PERMISSION_DENIED) {
+          toast.error(f('locationDenied'));
+        } else {
+          toast.error(f('locationError'));
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
   };
 
   // Calcul de l'itinéraire avec le backend
@@ -1422,13 +1496,33 @@ const Section1 = ({ }) => {
                 <Input
                   value={start}
                   onChange={handleStartChange}
-                  className={`pl-12 h-14 rounded-2xl bg-white dark:bg-slate-800 border-2 transition-all ${errors.start
+                  className={`pl-12 pr-40 h-14 rounded-2xl bg-white dark:bg-slate-800 border-2 transition-all ${errors.start
                     ? 'border-red-500 focus:ring-2 focus:ring-red-500/20'
                     : 'border-slate-200 dark:border-slate-700 hover:border-primary/50 focus:border-primary focus:ring-4 focus:ring-primary/10'
                     }`}
                   placeholder={f("go")}
                   id="start"
                 />
+                {/* Bouton géolocalisation */}
+                <button
+                  type="button"
+                  onClick={handleUseMyLocation}
+                  disabled={isGeolocating}
+                  title={f('useMyLocation')}
+                  className="absolute right-2 top-2 flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-primary/20 hover:border-primary/40"
+                >
+                  {isGeolocating ? (
+                    <>
+                      <div className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      <span>{f('locating')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaLocationArrow className="text-xs" />
+                      <span>{f('useMyLocation')}</span>
+                    </>
+                  )}
+                </button>
                 {errors.start && <p className="text-red-600 text-sm mt-1 ml-1">{errors.start}</p>}
 
                 {showSuggestionsStart && (
